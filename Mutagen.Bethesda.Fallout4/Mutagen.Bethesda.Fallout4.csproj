@@ -26,14 +26,19 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Enums\BipedObject.cs" />
+    <Compile Include="Enums\CastType.cs" />
     <Compile Include="Enums\CombatReaction.cs" />
     <Compile Include="Enums\CompareOperator.cs" />
     <Compile Include="Enums\GroupTypeEnum.cs" />
     <Compile Include="Enums\Size.cs" />
+    <Compile Include="Enums\SpellDataFlag.cs" />
+    <Compile Include="Enums\SpellType.cs" />
     <Compile Include="Enums\TargetObjectType.cs" />
+    <Compile Include="Enums\TargetType.cs" />
     <Compile Include="Interfaces\IModeled.cs" />
     <Compile Include="Interfaces\IObjectBounded.cs" />
     <Compile Include="Interfaces\IPositionRotation.cs" />
+    <Compile Include="Interfaces\IScripted.cs" />
     <Compile Include="Records\Common Subrecords\AVirtualMachineAdapter.cs">
       <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
     </Compile>

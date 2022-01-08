@@ -6,18 +6,21 @@ using System.Threading.Tasks;
 
 namespace Mutagen.Bethesda.Fallout4
 {
-    public enum DestructibleFlag
+    public partial class Destructible
     {
-        VATSTargetable,
-        LargeActorDestroys
-    }
+        public enum DestructibleFlag
+        {
+            VATSTargetable,
+            LargeActorDestroys
+        }
 
-    public enum DestructionStageDataFlag
-    {
-        CapDamage,
-        Disable,
-        Destroy,
-        IgnoreExternalDamage,
-        BecomesDynamic
+        public enum DestructionStageDataFlag
+        {
+            CapDamage,
+            Disable,
+            Destroy,
+            IgnoreExternalDamage,
+            BecomesDynamic
+        }
     }
 }
