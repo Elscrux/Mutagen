@@ -46,6 +46,9 @@
     <Compile Include="Records\Common Subrecords\Decal.cs">
       <DependentUpon>Decal.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Common Subrecords\Effect.cs">
+      <DependentUpon>Effect.xml</DependentUpon>
+    </Compile>
     <Compile Include="Records\Common Subrecords\LocationTargetRadius.cs">
       <DependentUpon>LocationTargetRadius.xml</DependentUpon>
     </Compile>
@@ -108,6 +111,9 @@
     </Compile>
     <Compile Include="Records\Major Records\MaterialType.cs">
       <DependentUpon>MaterialType.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\ObjectEffect.cs">
+      <DependentUpon>ObjectEffect.xml</DependentUpon>
     </Compile>
     <Compile Include="Records\Major Records\Part.cs">
       <DependentUpon>HeadPart.xml</DependentUpon>
@@ -379,6 +385,19 @@
       <DependentUpon>MaterialType.xml</DependentUpon>
     </Compile>
     <Compile Include="Interfaces\IRegionTarget_Generated.cs" />
+    <Compile Include="Records\Common Subrecords\Effect_Generated.cs">
+      <DependentUpon>Effect.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\EffectData_Generated.cs">
+      <DependentUpon>Effect.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\MagicEffect_Generated.cs">
+      <DependentUpon>MagicEffect.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\ObjectEffect_Generated.cs">
+      <DependentUpon>ObjectEffect.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Interfaces\IEffectRecord_Generated.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="GitInfo" Version="2.2.0">

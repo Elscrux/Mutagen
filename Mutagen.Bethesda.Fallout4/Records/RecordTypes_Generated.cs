@@ -31,6 +31,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType DNAM = new(0x4D414E44);
         public static readonly RecordType DODT = new(0x54444F44);
         public static readonly RecordType DOOR = new(0x524F4F44);
+        public static readonly RecordType EFID = new(0x44494645);
+        public static readonly RecordType EFIT = new(0x54494645);
+        public static readonly RecordType ENCH = new(0x48434E45);
+        public static readonly RecordType ENIT = new(0x54494E45);
         public static readonly RecordType EXPL = new(0x4C505845);
         public static readonly RecordType FACT = new(0x54434146);
         public static readonly RecordType FLST = new(0x54534C46);
@@ -60,6 +64,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType LVSP = new(0x5053564C);
         public static readonly RecordType MAST = new(0x5453414D);
         public static readonly RecordType MATT = new(0x5454414D);
+        public static readonly RecordType MGEF = new(0x4645474D);
         public static readonly RecordType MISC = new(0x4353494D);
         public static readonly RecordType MNAM = new(0x4D414E4D);
         public static readonly RecordType MODC = new(0x43444F4D);

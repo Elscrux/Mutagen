@@ -71,6 +71,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(LocationReferenceType),
             };
             dict[typeof(ILocationRecordGetter)] = dict[typeof(ILocationRecord)];
+            dict[typeof(IEffectRecord)] = new Type[]
+            {
+                typeof(ObjectEffect),
+            };
+            dict[typeof(IEffectRecordGetter)] = dict[typeof(IEffectRecord)];
             InterfaceToObjectTypes = dict;
         }
     }

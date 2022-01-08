@@ -18,8 +18,9 @@
       <!--<Group name="Races" refName="Race" />-->
       <Group name="SoundMarkers" refName="SoundMarker" />
 	  <Group name="AcousticSpaces" refName="AcousticSpace" />
-	  <!--<Group name="MagicEffects" refName="MagicEffect" />-->
+	  <Group name="MagicEffects" refName="MagicEffect" />
 	  <Group name="LandscapeTextures" refName="LandscapeTexture" />
+	  <Group name="ObjectEffects" refName="ObjectEffect" />
 	  <Group name="Grasses" refName="Grass" />
 	  <Group name="MaterialTypes" refName="MaterialType" />
 	</Fields>

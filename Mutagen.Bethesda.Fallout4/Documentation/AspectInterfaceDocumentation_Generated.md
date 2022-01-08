@@ -18,11 +18,13 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - HeadPart
 - Keyword
 - MaterialType
+- ObjectEffect
 - Race
 ### IObjectBounded
 - AcousticSpace
 - Component
 - Grass
+- ObjectEffect
 - SoundMarker
 - TextureSet
 ## Concrete Classes to Interfaces
@@ -48,6 +50,9 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - INamed
 ### MaterialType
 - INamed
+### ObjectEffect
+- INamed
+- IObjectBounded
 ### Race
 - IKeyworded
 - INamed

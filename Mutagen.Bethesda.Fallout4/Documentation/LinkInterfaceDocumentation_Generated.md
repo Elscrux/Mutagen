@@ -7,6 +7,8 @@ A `FormLink<IItem>` could then point to all those record types by pointing to th
 ## Interfaces to Concrete Classes
 ### IDamageTypeTarget
 - ActorValueInformation
+### IEffectRecord
+- ObjectEffect
 ### IIdleRelation
 - ActionRecord
 ### IKeywordLinkedReference
@@ -48,6 +50,8 @@ A `FormLink<IItem>` could then point to all those record types by pointing to th
 - ISpellRecord
 ### LocationReferenceType
 - ILocationRecord
+### ObjectEffect
+- IEffectRecord
 ### Race
 - IRelatable
 ### TextureSet

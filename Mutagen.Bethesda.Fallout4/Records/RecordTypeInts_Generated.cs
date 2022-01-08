@@ -29,6 +29,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int DNAM = 0x4D414E44;
         public const int DODT = 0x54444F44;
         public const int DOOR = 0x524F4F44;
+        public const int EFID = 0x44494645;
+        public const int EFIT = 0x54494645;
+        public const int ENCH = 0x48434E45;
+        public const int ENIT = 0x54494E45;
         public const int EXPL = 0x4C505845;
         public const int FACT = 0x54434146;
         public const int FLST = 0x54534C46;
@@ -58,6 +62,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int LVSP = 0x5053564C;
         public const int MAST = 0x5453414D;
         public const int MATT = 0x5454414D;
+        public const int MGEF = 0x4645474D;
         public const int MISC = 0x4353494D;
         public const int MNAM = 0x4D414E4D;
         public const int MODC = 0x43444F4D;
