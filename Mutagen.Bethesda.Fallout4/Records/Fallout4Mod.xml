@@ -21,6 +21,8 @@
 	  <Group name="MagicEffects" refName="MagicEffect" />
 	  <Group name="LandscapeTextures" refName="LandscapeTexture" />
 	  <Group name="ObjectEffects" refName="ObjectEffect" />
+	  <Group name="Spells" refName="Spell" />
+	  <Group name="Activators" refName="Activator" />
 	  <Group name="Grasses" refName="Grass" />
 	  <Group name="MaterialTypes" refName="MaterialType" />
 	</Fields>

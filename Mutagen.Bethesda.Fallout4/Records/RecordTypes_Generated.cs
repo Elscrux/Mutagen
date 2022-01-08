@@ -5,6 +5,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
     public class RecordTypes
     {
         public static readonly RecordType AACT = new(0x54434141);
+        public static readonly RecordType ACTI = new(0x49544341);
         public static readonly RecordType ANAM = new(0x4D414E41);
         public static readonly RecordType AORU = new(0x55524F41);
         public static readonly RecordType APPR = new(0x52505041);
@@ -23,18 +24,26 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType CRVA = new(0x41565243);
         public static readonly RecordType CTDA = new(0x41445443);
         public static readonly RecordType CUSD = new(0x44535543);
+        public static readonly RecordType DAMC = new(0x434D4144);
         public static readonly RecordType DATA = new(0x41544144);
         public static readonly RecordType DEBR = new(0x52424544);
         public static readonly RecordType DELE = new(0x454C4544);
         public static readonly RecordType DESC = new(0x43534544);
+        public static readonly RecordType DEST = new(0x54534544);
+        public static readonly RecordType DMDL = new(0x4C444D44);
         public static readonly RecordType DMGT = new(0x54474D44);
         public static readonly RecordType DNAM = new(0x4D414E44);
         public static readonly RecordType DODT = new(0x54444F44);
         public static readonly RecordType DOOR = new(0x524F4F44);
+        public static readonly RecordType DSTA = new(0x41545344);
+        public static readonly RecordType DSTD = new(0x44545344);
+        public static readonly RecordType DSTF = new(0x46545344);
         public static readonly RecordType EFID = new(0x44494645);
         public static readonly RecordType EFIT = new(0x54494645);
         public static readonly RecordType ENCH = new(0x48434E45);
         public static readonly RecordType ENIT = new(0x54494E45);
+        public static readonly RecordType EQUP = new(0x50555145);
+        public static readonly RecordType ETYP = new(0x50595445);
         public static readonly RecordType EXPL = new(0x4C505845);
         public static readonly RecordType FACT = new(0x54434146);
         public static readonly RecordType FLST = new(0x54534C46);
@@ -56,6 +65,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType IPDS = new(0x53445049);
         public static readonly RecordType JAIL = new(0x4C49414A);
         public static readonly RecordType JOUT = new(0x54554F4A);
+        public static readonly RecordType KNAM = new(0x4D414E4B);
         public static readonly RecordType KSIZ = new(0x5A49534B);
         public static readonly RecordType KWDA = new(0x4144574B);
         public static readonly RecordType KYWD = new(0x4457594B);
@@ -80,6 +90,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType OFST = new(0x5453464F);
         public static readonly RecordType ONAM = new(0x4D414E4F);
         public static readonly RecordType OTFT = new(0x5446544F);
+        public static readonly RecordType PERK = new(0x4B524550);
         public static readonly RecordType PLCN = new(0x4E434C50);
         public static readonly RecordType PLVD = new(0x44564C50);
         public static readonly RecordType PNAM = new(0x4D414E50);
@@ -97,6 +108,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType SNDR = new(0x52444E53);
         public static readonly RecordType SOUN = new(0x4E554F53);
         public static readonly RecordType SPCT = new(0x54435053);
+        public static readonly RecordType SPEL = new(0x4C455053);
+        public static readonly RecordType SPIT = new(0x54495053);
         public static readonly RecordType SPLO = new(0x4F4C5053);
         public static readonly RecordType STAG = new(0x47415453);
         public static readonly RecordType STCP = new(0x50435453);
@@ -116,7 +129,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType VENC = new(0x434E4556);
         public static readonly RecordType VEND = new(0x444E4556);
         public static readonly RecordType VENV = new(0x564E4556);
+        public static readonly RecordType VMAD = new(0x44414D56);
+        public static readonly RecordType VNAM = new(0x4D414E56);
         public static readonly RecordType WAIT = new(0x54494157);
+        public static readonly RecordType WATR = new(0x52544157);
         public static readonly RecordType WNAM = new(0x4D414E57);
         public static readonly RecordType XNAM = new(0x4D414E58);
         public static readonly RecordType XTRI = new(0x49525458);

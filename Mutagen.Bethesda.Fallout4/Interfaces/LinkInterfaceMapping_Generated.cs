@@ -23,18 +23,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(ActionRecord),
             };
             dict[typeof(IIdleRelationGetter)] = dict[typeof(IIdleRelation)];
+            dict[typeof(IObjectId)] = new Type[]
+            {
+                typeof(Activator),
+                typeof(Door),
+                typeof(Faction),
+                typeof(Spell),
+                typeof(TextureSet),
+            };
+            dict[typeof(IObjectIdGetter)] = dict[typeof(IObjectId)];
             dict[typeof(IDamageTypeTarget)] = new Type[]
             {
                 typeof(ActorValueInformation),
             };
             dict[typeof(IDamageTypeTargetGetter)] = dict[typeof(IDamageTypeTarget)];
-            dict[typeof(IObjectId)] = new Type[]
-            {
-                typeof(Door),
-                typeof(Faction),
-                typeof(TextureSet),
-            };
-            dict[typeof(IObjectIdGetter)] = dict[typeof(IObjectId)];
             dict[typeof(ILocationTargetable)] = new Type[]
             {
                 typeof(Door),
@@ -64,6 +66,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             dict[typeof(ISpellRecord)] = new Type[]
             {
                 typeof(LeveledSpell),
+                typeof(Spell),
             };
             dict[typeof(ISpellRecordGetter)] = dict[typeof(ISpellRecord)];
             dict[typeof(ILocationRecord)] = new Type[]
@@ -74,6 +77,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             dict[typeof(IEffectRecord)] = new Type[]
             {
                 typeof(ObjectEffect),
+                typeof(Spell),
             };
             dict[typeof(IEffectRecordGetter)] = dict[typeof(IEffectRecord)];
             InterfaceToObjectTypes = dict;

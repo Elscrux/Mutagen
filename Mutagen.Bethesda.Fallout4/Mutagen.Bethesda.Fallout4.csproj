@@ -34,6 +34,9 @@
     <Compile Include="Interfaces\IModeled.cs" />
     <Compile Include="Interfaces\IObjectBounded.cs" />
     <Compile Include="Interfaces\IPositionRotation.cs" />
+    <Compile Include="Records\Common Subrecords\AVirtualMachineAdapter.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
     <Compile Include="Records\Common Subrecords\Condition.cs">
       <DependentUpon>Condition.xml</DependentUpon>
     </Compile>
@@ -46,17 +49,32 @@
     <Compile Include="Records\Common Subrecords\Decal.cs">
       <DependentUpon>Decal.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Common Subrecords\Destructible.cs">
+      <DependentUpon>Destructible.xml</DependentUpon>
+    </Compile>
     <Compile Include="Records\Common Subrecords\Effect.cs">
       <DependentUpon>Effect.xml</DependentUpon>
     </Compile>
     <Compile Include="Records\Common Subrecords\LocationTargetRadius.cs">
       <DependentUpon>LocationTargetRadius.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Common Subrecords\ScriptEntry.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ScriptFragments.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ScriptProperty.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
     <Compile Include="Records\Fallout4Group.cs">
       <DependentUpon>Fallout4Group.xml</DependentUpon>
     </Compile>
     <Compile Include="Records\Major Records\ActionRecord.cs">
       <DependentUpon>ActionRecord.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Activator.cs">
+      <DependentUpon>Activator.xml</DependentUpon>
     </Compile>
     <Compile Include="Records\Major Records\ADamageType.cs">
       <DependentUpon>DamageType.xml</DependentUpon>
@@ -398,6 +416,87 @@
       <DependentUpon>ObjectEffect.xml</DependentUpon>
     </Compile>
     <Compile Include="Interfaces\IEffectRecord_Generated.cs" />
+    <Compile Include="Records\Common Subrecords\Destructible_Generated.cs">
+      <DependentUpon>Destructible.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\DestructableData_Generated.cs">
+      <DependentUpon>Destructible.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\Resistance_Generated.cs">
+      <DependentUpon>Destructible.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\DestructionStage_Generated.cs">
+      <DependentUpon>Destructible.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\DestructionStageData_Generated.cs">
+      <DependentUpon>Destructible.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\AVirtualMachineAdapter_Generated.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\VirtualMachineAdapter_Generated.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ScriptEntry_Generated.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ScriptProperty_Generated.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ScriptObjectProperty_Generated.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ScriptStringProperty_Generated.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ScriptIntProperty_Generated.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ScriptFloatProperty_Generated.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ScriptBoolProperty_Generated.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ScriptObjectListProperty_Generated.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ScriptStringListProperty_Generated.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ScriptIntListProperty_Generated.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ScriptFloatListProperty_Generated.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ScriptBoolListProperty_Generated.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ScriptFragment_Generated.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\IndexedScriptFragment_Generated.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ScriptFragments_Generated.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Activator_Generated.cs">
+      <DependentUpon>Activator.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\EquipType_Generated.cs">
+      <DependentUpon>EquipType.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Perk_Generated.cs">
+      <DependentUpon>Perk.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Spell_Generated.cs">
+      <DependentUpon>Spell.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Water_Generated.cs">
+      <DependentUpon>Water.xml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="GitInfo" Version="2.2.0">

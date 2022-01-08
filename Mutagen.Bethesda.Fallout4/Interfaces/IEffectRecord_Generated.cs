@@ -8,7 +8,7 @@ using Mutagen.Bethesda;
 namespace Mutagen.Bethesda.Fallout4
 {
     /// <summary>
-    /// Implemented by: [ObjectEffect]
+    /// Implemented by: [ObjectEffect, Spell]
     /// </summary>
     public partial interface IEffectRecord :
         IEffectRecordGetter,
@@ -17,7 +17,7 @@ namespace Mutagen.Bethesda.Fallout4
     }
 
     /// <summary>
-    /// Implemented by: [ObjectEffect]
+    /// Implemented by: [ObjectEffect, Spell]
     /// </summary>
     public partial interface IEffectRecordGetter : IFallout4MajorRecordGetter
     {
