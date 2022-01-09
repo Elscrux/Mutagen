@@ -9,11 +9,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType ANAM = new(0x4D414E41);
         public static readonly RecordType AORU = new(0x55524F41);
         public static readonly RecordType APPR = new(0x52505041);
+        public static readonly RecordType ARMA = new(0x414D5241);
         public static readonly RecordType ARMO = new(0x4F4D5241);
+        public static readonly RecordType ARTO = new(0x4F545241);
         public static readonly RecordType ASPC = new(0x43505341);
         public static readonly RecordType AVIF = new(0x46495641);
+        public static readonly RecordType BAMT = new(0x544D4142);
+        public static readonly RecordType BIDS = new(0x53444942);
+        public static readonly RecordType BMCT = new(0x54434D42);
         public static readonly RecordType BNAM = new(0x4D414E42);
         public static readonly RecordType BOD2 = new(0x32444F42);
+        public static readonly RecordType BODT = new(0x54444F42);
         public static readonly RecordType CELL = new(0x4C4C4543);
         public static readonly RecordType CITC = new(0x43544943);
         public static readonly RecordType CLAS = new(0x53414C43);
@@ -40,6 +46,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType DSTF = new(0x46545344);
         public static readonly RecordType EFID = new(0x44494645);
         public static readonly RecordType EFIT = new(0x54494645);
+        public static readonly RecordType EITM = new(0x4D544945);
         public static readonly RecordType ENCH = new(0x48434E45);
         public static readonly RecordType ENIT = new(0x54494E45);
         public static readonly RecordType EQUP = new(0x50555145);
@@ -49,6 +56,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType FLST = new(0x54534C46);
         public static readonly RecordType FLTV = new(0x56544C46);
         public static readonly RecordType FNAM = new(0x4D414E46);
+        public static readonly RecordType FSTP = new(0x50545346);
+        public static readonly RecordType FSTS = new(0x53545346);
         public static readonly RecordType FULL = new(0x4C4C5546);
         public static readonly RecordType GLOB = new(0x424F4C47);
         public static readonly RecordType GMST = new(0x54534D47);
@@ -58,6 +67,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType HDPT = new(0x54504448);
         public static readonly RecordType HEDR = new(0x52444548);
         public static readonly RecordType HNAM = new(0x4D414E48);
+        public static readonly RecordType ICO2 = new(0x324F4349);
         public static readonly RecordType ICON = new(0x4E4F4349);
         public static readonly RecordType INAM = new(0x4D414E49);
         public static readonly RecordType INCC = new(0x43434E49);
@@ -75,8 +85,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType MAST = new(0x5453414D);
         public static readonly RecordType MATT = new(0x5454414D);
         public static readonly RecordType MGEF = new(0x4645474D);
+        public static readonly RecordType MICO = new(0x4F43494D);
         public static readonly RecordType MISC = new(0x4353494D);
         public static readonly RecordType MNAM = new(0x4D414E4D);
+        public static readonly RecordType MOD2 = new(0x32444F4D);
+        public static readonly RecordType MOD3 = new(0x33444F4D);
+        public static readonly RecordType MOD4 = new(0x34444F4D);
+        public static readonly RecordType MOD5 = new(0x35444F4D);
         public static readonly RecordType MODC = new(0x43444F4D);
         public static readonly RecordType MODF = new(0x46444F4D);
         public static readonly RecordType MODL = new(0x4C444F4D);
@@ -85,6 +100,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType MSWP = new(0x5057534D);
         public static readonly RecordType NAM0 = new(0x304D414E);
         public static readonly RecordType NAM1 = new(0x314D414E);
+        public static readonly RecordType NAM2 = new(0x324D414E);
+        public static readonly RecordType NAM3 = new(0x334D414E);
         public static readonly RecordType NNAM = new(0x4D414E4E);
         public static readonly RecordType OBND = new(0x444E424F);
         public static readonly RecordType OFST = new(0x5453464F);
@@ -95,6 +112,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType PLVD = new(0x44564C50);
         public static readonly RecordType PNAM = new(0x4D414E50);
         public static readonly RecordType PRPS = new(0x53505250);
+        public static readonly RecordType PTRN = new(0x4E525450);
         public static readonly RecordType RACE = new(0x45434152);
         public static readonly RecordType RDAT = new(0x54414452);
         public static readonly RecordType REFR = new(0x52464552);
@@ -105,6 +123,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType SCRN = new(0x4E524353);
         public static readonly RecordType SDSC = new(0x43534453);
         public static readonly RecordType SNAM = new(0x4D414E53);
+        public static readonly RecordType SNDD = new(0x44444E53);
         public static readonly RecordType SNDR = new(0x52444E53);
         public static readonly RecordType SOUN = new(0x4E554F53);
         public static readonly RecordType SPCT = new(0x54435053);
@@ -136,8 +155,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType WAIT = new(0x54494157);
         public static readonly RecordType WATR = new(0x52544157);
         public static readonly RecordType WNAM = new(0x4D414E57);
+        public static readonly RecordType XCNT = new(0x544E4358);
         public static readonly RecordType XNAM = new(0x4D414E58);
         public static readonly RecordType XTRI = new(0x49525458);
         public static readonly RecordType XXXX = new(0x58585858);
+        public static readonly RecordType YNAM = new(0x4D414E59);
+        public static readonly RecordType ZNAM = new(0x4D414E5A);
     }
 }

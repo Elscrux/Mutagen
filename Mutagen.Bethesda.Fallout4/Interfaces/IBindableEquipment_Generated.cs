@@ -8,18 +8,18 @@ using Mutagen.Bethesda;
 namespace Mutagen.Bethesda.Fallout4
 {
     /// <summary>
-    /// Implemented by: [Activator, Armor, Door, Faction, Spell, TextureSet]
+    /// Implemented by: [Armor]
     /// </summary>
-    public partial interface IObjectId :
-        IFallout4MajorRecordInternal,
-        IObjectIdGetter
+    public partial interface IBindableEquipment :
+        IBindableEquipmentGetter,
+        IFallout4MajorRecordInternal
     {
     }
 
     /// <summary>
-    /// Implemented by: [Activator, Armor, Door, Faction, Spell, TextureSet]
+    /// Implemented by: [Armor]
     /// </summary>
-    public partial interface IObjectIdGetter : IFallout4MajorRecordGetter
+    public partial interface IBindableEquipmentGetter : IFallout4MajorRecordGetter
     {
     }
 }

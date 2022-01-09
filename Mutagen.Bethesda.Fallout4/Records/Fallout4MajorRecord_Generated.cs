@@ -39,7 +39,7 @@ namespace Mutagen.Bethesda.Fallout4
 {
     #region Class
     /// <summary>
-    /// Implemented by: [AcousticSpace, ActionRecord, Activator, ActorValueInformation, AnimationSoundTagSet, Armor, AttractionRule, Cell, Class, ColorRecord, Component, ADamageType, Debris, Door, EquipType, Explosion, Faction, FormList, GameSetting, Global, Grass, HeadPart, ImpactDataSet, Keyword, LandscapeTexture, LeveledSpell, LocationReferenceType, MagicEffect, MaterialSwap, MaterialType, MiscItem, ObjectEffect, Outfit, Perk, PlacedObject, Race, Region, ReverbParameters, SoundDescriptor, SoundMarker, Spell, TalkingActivator, TextureSet, Transform, VoiceType, Water]
+    /// Implemented by: [AcousticSpace, ActionRecord, Activator, ActorValueInformation, AnimationSoundTagSet, Armor, ArmorAddon, ArtObject, AttractionRule, Cell, Class, ColorRecord, Component, ADamageType, Debris, Door, EquipType, Explosion, Faction, Footstep, FootstepSet, FormList, GameSetting, Global, Grass, HeadPart, ImpactDataSet, Keyword, LandscapeTexture, LeveledSpell, LocationReferenceType, MagicEffect, MaterialSwap, MaterialType, MiscItem, ObjectEffect, Outfit, Perk, PlacedObject, Race, Region, ReverbParameters, SoundDescriptor, SoundMarker, Spell, TalkingActivator, TextureSet, Transform, VoiceType, Water]
     /// </summary>
     public abstract partial class Fallout4MajorRecord :
         MajorRecord,
@@ -474,7 +474,7 @@ namespace Mutagen.Bethesda.Fallout4
 
     #region Interface
     /// <summary>
-    /// Implemented by: [AcousticSpace, ActionRecord, Activator, ActorValueInformation, AnimationSoundTagSet, Armor, AttractionRule, Cell, Class, ColorRecord, Component, ADamageType, Debris, Door, EquipType, Explosion, Faction, FormList, GameSetting, Global, Grass, HeadPart, ImpactDataSet, Keyword, LandscapeTexture, LeveledSpell, LocationReferenceType, MagicEffect, MaterialSwap, MaterialType, MiscItem, ObjectEffect, Outfit, Perk, PlacedObject, Race, Region, ReverbParameters, SoundDescriptor, SoundMarker, Spell, TalkingActivator, TextureSet, Transform, VoiceType, Water]
+    /// Implemented by: [AcousticSpace, ActionRecord, Activator, ActorValueInformation, AnimationSoundTagSet, Armor, ArmorAddon, ArtObject, AttractionRule, Cell, Class, ColorRecord, Component, ADamageType, Debris, Door, EquipType, Explosion, Faction, Footstep, FootstepSet, FormList, GameSetting, Global, Grass, HeadPart, ImpactDataSet, Keyword, LandscapeTexture, LeveledSpell, LocationReferenceType, MagicEffect, MaterialSwap, MaterialType, MiscItem, ObjectEffect, Outfit, Perk, PlacedObject, Race, Region, ReverbParameters, SoundDescriptor, SoundMarker, Spell, TalkingActivator, TextureSet, Transform, VoiceType, Water]
     /// </summary>
     public partial interface IFallout4MajorRecord :
         IFallout4MajorRecordGetter,
@@ -494,7 +494,7 @@ namespace Mutagen.Bethesda.Fallout4
     }
 
     /// <summary>
-    /// Implemented by: [AcousticSpace, ActionRecord, Activator, ActorValueInformation, AnimationSoundTagSet, Armor, AttractionRule, Cell, Class, ColorRecord, Component, ADamageType, Debris, Door, EquipType, Explosion, Faction, FormList, GameSetting, Global, Grass, HeadPart, ImpactDataSet, Keyword, LandscapeTexture, LeveledSpell, LocationReferenceType, MagicEffect, MaterialSwap, MaterialType, MiscItem, ObjectEffect, Outfit, Perk, PlacedObject, Race, Region, ReverbParameters, SoundDescriptor, SoundMarker, Spell, TalkingActivator, TextureSet, Transform, VoiceType, Water]
+    /// Implemented by: [AcousticSpace, ActionRecord, Activator, ActorValueInformation, AnimationSoundTagSet, Armor, ArmorAddon, ArtObject, AttractionRule, Cell, Class, ColorRecord, Component, ADamageType, Debris, Door, EquipType, Explosion, Faction, Footstep, FootstepSet, FormList, GameSetting, Global, Grass, HeadPart, ImpactDataSet, Keyword, LandscapeTexture, LeveledSpell, LocationReferenceType, MagicEffect, MaterialSwap, MaterialType, MiscItem, ObjectEffect, Outfit, Perk, PlacedObject, Race, Region, ReverbParameters, SoundDescriptor, SoundMarker, Spell, TalkingActivator, TextureSet, Transform, VoiceType, Water]
     /// </summary>
     public partial interface IFallout4MajorRecordGetter :
         IMajorRecordGetter,

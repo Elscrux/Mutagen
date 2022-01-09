@@ -7,11 +7,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int ANAM = 0x4D414E41;
         public const int AORU = 0x55524F41;
         public const int APPR = 0x52505041;
+        public const int ARMA = 0x414D5241;
         public const int ARMO = 0x4F4D5241;
+        public const int ARTO = 0x4F545241;
         public const int ASPC = 0x43505341;
         public const int AVIF = 0x46495641;
+        public const int BAMT = 0x544D4142;
+        public const int BIDS = 0x53444942;
+        public const int BMCT = 0x54434D42;
         public const int BNAM = 0x4D414E42;
         public const int BOD2 = 0x32444F42;
+        public const int BODT = 0x54444F42;
         public const int CELL = 0x4C4C4543;
         public const int CITC = 0x43544943;
         public const int CLAS = 0x53414C43;
@@ -38,6 +44,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int DSTF = 0x46545344;
         public const int EFID = 0x44494645;
         public const int EFIT = 0x54494645;
+        public const int EITM = 0x4D544945;
         public const int ENCH = 0x48434E45;
         public const int ENIT = 0x54494E45;
         public const int EQUP = 0x50555145;
@@ -47,6 +54,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int FLST = 0x54534C46;
         public const int FLTV = 0x56544C46;
         public const int FNAM = 0x4D414E46;
+        public const int FSTP = 0x50545346;
+        public const int FSTS = 0x53545346;
         public const int FULL = 0x4C4C5546;
         public const int GLOB = 0x424F4C47;
         public const int GMST = 0x54534D47;
@@ -56,6 +65,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int HDPT = 0x54504448;
         public const int HEDR = 0x52444548;
         public const int HNAM = 0x4D414E48;
+        public const int ICO2 = 0x324F4349;
         public const int ICON = 0x4E4F4349;
         public const int INAM = 0x4D414E49;
         public const int INCC = 0x43434E49;
@@ -73,8 +83,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int MAST = 0x5453414D;
         public const int MATT = 0x5454414D;
         public const int MGEF = 0x4645474D;
+        public const int MICO = 0x4F43494D;
         public const int MISC = 0x4353494D;
         public const int MNAM = 0x4D414E4D;
+        public const int MOD2 = 0x32444F4D;
+        public const int MOD3 = 0x33444F4D;
+        public const int MOD4 = 0x34444F4D;
+        public const int MOD5 = 0x35444F4D;
         public const int MODC = 0x43444F4D;
         public const int MODF = 0x46444F4D;
         public const int MODL = 0x4C444F4D;
@@ -83,6 +98,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int MSWP = 0x5057534D;
         public const int NAM0 = 0x304D414E;
         public const int NAM1 = 0x314D414E;
+        public const int NAM2 = 0x324D414E;
+        public const int NAM3 = 0x334D414E;
         public const int NNAM = 0x4D414E4E;
         public const int OBND = 0x444E424F;
         public const int OFST = 0x5453464F;
@@ -93,6 +110,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int PLVD = 0x44564C50;
         public const int PNAM = 0x4D414E50;
         public const int PRPS = 0x53505250;
+        public const int PTRN = 0x4E525450;
         public const int RACE = 0x45434152;
         public const int RDAT = 0x54414452;
         public const int REFR = 0x52464552;
@@ -103,6 +121,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int SCRN = 0x4E524353;
         public const int SDSC = 0x43534453;
         public const int SNAM = 0x4D414E53;
+        public const int SNDD = 0x44444E53;
         public const int SNDR = 0x52444E53;
         public const int SOUN = 0x4E554F53;
         public const int SPCT = 0x54435053;
@@ -134,8 +153,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int WAIT = 0x54494157;
         public const int WATR = 0x52544157;
         public const int WNAM = 0x4D414E57;
+        public const int XCNT = 0x544E4358;
         public const int XNAM = 0x4D414E58;
         public const int XTRI = 0x49525458;
         public const int XXXX = 0x58585858;
+        public const int YNAM = 0x4D414E59;
+        public const int ZNAM = 0x4D414E5A;
     }
 }

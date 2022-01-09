@@ -26,6 +26,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             dict[typeof(IObjectId)] = new Type[]
             {
                 typeof(Activator),
+                typeof(Armor),
                 typeof(Door),
                 typeof(Faction),
                 typeof(Spell),
@@ -37,6 +38,26 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(ActorValueInformation),
             };
             dict[typeof(IDamageTypeTargetGetter)] = dict[typeof(IDamageTypeTarget)];
+            dict[typeof(IItem)] = new Type[]
+            {
+                typeof(Armor),
+            };
+            dict[typeof(IItemGetter)] = dict[typeof(IItem)];
+            dict[typeof(IOutfitTarget)] = new Type[]
+            {
+                typeof(Armor),
+            };
+            dict[typeof(IOutfitTargetGetter)] = dict[typeof(IOutfitTarget)];
+            dict[typeof(IConstructible)] = new Type[]
+            {
+                typeof(Armor),
+            };
+            dict[typeof(IConstructibleGetter)] = dict[typeof(IConstructible)];
+            dict[typeof(IBindableEquipment)] = new Type[]
+            {
+                typeof(Armor),
+            };
+            dict[typeof(IBindableEquipmentGetter)] = dict[typeof(IBindableEquipment)];
             dict[typeof(ILocationTargetable)] = new Type[]
             {
                 typeof(Door),

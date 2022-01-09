@@ -3,15 +3,20 @@ Aspect Interfaces expose common aspects of records.  For example, `INamed` are i
 
 Functions can then be written that take in `INamed`, allowing any record that has a name to be passed in.
 ## Interfaces to Concrete Classes
+### IHasIcons
+- ArmorModel
 ### IKeywordCommon
 - Keyword
 ### IKeyworded
 - Activator
+- Armor
 - Race
 - Spell
 - TalkingActivator
 ### IModeled
 - Activator
+- ArmorModel
+- ArtObject
 - DestructionStage
 - Grass
 - HeadPart
@@ -19,6 +24,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 ### INamed
 - ActionRecord
 - Activator
+- Armor
 - Class
 - Component
 - Faction
@@ -44,6 +50,8 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 ### IObjectBounded
 - AcousticSpace
 - Activator
+- Armor
+- ArtObject
 - Component
 - Grass
 - ObjectEffect
@@ -53,7 +61,10 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - TextureSet
 ### IScripted
 - Activator
+- Armor
 - TalkingActivator
+### IWeightValue
+- Armor
 ## Concrete Classes to Interfaces
 ### AcousticSpace
 - IObjectBounded
@@ -65,6 +76,18 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - INamed
 - IObjectBounded
 - IScripted
+### Armor
+- IKeyworded
+- INamed
+- IObjectBounded
+- IScripted
+- IWeightValue
+### ArmorModel
+- IHasIcons
+- IModeled
+### ArtObject
+- IModeled
+- IObjectBounded
 ### Class
 - INamed
 ### Component
