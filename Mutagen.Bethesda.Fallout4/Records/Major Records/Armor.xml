@@ -38,9 +38,7 @@
         <FormLink refName="Keyword" />
       </List>
       <String name="Description" recordType="DESC" translated="DL" />
-      <List name="Models">
-		  <RefDirect name="Model" refName="ArmorAddonModel"/>
-      </List>
+	  <RefList name="Armatures" refName="ArmorAddonModel" />
       <Data>
         <Fields>
           <UInt32 name="Value" />
@@ -72,7 +70,7 @@
   </Object>
   <Object name="ArmorAddonModel" objType="Subrecord">
   	<Fields>
-		<UInt16 name="AddonIndex" />
+		<UInt16 name="AddonIndex" recordType="INDX"/>
 		<FormLink recordType="MODL" refName="ArmorAddon" />
   	</Fields>
   </Object>
