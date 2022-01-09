@@ -114,6 +114,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType STAG = new(0x47415453);
         public static readonly RecordType STCP = new(0x50435453);
         public static readonly RecordType STOL = new(0x4C4F5453);
+        public static readonly RecordType TACT = new(0x54434154);
         public static readonly RecordType TES4 = new(0x34534554);
         public static readonly RecordType TNAM = new(0x4D414E54);
         public static readonly RecordType TRNS = new(0x534E5254);
@@ -131,6 +132,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType VENV = new(0x564E4556);
         public static readonly RecordType VMAD = new(0x44414D56);
         public static readonly RecordType VNAM = new(0x4D414E56);
+        public static readonly RecordType VTYP = new(0x50595456);
         public static readonly RecordType WAIT = new(0x54494157);
         public static readonly RecordType WATR = new(0x52544157);
         public static readonly RecordType WNAM = new(0x4D414E57);

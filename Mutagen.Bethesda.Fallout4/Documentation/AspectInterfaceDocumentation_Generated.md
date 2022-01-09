@@ -9,11 +9,13 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Activator
 - Race
 - Spell
+- TalkingActivator
 ### IModeled
 - Activator
 - DestructionStage
 - Grass
 - HeadPart
+- TalkingActivator
 ### INamed
 - ActionRecord
 - Activator
@@ -38,6 +40,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - ScriptStringListProperty
 - ScriptStringProperty
 - Spell
+- TalkingActivator
 ### IObjectBounded
 - AcousticSpace
 - Activator
@@ -46,9 +49,11 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - ObjectEffect
 - SoundMarker
 - Spell
+- TalkingActivator
 - TextureSet
 ### IScripted
 - Activator
+- TalkingActivator
 ## Concrete Classes to Interfaces
 ### AcousticSpace
 - IObjectBounded
@@ -116,5 +121,11 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - IKeyworded
 - INamed
 - IObjectBounded
+### TalkingActivator
+- IKeyworded
+- IModeled
+- INamed
+- IObjectBounded
+- IScripted
 ### TextureSet
 - IObjectBounded

@@ -112,6 +112,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int STAG = 0x47415453;
         public const int STCP = 0x50435453;
         public const int STOL = 0x4C4F5453;
+        public const int TACT = 0x54434154;
         public const int TES4 = 0x34534554;
         public const int TNAM = 0x4D414E54;
         public const int TRNS = 0x534E5254;
@@ -129,6 +130,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int VENV = 0x564E4556;
         public const int VMAD = 0x44414D56;
         public const int VNAM = 0x4D414E56;
+        public const int VTYP = 0x50595456;
         public const int WAIT = 0x54494157;
         public const int WATR = 0x52544157;
         public const int WNAM = 0x4D414E57;

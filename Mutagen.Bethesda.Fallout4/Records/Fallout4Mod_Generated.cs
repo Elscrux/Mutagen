@@ -76,6 +76,7 @@ namespace Mutagen.Bethesda.Fallout4
             _ObjectEffects_Object = new Fallout4Group<ObjectEffect>(this);
             _Spells_Object = new Fallout4Group<Spell>(this);
             _Activators_Object = new Fallout4Group<Activator>(this);
+            _TalkingActivators_Object = new Fallout4Group<TalkingActivator>(this);
             _Grasses_Object = new Fallout4Group<Grass>(this);
             _MaterialTypes_Object = new Fallout4Group<MaterialType>(this);
             CustomCtor();
@@ -223,6 +224,13 @@ namespace Mutagen.Bethesda.Fallout4
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IFallout4GroupGetter<IActivatorGetter> IFallout4ModGetter.Activators => _Activators_Object;
         #endregion
+        #region TalkingActivators
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Fallout4Group<TalkingActivator> _TalkingActivators_Object;
+        public Fallout4Group<TalkingActivator> TalkingActivators => _TalkingActivators_Object;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFallout4GroupGetter<ITalkingActivatorGetter> IFallout4ModGetter.TalkingActivators => _TalkingActivators_Object;
+        #endregion
         #region Grasses
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private Fallout4Group<Grass> _Grasses_Object;
@@ -295,6 +303,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.ObjectEffects = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Spells = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Activators = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
+                this.TalkingActivators = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Grasses = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.MaterialTypes = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
             }
@@ -320,6 +329,7 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem ObjectEffects,
                 TItem Spells,
                 TItem Activators,
+                TItem TalkingActivators,
                 TItem Grasses,
                 TItem MaterialTypes)
             {
@@ -343,6 +353,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.ObjectEffects = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(ObjectEffects, new Fallout4Group.Mask<TItem>(ObjectEffects));
                 this.Spells = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Spells, new Fallout4Group.Mask<TItem>(Spells));
                 this.Activators = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Activators, new Fallout4Group.Mask<TItem>(Activators));
+                this.TalkingActivators = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(TalkingActivators, new Fallout4Group.Mask<TItem>(TalkingActivators));
                 this.Grasses = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Grasses, new Fallout4Group.Mask<TItem>(Grasses));
                 this.MaterialTypes = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(MaterialTypes, new Fallout4Group.Mask<TItem>(MaterialTypes));
             }
@@ -376,6 +387,7 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? ObjectEffects { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Spells { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Activators { get; set; }
+            public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? TalkingActivators { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Grasses { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? MaterialTypes { get; set; }
             #endregion
@@ -410,6 +422,7 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!object.Equals(this.ObjectEffects, rhs.ObjectEffects)) return false;
                 if (!object.Equals(this.Spells, rhs.Spells)) return false;
                 if (!object.Equals(this.Activators, rhs.Activators)) return false;
+                if (!object.Equals(this.TalkingActivators, rhs.TalkingActivators)) return false;
                 if (!object.Equals(this.Grasses, rhs.Grasses)) return false;
                 if (!object.Equals(this.MaterialTypes, rhs.MaterialTypes)) return false;
                 return true;
@@ -437,6 +450,7 @@ namespace Mutagen.Bethesda.Fallout4
                 hash.Add(this.ObjectEffects);
                 hash.Add(this.Spells);
                 hash.Add(this.Activators);
+                hash.Add(this.TalkingActivators);
                 hash.Add(this.Grasses);
                 hash.Add(this.MaterialTypes);
                 return hash.ToHashCode();
@@ -546,6 +560,11 @@ namespace Mutagen.Bethesda.Fallout4
                 {
                     if (!eval(this.Activators.Overall)) return false;
                     if (this.Activators.Specific != null && !this.Activators.Specific.All(eval)) return false;
+                }
+                if (TalkingActivators != null)
+                {
+                    if (!eval(this.TalkingActivators.Overall)) return false;
+                    if (this.TalkingActivators.Specific != null && !this.TalkingActivators.Specific.All(eval)) return false;
                 }
                 if (Grasses != null)
                 {
@@ -664,6 +683,11 @@ namespace Mutagen.Bethesda.Fallout4
                     if (eval(this.Activators.Overall)) return true;
                     if (this.Activators.Specific != null && this.Activators.Specific.Any(eval)) return true;
                 }
+                if (TalkingActivators != null)
+                {
+                    if (eval(this.TalkingActivators.Overall)) return true;
+                    if (this.TalkingActivators.Specific != null && this.TalkingActivators.Specific.Any(eval)) return true;
+                }
                 if (Grasses != null)
                 {
                     if (eval(this.Grasses.Overall)) return true;
@@ -708,6 +732,7 @@ namespace Mutagen.Bethesda.Fallout4
                 obj.ObjectEffects = this.ObjectEffects == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.ObjectEffects.Overall), this.ObjectEffects.Specific?.Translate(eval));
                 obj.Spells = this.Spells == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Spells.Overall), this.Spells.Specific?.Translate(eval));
                 obj.Activators = this.Activators == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Activators.Overall), this.Activators.Specific?.Translate(eval));
+                obj.TalkingActivators = this.TalkingActivators == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.TalkingActivators.Overall), this.TalkingActivators.Specific?.Translate(eval));
                 obj.Grasses = this.Grasses == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Grasses.Overall), this.Grasses.Specific?.Translate(eval));
                 obj.MaterialTypes = this.MaterialTypes == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.MaterialTypes.Overall), this.MaterialTypes.Specific?.Translate(eval));
             }
@@ -812,6 +837,10 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         Activators?.ToString(fg);
                     }
+                    if (printMask?.TalkingActivators?.Overall ?? true)
+                    {
+                        TalkingActivators?.ToString(fg);
+                    }
                     if (printMask?.Grasses?.Overall ?? true)
                     {
                         Grasses?.ToString(fg);
@@ -865,6 +894,7 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<Exception?, Fallout4Group.ErrorMask<ObjectEffect.ErrorMask>?>? ObjectEffects;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Spell.ErrorMask>?>? Spells;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Activator.ErrorMask>?>? Activators;
+            public MaskItem<Exception?, Fallout4Group.ErrorMask<TalkingActivator.ErrorMask>?>? TalkingActivators;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Grass.ErrorMask>?>? Grasses;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<MaterialType.ErrorMask>?>? MaterialTypes;
             #endregion
@@ -915,6 +945,8 @@ namespace Mutagen.Bethesda.Fallout4
                         return Spells;
                     case Fallout4Mod_FieldIndex.Activators:
                         return Activators;
+                    case Fallout4Mod_FieldIndex.TalkingActivators:
+                        return TalkingActivators;
                     case Fallout4Mod_FieldIndex.Grasses:
                         return Grasses;
                     case Fallout4Mod_FieldIndex.MaterialTypes:
@@ -988,6 +1020,9 @@ namespace Mutagen.Bethesda.Fallout4
                         break;
                     case Fallout4Mod_FieldIndex.Activators:
                         this.Activators = new MaskItem<Exception?, Fallout4Group.ErrorMask<Activator.ErrorMask>?>(ex, null);
+                        break;
+                    case Fallout4Mod_FieldIndex.TalkingActivators:
+                        this.TalkingActivators = new MaskItem<Exception?, Fallout4Group.ErrorMask<TalkingActivator.ErrorMask>?>(ex, null);
                         break;
                     case Fallout4Mod_FieldIndex.Grasses:
                         this.Grasses = new MaskItem<Exception?, Fallout4Group.ErrorMask<Grass.ErrorMask>?>(ex, null);
@@ -1065,6 +1100,9 @@ namespace Mutagen.Bethesda.Fallout4
                     case Fallout4Mod_FieldIndex.Activators:
                         this.Activators = (MaskItem<Exception?, Fallout4Group.ErrorMask<Activator.ErrorMask>?>?)obj;
                         break;
+                    case Fallout4Mod_FieldIndex.TalkingActivators:
+                        this.TalkingActivators = (MaskItem<Exception?, Fallout4Group.ErrorMask<TalkingActivator.ErrorMask>?>?)obj;
+                        break;
                     case Fallout4Mod_FieldIndex.Grasses:
                         this.Grasses = (MaskItem<Exception?, Fallout4Group.ErrorMask<Grass.ErrorMask>?>?)obj;
                         break;
@@ -1099,6 +1137,7 @@ namespace Mutagen.Bethesda.Fallout4
                 if (ObjectEffects != null) return true;
                 if (Spells != null) return true;
                 if (Activators != null) return true;
+                if (TalkingActivators != null) return true;
                 if (Grasses != null) return true;
                 if (MaterialTypes != null) return true;
                 return false;
@@ -1155,6 +1194,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ObjectEffects?.ToString(fg);
                 Spells?.ToString(fg);
                 Activators?.ToString(fg);
+                TalkingActivators?.ToString(fg);
                 Grasses?.ToString(fg);
                 MaterialTypes?.ToString(fg);
             }
@@ -1185,6 +1225,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.ObjectEffects = this.ObjectEffects.Combine(rhs.ObjectEffects, (l, r) => l.Combine(r));
                 ret.Spells = this.Spells.Combine(rhs.Spells, (l, r) => l.Combine(r));
                 ret.Activators = this.Activators.Combine(rhs.Activators, (l, r) => l.Combine(r));
+                ret.TalkingActivators = this.TalkingActivators.Combine(rhs.TalkingActivators, (l, r) => l.Combine(r));
                 ret.Grasses = this.Grasses.Combine(rhs.Grasses, (l, r) => l.Combine(r));
                 ret.MaterialTypes = this.MaterialTypes.Combine(rhs.MaterialTypes, (l, r) => l.Combine(r));
                 return ret;
@@ -1230,6 +1271,7 @@ namespace Mutagen.Bethesda.Fallout4
             public Fallout4Group.TranslationMask<ObjectEffect.TranslationMask>? ObjectEffects;
             public Fallout4Group.TranslationMask<Spell.TranslationMask>? Spells;
             public Fallout4Group.TranslationMask<Activator.TranslationMask>? Activators;
+            public Fallout4Group.TranslationMask<TalkingActivator.TranslationMask>? TalkingActivators;
             public Fallout4Group.TranslationMask<Grass.TranslationMask>? Grasses;
             public Fallout4Group.TranslationMask<MaterialType.TranslationMask>? MaterialTypes;
             #endregion
@@ -1276,6 +1318,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((ObjectEffects != null ? ObjectEffects.OnOverall : DefaultOn, ObjectEffects?.GetCrystal()));
                 ret.Add((Spells != null ? Spells.OnOverall : DefaultOn, Spells?.GetCrystal()));
                 ret.Add((Activators != null ? Activators.OnOverall : DefaultOn, Activators?.GetCrystal()));
+                ret.Add((TalkingActivators != null ? TalkingActivators.OnOverall : DefaultOn, TalkingActivators?.GetCrystal()));
                 ret.Add((Grasses != null ? Grasses.OnOverall : DefaultOn, Grasses?.GetCrystal()));
                 ret.Add((MaterialTypes != null ? MaterialTypes.OnOverall : DefaultOn, MaterialTypes?.GetCrystal()));
             }
@@ -1339,6 +1382,7 @@ namespace Mutagen.Bethesda.Fallout4
             _ObjectEffects_Object = new Fallout4Group<ObjectEffect>(this);
             _Spells_Object = new Fallout4Group<Spell>(this);
             _Activators_Object = new Fallout4Group<Activator>(this);
+            _TalkingActivators_Object = new Fallout4Group<TalkingActivator>(this);
             _Grasses_Object = new Fallout4Group<Grass>(this);
             _MaterialTypes_Object = new Fallout4Group<MaterialType>(this);
             CustomCtor();
@@ -1423,6 +1467,10 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 this.Activators.RecordCache.Set(rhsMod.Activators.RecordCache.Items);
             }
+            if (mask?.TalkingActivators ?? true)
+            {
+                this.TalkingActivators.RecordCache.Set(rhsMod.TalkingActivators.RecordCache.Items);
+            }
             if (mask?.Grasses ?? true)
             {
                 this.Grasses.RecordCache.Set(rhsMod.Grasses.RecordCache.Items);
@@ -1460,6 +1508,7 @@ namespace Mutagen.Bethesda.Fallout4
             count += ObjectEffects.RecordCache.Count > 0 ? 1 : default(uint);
             count += Spells.RecordCache.Count > 0 ? 1 : default(uint);
             count += Activators.RecordCache.Count > 0 ? 1 : default(uint);
+            count += TalkingActivators.RecordCache.Count > 0 ? 1 : default(uint);
             count += Grasses.RecordCache.Count > 0 ? 1 : default(uint);
             count += MaterialTypes.RecordCache.Count > 0 ? 1 : default(uint);
             GetCustomRecordCount((customCount) => count += customCount);
@@ -1728,6 +1777,7 @@ namespace Mutagen.Bethesda.Fallout4
         new Fallout4Group<ObjectEffect> ObjectEffects { get; }
         new Fallout4Group<Spell> Spells { get; }
         new Fallout4Group<Activator> Activators { get; }
+        new Fallout4Group<TalkingActivator> TalkingActivators { get; }
         new Fallout4Group<Grass> Grasses { get; }
         new Fallout4Group<MaterialType> MaterialTypes { get; }
     }
@@ -1768,6 +1818,7 @@ namespace Mutagen.Bethesda.Fallout4
         IFallout4GroupGetter<IObjectEffectGetter> ObjectEffects { get; }
         IFallout4GroupGetter<ISpellGetter> Spells { get; }
         IFallout4GroupGetter<IActivatorGetter> Activators { get; }
+        IFallout4GroupGetter<ITalkingActivatorGetter> TalkingActivators { get; }
         IFallout4GroupGetter<IGrassGetter> Grasses { get; }
         IFallout4GroupGetter<IMaterialTypeGetter> MaterialTypes { get; }
 
@@ -2346,8 +2397,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         ObjectEffects = 17,
         Spells = 18,
         Activators = 19,
-        Grasses = 20,
-        MaterialTypes = 21,
+        TalkingActivators = 20,
+        Grasses = 21,
+        MaterialTypes = 22,
     }
     #endregion
 
@@ -2365,9 +2417,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public const string GUID = "9cae6baa-1084-4862-ae0a-07c79b9f2a3a";
 
-        public const ushort AdditionalFieldCount = 22;
+        public const ushort AdditionalFieldCount = 23;
 
-        public const ushort FieldCount = 22;
+        public const ushort FieldCount = 23;
 
         public static readonly Type MaskType = typeof(Fallout4Mod.Mask<>);
 
@@ -2455,6 +2507,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.ObjectEffects.Clear();
             item.Spells.Clear();
             item.Activators.Clear();
+            item.TalkingActivators.Clear();
             item.Grasses.Clear();
             item.MaterialTypes.Clear();
         }
@@ -2482,6 +2535,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.ObjectEffects.RemapLinks(mapping);
             obj.Spells.RemapLinks(mapping);
             obj.Activators.RemapLinks(mapping);
+            obj.TalkingActivators.RemapLinks(mapping);
             obj.Grasses.RemapLinks(mapping);
             obj.MaterialTypes.RemapLinks(mapping);
         }
@@ -2537,6 +2591,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.ObjectEffects.Remove(keys);
             obj.Spells.Remove(keys);
             obj.Activators.Remove(keys);
+            obj.TalkingActivators.Remove(keys);
             obj.Grasses.Remove(keys);
             obj.MaterialTypes.Remove(keys);
         }
@@ -2710,6 +2765,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         type: type,
                         keys: keys);
                     break;
+                case "TalkingActivator":
+                case "ITalkingActivatorGetter":
+                case "ITalkingActivator":
+                case "ITalkingActivatorInternal":
+                    obj.TalkingActivators.Remove(
+                        type: type,
+                        keys: keys);
+                    break;
                 case "Grass":
                 case "IGrassGetter":
                 case "IGrass":
@@ -2842,6 +2905,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ret.ObjectEffects = MaskItemExt.Factory(item.ObjectEffects.GetEqualsMask(rhs.ObjectEffects, include), include);
             ret.Spells = MaskItemExt.Factory(item.Spells.GetEqualsMask(rhs.Spells, include), include);
             ret.Activators = MaskItemExt.Factory(item.Activators.GetEqualsMask(rhs.Activators, include), include);
+            ret.TalkingActivators = MaskItemExt.Factory(item.TalkingActivators.GetEqualsMask(rhs.TalkingActivators, include), include);
             ret.Grasses = MaskItemExt.Factory(item.Grasses.GetEqualsMask(rhs.Grasses, include), include);
             ret.MaterialTypes = MaskItemExt.Factory(item.MaterialTypes.GetEqualsMask(rhs.MaterialTypes, include), include);
         }
@@ -2969,6 +3033,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             if (printMask?.Activators?.Overall ?? true)
             {
                 item.Activators?.ToString(fg, "Activators");
+            }
+            if (printMask?.TalkingActivators?.Overall ?? true)
+            {
+                item.TalkingActivators?.ToString(fg, "TalkingActivators");
             }
             if (printMask?.Grasses?.Overall ?? true)
             {
@@ -3147,6 +3215,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 else if (!isActivatorsEqual) return false;
             }
+            if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.TalkingActivators) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.TalkingActivators, rhs.TalkingActivators, out var lhsTalkingActivators, out var rhsTalkingActivators, out var isTalkingActivatorsEqual))
+                {
+                    if (!object.Equals(lhsTalkingActivators, rhsTalkingActivators)) return false;
+                }
+                else if (!isTalkingActivatorsEqual) return false;
+            }
             if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.Grasses) ?? true))
             {
                 if (EqualsMaskHelper.RefEquality(lhs.Grasses, rhs.Grasses, out var lhsGrasses, out var rhsGrasses, out var isGrassesEqual))
@@ -3189,6 +3265,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             hash.Add(item.ObjectEffects);
             hash.Add(item.Spells);
             hash.Add(item.Activators);
+            hash.Add(item.TalkingActivators);
             hash.Add(item.Grasses);
             hash.Add(item.MaterialTypes);
             return hash.ToHashCode();
@@ -3304,6 +3381,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IActivator":
                 case "IActivatorInternal":
                     return obj.Activators;
+                case "TalkingActivator":
+                case "ITalkingActivatorGetter":
+                case "ITalkingActivator":
+                case "ITalkingActivatorInternal":
+                    return obj.TalkingActivators;
                 case "Grass":
                 case "IGrassGetter":
                 case "IGrass":
@@ -3334,7 +3416,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 mod: item,
                 modHeader: item.ModHeader.DeepCopy(),
                 modKey: modKey);
-            Stream[] outputStreams = new Stream[21];
+            Stream[] outputStreams = new Stream[22];
             List<Action> toDo = new List<Action>();
             toDo.Add(() => WriteGroupParallel(item.GameSettings, writer.MetaData.MasterReferences!, 0, outputStreams, param.StringsWriter));
             toDo.Add(() => WriteGroupParallel(item.Keywords, writer.MetaData.MasterReferences!, 1, outputStreams, param.StringsWriter));
@@ -3355,8 +3437,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             toDo.Add(() => WriteGroupParallel(item.ObjectEffects, writer.MetaData.MasterReferences!, 16, outputStreams, param.StringsWriter));
             toDo.Add(() => WriteGroupParallel(item.Spells, writer.MetaData.MasterReferences!, 17, outputStreams, param.StringsWriter));
             toDo.Add(() => WriteGroupParallel(item.Activators, writer.MetaData.MasterReferences!, 18, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Grasses, writer.MetaData.MasterReferences!, 19, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.MaterialTypes, writer.MetaData.MasterReferences!, 20, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.TalkingActivators, writer.MetaData.MasterReferences!, 19, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Grasses, writer.MetaData.MasterReferences!, 20, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.MaterialTypes, writer.MetaData.MasterReferences!, 21, outputStreams, param.StringsWriter));
             Parallel.Invoke(toDo.ToArray());
             PluginUtilityTranslation.CompileStreamsInto(
                 outputStreams.NotNull(),
@@ -3543,6 +3626,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     yield return item;
                 }
             }
+            if (obj.TalkingActivators is IFormLinkContainerGetter TalkingActivatorslinkCont)
+            {
+                foreach (var item in TalkingActivatorslinkCont.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
             if (obj.Grasses is IFormLinkContainerGetter GrasseslinkCont)
             {
                 foreach (var item in GrasseslinkCont.ContainedFormLinks)
@@ -3635,6 +3725,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 yield return item;
             }
             foreach (var item in obj.Activators.EnumerateMajorRecords())
+            {
+                yield return item;
+            }
+            foreach (var item in obj.TalkingActivators.EnumerateMajorRecords())
             {
                 yield return item;
             }
@@ -3848,6 +3942,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IActivator":
                 case "IActivatorInternal":
                     foreach (var item in obj.Activators.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                case "TalkingActivator":
+                case "ITalkingActivatorGetter":
+                case "ITalkingActivator":
+                case "ITalkingActivatorInternal":
+                    foreach (var item in obj.TalkingActivators.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -4223,6 +4326,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     group: (m) => m.Activators,
                     groupGetter: (m) => m.Activators);
             }
+            foreach (var item in obj.TalkingActivators)
+            {
+                yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, TalkingActivator, ITalkingActivatorGetter>(
+                    modKey: obj.ModKey,
+                    record: item,
+                    group: (m) => m.TalkingActivators,
+                    groupGetter: (m) => m.TalkingActivators);
+            }
             foreach (var item in obj.Grasses)
             {
                 yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, Grass, IGrassGetter>(
@@ -4515,6 +4626,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                             record: item,
                             group: (m) => m.Activators,
                             groupGetter: (m) => m.Activators);
+                    }
+                    yield break;
+                case "TalkingActivator":
+                case "ITalkingActivatorGetter":
+                case "ITalkingActivator":
+                case "ITalkingActivatorInternal":
+                    foreach (var item in obj.TalkingActivators)
+                    {
+                        yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, TalkingActivator, ITalkingActivatorGetter>(
+                            modKey: obj.ModKey,
+                            record: item,
+                            group: (m) => m.TalkingActivators,
+                            groupGetter: (m) => m.TalkingActivators);
                     }
                     yield break;
                 case "Grass":
@@ -5119,6 +5243,26 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     errorMask?.PopIndex();
                 }
             }
+            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.TalkingActivators) ?? true))
+            {
+                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.TalkingActivators);
+                try
+                {
+                    item.TalkingActivators.DeepCopyIn(
+                        rhs: rhs.TalkingActivators,
+                        errorMask: errorMask,
+                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.TalkingActivators));
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
             if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.Grasses) ?? true))
             {
                 errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.Grasses);
@@ -5268,6 +5412,7 @@ namespace Mutagen.Bethesda.Fallout4
         public bool ObjectEffects;
         public bool Spells;
         public bool Activators;
+        public bool TalkingActivators;
         public bool Grasses;
         public bool MaterialTypes;
         public GroupMask()
@@ -5294,6 +5439,7 @@ namespace Mutagen.Bethesda.Fallout4
             ObjectEffects = defaultValue;
             Spells = defaultValue;
             Activators = defaultValue;
+            TalkingActivators = defaultValue;
             Grasses = defaultValue;
             MaterialTypes = defaultValue;
         }
@@ -5532,6 +5678,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 {
                     ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)ActivatorsItem).BinaryWriteTranslator).Write<IActivatorGetter>(
                         item: ActivatorsItem,
+                        writer: writer,
+                        translationParams: translationParams);
+                }
+            }
+            if (importMask?.TalkingActivators ?? true)
+            {
+                var TalkingActivatorsItem = item.TalkingActivators;
+                if (TalkingActivatorsItem.RecordCache.Count > 0)
+                {
+                    ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)TalkingActivatorsItem).BinaryWriteTranslator).Write<ITalkingActivatorGetter>(
+                        item: TalkingActivatorsItem,
                         writer: writer,
                         translationParams: translationParams);
                 }
@@ -5890,6 +6047,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     }
                     return (int)Fallout4Mod_FieldIndex.Activators;
                 }
+                case RecordTypeInts.TACT:
+                {
+                    if (importMask?.TalkingActivators ?? true)
+                    {
+                        item.TalkingActivators.CopyInFromBinary(
+                            frame: frame,
+                            translationParams: null);
+                    }
+                    else
+                    {
+                        frame.Position += contentLength;
+                    }
+                    return (int)Fallout4Mod_FieldIndex.TalkingActivators;
+                }
                 case RecordTypeInts.GRAS:
                 {
                     if (importMask?.Grasses ?? true)
@@ -6173,6 +6344,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private IFallout4GroupGetter<IActivatorGetter>? _Activators => _ActivatorsLocation.HasValue ? Fallout4GroupBinaryOverlay<IActivatorGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _ActivatorsLocation!.Value.Min, _ActivatorsLocation!.Value.Max), _package), _package) : default;
         public IFallout4GroupGetter<IActivatorGetter> Activators => _Activators ?? new Fallout4Group<Activator>(this);
         #endregion
+        #region TalkingActivators
+        private RangeInt64? _TalkingActivatorsLocation;
+        private IFallout4GroupGetter<ITalkingActivatorGetter>? _TalkingActivators => _TalkingActivatorsLocation.HasValue ? Fallout4GroupBinaryOverlay<ITalkingActivatorGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _TalkingActivatorsLocation!.Value.Min, _TalkingActivatorsLocation!.Value.Max), _package), _package) : default;
+        public IFallout4GroupGetter<ITalkingActivatorGetter> TalkingActivators => _TalkingActivators ?? new Fallout4Group<TalkingActivator>(this);
+        #endregion
         #region Grasses
         private RangeInt64? _GrassesLocation;
         private IFallout4GroupGetter<IGrassGetter>? _Grasses => _GrassesLocation.HasValue ? Fallout4GroupBinaryOverlay<IGrassGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _GrassesLocation!.Value.Min, _GrassesLocation!.Value.Max), _package), _package) : default;
@@ -6364,6 +6540,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 {
                     _ActivatorsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
                     return (int)Fallout4Mod_FieldIndex.Activators;
+                }
+                case RecordTypeInts.TACT:
+                {
+                    _TalkingActivatorsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    return (int)Fallout4Mod_FieldIndex.TalkingActivators;
                 }
                 case RecordTypeInts.GRAS:
                 {

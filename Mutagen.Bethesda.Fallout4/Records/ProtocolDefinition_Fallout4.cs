@@ -118,6 +118,8 @@ namespace Loqui
             LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.Perk_Registration.Instance);
             LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.Spell_Registration.Instance);
             LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.Water_Registration.Instance);
+            LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.TalkingActivator_Registration.Instance);
+            LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.VoiceType_Registration.Instance);
         }
     }
 }

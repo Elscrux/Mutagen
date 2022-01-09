@@ -25,6 +25,7 @@
 	  <Group name="Activators" refName="Activator" />
 	  <Group name="TalkingActivators" refName="TalkingActivator" />
 	  <Group name="Grasses" refName="Grass" />
+	  <Group name="VoiceTypes" refName="VoiceType" />
 	  <Group name="MaterialTypes" refName="MaterialType" />
 	</Fields>
   </Object>
