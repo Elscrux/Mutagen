@@ -65,6 +65,9 @@
     <Compile Include="Records\Common Subrecords\Effect.cs">
       <DependentUpon>Effect.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Common Subrecords\ExtraData.cs">
+      <DependentUpon>ExtraData.xml</DependentUpon>
+    </Compile>
     <Compile Include="Records\Common Subrecords\LocationTargetRadius.cs">
       <DependentUpon>LocationTargetRadius.xml</DependentUpon>
     </Compile>
@@ -100,6 +103,9 @@
     </Compile>
     <Compile Include="Records\Major Records\Book.cs">
       <DependentUpon>Book.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Container.cs">
+      <DependentUpon>Container.xml</DependentUpon>
     </Compile>
     <Compile Include="Records\Major Records\Faction.cs">
       <DependentUpon>Faction.xml</DependentUpon>
@@ -606,6 +612,36 @@
     </Compile>
     <Compile Include="Records\Major Records\Static_Generated.cs">
       <DependentUpon>Static.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ContainerEntry_Generated.cs">
+      <DependentUpon>ContainerEntry.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ContainerItem_Generated.cs">
+      <DependentUpon>ContainerEntry.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ExtraData_Generated.cs">
+      <DependentUpon>ExtraData.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\OwnerTarget_Generated.cs">
+      <DependentUpon>ExtraData.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\NpcOwner_Generated.cs">
+      <DependentUpon>ExtraData.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\FactionOwner_Generated.cs">
+      <DependentUpon>ExtraData.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\NoOwner_Generated.cs">
+      <DependentUpon>ExtraData.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\Terminal_Generated.cs">
+      <DependentUpon>Terminal.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Container_Generated.cs">
+      <DependentUpon>Container.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Npc_Generated.cs">
+      <DependentUpon>Npc.xml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

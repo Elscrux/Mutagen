@@ -30,6 +30,7 @@ A `FormLink<IItem>` could then point to all those record types by pointing to th
 - Activator
 - Armor
 - Book
+- Container
 - Door
 - Faction
 - Spell
@@ -62,6 +63,8 @@ A `FormLink<IItem>` could then point to all those record types by pointing to th
 ### Book
 - IConstructible
 - IItem
+- IObjectId
+### Container
 - IObjectId
 ### Door
 - ILocationTargetable

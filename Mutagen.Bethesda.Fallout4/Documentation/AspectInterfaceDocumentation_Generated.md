@@ -11,6 +11,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Activator
 - Armor
 - Book
+- Container
 - Race
 - Spell
 - TalkingActivator
@@ -19,6 +20,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - ArmorModel
 - ArtObject
 - Book
+- Container
 - DestructionStage
 - Grass
 - HeadPart
@@ -30,6 +32,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Book
 - Class
 - Component
+- Container
 - Faction
 - HeadPart
 - Keyword
@@ -58,6 +61,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - ArtObject
 - Book
 - Component
+- Container
 - Grass
 - ObjectEffect
 - SoundMarker
@@ -68,6 +72,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Activator
 - Armor
 - Book
+- Container
 - TalkingActivator
 ### IWeightValue
 - Armor
@@ -107,6 +112,12 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 ### Component
 - INamed
 - IObjectBounded
+### Container
+- IKeyworded
+- IModeled
+- INamed
+- IObjectBounded
+- IScripted
 ### DestructionStage
 - IModeled
 ### Faction

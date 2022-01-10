@@ -26,6 +26,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType CLFM = new(0x4D464C43);
         public static readonly RecordType CMPO = new(0x4F504D43);
         public static readonly RecordType CNAM = new(0x4D414E43);
+        public static readonly RecordType CNTO = new(0x4F544E43);
+        public static readonly RecordType COCT = new(0x54434F43);
+        public static readonly RecordType COED = new(0x44454F43);
+        public static readonly RecordType CONT = new(0x544E4F43);
         public static readonly RecordType CRGR = new(0x52475243);
         public static readonly RecordType CRVA = new(0x41565243);
         public static readonly RecordType CTDA = new(0x41445443);
@@ -60,6 +64,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType FNAM = new(0x4D414E46);
         public static readonly RecordType FSTP = new(0x50545346);
         public static readonly RecordType FSTS = new(0x53545346);
+        public static readonly RecordType FTYP = new(0x50595446);
         public static readonly RecordType FULL = new(0x4C4C5546);
         public static readonly RecordType GLOB = new(0x424F4C47);
         public static readonly RecordType GMST = new(0x54534D47);
@@ -108,6 +113,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType NAM2 = new(0x324D414E);
         public static readonly RecordType NAM3 = new(0x334D414E);
         public static readonly RecordType NNAM = new(0x4D414E4E);
+        public static readonly RecordType NPC_ = new(0x5F43504E);
+        public static readonly RecordType NTRM = new(0x4D52544E);
         public static readonly RecordType OBND = new(0x444E424F);
         public static readonly RecordType OFST = new(0x5453464F);
         public static readonly RecordType ONAM = new(0x4D414E4F);
@@ -142,6 +149,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType STCP = new(0x50435453);
         public static readonly RecordType STOL = new(0x4C4F5453);
         public static readonly RecordType TACT = new(0x54434154);
+        public static readonly RecordType TERM = new(0x4D524554);
         public static readonly RecordType TES4 = new(0x34534554);
         public static readonly RecordType TNAM = new(0x4D414E54);
         public static readonly RecordType TRNS = new(0x534E5254);

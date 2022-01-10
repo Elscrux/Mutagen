@@ -28,6 +28,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Activator),
                 typeof(Armor),
                 typeof(Book),
+                typeof(Container),
                 typeof(Door),
                 typeof(Faction),
                 typeof(Spell),

@@ -24,6 +24,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int CLFM = 0x4D464C43;
         public const int CMPO = 0x4F504D43;
         public const int CNAM = 0x4D414E43;
+        public const int CNTO = 0x4F544E43;
+        public const int COCT = 0x54434F43;
+        public const int COED = 0x44454F43;
+        public const int CONT = 0x544E4F43;
         public const int CRGR = 0x52475243;
         public const int CRVA = 0x41565243;
         public const int CTDA = 0x41445443;
@@ -58,6 +62,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int FNAM = 0x4D414E46;
         public const int FSTP = 0x50545346;
         public const int FSTS = 0x53545346;
+        public const int FTYP = 0x50595446;
         public const int FULL = 0x4C4C5546;
         public const int GLOB = 0x424F4C47;
         public const int GMST = 0x54534D47;
@@ -106,6 +111,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int NAM2 = 0x324D414E;
         public const int NAM3 = 0x334D414E;
         public const int NNAM = 0x4D414E4E;
+        public const int NPC_ = 0x5F43504E;
+        public const int NTRM = 0x4D52544E;
         public const int OBND = 0x444E424F;
         public const int OFST = 0x5453464F;
         public const int ONAM = 0x4D414E4F;
@@ -140,6 +147,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int STCP = 0x50435453;
         public const int STOL = 0x4C4F5453;
         public const int TACT = 0x54434154;
+        public const int TERM = 0x4D524554;
         public const int TES4 = 0x34534554;
         public const int TNAM = 0x4D414E54;
         public const int TRNS = 0x534E5254;

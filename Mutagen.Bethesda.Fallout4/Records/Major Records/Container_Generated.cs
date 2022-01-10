@@ -31,7 +31,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -42,14 +41,14 @@ using System.Text;
 namespace Mutagen.Bethesda.Fallout4
 {
     #region Class
-    public partial class Activator :
+    public partial class Container :
         Fallout4MajorRecord,
-        IActivatorInternal,
-        IEquatable<IActivatorGetter>,
-        ILoquiObjectSetter<Activator>
+        IContainerInternal,
+        IEquatable<IContainerGetter>,
+        ILoquiObjectSetter<Container>
     {
         #region Ctor
-        protected Activator()
+        protected Container()
         {
             CustomCtor();
         }
@@ -68,7 +67,7 @@ namespace Mutagen.Bethesda.Fallout4
             set => _VirtualMachineAdapter = value;
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IVirtualMachineAdapterGetter? IActivatorGetter.VirtualMachineAdapter => this.VirtualMachineAdapter;
+        IVirtualMachineAdapterGetter? IContainerGetter.VirtualMachineAdapter => this.VirtualMachineAdapter;
         #region Aspects
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IVirtualMachineAdapterGetter? IScriptedGetter.VirtualMachineAdapter => this.VirtualMachineAdapter;
@@ -80,7 +79,7 @@ namespace Mutagen.Bethesda.Fallout4
         /// </summary>
         public ObjectBounds ObjectBounds { get; set; } = new ObjectBounds();
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IObjectBoundsGetter IActivatorGetter.ObjectBounds => ObjectBounds;
+        IObjectBoundsGetter IContainerGetter.ObjectBounds => ObjectBounds;
         #region Aspects
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         ObjectBounds? IObjectBoundedOptional.ObjectBounds
@@ -97,17 +96,7 @@ namespace Mutagen.Bethesda.Fallout4
         #region PreviewTransform
         public PreviewTransform PreviewTransform { get; set; } = new PreviewTransform();
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IPreviewTransformGetter IActivatorGetter.PreviewTransform => PreviewTransform;
-        #endregion
-        #region AnimationSound
-        private readonly IFormLinkNullable<IAnimationSoundTagSetGetter> _AnimationSound = new FormLinkNullable<IAnimationSoundTagSetGetter>();
-        public IFormLinkNullable<IAnimationSoundTagSetGetter> AnimationSound
-        {
-            get => _AnimationSound;
-            set => _AnimationSound.SetTo(value);
-        }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IFormLinkNullableGetter<IAnimationSoundTagSetGetter> IActivatorGetter.AnimationSound => this.AnimationSound;
+        IPreviewTransformGetter IContainerGetter.PreviewTransform => PreviewTransform;
         #endregion
         #region Name
         /// <summary>
@@ -115,7 +104,7 @@ namespace Mutagen.Bethesda.Fallout4
         /// </summary>
         public TranslatedString? Name { get; set; }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        ITranslatedStringGetter? IActivatorGetter.Name => this.Name;
+        ITranslatedStringGetter? IContainerGetter.Name => this.Name;
         #region Aspects
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         string INamedRequiredGetter.Name => this.Name?.String ?? string.Empty;
@@ -157,11 +146,25 @@ namespace Mutagen.Bethesda.Fallout4
             set => _Model = value;
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IModelGetter? IActivatorGetter.Model => this.Model;
+        IModelGetter? IContainerGetter.Model => this.Model;
         #region Aspects
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IModelGetter? IModeledGetter.Model => this.Model;
         #endregion
+        #endregion
+        #region Items
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ExtendedList<ContainerEntry>? _Items;
+        public ExtendedList<ContainerEntry>? Items
+        {
+            get => this._Items;
+            set => this._Items = value;
+        }
+        #region Interface Members
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IReadOnlyList<IContainerEntryGetter>? IContainerGetter.Items => _Items;
+        #endregion
+
         #endregion
         #region Destructible
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -172,7 +175,13 @@ namespace Mutagen.Bethesda.Fallout4
             set => _Destructible = value;
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IDestructibleGetter? IActivatorGetter.Destructible => this.Destructible;
+        IDestructibleGetter? IContainerGetter.Destructible => this.Destructible;
+        #endregion
+        #region Flags
+        public Container.Flag Flags { get; set; } = default;
+        #endregion
+        #region Weight
+        public Single Weight { get; set; } = default;
         #endregion
         #region Keywords
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -187,13 +196,23 @@ namespace Mutagen.Bethesda.Fallout4
         }
         #region Interface Members
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? IActivatorGetter.Keywords => _Keywords;
+        IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? IContainerGetter.Keywords => _Keywords;
         #endregion
 
         #region Aspects
         IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? IKeywordedGetter<IKeywordGetter>.Keywords => this.Keywords;
         IReadOnlyList<IFormLinkGetter<IKeywordCommonGetter>>? IKeywordedGetter.Keywords => this.Keywords;
         #endregion
+        #endregion
+        #region ForcedLocRefType
+        private readonly IFormLinkNullable<ILocationReferenceTypeGetter> _ForcedLocRefType = new FormLinkNullable<ILocationReferenceTypeGetter>();
+        public IFormLinkNullable<ILocationReferenceTypeGetter> ForcedLocRefType
+        {
+            get => _ForcedLocRefType;
+            set => _ForcedLocRefType.SetTo(value);
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFormLinkNullableGetter<ILocationReferenceTypeGetter> IContainerGetter.ForcedLocRefType => this.ForcedLocRefType;
         #endregion
         #region Properties
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -204,82 +223,30 @@ namespace Mutagen.Bethesda.Fallout4
             set => _Properties = value;
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IPropertiesGetter? IActivatorGetter.Properties => this.Properties;
+        IPropertiesGetter? IContainerGetter.Properties => this.Properties;
         #endregion
-        #region Terminal
-        private readonly IFormLinkNullable<ITerminalGetter> _Terminal = new FormLinkNullable<ITerminalGetter>();
-        public IFormLinkNullable<ITerminalGetter> Terminal
+        #region OpenSound
+        private readonly IFormLinkNullable<ISoundDescriptorGetter> _OpenSound = new FormLinkNullable<ISoundDescriptorGetter>();
+        public IFormLinkNullable<ISoundDescriptorGetter> OpenSound
         {
-            get => _Terminal;
-            set => _Terminal.SetTo(value);
+            get => _OpenSound;
+            set => _OpenSound.SetTo(value);
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IFormLinkNullableGetter<ITerminalGetter> IActivatorGetter.Terminal => this.Terminal;
+        IFormLinkNullableGetter<ISoundDescriptorGetter> IContainerGetter.OpenSound => this.OpenSound;
         #endregion
-        #region ForcedLocRefType
-        private readonly IFormLinkNullable<ILocationReferenceTypeGetter> _ForcedLocRefType = new FormLinkNullable<ILocationReferenceTypeGetter>();
-        public IFormLinkNullable<ILocationReferenceTypeGetter> ForcedLocRefType
+        #region CloseSound
+        private readonly IFormLinkNullable<ISoundDescriptorGetter> _CloseSound = new FormLinkNullable<ISoundDescriptorGetter>();
+        public IFormLinkNullable<ISoundDescriptorGetter> CloseSound
         {
-            get => _ForcedLocRefType;
-            set => _ForcedLocRefType.SetTo(value);
+            get => _CloseSound;
+            set => _CloseSound.SetTo(value);
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IFormLinkNullableGetter<ILocationReferenceTypeGetter> IActivatorGetter.ForcedLocRefType => this.ForcedLocRefType;
+        IFormLinkNullableGetter<ISoundDescriptorGetter> IContainerGetter.CloseSound => this.CloseSound;
         #endregion
-        #region MarkerColor
-        public Color? MarkerColor { get; set; }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        Color? IActivatorGetter.MarkerColor => this.MarkerColor;
-        #endregion
-        #region LoopingSound
-        private readonly IFormLinkNullable<ISoundDescriptorGetter> _LoopingSound = new FormLinkNullable<ISoundDescriptorGetter>();
-        public IFormLinkNullable<ISoundDescriptorGetter> LoopingSound
-        {
-            get => _LoopingSound;
-            set => _LoopingSound.SetTo(value);
-        }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IFormLinkNullableGetter<ISoundDescriptorGetter> IActivatorGetter.LoopingSound => this.LoopingSound;
-        #endregion
-        #region ActivationSound
-        private readonly IFormLinkNullable<ISoundDescriptorGetter> _ActivationSound = new FormLinkNullable<ISoundDescriptorGetter>();
-        public IFormLinkNullable<ISoundDescriptorGetter> ActivationSound
-        {
-            get => _ActivationSound;
-            set => _ActivationSound.SetTo(value);
-        }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IFormLinkNullableGetter<ISoundDescriptorGetter> IActivatorGetter.ActivationSound => this.ActivationSound;
-        #endregion
-        #region WaterType
-        private readonly IFormLinkNullable<IWaterGetter> _WaterType = new FormLinkNullable<IWaterGetter>();
-        public IFormLinkNullable<IWaterGetter> WaterType
-        {
-            get => _WaterType;
-            set => _WaterType.SetTo(value);
-        }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IFormLinkNullableGetter<IWaterGetter> IActivatorGetter.WaterType => this.WaterType;
-        #endregion
-        #region ActivateTextOverride
-        public TranslatedString? ActivateTextOverride { get; set; }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        ITranslatedStringGetter? IActivatorGetter.ActivateTextOverride => this.ActivateTextOverride;
-        #endregion
-        #region Flags
-        public Activator.Flag? Flags { get; set; }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        Activator.Flag? IActivatorGetter.Flags => this.Flags;
-        #endregion
-        #region InteractionKeyword
-        private readonly IFormLinkNullable<IKeywordGetter> _InteractionKeyword = new FormLinkNullable<IKeywordGetter>();
-        public IFormLinkNullable<IKeywordGetter> InteractionKeyword
-        {
-            get => _InteractionKeyword;
-            set => _InteractionKeyword.SetTo(value);
-        }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IFormLinkNullableGetter<IKeywordGetter> IActivatorGetter.InteractionKeyword => this.InteractionKeyword;
+        #region DATADataTypeState
+        public Container.DATADataType DATADataTypeState { get; set; } = default;
         #endregion
 
         #region To String
@@ -288,7 +255,7 @@ namespace Mutagen.Bethesda.Fallout4
             FileGeneration fg,
             string? name = null)
         {
-            ActivatorMixIn.ToString(
+            ContainerMixIn.ToString(
                 item: this,
                 name: name);
         }
@@ -308,21 +275,18 @@ namespace Mutagen.Bethesda.Fallout4
                 this.VirtualMachineAdapter = new MaskItem<TItem, VirtualMachineAdapter.Mask<TItem>?>(initialValue, new VirtualMachineAdapter.Mask<TItem>(initialValue));
                 this.ObjectBounds = new MaskItem<TItem, ObjectBounds.Mask<TItem>?>(initialValue, new ObjectBounds.Mask<TItem>(initialValue));
                 this.PreviewTransform = new MaskItem<TItem, PreviewTransform.Mask<TItem>?>(initialValue, new PreviewTransform.Mask<TItem>(initialValue));
-                this.AnimationSound = initialValue;
                 this.Name = initialValue;
                 this.Model = new MaskItem<TItem, Model.Mask<TItem>?>(initialValue, new Model.Mask<TItem>(initialValue));
+                this.Items = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ContainerEntry.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, ContainerEntry.Mask<TItem>?>>());
                 this.Destructible = new MaskItem<TItem, Destructible.Mask<TItem>?>(initialValue, new Destructible.Mask<TItem>(initialValue));
-                this.Keywords = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(initialValue, Enumerable.Empty<(int Index, TItem Value)>());
-                this.Properties = new MaskItem<TItem, Properties.Mask<TItem>?>(initialValue, new Properties.Mask<TItem>(initialValue));
-                this.Terminal = initialValue;
-                this.ForcedLocRefType = initialValue;
-                this.MarkerColor = initialValue;
-                this.LoopingSound = initialValue;
-                this.ActivationSound = initialValue;
-                this.WaterType = initialValue;
-                this.ActivateTextOverride = initialValue;
                 this.Flags = initialValue;
-                this.InteractionKeyword = initialValue;
+                this.Weight = initialValue;
+                this.Keywords = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(initialValue, Enumerable.Empty<(int Index, TItem Value)>());
+                this.ForcedLocRefType = initialValue;
+                this.Properties = new MaskItem<TItem, Properties.Mask<TItem>?>(initialValue, new Properties.Mask<TItem>(initialValue));
+                this.OpenSound = initialValue;
+                this.CloseSound = initialValue;
+                this.DATADataTypeState = initialValue;
             }
 
             public Mask(
@@ -335,21 +299,18 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem VirtualMachineAdapter,
                 TItem ObjectBounds,
                 TItem PreviewTransform,
-                TItem AnimationSound,
                 TItem Name,
                 TItem Model,
+                TItem Items,
                 TItem Destructible,
-                TItem Keywords,
-                TItem Properties,
-                TItem Terminal,
-                TItem ForcedLocRefType,
-                TItem MarkerColor,
-                TItem LoopingSound,
-                TItem ActivationSound,
-                TItem WaterType,
-                TItem ActivateTextOverride,
                 TItem Flags,
-                TItem InteractionKeyword)
+                TItem Weight,
+                TItem Keywords,
+                TItem ForcedLocRefType,
+                TItem Properties,
+                TItem OpenSound,
+                TItem CloseSound,
+                TItem DATADataTypeState)
             : base(
                 MajorRecordFlagsRaw: MajorRecordFlagsRaw,
                 FormKey: FormKey,
@@ -361,21 +322,18 @@ namespace Mutagen.Bethesda.Fallout4
                 this.VirtualMachineAdapter = new MaskItem<TItem, VirtualMachineAdapter.Mask<TItem>?>(VirtualMachineAdapter, new VirtualMachineAdapter.Mask<TItem>(VirtualMachineAdapter));
                 this.ObjectBounds = new MaskItem<TItem, ObjectBounds.Mask<TItem>?>(ObjectBounds, new ObjectBounds.Mask<TItem>(ObjectBounds));
                 this.PreviewTransform = new MaskItem<TItem, PreviewTransform.Mask<TItem>?>(PreviewTransform, new PreviewTransform.Mask<TItem>(PreviewTransform));
-                this.AnimationSound = AnimationSound;
                 this.Name = Name;
                 this.Model = new MaskItem<TItem, Model.Mask<TItem>?>(Model, new Model.Mask<TItem>(Model));
+                this.Items = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ContainerEntry.Mask<TItem>?>>?>(Items, Enumerable.Empty<MaskItemIndexed<TItem, ContainerEntry.Mask<TItem>?>>());
                 this.Destructible = new MaskItem<TItem, Destructible.Mask<TItem>?>(Destructible, new Destructible.Mask<TItem>(Destructible));
-                this.Keywords = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(Keywords, Enumerable.Empty<(int Index, TItem Value)>());
-                this.Properties = new MaskItem<TItem, Properties.Mask<TItem>?>(Properties, new Properties.Mask<TItem>(Properties));
-                this.Terminal = Terminal;
-                this.ForcedLocRefType = ForcedLocRefType;
-                this.MarkerColor = MarkerColor;
-                this.LoopingSound = LoopingSound;
-                this.ActivationSound = ActivationSound;
-                this.WaterType = WaterType;
-                this.ActivateTextOverride = ActivateTextOverride;
                 this.Flags = Flags;
-                this.InteractionKeyword = InteractionKeyword;
+                this.Weight = Weight;
+                this.Keywords = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(Keywords, Enumerable.Empty<(int Index, TItem Value)>());
+                this.ForcedLocRefType = ForcedLocRefType;
+                this.Properties = new MaskItem<TItem, Properties.Mask<TItem>?>(Properties, new Properties.Mask<TItem>(Properties));
+                this.OpenSound = OpenSound;
+                this.CloseSound = CloseSound;
+                this.DATADataTypeState = DATADataTypeState;
             }
 
             #pragma warning disable CS8618
@@ -390,21 +348,18 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<TItem, VirtualMachineAdapter.Mask<TItem>?>? VirtualMachineAdapter { get; set; }
             public MaskItem<TItem, ObjectBounds.Mask<TItem>?>? ObjectBounds { get; set; }
             public MaskItem<TItem, PreviewTransform.Mask<TItem>?>? PreviewTransform { get; set; }
-            public TItem AnimationSound;
             public TItem Name;
             public MaskItem<TItem, Model.Mask<TItem>?>? Model { get; set; }
+            public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ContainerEntry.Mask<TItem>?>>?>? Items;
             public MaskItem<TItem, Destructible.Mask<TItem>?>? Destructible { get; set; }
-            public MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>? Keywords;
-            public MaskItem<TItem, Properties.Mask<TItem>?>? Properties { get; set; }
-            public TItem Terminal;
-            public TItem ForcedLocRefType;
-            public TItem MarkerColor;
-            public TItem LoopingSound;
-            public TItem ActivationSound;
-            public TItem WaterType;
-            public TItem ActivateTextOverride;
             public TItem Flags;
-            public TItem InteractionKeyword;
+            public TItem Weight;
+            public MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>? Keywords;
+            public TItem ForcedLocRefType;
+            public MaskItem<TItem, Properties.Mask<TItem>?>? Properties { get; set; }
+            public TItem OpenSound;
+            public TItem CloseSound;
+            public TItem DATADataTypeState;
             #endregion
 
             #region Equals
@@ -421,21 +376,18 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!object.Equals(this.VirtualMachineAdapter, rhs.VirtualMachineAdapter)) return false;
                 if (!object.Equals(this.ObjectBounds, rhs.ObjectBounds)) return false;
                 if (!object.Equals(this.PreviewTransform, rhs.PreviewTransform)) return false;
-                if (!object.Equals(this.AnimationSound, rhs.AnimationSound)) return false;
                 if (!object.Equals(this.Name, rhs.Name)) return false;
                 if (!object.Equals(this.Model, rhs.Model)) return false;
+                if (!object.Equals(this.Items, rhs.Items)) return false;
                 if (!object.Equals(this.Destructible, rhs.Destructible)) return false;
-                if (!object.Equals(this.Keywords, rhs.Keywords)) return false;
-                if (!object.Equals(this.Properties, rhs.Properties)) return false;
-                if (!object.Equals(this.Terminal, rhs.Terminal)) return false;
-                if (!object.Equals(this.ForcedLocRefType, rhs.ForcedLocRefType)) return false;
-                if (!object.Equals(this.MarkerColor, rhs.MarkerColor)) return false;
-                if (!object.Equals(this.LoopingSound, rhs.LoopingSound)) return false;
-                if (!object.Equals(this.ActivationSound, rhs.ActivationSound)) return false;
-                if (!object.Equals(this.WaterType, rhs.WaterType)) return false;
-                if (!object.Equals(this.ActivateTextOverride, rhs.ActivateTextOverride)) return false;
                 if (!object.Equals(this.Flags, rhs.Flags)) return false;
-                if (!object.Equals(this.InteractionKeyword, rhs.InteractionKeyword)) return false;
+                if (!object.Equals(this.Weight, rhs.Weight)) return false;
+                if (!object.Equals(this.Keywords, rhs.Keywords)) return false;
+                if (!object.Equals(this.ForcedLocRefType, rhs.ForcedLocRefType)) return false;
+                if (!object.Equals(this.Properties, rhs.Properties)) return false;
+                if (!object.Equals(this.OpenSound, rhs.OpenSound)) return false;
+                if (!object.Equals(this.CloseSound, rhs.CloseSound)) return false;
+                if (!object.Equals(this.DATADataTypeState, rhs.DATADataTypeState)) return false;
                 return true;
             }
             public override int GetHashCode()
@@ -444,21 +396,18 @@ namespace Mutagen.Bethesda.Fallout4
                 hash.Add(this.VirtualMachineAdapter);
                 hash.Add(this.ObjectBounds);
                 hash.Add(this.PreviewTransform);
-                hash.Add(this.AnimationSound);
                 hash.Add(this.Name);
                 hash.Add(this.Model);
+                hash.Add(this.Items);
                 hash.Add(this.Destructible);
-                hash.Add(this.Keywords);
-                hash.Add(this.Properties);
-                hash.Add(this.Terminal);
-                hash.Add(this.ForcedLocRefType);
-                hash.Add(this.MarkerColor);
-                hash.Add(this.LoopingSound);
-                hash.Add(this.ActivationSound);
-                hash.Add(this.WaterType);
-                hash.Add(this.ActivateTextOverride);
                 hash.Add(this.Flags);
-                hash.Add(this.InteractionKeyword);
+                hash.Add(this.Weight);
+                hash.Add(this.Keywords);
+                hash.Add(this.ForcedLocRefType);
+                hash.Add(this.Properties);
+                hash.Add(this.OpenSound);
+                hash.Add(this.CloseSound);
+                hash.Add(this.DATADataTypeState);
                 hash.Add(base.GetHashCode());
                 return hash.ToHashCode();
             }
@@ -484,18 +433,31 @@ namespace Mutagen.Bethesda.Fallout4
                     if (!eval(this.PreviewTransform.Overall)) return false;
                     if (this.PreviewTransform.Specific != null && !this.PreviewTransform.Specific.All(eval)) return false;
                 }
-                if (!eval(this.AnimationSound)) return false;
                 if (!eval(this.Name)) return false;
                 if (Model != null)
                 {
                     if (!eval(this.Model.Overall)) return false;
                     if (this.Model.Specific != null && !this.Model.Specific.All(eval)) return false;
                 }
+                if (this.Items != null)
+                {
+                    if (!eval(this.Items.Overall)) return false;
+                    if (this.Items.Specific != null)
+                    {
+                        foreach (var item in this.Items.Specific)
+                        {
+                            if (!eval(item.Overall)) return false;
+                            if (item.Specific != null && !item.Specific.All(eval)) return false;
+                        }
+                    }
+                }
                 if (Destructible != null)
                 {
                     if (!eval(this.Destructible.Overall)) return false;
                     if (this.Destructible.Specific != null && !this.Destructible.Specific.All(eval)) return false;
                 }
+                if (!eval(this.Flags)) return false;
+                if (!eval(this.Weight)) return false;
                 if (this.Keywords != null)
                 {
                     if (!eval(this.Keywords.Overall)) return false;
@@ -507,20 +469,15 @@ namespace Mutagen.Bethesda.Fallout4
                         }
                     }
                 }
+                if (!eval(this.ForcedLocRefType)) return false;
                 if (Properties != null)
                 {
                     if (!eval(this.Properties.Overall)) return false;
                     if (this.Properties.Specific != null && !this.Properties.Specific.All(eval)) return false;
                 }
-                if (!eval(this.Terminal)) return false;
-                if (!eval(this.ForcedLocRefType)) return false;
-                if (!eval(this.MarkerColor)) return false;
-                if (!eval(this.LoopingSound)) return false;
-                if (!eval(this.ActivationSound)) return false;
-                if (!eval(this.WaterType)) return false;
-                if (!eval(this.ActivateTextOverride)) return false;
-                if (!eval(this.Flags)) return false;
-                if (!eval(this.InteractionKeyword)) return false;
+                if (!eval(this.OpenSound)) return false;
+                if (!eval(this.CloseSound)) return false;
+                if (!eval(this.DATADataTypeState)) return false;
                 return true;
             }
             #endregion
@@ -544,18 +501,31 @@ namespace Mutagen.Bethesda.Fallout4
                     if (eval(this.PreviewTransform.Overall)) return true;
                     if (this.PreviewTransform.Specific != null && this.PreviewTransform.Specific.Any(eval)) return true;
                 }
-                if (eval(this.AnimationSound)) return true;
                 if (eval(this.Name)) return true;
                 if (Model != null)
                 {
                     if (eval(this.Model.Overall)) return true;
                     if (this.Model.Specific != null && this.Model.Specific.Any(eval)) return true;
                 }
+                if (this.Items != null)
+                {
+                    if (eval(this.Items.Overall)) return true;
+                    if (this.Items.Specific != null)
+                    {
+                        foreach (var item in this.Items.Specific)
+                        {
+                            if (!eval(item.Overall)) return false;
+                            if (item.Specific != null && !item.Specific.All(eval)) return false;
+                        }
+                    }
+                }
                 if (Destructible != null)
                 {
                     if (eval(this.Destructible.Overall)) return true;
                     if (this.Destructible.Specific != null && this.Destructible.Specific.Any(eval)) return true;
                 }
+                if (eval(this.Flags)) return true;
+                if (eval(this.Weight)) return true;
                 if (this.Keywords != null)
                 {
                     if (eval(this.Keywords.Overall)) return true;
@@ -567,20 +537,15 @@ namespace Mutagen.Bethesda.Fallout4
                         }
                     }
                 }
+                if (eval(this.ForcedLocRefType)) return true;
                 if (Properties != null)
                 {
                     if (eval(this.Properties.Overall)) return true;
                     if (this.Properties.Specific != null && this.Properties.Specific.Any(eval)) return true;
                 }
-                if (eval(this.Terminal)) return true;
-                if (eval(this.ForcedLocRefType)) return true;
-                if (eval(this.MarkerColor)) return true;
-                if (eval(this.LoopingSound)) return true;
-                if (eval(this.ActivationSound)) return true;
-                if (eval(this.WaterType)) return true;
-                if (eval(this.ActivateTextOverride)) return true;
-                if (eval(this.Flags)) return true;
-                if (eval(this.InteractionKeyword)) return true;
+                if (eval(this.OpenSound)) return true;
+                if (eval(this.CloseSound)) return true;
+                if (eval(this.DATADataTypeState)) return true;
                 return false;
             }
             #endregion
@@ -588,7 +553,7 @@ namespace Mutagen.Bethesda.Fallout4
             #region Translate
             public new Mask<R> Translate<R>(Func<TItem, R> eval)
             {
-                var ret = new Activator.Mask<R>();
+                var ret = new Container.Mask<R>();
                 this.Translate_InternalFill(ret, eval);
                 return ret;
             }
@@ -599,10 +564,26 @@ namespace Mutagen.Bethesda.Fallout4
                 obj.VirtualMachineAdapter = this.VirtualMachineAdapter == null ? null : new MaskItem<R, VirtualMachineAdapter.Mask<R>?>(eval(this.VirtualMachineAdapter.Overall), this.VirtualMachineAdapter.Specific?.Translate(eval));
                 obj.ObjectBounds = this.ObjectBounds == null ? null : new MaskItem<R, ObjectBounds.Mask<R>?>(eval(this.ObjectBounds.Overall), this.ObjectBounds.Specific?.Translate(eval));
                 obj.PreviewTransform = this.PreviewTransform == null ? null : new MaskItem<R, PreviewTransform.Mask<R>?>(eval(this.PreviewTransform.Overall), this.PreviewTransform.Specific?.Translate(eval));
-                obj.AnimationSound = eval(this.AnimationSound);
                 obj.Name = eval(this.Name);
                 obj.Model = this.Model == null ? null : new MaskItem<R, Model.Mask<R>?>(eval(this.Model.Overall), this.Model.Specific?.Translate(eval));
+                if (Items != null)
+                {
+                    obj.Items = new MaskItem<R, IEnumerable<MaskItemIndexed<R, ContainerEntry.Mask<R>?>>?>(eval(this.Items.Overall), Enumerable.Empty<MaskItemIndexed<R, ContainerEntry.Mask<R>?>>());
+                    if (Items.Specific != null)
+                    {
+                        var l = new List<MaskItemIndexed<R, ContainerEntry.Mask<R>?>>();
+                        obj.Items.Specific = l;
+                        foreach (var item in Items.Specific.WithIndex())
+                        {
+                            MaskItemIndexed<R, ContainerEntry.Mask<R>?>? mask = item.Item == null ? null : new MaskItemIndexed<R, ContainerEntry.Mask<R>?>(item.Item.Index, eval(item.Item.Overall), item.Item.Specific?.Translate(eval));
+                            if (mask == null) continue;
+                            l.Add(mask);
+                        }
+                    }
+                }
                 obj.Destructible = this.Destructible == null ? null : new MaskItem<R, Destructible.Mask<R>?>(eval(this.Destructible.Overall), this.Destructible.Specific?.Translate(eval));
+                obj.Flags = eval(this.Flags);
+                obj.Weight = eval(this.Weight);
                 if (Keywords != null)
                 {
                     obj.Keywords = new MaskItem<R, IEnumerable<(int Index, R Value)>?>(eval(this.Keywords.Overall), Enumerable.Empty<(int Index, R Value)>());
@@ -617,16 +598,11 @@ namespace Mutagen.Bethesda.Fallout4
                         }
                     }
                 }
-                obj.Properties = this.Properties == null ? null : new MaskItem<R, Properties.Mask<R>?>(eval(this.Properties.Overall), this.Properties.Specific?.Translate(eval));
-                obj.Terminal = eval(this.Terminal);
                 obj.ForcedLocRefType = eval(this.ForcedLocRefType);
-                obj.MarkerColor = eval(this.MarkerColor);
-                obj.LoopingSound = eval(this.LoopingSound);
-                obj.ActivationSound = eval(this.ActivationSound);
-                obj.WaterType = eval(this.WaterType);
-                obj.ActivateTextOverride = eval(this.ActivateTextOverride);
-                obj.Flags = eval(this.Flags);
-                obj.InteractionKeyword = eval(this.InteractionKeyword);
+                obj.Properties = this.Properties == null ? null : new MaskItem<R, Properties.Mask<R>?>(eval(this.Properties.Overall), this.Properties.Specific?.Translate(eval));
+                obj.OpenSound = eval(this.OpenSound);
+                obj.CloseSound = eval(this.CloseSound);
+                obj.DATADataTypeState = eval(this.DATADataTypeState);
             }
             #endregion
 
@@ -636,16 +612,16 @@ namespace Mutagen.Bethesda.Fallout4
                 return ToString(printMask: null);
             }
 
-            public string ToString(Activator.Mask<bool>? printMask = null)
+            public string ToString(Container.Mask<bool>? printMask = null)
             {
                 var fg = new FileGeneration();
                 ToString(fg, printMask);
                 return fg.ToString();
             }
 
-            public void ToString(FileGeneration fg, Activator.Mask<bool>? printMask = null)
+            public void ToString(FileGeneration fg, Container.Mask<bool>? printMask = null)
             {
-                fg.AppendLine($"{nameof(Activator.Mask<TItem>)} =>");
+                fg.AppendLine($"{nameof(Container.Mask<TItem>)} =>");
                 fg.AppendLine("[");
                 using (new DepthWrapper(fg))
                 {
@@ -661,10 +637,6 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         PreviewTransform?.ToString(fg);
                     }
-                    if (printMask?.AnimationSound ?? true)
-                    {
-                        fg.AppendItem(AnimationSound, "AnimationSound");
-                    }
                     if (printMask?.Name ?? true)
                     {
                         fg.AppendItem(Name, "Name");
@@ -673,9 +645,40 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         Model?.ToString(fg);
                     }
+                    if ((printMask?.Items?.Overall ?? true)
+                        && Items is {} ItemsItem)
+                    {
+                        fg.AppendLine("Items =>");
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            fg.AppendItem(ItemsItem.Overall);
+                            if (ItemsItem.Specific != null)
+                            {
+                                foreach (var subItem in ItemsItem.Specific)
+                                {
+                                    fg.AppendLine("[");
+                                    using (new DepthWrapper(fg))
+                                    {
+                                        subItem?.ToString(fg);
+                                    }
+                                    fg.AppendLine("]");
+                                }
+                            }
+                        }
+                        fg.AppendLine("]");
+                    }
                     if (printMask?.Destructible?.Overall ?? true)
                     {
                         Destructible?.ToString(fg);
+                    }
+                    if (printMask?.Flags ?? true)
+                    {
+                        fg.AppendItem(Flags, "Flags");
+                    }
+                    if (printMask?.Weight ?? true)
+                    {
+                        fg.AppendItem(Weight, "Weight");
                     }
                     if ((printMask?.Keywords?.Overall ?? true)
                         && Keywords is {} KeywordsItem)
@@ -700,45 +703,25 @@ namespace Mutagen.Bethesda.Fallout4
                         }
                         fg.AppendLine("]");
                     }
-                    if (printMask?.Properties?.Overall ?? true)
-                    {
-                        Properties?.ToString(fg);
-                    }
-                    if (printMask?.Terminal ?? true)
-                    {
-                        fg.AppendItem(Terminal, "Terminal");
-                    }
                     if (printMask?.ForcedLocRefType ?? true)
                     {
                         fg.AppendItem(ForcedLocRefType, "ForcedLocRefType");
                     }
-                    if (printMask?.MarkerColor ?? true)
+                    if (printMask?.Properties?.Overall ?? true)
                     {
-                        fg.AppendItem(MarkerColor, "MarkerColor");
+                        Properties?.ToString(fg);
                     }
-                    if (printMask?.LoopingSound ?? true)
+                    if (printMask?.OpenSound ?? true)
                     {
-                        fg.AppendItem(LoopingSound, "LoopingSound");
+                        fg.AppendItem(OpenSound, "OpenSound");
                     }
-                    if (printMask?.ActivationSound ?? true)
+                    if (printMask?.CloseSound ?? true)
                     {
-                        fg.AppendItem(ActivationSound, "ActivationSound");
+                        fg.AppendItem(CloseSound, "CloseSound");
                     }
-                    if (printMask?.WaterType ?? true)
+                    if (printMask?.DATADataTypeState ?? true)
                     {
-                        fg.AppendItem(WaterType, "WaterType");
-                    }
-                    if (printMask?.ActivateTextOverride ?? true)
-                    {
-                        fg.AppendItem(ActivateTextOverride, "ActivateTextOverride");
-                    }
-                    if (printMask?.Flags ?? true)
-                    {
-                        fg.AppendItem(Flags, "Flags");
-                    }
-                    if (printMask?.InteractionKeyword ?? true)
-                    {
-                        fg.AppendItem(InteractionKeyword, "InteractionKeyword");
+                        fg.AppendItem(DATADataTypeState, "DATADataTypeState");
                     }
                 }
                 fg.AppendLine("]");
@@ -755,65 +738,56 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<Exception?, VirtualMachineAdapter.ErrorMask?>? VirtualMachineAdapter;
             public MaskItem<Exception?, ObjectBounds.ErrorMask?>? ObjectBounds;
             public MaskItem<Exception?, PreviewTransform.ErrorMask?>? PreviewTransform;
-            public Exception? AnimationSound;
             public Exception? Name;
             public MaskItem<Exception?, Model.ErrorMask?>? Model;
+            public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ContainerEntry.ErrorMask?>>?>? Items;
             public MaskItem<Exception?, Destructible.ErrorMask?>? Destructible;
-            public MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>? Keywords;
-            public MaskItem<Exception?, Properties.ErrorMask?>? Properties;
-            public Exception? Terminal;
-            public Exception? ForcedLocRefType;
-            public Exception? MarkerColor;
-            public Exception? LoopingSound;
-            public Exception? ActivationSound;
-            public Exception? WaterType;
-            public Exception? ActivateTextOverride;
             public Exception? Flags;
-            public Exception? InteractionKeyword;
+            public Exception? Weight;
+            public MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>? Keywords;
+            public Exception? ForcedLocRefType;
+            public MaskItem<Exception?, Properties.ErrorMask?>? Properties;
+            public Exception? OpenSound;
+            public Exception? CloseSound;
+            public Exception? DATADataTypeState;
             #endregion
 
             #region IErrorMask
             public override object? GetNthMask(int index)
             {
-                Activator_FieldIndex enu = (Activator_FieldIndex)index;
+                Container_FieldIndex enu = (Container_FieldIndex)index;
                 switch (enu)
                 {
-                    case Activator_FieldIndex.VirtualMachineAdapter:
+                    case Container_FieldIndex.VirtualMachineAdapter:
                         return VirtualMachineAdapter;
-                    case Activator_FieldIndex.ObjectBounds:
+                    case Container_FieldIndex.ObjectBounds:
                         return ObjectBounds;
-                    case Activator_FieldIndex.PreviewTransform:
+                    case Container_FieldIndex.PreviewTransform:
                         return PreviewTransform;
-                    case Activator_FieldIndex.AnimationSound:
-                        return AnimationSound;
-                    case Activator_FieldIndex.Name:
+                    case Container_FieldIndex.Name:
                         return Name;
-                    case Activator_FieldIndex.Model:
+                    case Container_FieldIndex.Model:
                         return Model;
-                    case Activator_FieldIndex.Destructible:
+                    case Container_FieldIndex.Items:
+                        return Items;
+                    case Container_FieldIndex.Destructible:
                         return Destructible;
-                    case Activator_FieldIndex.Keywords:
-                        return Keywords;
-                    case Activator_FieldIndex.Properties:
-                        return Properties;
-                    case Activator_FieldIndex.Terminal:
-                        return Terminal;
-                    case Activator_FieldIndex.ForcedLocRefType:
-                        return ForcedLocRefType;
-                    case Activator_FieldIndex.MarkerColor:
-                        return MarkerColor;
-                    case Activator_FieldIndex.LoopingSound:
-                        return LoopingSound;
-                    case Activator_FieldIndex.ActivationSound:
-                        return ActivationSound;
-                    case Activator_FieldIndex.WaterType:
-                        return WaterType;
-                    case Activator_FieldIndex.ActivateTextOverride:
-                        return ActivateTextOverride;
-                    case Activator_FieldIndex.Flags:
+                    case Container_FieldIndex.Flags:
                         return Flags;
-                    case Activator_FieldIndex.InteractionKeyword:
-                        return InteractionKeyword;
+                    case Container_FieldIndex.Weight:
+                        return Weight;
+                    case Container_FieldIndex.Keywords:
+                        return Keywords;
+                    case Container_FieldIndex.ForcedLocRefType:
+                        return ForcedLocRefType;
+                    case Container_FieldIndex.Properties:
+                        return Properties;
+                    case Container_FieldIndex.OpenSound:
+                        return OpenSound;
+                    case Container_FieldIndex.CloseSound:
+                        return CloseSound;
+                    case Container_FieldIndex.DATADataTypeState:
+                        return DATADataTypeState;
                     default:
                         return base.GetNthMask(index);
                 }
@@ -821,62 +795,53 @@ namespace Mutagen.Bethesda.Fallout4
 
             public override void SetNthException(int index, Exception ex)
             {
-                Activator_FieldIndex enu = (Activator_FieldIndex)index;
+                Container_FieldIndex enu = (Container_FieldIndex)index;
                 switch (enu)
                 {
-                    case Activator_FieldIndex.VirtualMachineAdapter:
+                    case Container_FieldIndex.VirtualMachineAdapter:
                         this.VirtualMachineAdapter = new MaskItem<Exception?, VirtualMachineAdapter.ErrorMask?>(ex, null);
                         break;
-                    case Activator_FieldIndex.ObjectBounds:
+                    case Container_FieldIndex.ObjectBounds:
                         this.ObjectBounds = new MaskItem<Exception?, ObjectBounds.ErrorMask?>(ex, null);
                         break;
-                    case Activator_FieldIndex.PreviewTransform:
+                    case Container_FieldIndex.PreviewTransform:
                         this.PreviewTransform = new MaskItem<Exception?, PreviewTransform.ErrorMask?>(ex, null);
                         break;
-                    case Activator_FieldIndex.AnimationSound:
-                        this.AnimationSound = ex;
-                        break;
-                    case Activator_FieldIndex.Name:
+                    case Container_FieldIndex.Name:
                         this.Name = ex;
                         break;
-                    case Activator_FieldIndex.Model:
+                    case Container_FieldIndex.Model:
                         this.Model = new MaskItem<Exception?, Model.ErrorMask?>(ex, null);
                         break;
-                    case Activator_FieldIndex.Destructible:
+                    case Container_FieldIndex.Items:
+                        this.Items = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ContainerEntry.ErrorMask?>>?>(ex, null);
+                        break;
+                    case Container_FieldIndex.Destructible:
                         this.Destructible = new MaskItem<Exception?, Destructible.ErrorMask?>(ex, null);
                         break;
-                    case Activator_FieldIndex.Keywords:
-                        this.Keywords = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ex, null);
-                        break;
-                    case Activator_FieldIndex.Properties:
-                        this.Properties = new MaskItem<Exception?, Properties.ErrorMask?>(ex, null);
-                        break;
-                    case Activator_FieldIndex.Terminal:
-                        this.Terminal = ex;
-                        break;
-                    case Activator_FieldIndex.ForcedLocRefType:
-                        this.ForcedLocRefType = ex;
-                        break;
-                    case Activator_FieldIndex.MarkerColor:
-                        this.MarkerColor = ex;
-                        break;
-                    case Activator_FieldIndex.LoopingSound:
-                        this.LoopingSound = ex;
-                        break;
-                    case Activator_FieldIndex.ActivationSound:
-                        this.ActivationSound = ex;
-                        break;
-                    case Activator_FieldIndex.WaterType:
-                        this.WaterType = ex;
-                        break;
-                    case Activator_FieldIndex.ActivateTextOverride:
-                        this.ActivateTextOverride = ex;
-                        break;
-                    case Activator_FieldIndex.Flags:
+                    case Container_FieldIndex.Flags:
                         this.Flags = ex;
                         break;
-                    case Activator_FieldIndex.InteractionKeyword:
-                        this.InteractionKeyword = ex;
+                    case Container_FieldIndex.Weight:
+                        this.Weight = ex;
+                        break;
+                    case Container_FieldIndex.Keywords:
+                        this.Keywords = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ex, null);
+                        break;
+                    case Container_FieldIndex.ForcedLocRefType:
+                        this.ForcedLocRefType = ex;
+                        break;
+                    case Container_FieldIndex.Properties:
+                        this.Properties = new MaskItem<Exception?, Properties.ErrorMask?>(ex, null);
+                        break;
+                    case Container_FieldIndex.OpenSound:
+                        this.OpenSound = ex;
+                        break;
+                    case Container_FieldIndex.CloseSound:
+                        this.CloseSound = ex;
+                        break;
+                    case Container_FieldIndex.DATADataTypeState:
+                        this.DATADataTypeState = ex;
                         break;
                     default:
                         base.SetNthException(index, ex);
@@ -886,62 +851,53 @@ namespace Mutagen.Bethesda.Fallout4
 
             public override void SetNthMask(int index, object obj)
             {
-                Activator_FieldIndex enu = (Activator_FieldIndex)index;
+                Container_FieldIndex enu = (Container_FieldIndex)index;
                 switch (enu)
                 {
-                    case Activator_FieldIndex.VirtualMachineAdapter:
+                    case Container_FieldIndex.VirtualMachineAdapter:
                         this.VirtualMachineAdapter = (MaskItem<Exception?, VirtualMachineAdapter.ErrorMask?>?)obj;
                         break;
-                    case Activator_FieldIndex.ObjectBounds:
+                    case Container_FieldIndex.ObjectBounds:
                         this.ObjectBounds = (MaskItem<Exception?, ObjectBounds.ErrorMask?>?)obj;
                         break;
-                    case Activator_FieldIndex.PreviewTransform:
+                    case Container_FieldIndex.PreviewTransform:
                         this.PreviewTransform = (MaskItem<Exception?, PreviewTransform.ErrorMask?>?)obj;
                         break;
-                    case Activator_FieldIndex.AnimationSound:
-                        this.AnimationSound = (Exception?)obj;
-                        break;
-                    case Activator_FieldIndex.Name:
+                    case Container_FieldIndex.Name:
                         this.Name = (Exception?)obj;
                         break;
-                    case Activator_FieldIndex.Model:
+                    case Container_FieldIndex.Model:
                         this.Model = (MaskItem<Exception?, Model.ErrorMask?>?)obj;
                         break;
-                    case Activator_FieldIndex.Destructible:
+                    case Container_FieldIndex.Items:
+                        this.Items = (MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ContainerEntry.ErrorMask?>>?>)obj;
+                        break;
+                    case Container_FieldIndex.Destructible:
                         this.Destructible = (MaskItem<Exception?, Destructible.ErrorMask?>?)obj;
                         break;
-                    case Activator_FieldIndex.Keywords:
-                        this.Keywords = (MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>)obj;
-                        break;
-                    case Activator_FieldIndex.Properties:
-                        this.Properties = (MaskItem<Exception?, Properties.ErrorMask?>?)obj;
-                        break;
-                    case Activator_FieldIndex.Terminal:
-                        this.Terminal = (Exception?)obj;
-                        break;
-                    case Activator_FieldIndex.ForcedLocRefType:
-                        this.ForcedLocRefType = (Exception?)obj;
-                        break;
-                    case Activator_FieldIndex.MarkerColor:
-                        this.MarkerColor = (Exception?)obj;
-                        break;
-                    case Activator_FieldIndex.LoopingSound:
-                        this.LoopingSound = (Exception?)obj;
-                        break;
-                    case Activator_FieldIndex.ActivationSound:
-                        this.ActivationSound = (Exception?)obj;
-                        break;
-                    case Activator_FieldIndex.WaterType:
-                        this.WaterType = (Exception?)obj;
-                        break;
-                    case Activator_FieldIndex.ActivateTextOverride:
-                        this.ActivateTextOverride = (Exception?)obj;
-                        break;
-                    case Activator_FieldIndex.Flags:
+                    case Container_FieldIndex.Flags:
                         this.Flags = (Exception?)obj;
                         break;
-                    case Activator_FieldIndex.InteractionKeyword:
-                        this.InteractionKeyword = (Exception?)obj;
+                    case Container_FieldIndex.Weight:
+                        this.Weight = (Exception?)obj;
+                        break;
+                    case Container_FieldIndex.Keywords:
+                        this.Keywords = (MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>)obj;
+                        break;
+                    case Container_FieldIndex.ForcedLocRefType:
+                        this.ForcedLocRefType = (Exception?)obj;
+                        break;
+                    case Container_FieldIndex.Properties:
+                        this.Properties = (MaskItem<Exception?, Properties.ErrorMask?>?)obj;
+                        break;
+                    case Container_FieldIndex.OpenSound:
+                        this.OpenSound = (Exception?)obj;
+                        break;
+                    case Container_FieldIndex.CloseSound:
+                        this.CloseSound = (Exception?)obj;
+                        break;
+                    case Container_FieldIndex.DATADataTypeState:
+                        this.DATADataTypeState = (Exception?)obj;
                         break;
                     default:
                         base.SetNthMask(index, obj);
@@ -955,21 +911,18 @@ namespace Mutagen.Bethesda.Fallout4
                 if (VirtualMachineAdapter != null) return true;
                 if (ObjectBounds != null) return true;
                 if (PreviewTransform != null) return true;
-                if (AnimationSound != null) return true;
                 if (Name != null) return true;
                 if (Model != null) return true;
+                if (Items != null) return true;
                 if (Destructible != null) return true;
-                if (Keywords != null) return true;
-                if (Properties != null) return true;
-                if (Terminal != null) return true;
-                if (ForcedLocRefType != null) return true;
-                if (MarkerColor != null) return true;
-                if (LoopingSound != null) return true;
-                if (ActivationSound != null) return true;
-                if (WaterType != null) return true;
-                if (ActivateTextOverride != null) return true;
                 if (Flags != null) return true;
-                if (InteractionKeyword != null) return true;
+                if (Weight != null) return true;
+                if (Keywords != null) return true;
+                if (ForcedLocRefType != null) return true;
+                if (Properties != null) return true;
+                if (OpenSound != null) return true;
+                if (CloseSound != null) return true;
+                if (DATADataTypeState != null) return true;
                 return false;
             }
             #endregion
@@ -1008,10 +961,33 @@ namespace Mutagen.Bethesda.Fallout4
                 VirtualMachineAdapter?.ToString(fg);
                 ObjectBounds?.ToString(fg);
                 PreviewTransform?.ToString(fg);
-                fg.AppendItem(AnimationSound, "AnimationSound");
                 fg.AppendItem(Name, "Name");
                 Model?.ToString(fg);
+                if (Items is {} ItemsItem)
+                {
+                    fg.AppendLine("Items =>");
+                    fg.AppendLine("[");
+                    using (new DepthWrapper(fg))
+                    {
+                        fg.AppendItem(ItemsItem.Overall);
+                        if (ItemsItem.Specific != null)
+                        {
+                            foreach (var subItem in ItemsItem.Specific)
+                            {
+                                fg.AppendLine("[");
+                                using (new DepthWrapper(fg))
+                                {
+                                    subItem?.ToString(fg);
+                                }
+                                fg.AppendLine("]");
+                            }
+                        }
+                    }
+                    fg.AppendLine("]");
+                }
                 Destructible?.ToString(fg);
+                fg.AppendItem(Flags, "Flags");
+                fg.AppendItem(Weight, "Weight");
                 if (Keywords is {} KeywordsItem)
                 {
                     fg.AppendLine("Keywords =>");
@@ -1034,16 +1010,11 @@ namespace Mutagen.Bethesda.Fallout4
                     }
                     fg.AppendLine("]");
                 }
-                Properties?.ToString(fg);
-                fg.AppendItem(Terminal, "Terminal");
                 fg.AppendItem(ForcedLocRefType, "ForcedLocRefType");
-                fg.AppendItem(MarkerColor, "MarkerColor");
-                fg.AppendItem(LoopingSound, "LoopingSound");
-                fg.AppendItem(ActivationSound, "ActivationSound");
-                fg.AppendItem(WaterType, "WaterType");
-                fg.AppendItem(ActivateTextOverride, "ActivateTextOverride");
-                fg.AppendItem(Flags, "Flags");
-                fg.AppendItem(InteractionKeyword, "InteractionKeyword");
+                Properties?.ToString(fg);
+                fg.AppendItem(OpenSound, "OpenSound");
+                fg.AppendItem(CloseSound, "CloseSound");
+                fg.AppendItem(DATADataTypeState, "DATADataTypeState");
             }
             #endregion
 
@@ -1055,21 +1026,18 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.VirtualMachineAdapter = this.VirtualMachineAdapter.Combine(rhs.VirtualMachineAdapter, (l, r) => l.Combine(r));
                 ret.ObjectBounds = this.ObjectBounds.Combine(rhs.ObjectBounds, (l, r) => l.Combine(r));
                 ret.PreviewTransform = this.PreviewTransform.Combine(rhs.PreviewTransform, (l, r) => l.Combine(r));
-                ret.AnimationSound = this.AnimationSound.Combine(rhs.AnimationSound);
                 ret.Name = this.Name.Combine(rhs.Name);
                 ret.Model = this.Model.Combine(rhs.Model, (l, r) => l.Combine(r));
+                ret.Items = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ContainerEntry.ErrorMask?>>?>(ExceptionExt.Combine(this.Items?.Overall, rhs.Items?.Overall), ExceptionExt.Combine(this.Items?.Specific, rhs.Items?.Specific));
                 ret.Destructible = this.Destructible.Combine(rhs.Destructible, (l, r) => l.Combine(r));
-                ret.Keywords = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ExceptionExt.Combine(this.Keywords?.Overall, rhs.Keywords?.Overall), ExceptionExt.Combine(this.Keywords?.Specific, rhs.Keywords?.Specific));
-                ret.Properties = this.Properties.Combine(rhs.Properties, (l, r) => l.Combine(r));
-                ret.Terminal = this.Terminal.Combine(rhs.Terminal);
-                ret.ForcedLocRefType = this.ForcedLocRefType.Combine(rhs.ForcedLocRefType);
-                ret.MarkerColor = this.MarkerColor.Combine(rhs.MarkerColor);
-                ret.LoopingSound = this.LoopingSound.Combine(rhs.LoopingSound);
-                ret.ActivationSound = this.ActivationSound.Combine(rhs.ActivationSound);
-                ret.WaterType = this.WaterType.Combine(rhs.WaterType);
-                ret.ActivateTextOverride = this.ActivateTextOverride.Combine(rhs.ActivateTextOverride);
                 ret.Flags = this.Flags.Combine(rhs.Flags);
-                ret.InteractionKeyword = this.InteractionKeyword.Combine(rhs.InteractionKeyword);
+                ret.Weight = this.Weight.Combine(rhs.Weight);
+                ret.Keywords = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ExceptionExt.Combine(this.Keywords?.Overall, rhs.Keywords?.Overall), ExceptionExt.Combine(this.Keywords?.Specific, rhs.Keywords?.Specific));
+                ret.ForcedLocRefType = this.ForcedLocRefType.Combine(rhs.ForcedLocRefType);
+                ret.Properties = this.Properties.Combine(rhs.Properties, (l, r) => l.Combine(r));
+                ret.OpenSound = this.OpenSound.Combine(rhs.OpenSound);
+                ret.CloseSound = this.CloseSound.Combine(rhs.CloseSound);
+                ret.DATADataTypeState = this.DATADataTypeState.Combine(rhs.DATADataTypeState);
                 return ret;
             }
             public static ErrorMask? Combine(ErrorMask? lhs, ErrorMask? rhs)
@@ -1095,21 +1063,18 @@ namespace Mutagen.Bethesda.Fallout4
             public VirtualMachineAdapter.TranslationMask? VirtualMachineAdapter;
             public ObjectBounds.TranslationMask? ObjectBounds;
             public PreviewTransform.TranslationMask? PreviewTransform;
-            public bool AnimationSound;
             public bool Name;
             public Model.TranslationMask? Model;
+            public ContainerEntry.TranslationMask? Items;
             public Destructible.TranslationMask? Destructible;
-            public bool Keywords;
-            public Properties.TranslationMask? Properties;
-            public bool Terminal;
-            public bool ForcedLocRefType;
-            public bool MarkerColor;
-            public bool LoopingSound;
-            public bool ActivationSound;
-            public bool WaterType;
-            public bool ActivateTextOverride;
             public bool Flags;
-            public bool InteractionKeyword;
+            public bool Weight;
+            public bool Keywords;
+            public bool ForcedLocRefType;
+            public Properties.TranslationMask? Properties;
+            public bool OpenSound;
+            public bool CloseSound;
+            public bool DATADataTypeState;
             #endregion
 
             #region Ctors
@@ -1118,18 +1083,14 @@ namespace Mutagen.Bethesda.Fallout4
                 bool onOverall = true)
                 : base(defaultOn, onOverall)
             {
-                this.AnimationSound = defaultOn;
                 this.Name = defaultOn;
-                this.Keywords = defaultOn;
-                this.Terminal = defaultOn;
-                this.ForcedLocRefType = defaultOn;
-                this.MarkerColor = defaultOn;
-                this.LoopingSound = defaultOn;
-                this.ActivationSound = defaultOn;
-                this.WaterType = defaultOn;
-                this.ActivateTextOverride = defaultOn;
                 this.Flags = defaultOn;
-                this.InteractionKeyword = defaultOn;
+                this.Weight = defaultOn;
+                this.Keywords = defaultOn;
+                this.ForcedLocRefType = defaultOn;
+                this.OpenSound = defaultOn;
+                this.CloseSound = defaultOn;
+                this.DATADataTypeState = defaultOn;
             }
 
             #endregion
@@ -1140,21 +1101,18 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((VirtualMachineAdapter != null ? VirtualMachineAdapter.OnOverall : DefaultOn, VirtualMachineAdapter?.GetCrystal()));
                 ret.Add((ObjectBounds != null ? ObjectBounds.OnOverall : DefaultOn, ObjectBounds?.GetCrystal()));
                 ret.Add((PreviewTransform != null ? PreviewTransform.OnOverall : DefaultOn, PreviewTransform?.GetCrystal()));
-                ret.Add((AnimationSound, null));
                 ret.Add((Name, null));
                 ret.Add((Model != null ? Model.OnOverall : DefaultOn, Model?.GetCrystal()));
+                ret.Add((Items == null ? DefaultOn : !Items.GetCrystal().CopyNothing, Items?.GetCrystal()));
                 ret.Add((Destructible != null ? Destructible.OnOverall : DefaultOn, Destructible?.GetCrystal()));
-                ret.Add((Keywords, null));
-                ret.Add((Properties != null ? Properties.OnOverall : DefaultOn, Properties?.GetCrystal()));
-                ret.Add((Terminal, null));
-                ret.Add((ForcedLocRefType, null));
-                ret.Add((MarkerColor, null));
-                ret.Add((LoopingSound, null));
-                ret.Add((ActivationSound, null));
-                ret.Add((WaterType, null));
-                ret.Add((ActivateTextOverride, null));
                 ret.Add((Flags, null));
-                ret.Add((InteractionKeyword, null));
+                ret.Add((Weight, null));
+                ret.Add((Keywords, null));
+                ret.Add((ForcedLocRefType, null));
+                ret.Add((Properties != null ? Properties.OnOverall : DefaultOn, Properties?.GetCrystal()));
+                ret.Add((OpenSound, null));
+                ret.Add((CloseSound, null));
+                ret.Add((DATADataTypeState, null));
             }
 
             public static implicit operator TranslationMask(bool defaultOn)
@@ -1166,16 +1124,16 @@ namespace Mutagen.Bethesda.Fallout4
         #endregion
 
         #region Mutagen
-        public static readonly RecordType GrupRecordType = Activator_Registration.TriggeringRecordType;
-        public override IEnumerable<IFormLinkGetter> ContainedFormLinks => ActivatorCommon.Instance.GetContainedFormLinks(this);
-        public override void RemapLinks(IReadOnlyDictionary<FormKey, FormKey> mapping) => ActivatorSetterCommon.Instance.RemapLinks(this, mapping);
-        public Activator(FormKey formKey)
+        public static readonly RecordType GrupRecordType = Container_Registration.TriggeringRecordType;
+        public override IEnumerable<IFormLinkGetter> ContainedFormLinks => ContainerCommon.Instance.GetContainedFormLinks(this);
+        public override void RemapLinks(IReadOnlyDictionary<FormKey, FormKey> mapping) => ContainerSetterCommon.Instance.RemapLinks(this, mapping);
+        public Container(FormKey formKey)
         {
             this.FormKey = formKey;
             CustomCtor();
         }
 
-        private Activator(
+        private Container(
             FormKey formKey,
             GameRelease gameRelease)
         {
@@ -1184,7 +1142,7 @@ namespace Mutagen.Bethesda.Fallout4
             CustomCtor();
         }
 
-        internal Activator(
+        internal Container(
             FormKey formKey,
             ushort formVersion)
         {
@@ -1193,12 +1151,12 @@ namespace Mutagen.Bethesda.Fallout4
             CustomCtor();
         }
 
-        public Activator(IFallout4Mod mod)
+        public Container(IFallout4Mod mod)
             : this(mod.GetNextFormKey())
         {
         }
 
-        public Activator(IFallout4Mod mod, string editorID)
+        public Container(IFallout4Mod mod, string editorID)
             : this(mod.GetNextFormKey(editorID))
         {
             this.EditorID = editorID;
@@ -1206,15 +1164,19 @@ namespace Mutagen.Bethesda.Fallout4
 
         public override string ToString()
         {
-            return MajorRecordPrinter<Activator>.ToString(this);
+            return MajorRecordPrinter<Container>.ToString(this);
         }
 
-        protected override Type LinkType => typeof(IActivator);
+        protected override Type LinkType => typeof(IContainer);
 
         public MajorFlag MajorFlags
         {
             get => (MajorFlag)this.MajorRecordFlagsRaw;
             set => this.MajorRecordFlagsRaw = (int)value;
+        }
+        [Flags]
+        public enum DATADataType
+        {
         }
         #region Equals and Hash
         public override bool Equals(object? obj)
@@ -1223,16 +1185,16 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 return formLink.Equals(this);
             }
-            if (obj is not IActivatorGetter rhs) return false;
-            return ((ActivatorCommon)((IActivatorGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
+            if (obj is not IContainerGetter rhs) return false;
+            return ((ContainerCommon)((IContainerGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
         }
 
-        public bool Equals(IActivatorGetter? obj)
+        public bool Equals(IContainerGetter? obj)
         {
-            return ((ActivatorCommon)((IActivatorGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
+            return ((ContainerCommon)((IContainerGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
         }
 
-        public override int GetHashCode() => ((ActivatorCommon)((IActivatorGetter)this).CommonInstance()!).GetHashCode(this);
+        public override int GetHashCode() => ((ContainerCommon)((IContainerGetter)this).CommonInstance()!).GetHashCode(this);
 
         #endregion
 
@@ -1240,23 +1202,23 @@ namespace Mutagen.Bethesda.Fallout4
 
         #region Binary Translation
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected override object BinaryWriteTranslator => ActivatorBinaryWriteTranslation.Instance;
+        protected override object BinaryWriteTranslator => ContainerBinaryWriteTranslation.Instance;
         void IBinaryItem.WriteToBinary(
             MutagenWriter writer,
             TypedWriteParams? translationParams = null)
         {
-            ((ActivatorBinaryWriteTranslation)this.BinaryWriteTranslator).Write(
+            ((ContainerBinaryWriteTranslation)this.BinaryWriteTranslator).Write(
                 item: this,
                 writer: writer,
                 translationParams: translationParams);
         }
         #region Binary Create
-        public new static Activator CreateFromBinary(
+        public new static Container CreateFromBinary(
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
-            var ret = new Activator();
-            ((ActivatorSetterCommon)((IActivatorGetter)ret).CommonSetterInstance()!).CopyInFromBinary(
+            var ret = new Container();
+            ((ContainerSetterCommon)((IContainerGetter)ret).CommonSetterInstance()!).CopyInFromBinary(
                 item: ret,
                 frame: frame,
                 translationParams: translationParams);
@@ -1267,7 +1229,7 @@ namespace Mutagen.Bethesda.Fallout4
 
         public static bool TryCreateFromBinary(
             MutagenFrame frame,
-            out Activator item,
+            out Container item,
             TypedParseParams? translationParams = null)
         {
             var startPos = frame.Position;
@@ -1282,24 +1244,24 @@ namespace Mutagen.Bethesda.Fallout4
 
         void IClearable.Clear()
         {
-            ((ActivatorSetterCommon)((IActivatorGetter)this).CommonSetterInstance()!).Clear(this);
+            ((ContainerSetterCommon)((IContainerGetter)this).CommonSetterInstance()!).Clear(this);
         }
 
-        internal static new Activator GetNew()
+        internal static new Container GetNew()
         {
-            return new Activator();
+            return new Container();
         }
 
     }
     #endregion
 
     #region Interface
-    public partial interface IActivator :
-        IActivatorGetter,
+    public partial interface IContainer :
+        IContainerGetter,
         IFallout4MajorRecordInternal,
         IFormLinkContainer,
         IKeyworded<IKeywordGetter>,
-        ILoquiObjectSetter<IActivatorInternal>,
+        ILoquiObjectSetter<IContainerInternal>,
         IModeled,
         INamed,
         INamedRequired,
@@ -1319,7 +1281,6 @@ namespace Mutagen.Bethesda.Fallout4
         /// </summary>
         new ObjectBounds ObjectBounds { get; set; }
         new PreviewTransform PreviewTransform { get; set; }
-        new IFormLinkNullable<IAnimationSoundTagSetGetter> AnimationSound { get; set; }
         /// <summary>
         /// Aspects: INamed, INamedRequired, ITranslatedNamed, ITranslatedNamedRequired
         /// </summary>
@@ -1328,42 +1289,40 @@ namespace Mutagen.Bethesda.Fallout4
         /// Aspects: IModeled
         /// </summary>
         new Model? Model { get; set; }
+        new ExtendedList<ContainerEntry>? Items { get; set; }
         new Destructible? Destructible { get; set; }
+        new Container.Flag Flags { get; set; }
+        new Single Weight { get; set; }
         /// <summary>
         /// Aspects: IKeyworded&lt;IKeywordGetter&gt;
         /// </summary>
         new ExtendedList<IFormLinkGetter<IKeywordGetter>>? Keywords { get; set; }
-        new Properties? Properties { get; set; }
-        new IFormLinkNullable<ITerminalGetter> Terminal { get; set; }
         new IFormLinkNullable<ILocationReferenceTypeGetter> ForcedLocRefType { get; set; }
-        new Color? MarkerColor { get; set; }
-        new IFormLinkNullable<ISoundDescriptorGetter> LoopingSound { get; set; }
-        new IFormLinkNullable<ISoundDescriptorGetter> ActivationSound { get; set; }
-        new IFormLinkNullable<IWaterGetter> WaterType { get; set; }
-        new TranslatedString? ActivateTextOverride { get; set; }
-        new Activator.Flag? Flags { get; set; }
-        new IFormLinkNullable<IKeywordGetter> InteractionKeyword { get; set; }
+        new Properties? Properties { get; set; }
+        new IFormLinkNullable<ISoundDescriptorGetter> OpenSound { get; set; }
+        new IFormLinkNullable<ISoundDescriptorGetter> CloseSound { get; set; }
+        new Container.DATADataType DATADataTypeState { get; set; }
         #region Mutagen
-        new Activator.MajorFlag MajorFlags { get; set; }
+        new Container.MajorFlag MajorFlags { get; set; }
         #endregion
 
     }
 
-    public partial interface IActivatorInternal :
+    public partial interface IContainerInternal :
         IFallout4MajorRecordInternal,
-        IActivator,
-        IActivatorGetter
+        IContainer,
+        IContainerGetter
     {
     }
 
-    [AssociatedRecordTypesAttribute(Mutagen.Bethesda.Fallout4.Internals.RecordTypeInts.ACTI)]
-    public partial interface IActivatorGetter :
+    [AssociatedRecordTypesAttribute(Mutagen.Bethesda.Fallout4.Internals.RecordTypeInts.CONT)]
+    public partial interface IContainerGetter :
         IFallout4MajorRecordGetter,
         IBinaryItem,
         IFormLinkContainerGetter,
         IKeywordedGetter<IKeywordGetter>,
-        ILoquiObject<IActivatorGetter>,
-        IMapsToGetter<IActivatorGetter>,
+        ILoquiObject<IContainerGetter>,
+        IMapsToGetter<IContainerGetter>,
         IModeledGetter,
         INamedGetter,
         INamedRequiredGetter,
@@ -1374,7 +1333,7 @@ namespace Mutagen.Bethesda.Fallout4
         ITranslatedNamedGetter,
         ITranslatedNamedRequiredGetter
     {
-        static new ILoquiRegistration StaticRegistration => Activator_Registration.Instance;
+        static new ILoquiRegistration StaticRegistration => Container_Registration.Instance;
         #region VirtualMachineAdapter
         /// <summary>
         /// Aspects: IScriptedGetter
@@ -1388,7 +1347,6 @@ namespace Mutagen.Bethesda.Fallout4
         IObjectBoundsGetter ObjectBounds { get; }
         #endregion
         IPreviewTransformGetter PreviewTransform { get; }
-        IFormLinkNullableGetter<IAnimationSoundTagSetGetter> AnimationSound { get; }
         #region Name
         /// <summary>
         /// Aspects: INamedGetter, INamedRequiredGetter, ITranslatedNamedGetter, ITranslatedNamedRequiredGetter
@@ -1401,26 +1359,24 @@ namespace Mutagen.Bethesda.Fallout4
         /// </summary>
         IModelGetter? Model { get; }
         #endregion
+        IReadOnlyList<IContainerEntryGetter>? Items { get; }
         IDestructibleGetter? Destructible { get; }
+        Container.Flag Flags { get; }
+        Single Weight { get; }
         #region Keywords
         /// <summary>
         /// Aspects: IKeywordedGetter&lt;IKeywordGetter&gt;
         /// </summary>
         IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? Keywords { get; }
         #endregion
-        IPropertiesGetter? Properties { get; }
-        IFormLinkNullableGetter<ITerminalGetter> Terminal { get; }
         IFormLinkNullableGetter<ILocationReferenceTypeGetter> ForcedLocRefType { get; }
-        Color? MarkerColor { get; }
-        IFormLinkNullableGetter<ISoundDescriptorGetter> LoopingSound { get; }
-        IFormLinkNullableGetter<ISoundDescriptorGetter> ActivationSound { get; }
-        IFormLinkNullableGetter<IWaterGetter> WaterType { get; }
-        ITranslatedStringGetter? ActivateTextOverride { get; }
-        Activator.Flag? Flags { get; }
-        IFormLinkNullableGetter<IKeywordGetter> InteractionKeyword { get; }
+        IPropertiesGetter? Properties { get; }
+        IFormLinkNullableGetter<ISoundDescriptorGetter> OpenSound { get; }
+        IFormLinkNullableGetter<ISoundDescriptorGetter> CloseSound { get; }
+        Container.DATADataType DATADataTypeState { get; }
 
         #region Mutagen
-        Activator.MajorFlag MajorFlags { get; }
+        Container.MajorFlag MajorFlags { get; }
         #endregion
 
     }
@@ -1428,42 +1384,42 @@ namespace Mutagen.Bethesda.Fallout4
     #endregion
 
     #region Common MixIn
-    public static partial class ActivatorMixIn
+    public static partial class ContainerMixIn
     {
-        public static void Clear(this IActivatorInternal item)
+        public static void Clear(this IContainerInternal item)
         {
-            ((ActivatorSetterCommon)((IActivatorGetter)item).CommonSetterInstance()!).Clear(item: item);
+            ((ContainerSetterCommon)((IContainerGetter)item).CommonSetterInstance()!).Clear(item: item);
         }
 
-        public static Activator.Mask<bool> GetEqualsMask(
-            this IActivatorGetter item,
-            IActivatorGetter rhs,
+        public static Container.Mask<bool> GetEqualsMask(
+            this IContainerGetter item,
+            IContainerGetter rhs,
             EqualsMaskHelper.Include include = EqualsMaskHelper.Include.All)
         {
-            return ((ActivatorCommon)((IActivatorGetter)item).CommonInstance()!).GetEqualsMask(
+            return ((ContainerCommon)((IContainerGetter)item).CommonInstance()!).GetEqualsMask(
                 item: item,
                 rhs: rhs,
                 include: include);
         }
 
         public static string ToString(
-            this IActivatorGetter item,
+            this IContainerGetter item,
             string? name = null,
-            Activator.Mask<bool>? printMask = null)
+            Container.Mask<bool>? printMask = null)
         {
-            return ((ActivatorCommon)((IActivatorGetter)item).CommonInstance()!).ToString(
+            return ((ContainerCommon)((IContainerGetter)item).CommonInstance()!).ToString(
                 item: item,
                 name: name,
                 printMask: printMask);
         }
 
         public static void ToString(
-            this IActivatorGetter item,
+            this IContainerGetter item,
             FileGeneration fg,
             string? name = null,
-            Activator.Mask<bool>? printMask = null)
+            Container.Mask<bool>? printMask = null)
         {
-            ((ActivatorCommon)((IActivatorGetter)item).CommonInstance()!).ToString(
+            ((ContainerCommon)((IContainerGetter)item).CommonInstance()!).ToString(
                 item: item,
                 fg: fg,
                 name: name,
@@ -1471,39 +1427,39 @@ namespace Mutagen.Bethesda.Fallout4
         }
 
         public static bool Equals(
-            this IActivatorGetter item,
-            IActivatorGetter rhs,
-            Activator.TranslationMask? equalsMask = null)
+            this IContainerGetter item,
+            IContainerGetter rhs,
+            Container.TranslationMask? equalsMask = null)
         {
-            return ((ActivatorCommon)((IActivatorGetter)item).CommonInstance()!).Equals(
+            return ((ContainerCommon)((IContainerGetter)item).CommonInstance()!).Equals(
                 lhs: item,
                 rhs: rhs,
                 crystal: equalsMask?.GetCrystal());
         }
 
         public static void DeepCopyIn(
-            this IActivatorInternal lhs,
-            IActivatorGetter rhs,
-            out Activator.ErrorMask errorMask,
-            Activator.TranslationMask? copyMask = null)
+            this IContainerInternal lhs,
+            IContainerGetter rhs,
+            out Container.ErrorMask errorMask,
+            Container.TranslationMask? copyMask = null)
         {
             var errorMaskBuilder = new ErrorMaskBuilder();
-            ((ActivatorSetterTranslationCommon)((IActivatorGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
+            ((ContainerSetterTranslationCommon)((IContainerGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: lhs,
                 rhs: rhs,
                 errorMask: errorMaskBuilder,
                 copyMask: copyMask?.GetCrystal(),
                 deepCopy: false);
-            errorMask = Activator.ErrorMask.Factory(errorMaskBuilder);
+            errorMask = Container.ErrorMask.Factory(errorMaskBuilder);
         }
 
         public static void DeepCopyIn(
-            this IActivatorInternal lhs,
-            IActivatorGetter rhs,
+            this IContainerInternal lhs,
+            IContainerGetter rhs,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask)
         {
-            ((ActivatorSetterTranslationCommon)((IActivatorGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
+            ((ContainerSetterTranslationCommon)((IContainerGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: lhs,
                 rhs: rhs,
                 errorMask: errorMask,
@@ -1511,44 +1467,44 @@ namespace Mutagen.Bethesda.Fallout4
                 deepCopy: false);
         }
 
-        public static Activator DeepCopy(
-            this IActivatorGetter item,
-            Activator.TranslationMask? copyMask = null)
+        public static Container DeepCopy(
+            this IContainerGetter item,
+            Container.TranslationMask? copyMask = null)
         {
-            return ((ActivatorSetterTranslationCommon)((IActivatorGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
+            return ((ContainerSetterTranslationCommon)((IContainerGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
                 item: item,
                 copyMask: copyMask);
         }
 
-        public static Activator DeepCopy(
-            this IActivatorGetter item,
-            out Activator.ErrorMask errorMask,
-            Activator.TranslationMask? copyMask = null)
+        public static Container DeepCopy(
+            this IContainerGetter item,
+            out Container.ErrorMask errorMask,
+            Container.TranslationMask? copyMask = null)
         {
-            return ((ActivatorSetterTranslationCommon)((IActivatorGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
+            return ((ContainerSetterTranslationCommon)((IContainerGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
                 item: item,
                 copyMask: copyMask,
                 errorMask: out errorMask);
         }
 
-        public static Activator DeepCopy(
-            this IActivatorGetter item,
+        public static Container DeepCopy(
+            this IContainerGetter item,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask = null)
         {
-            return ((ActivatorSetterTranslationCommon)((IActivatorGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
+            return ((ContainerSetterTranslationCommon)((IContainerGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
                 item: item,
                 copyMask: copyMask,
                 errorMask: errorMask);
         }
 
         #region Mutagen
-        public static Activator Duplicate(
-            this IActivatorGetter item,
+        public static Container Duplicate(
+            this IContainerGetter item,
             FormKey formKey,
-            Activator.TranslationMask? copyMask = null)
+            Container.TranslationMask? copyMask = null)
         {
-            return ((ActivatorCommon)((IActivatorGetter)item).CommonInstance()!).Duplicate(
+            return ((ContainerCommon)((IContainerGetter)item).CommonInstance()!).Duplicate(
                 item: item,
                 formKey: formKey,
                 copyMask: copyMask?.GetCrystal());
@@ -1558,11 +1514,11 @@ namespace Mutagen.Bethesda.Fallout4
 
         #region Binary Translation
         public static void CopyInFromBinary(
-            this IActivatorInternal item,
+            this IContainerInternal item,
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
-            ((ActivatorSetterCommon)((IActivatorGetter)item).CommonSetterInstance()!).CopyInFromBinary(
+            ((ContainerSetterCommon)((IContainerGetter)item).CommonSetterInstance()!).CopyInFromBinary(
                 item: item,
                 frame: frame,
                 translationParams: translationParams);
@@ -1578,7 +1534,7 @@ namespace Mutagen.Bethesda.Fallout4
 namespace Mutagen.Bethesda.Fallout4.Internals
 {
     #region Field Index
-    public enum Activator_FieldIndex
+    public enum Container_FieldIndex
     {
         MajorRecordFlagsRaw = 0,
         FormKey = 1,
@@ -1589,59 +1545,56 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         VirtualMachineAdapter = 6,
         ObjectBounds = 7,
         PreviewTransform = 8,
-        AnimationSound = 9,
-        Name = 10,
-        Model = 11,
+        Name = 9,
+        Model = 10,
+        Items = 11,
         Destructible = 12,
-        Keywords = 13,
-        Properties = 14,
-        Terminal = 15,
+        Flags = 13,
+        Weight = 14,
+        Keywords = 15,
         ForcedLocRefType = 16,
-        MarkerColor = 17,
-        LoopingSound = 18,
-        ActivationSound = 19,
-        WaterType = 20,
-        ActivateTextOverride = 21,
-        Flags = 22,
-        InteractionKeyword = 23,
+        Properties = 17,
+        OpenSound = 18,
+        CloseSound = 19,
+        DATADataTypeState = 20,
     }
     #endregion
 
     #region Registration
-    public partial class Activator_Registration : ILoquiRegistration
+    public partial class Container_Registration : ILoquiRegistration
     {
-        public static readonly Activator_Registration Instance = new Activator_Registration();
+        public static readonly Container_Registration Instance = new Container_Registration();
 
         public static ProtocolKey ProtocolKey => ProtocolDefinition_Fallout4.ProtocolKey;
 
         public static readonly ObjectKey ObjectKey = new ObjectKey(
             protocolKey: ProtocolDefinition_Fallout4.ProtocolKey,
-            msgID: 127,
+            msgID: 165,
             version: 0);
 
-        public const string GUID = "e5dd8417-9b46-4754-bfe1-1db51332bfa4";
+        public const string GUID = "d5eebb15-76fe-43cd-9ba9-7ad6eac2b785";
 
-        public const ushort AdditionalFieldCount = 18;
+        public const ushort AdditionalFieldCount = 15;
 
-        public const ushort FieldCount = 24;
+        public const ushort FieldCount = 21;
 
-        public static readonly Type MaskType = typeof(Activator.Mask<>);
+        public static readonly Type MaskType = typeof(Container.Mask<>);
 
-        public static readonly Type ErrorMaskType = typeof(Activator.ErrorMask);
+        public static readonly Type ErrorMaskType = typeof(Container.ErrorMask);
 
-        public static readonly Type ClassType = typeof(Activator);
+        public static readonly Type ClassType = typeof(Container);
 
-        public static readonly Type GetterType = typeof(IActivatorGetter);
+        public static readonly Type GetterType = typeof(IContainerGetter);
 
         public static readonly Type? InternalGetterType = null;
 
-        public static readonly Type SetterType = typeof(IActivator);
+        public static readonly Type SetterType = typeof(IContainer);
 
-        public static readonly Type? InternalSetterType = typeof(IActivatorInternal);
+        public static readonly Type? InternalSetterType = typeof(IContainerInternal);
 
-        public const string FullName = "Mutagen.Bethesda.Fallout4.Activator";
+        public const string FullName = "Mutagen.Bethesda.Fallout4.Container";
 
-        public const string Name = "Activator";
+        public const string Name = "Container";
 
         public const string Namespace = "Mutagen.Bethesda.Fallout4";
 
@@ -1649,8 +1602,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public static readonly Type? GenericRegistrationType = null;
 
-        public static readonly RecordType TriggeringRecordType = RecordTypes.ACTI;
-        public static readonly Type BinaryWriteTranslation = typeof(ActivatorBinaryWriteTranslation);
+        public static readonly RecordType TriggeringRecordType = RecordTypes.CONT;
+        public static readonly Type BinaryWriteTranslation = typeof(ContainerBinaryWriteTranslation);
         #region Interface
         ProtocolKey ILoquiRegistration.ProtocolKey => ProtocolKey;
         ObjectKey ILoquiRegistration.ObjectKey => ObjectKey;
@@ -1683,78 +1636,72 @@ namespace Mutagen.Bethesda.Fallout4.Internals
     #endregion
 
     #region Common
-    public partial class ActivatorSetterCommon : Fallout4MajorRecordSetterCommon
+    public partial class ContainerSetterCommon : Fallout4MajorRecordSetterCommon
     {
-        public new static readonly ActivatorSetterCommon Instance = new ActivatorSetterCommon();
+        public new static readonly ContainerSetterCommon Instance = new ContainerSetterCommon();
 
         partial void ClearPartial();
         
-        public void Clear(IActivatorInternal item)
+        public void Clear(IContainerInternal item)
         {
             ClearPartial();
             item.VirtualMachineAdapter = null;
             item.ObjectBounds.Clear();
             item.PreviewTransform.Clear();
-            item.AnimationSound.Clear();
             item.Name = default;
             item.Model = null;
+            item.Items = null;
             item.Destructible = null;
-            item.Keywords = null;
-            item.Properties = null;
-            item.Terminal.Clear();
-            item.ForcedLocRefType.Clear();
-            item.MarkerColor = default;
-            item.LoopingSound.Clear();
-            item.ActivationSound.Clear();
-            item.WaterType.Clear();
-            item.ActivateTextOverride = default;
             item.Flags = default;
-            item.InteractionKeyword.Clear();
+            item.Weight = default;
+            item.Keywords = null;
+            item.ForcedLocRefType.Clear();
+            item.Properties = null;
+            item.OpenSound.Clear();
+            item.CloseSound.Clear();
+            item.DATADataTypeState = default;
             base.Clear(item);
         }
         
         public override void Clear(IFallout4MajorRecordInternal item)
         {
-            Clear(item: (IActivatorInternal)item);
+            Clear(item: (IContainerInternal)item);
         }
         
         public override void Clear(IMajorRecordInternal item)
         {
-            Clear(item: (IActivatorInternal)item);
+            Clear(item: (IContainerInternal)item);
         }
         
         #region Mutagen
-        public void RemapLinks(IActivator obj, IReadOnlyDictionary<FormKey, FormKey> mapping)
+        public void RemapLinks(IContainer obj, IReadOnlyDictionary<FormKey, FormKey> mapping)
         {
             base.RemapLinks(obj, mapping);
             obj.VirtualMachineAdapter?.RemapLinks(mapping);
             obj.PreviewTransform.RemapLinks(mapping);
-            obj.AnimationSound.Relink(mapping);
             obj.Model?.RemapLinks(mapping);
+            obj.Items?.RemapLinks(mapping);
             obj.Destructible?.RemapLinks(mapping);
             obj.Keywords?.RemapLinks(mapping);
-            obj.Terminal.Relink(mapping);
             obj.ForcedLocRefType.Relink(mapping);
-            obj.LoopingSound.Relink(mapping);
-            obj.ActivationSound.Relink(mapping);
-            obj.WaterType.Relink(mapping);
-            obj.InteractionKeyword.Relink(mapping);
+            obj.OpenSound.Relink(mapping);
+            obj.CloseSound.Relink(mapping);
         }
         
         #endregion
         
         #region Binary Translation
         public virtual void CopyInFromBinary(
-            IActivatorInternal item,
+            IContainerInternal item,
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
-            PluginUtilityTranslation.MajorRecordParse<IActivatorInternal>(
+            PluginUtilityTranslation.MajorRecordParse<IContainerInternal>(
                 record: item,
                 frame: frame,
                 translationParams: translationParams,
-                fillStructs: ActivatorBinaryCreateTranslation.FillBinaryStructs,
-                fillTyped: ActivatorBinaryCreateTranslation.FillBinaryRecordTypes);
+                fillStructs: ContainerBinaryCreateTranslation.FillBinaryStructs,
+                fillTyped: ContainerBinaryCreateTranslation.FillBinaryRecordTypes);
         }
         
         public override void CopyInFromBinary(
@@ -1763,7 +1710,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TypedParseParams? translationParams = null)
         {
             CopyInFromBinary(
-                item: (Activator)item,
+                item: (Container)item,
                 frame: frame,
                 translationParams: translationParams);
         }
@@ -1774,7 +1721,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TypedParseParams? translationParams = null)
         {
             CopyInFromBinary(
-                item: (Activator)item,
+                item: (Container)item,
                 frame: frame,
                 translationParams: translationParams);
         }
@@ -1782,17 +1729,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         #endregion
         
     }
-    public partial class ActivatorCommon : Fallout4MajorRecordCommon
+    public partial class ContainerCommon : Fallout4MajorRecordCommon
     {
-        public new static readonly ActivatorCommon Instance = new ActivatorCommon();
+        public new static readonly ContainerCommon Instance = new ContainerCommon();
 
-        public Activator.Mask<bool> GetEqualsMask(
-            IActivatorGetter item,
-            IActivatorGetter rhs,
+        public Container.Mask<bool> GetEqualsMask(
+            IContainerGetter item,
+            IContainerGetter rhs,
             EqualsMaskHelper.Include include = EqualsMaskHelper.Include.All)
         {
-            var ret = new Activator.Mask<bool>(false);
-            ((ActivatorCommon)((IActivatorGetter)item).CommonInstance()!).FillEqualsMask(
+            var ret = new Container.Mask<bool>(false);
+            ((ContainerCommon)((IContainerGetter)item).CommonInstance()!).FillEqualsMask(
                 item: item,
                 rhs: rhs,
                 ret: ret,
@@ -1801,9 +1748,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         public void FillEqualsMask(
-            IActivatorGetter item,
-            IActivatorGetter rhs,
-            Activator.Mask<bool> ret,
+            IContainerGetter item,
+            IContainerGetter rhs,
+            Container.Mask<bool> ret,
             EqualsMaskHelper.Include include = EqualsMaskHelper.Include.All)
         {
             if (rhs == null) return;
@@ -1814,43 +1761,43 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 include);
             ret.ObjectBounds = MaskItemExt.Factory(item.ObjectBounds.GetEqualsMask(rhs.ObjectBounds, include), include);
             ret.PreviewTransform = MaskItemExt.Factory(item.PreviewTransform.GetEqualsMask(rhs.PreviewTransform, include), include);
-            ret.AnimationSound = item.AnimationSound.Equals(rhs.AnimationSound);
             ret.Name = object.Equals(item.Name, rhs.Name);
             ret.Model = EqualsMaskHelper.EqualsHelper(
                 item.Model,
                 rhs.Model,
                 (loqLhs, loqRhs, incl) => loqLhs.GetEqualsMask(loqRhs, incl),
                 include);
+            ret.Items = item.Items.CollectionEqualsHelper(
+                rhs.Items,
+                (loqLhs, loqRhs) => loqLhs.GetEqualsMask(loqRhs, include),
+                include);
             ret.Destructible = EqualsMaskHelper.EqualsHelper(
                 item.Destructible,
                 rhs.Destructible,
                 (loqLhs, loqRhs, incl) => loqLhs.GetEqualsMask(loqRhs, incl),
                 include);
+            ret.Flags = item.Flags == rhs.Flags;
+            ret.Weight = item.Weight.EqualsWithin(rhs.Weight);
             ret.Keywords = item.Keywords.CollectionEqualsHelper(
                 rhs.Keywords,
                 (l, r) => object.Equals(l, r),
                 include);
+            ret.ForcedLocRefType = item.ForcedLocRefType.Equals(rhs.ForcedLocRefType);
             ret.Properties = EqualsMaskHelper.EqualsHelper(
                 item.Properties,
                 rhs.Properties,
                 (loqLhs, loqRhs, incl) => loqLhs.GetEqualsMask(loqRhs, incl),
                 include);
-            ret.Terminal = item.Terminal.Equals(rhs.Terminal);
-            ret.ForcedLocRefType = item.ForcedLocRefType.Equals(rhs.ForcedLocRefType);
-            ret.MarkerColor = item.MarkerColor.ColorOnlyEquals(rhs.MarkerColor);
-            ret.LoopingSound = item.LoopingSound.Equals(rhs.LoopingSound);
-            ret.ActivationSound = item.ActivationSound.Equals(rhs.ActivationSound);
-            ret.WaterType = item.WaterType.Equals(rhs.WaterType);
-            ret.ActivateTextOverride = object.Equals(item.ActivateTextOverride, rhs.ActivateTextOverride);
-            ret.Flags = item.Flags == rhs.Flags;
-            ret.InteractionKeyword = item.InteractionKeyword.Equals(rhs.InteractionKeyword);
+            ret.OpenSound = item.OpenSound.Equals(rhs.OpenSound);
+            ret.CloseSound = item.CloseSound.Equals(rhs.CloseSound);
+            ret.DATADataTypeState = item.DATADataTypeState == rhs.DATADataTypeState;
             base.FillEqualsMask(item, rhs, ret, include);
         }
         
         public string ToString(
-            IActivatorGetter item,
+            IContainerGetter item,
             string? name = null,
-            Activator.Mask<bool>? printMask = null)
+            Container.Mask<bool>? printMask = null)
         {
             var fg = new FileGeneration();
             ToString(
@@ -1862,18 +1809,18 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         public void ToString(
-            IActivatorGetter item,
+            IContainerGetter item,
             FileGeneration fg,
             string? name = null,
-            Activator.Mask<bool>? printMask = null)
+            Container.Mask<bool>? printMask = null)
         {
             if (name == null)
             {
-                fg.AppendLine($"Activator =>");
+                fg.AppendLine($"Container =>");
             }
             else
             {
-                fg.AppendLine($"{name} (Activator) =>");
+                fg.AppendLine($"{name} (Container) =>");
             }
             fg.AppendLine("[");
             using (new DepthWrapper(fg))
@@ -1887,9 +1834,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         protected static void ToStringFields(
-            IActivatorGetter item,
+            IContainerGetter item,
             FileGeneration fg,
-            Activator.Mask<bool>? printMask = null)
+            Container.Mask<bool>? printMask = null)
         {
             Fallout4MajorRecordCommon.ToStringFields(
                 item: item,
@@ -1908,10 +1855,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 item.PreviewTransform?.ToString(fg, "PreviewTransform");
             }
-            if (printMask?.AnimationSound ?? true)
-            {
-                fg.AppendItem(item.AnimationSound.FormKeyNullable, "AnimationSound");
-            }
             if ((printMask?.Name ?? true)
                 && item.Name is {} NameItem)
             {
@@ -1922,10 +1865,37 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 ModelItem?.ToString(fg, "Model");
             }
+            if ((printMask?.Items?.Overall ?? true)
+                && item.Items is {} ItemsItem)
+            {
+                fg.AppendLine("Items =>");
+                fg.AppendLine("[");
+                using (new DepthWrapper(fg))
+                {
+                    foreach (var subItem in ItemsItem)
+                    {
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            subItem?.ToString(fg, "Item");
+                        }
+                        fg.AppendLine("]");
+                    }
+                }
+                fg.AppendLine("]");
+            }
             if ((printMask?.Destructible?.Overall ?? true)
                 && item.Destructible is {} DestructibleItem)
             {
                 DestructibleItem?.ToString(fg, "Destructible");
+            }
+            if (printMask?.Flags ?? true)
+            {
+                fg.AppendItem(item.Flags, "Flags");
+            }
+            if (printMask?.Weight ?? true)
+            {
+                fg.AppendItem(item.Weight, "Weight");
             }
             if ((printMask?.Keywords?.Overall ?? true)
                 && item.Keywords is {} KeywordsItem)
@@ -1946,85 +1916,62 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 fg.AppendLine("]");
             }
+            if (printMask?.ForcedLocRefType ?? true)
+            {
+                fg.AppendItem(item.ForcedLocRefType.FormKeyNullable, "ForcedLocRefType");
+            }
             if ((printMask?.Properties?.Overall ?? true)
                 && item.Properties is {} PropertiesItem)
             {
                 PropertiesItem?.ToString(fg, "Properties");
             }
-            if (printMask?.Terminal ?? true)
+            if (printMask?.OpenSound ?? true)
             {
-                fg.AppendItem(item.Terminal.FormKeyNullable, "Terminal");
+                fg.AppendItem(item.OpenSound.FormKeyNullable, "OpenSound");
             }
-            if (printMask?.ForcedLocRefType ?? true)
+            if (printMask?.CloseSound ?? true)
             {
-                fg.AppendItem(item.ForcedLocRefType.FormKeyNullable, "ForcedLocRefType");
+                fg.AppendItem(item.CloseSound.FormKeyNullable, "CloseSound");
             }
-            if ((printMask?.MarkerColor ?? true)
-                && item.MarkerColor is {} MarkerColorItem)
+            if (printMask?.DATADataTypeState ?? true)
             {
-                fg.AppendItem(MarkerColorItem, "MarkerColor");
-            }
-            if (printMask?.LoopingSound ?? true)
-            {
-                fg.AppendItem(item.LoopingSound.FormKeyNullable, "LoopingSound");
-            }
-            if (printMask?.ActivationSound ?? true)
-            {
-                fg.AppendItem(item.ActivationSound.FormKeyNullable, "ActivationSound");
-            }
-            if (printMask?.WaterType ?? true)
-            {
-                fg.AppendItem(item.WaterType.FormKeyNullable, "WaterType");
-            }
-            if ((printMask?.ActivateTextOverride ?? true)
-                && item.ActivateTextOverride is {} ActivateTextOverrideItem)
-            {
-                fg.AppendItem(ActivateTextOverrideItem, "ActivateTextOverride");
-            }
-            if ((printMask?.Flags ?? true)
-                && item.Flags is {} FlagsItem)
-            {
-                fg.AppendItem(FlagsItem, "Flags");
-            }
-            if (printMask?.InteractionKeyword ?? true)
-            {
-                fg.AppendItem(item.InteractionKeyword.FormKeyNullable, "InteractionKeyword");
+                fg.AppendItem(item.DATADataTypeState, "DATADataTypeState");
             }
         }
         
-        public static Activator_FieldIndex ConvertFieldIndex(Fallout4MajorRecord_FieldIndex index)
+        public static Container_FieldIndex ConvertFieldIndex(Fallout4MajorRecord_FieldIndex index)
         {
             switch (index)
             {
                 case Fallout4MajorRecord_FieldIndex.MajorRecordFlagsRaw:
-                    return (Activator_FieldIndex)((int)index);
+                    return (Container_FieldIndex)((int)index);
                 case Fallout4MajorRecord_FieldIndex.FormKey:
-                    return (Activator_FieldIndex)((int)index);
+                    return (Container_FieldIndex)((int)index);
                 case Fallout4MajorRecord_FieldIndex.VersionControl:
-                    return (Activator_FieldIndex)((int)index);
+                    return (Container_FieldIndex)((int)index);
                 case Fallout4MajorRecord_FieldIndex.EditorID:
-                    return (Activator_FieldIndex)((int)index);
+                    return (Container_FieldIndex)((int)index);
                 case Fallout4MajorRecord_FieldIndex.FormVersion:
-                    return (Activator_FieldIndex)((int)index);
+                    return (Container_FieldIndex)((int)index);
                 case Fallout4MajorRecord_FieldIndex.Version2:
-                    return (Activator_FieldIndex)((int)index);
+                    return (Container_FieldIndex)((int)index);
                 default:
                     throw new ArgumentException($"Index is out of range: {index.ToStringFast_Enum_Only()}");
             }
         }
         
-        public static new Activator_FieldIndex ConvertFieldIndex(MajorRecord_FieldIndex index)
+        public static new Container_FieldIndex ConvertFieldIndex(MajorRecord_FieldIndex index)
         {
             switch (index)
             {
                 case MajorRecord_FieldIndex.MajorRecordFlagsRaw:
-                    return (Activator_FieldIndex)((int)index);
+                    return (Container_FieldIndex)((int)index);
                 case MajorRecord_FieldIndex.FormKey:
-                    return (Activator_FieldIndex)((int)index);
+                    return (Container_FieldIndex)((int)index);
                 case MajorRecord_FieldIndex.VersionControl:
-                    return (Activator_FieldIndex)((int)index);
+                    return (Container_FieldIndex)((int)index);
                 case MajorRecord_FieldIndex.EditorID:
-                    return (Activator_FieldIndex)((int)index);
+                    return (Container_FieldIndex)((int)index);
                 default:
                     throw new ArgumentException($"Index is out of range: {index.ToStringFast_Enum_Only()}");
             }
@@ -2032,107 +1979,95 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         
         #region Equals and Hash
         public virtual bool Equals(
-            IActivatorGetter? lhs,
-            IActivatorGetter? rhs,
+            IContainerGetter? lhs,
+            IContainerGetter? rhs,
             TranslationCrystal? crystal)
         {
             if (!EqualsMaskHelper.RefEquality(lhs, rhs, out var isEqual)) return isEqual;
             if (!base.Equals((IFallout4MajorRecordGetter)lhs, (IFallout4MajorRecordGetter)rhs, crystal)) return false;
-            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.VirtualMachineAdapter) ?? true))
+            if ((crystal?.GetShouldTranslate((int)Container_FieldIndex.VirtualMachineAdapter) ?? true))
             {
                 if (EqualsMaskHelper.RefEquality(lhs.VirtualMachineAdapter, rhs.VirtualMachineAdapter, out var lhsVirtualMachineAdapter, out var rhsVirtualMachineAdapter, out var isVirtualMachineAdapterEqual))
                 {
-                    if (!((VirtualMachineAdapterCommon)((IVirtualMachineAdapterGetter)lhsVirtualMachineAdapter).CommonInstance()!).Equals(lhsVirtualMachineAdapter, rhsVirtualMachineAdapter, crystal?.GetSubCrystal((int)Activator_FieldIndex.VirtualMachineAdapter))) return false;
+                    if (!((VirtualMachineAdapterCommon)((IVirtualMachineAdapterGetter)lhsVirtualMachineAdapter).CommonInstance()!).Equals(lhsVirtualMachineAdapter, rhsVirtualMachineAdapter, crystal?.GetSubCrystal((int)Container_FieldIndex.VirtualMachineAdapter))) return false;
                 }
                 else if (!isVirtualMachineAdapterEqual) return false;
             }
-            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.ObjectBounds) ?? true))
+            if ((crystal?.GetShouldTranslate((int)Container_FieldIndex.ObjectBounds) ?? true))
             {
                 if (EqualsMaskHelper.RefEquality(lhs.ObjectBounds, rhs.ObjectBounds, out var lhsObjectBounds, out var rhsObjectBounds, out var isObjectBoundsEqual))
                 {
-                    if (!((ObjectBoundsCommon)((IObjectBoundsGetter)lhsObjectBounds).CommonInstance()!).Equals(lhsObjectBounds, rhsObjectBounds, crystal?.GetSubCrystal((int)Activator_FieldIndex.ObjectBounds))) return false;
+                    if (!((ObjectBoundsCommon)((IObjectBoundsGetter)lhsObjectBounds).CommonInstance()!).Equals(lhsObjectBounds, rhsObjectBounds, crystal?.GetSubCrystal((int)Container_FieldIndex.ObjectBounds))) return false;
                 }
                 else if (!isObjectBoundsEqual) return false;
             }
-            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.PreviewTransform) ?? true))
+            if ((crystal?.GetShouldTranslate((int)Container_FieldIndex.PreviewTransform) ?? true))
             {
                 if (EqualsMaskHelper.RefEquality(lhs.PreviewTransform, rhs.PreviewTransform, out var lhsPreviewTransform, out var rhsPreviewTransform, out var isPreviewTransformEqual))
                 {
-                    if (!((PreviewTransformCommon)((IPreviewTransformGetter)lhsPreviewTransform).CommonInstance()!).Equals(lhsPreviewTransform, rhsPreviewTransform, crystal?.GetSubCrystal((int)Activator_FieldIndex.PreviewTransform))) return false;
+                    if (!((PreviewTransformCommon)((IPreviewTransformGetter)lhsPreviewTransform).CommonInstance()!).Equals(lhsPreviewTransform, rhsPreviewTransform, crystal?.GetSubCrystal((int)Container_FieldIndex.PreviewTransform))) return false;
                 }
                 else if (!isPreviewTransformEqual) return false;
             }
-            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.AnimationSound) ?? true))
-            {
-                if (!lhs.AnimationSound.Equals(rhs.AnimationSound)) return false;
-            }
-            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.Name) ?? true))
+            if ((crystal?.GetShouldTranslate((int)Container_FieldIndex.Name) ?? true))
             {
                 if (!object.Equals(lhs.Name, rhs.Name)) return false;
             }
-            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.Model) ?? true))
+            if ((crystal?.GetShouldTranslate((int)Container_FieldIndex.Model) ?? true))
             {
                 if (EqualsMaskHelper.RefEquality(lhs.Model, rhs.Model, out var lhsModel, out var rhsModel, out var isModelEqual))
                 {
-                    if (!((ModelCommon)((IModelGetter)lhsModel).CommonInstance()!).Equals(lhsModel, rhsModel, crystal?.GetSubCrystal((int)Activator_FieldIndex.Model))) return false;
+                    if (!((ModelCommon)((IModelGetter)lhsModel).CommonInstance()!).Equals(lhsModel, rhsModel, crystal?.GetSubCrystal((int)Container_FieldIndex.Model))) return false;
                 }
                 else if (!isModelEqual) return false;
             }
-            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.Destructible) ?? true))
+            if ((crystal?.GetShouldTranslate((int)Container_FieldIndex.Items) ?? true))
+            {
+                if (!lhs.Items.SequenceEqualNullable(rhs.Items)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Container_FieldIndex.Destructible) ?? true))
             {
                 if (EqualsMaskHelper.RefEquality(lhs.Destructible, rhs.Destructible, out var lhsDestructible, out var rhsDestructible, out var isDestructibleEqual))
                 {
-                    if (!((DestructibleCommon)((IDestructibleGetter)lhsDestructible).CommonInstance()!).Equals(lhsDestructible, rhsDestructible, crystal?.GetSubCrystal((int)Activator_FieldIndex.Destructible))) return false;
+                    if (!((DestructibleCommon)((IDestructibleGetter)lhsDestructible).CommonInstance()!).Equals(lhsDestructible, rhsDestructible, crystal?.GetSubCrystal((int)Container_FieldIndex.Destructible))) return false;
                 }
                 else if (!isDestructibleEqual) return false;
             }
-            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.Keywords) ?? true))
-            {
-                if (!lhs.Keywords.SequenceEqualNullable(rhs.Keywords)) return false;
-            }
-            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.Properties) ?? true))
-            {
-                if (EqualsMaskHelper.RefEquality(lhs.Properties, rhs.Properties, out var lhsProperties, out var rhsProperties, out var isPropertiesEqual))
-                {
-                    if (!((PropertiesCommon)((IPropertiesGetter)lhsProperties).CommonInstance()!).Equals(lhsProperties, rhsProperties, crystal?.GetSubCrystal((int)Activator_FieldIndex.Properties))) return false;
-                }
-                else if (!isPropertiesEqual) return false;
-            }
-            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.Terminal) ?? true))
-            {
-                if (!lhs.Terminal.Equals(rhs.Terminal)) return false;
-            }
-            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.ForcedLocRefType) ?? true))
-            {
-                if (!lhs.ForcedLocRefType.Equals(rhs.ForcedLocRefType)) return false;
-            }
-            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.MarkerColor) ?? true))
-            {
-                if (!lhs.MarkerColor.ColorOnlyEquals(rhs.MarkerColor)) return false;
-            }
-            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.LoopingSound) ?? true))
-            {
-                if (!lhs.LoopingSound.Equals(rhs.LoopingSound)) return false;
-            }
-            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.ActivationSound) ?? true))
-            {
-                if (!lhs.ActivationSound.Equals(rhs.ActivationSound)) return false;
-            }
-            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.WaterType) ?? true))
-            {
-                if (!lhs.WaterType.Equals(rhs.WaterType)) return false;
-            }
-            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.ActivateTextOverride) ?? true))
-            {
-                if (!object.Equals(lhs.ActivateTextOverride, rhs.ActivateTextOverride)) return false;
-            }
-            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.Flags) ?? true))
+            if ((crystal?.GetShouldTranslate((int)Container_FieldIndex.Flags) ?? true))
             {
                 if (lhs.Flags != rhs.Flags) return false;
             }
-            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.InteractionKeyword) ?? true))
+            if ((crystal?.GetShouldTranslate((int)Container_FieldIndex.Weight) ?? true))
             {
-                if (!lhs.InteractionKeyword.Equals(rhs.InteractionKeyword)) return false;
+                if (!lhs.Weight.EqualsWithin(rhs.Weight)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Container_FieldIndex.Keywords) ?? true))
+            {
+                if (!lhs.Keywords.SequenceEqualNullable(rhs.Keywords)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Container_FieldIndex.ForcedLocRefType) ?? true))
+            {
+                if (!lhs.ForcedLocRefType.Equals(rhs.ForcedLocRefType)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Container_FieldIndex.Properties) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.Properties, rhs.Properties, out var lhsProperties, out var rhsProperties, out var isPropertiesEqual))
+                {
+                    if (!((PropertiesCommon)((IPropertiesGetter)lhsProperties).CommonInstance()!).Equals(lhsProperties, rhsProperties, crystal?.GetSubCrystal((int)Container_FieldIndex.Properties))) return false;
+                }
+                else if (!isPropertiesEqual) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Container_FieldIndex.OpenSound) ?? true))
+            {
+                if (!lhs.OpenSound.Equals(rhs.OpenSound)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Container_FieldIndex.CloseSound) ?? true))
+            {
+                if (!lhs.CloseSound.Equals(rhs.CloseSound)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Container_FieldIndex.DATADataTypeState) ?? true))
+            {
+                if (lhs.DATADataTypeState != rhs.DATADataTypeState) return false;
             }
             return true;
         }
@@ -2143,8 +2078,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TranslationCrystal? crystal)
         {
             return Equals(
-                lhs: (IActivatorGetter?)lhs,
-                rhs: rhs as IActivatorGetter,
+                lhs: (IContainerGetter?)lhs,
+                rhs: rhs as IContainerGetter,
                 crystal: crystal);
         }
         
@@ -2154,12 +2089,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TranslationCrystal? crystal)
         {
             return Equals(
-                lhs: (IActivatorGetter?)lhs,
-                rhs: rhs as IActivatorGetter,
+                lhs: (IContainerGetter?)lhs,
+                rhs: rhs as IContainerGetter,
                 crystal: crystal);
         }
         
-        public virtual int GetHashCode(IActivatorGetter item)
+        public virtual int GetHashCode(IContainerGetter item)
         {
             var hash = new HashCode();
             if (item.VirtualMachineAdapter is {} VirtualMachineAdapteritem)
@@ -2168,7 +2103,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             }
             hash.Add(item.ObjectBounds);
             hash.Add(item.PreviewTransform);
-            hash.Add(item.AnimationSound);
             if (item.Name is {} Nameitem)
             {
                 hash.Add(Nameitem);
@@ -2177,45 +2111,34 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 hash.Add(Modelitem);
             }
+            hash.Add(item.Items);
             if (item.Destructible is {} Destructibleitem)
             {
                 hash.Add(Destructibleitem);
             }
+            hash.Add(item.Flags);
+            hash.Add(item.Weight);
             hash.Add(item.Keywords);
+            hash.Add(item.ForcedLocRefType);
             if (item.Properties is {} Propertiesitem)
             {
                 hash.Add(Propertiesitem);
             }
-            hash.Add(item.Terminal);
-            hash.Add(item.ForcedLocRefType);
-            if (item.MarkerColor is {} MarkerColoritem)
-            {
-                hash.Add(MarkerColoritem);
-            }
-            hash.Add(item.LoopingSound);
-            hash.Add(item.ActivationSound);
-            hash.Add(item.WaterType);
-            if (item.ActivateTextOverride is {} ActivateTextOverrideitem)
-            {
-                hash.Add(ActivateTextOverrideitem);
-            }
-            if (item.Flags is {} Flagsitem)
-            {
-                hash.Add(Flagsitem);
-            }
-            hash.Add(item.InteractionKeyword);
+            hash.Add(item.OpenSound);
+            hash.Add(item.CloseSound);
+            hash.Add(item.DATADataTypeState);
             hash.Add(base.GetHashCode());
             return hash.ToHashCode();
         }
         
         public override int GetHashCode(IFallout4MajorRecordGetter item)
         {
-            return GetHashCode(item: (IActivatorGetter)item);
+            return GetHashCode(item: (IContainerGetter)item);
         }
         
         public override int GetHashCode(IMajorRecordGetter item)
         {
-            return GetHashCode(item: (IActivatorGetter)item);
+            return GetHashCode(item: (IContainerGetter)item);
         }
         
         #endregion
@@ -2223,11 +2146,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         
         public override object GetNew()
         {
-            return Activator.GetNew();
+            return Container.GetNew();
         }
         
         #region Mutagen
-        public IEnumerable<IFormLinkGetter> GetContainedFormLinks(IActivatorGetter obj)
+        public IEnumerable<IFormLinkGetter> GetContainedFormLinks(IContainerGetter obj)
         {
             foreach (var item in base.GetContainedFormLinks(obj))
             {
@@ -2244,15 +2167,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 yield return item;
             }
-            if (obj.AnimationSound.FormKeyNullable.HasValue)
-            {
-                yield return FormLinkInformation.Factory(obj.AnimationSound);
-            }
             if (obj.Model is {} ModelItems)
             {
                 foreach (var item in ModelItems.ContainedFormLinks)
                 {
                     yield return item;
+                }
+            }
+            if (obj.Items is {} ItemsItem)
+            {
+                foreach (var item in ItemsItem.WhereCastable<IContainerEntryGetter, IFormLinkContainerGetter>()
+                    .SelectMany((f) => f.ContainedFormLinks))
+                {
+                    yield return FormLinkInformation.Factory(item);
                 }
             }
             if (obj.Destructible is {} DestructibleItems)
@@ -2269,40 +2196,28 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     yield return FormLinkInformation.Factory(item);
                 }
             }
-            if (obj.Terminal.FormKeyNullable.HasValue)
-            {
-                yield return FormLinkInformation.Factory(obj.Terminal);
-            }
             if (obj.ForcedLocRefType.FormKeyNullable.HasValue)
             {
                 yield return FormLinkInformation.Factory(obj.ForcedLocRefType);
             }
-            if (obj.LoopingSound.FormKeyNullable.HasValue)
+            if (obj.OpenSound.FormKeyNullable.HasValue)
             {
-                yield return FormLinkInformation.Factory(obj.LoopingSound);
+                yield return FormLinkInformation.Factory(obj.OpenSound);
             }
-            if (obj.ActivationSound.FormKeyNullable.HasValue)
+            if (obj.CloseSound.FormKeyNullable.HasValue)
             {
-                yield return FormLinkInformation.Factory(obj.ActivationSound);
-            }
-            if (obj.WaterType.FormKeyNullable.HasValue)
-            {
-                yield return FormLinkInformation.Factory(obj.WaterType);
-            }
-            if (obj.InteractionKeyword.FormKeyNullable.HasValue)
-            {
-                yield return FormLinkInformation.Factory(obj.InteractionKeyword);
+                yield return FormLinkInformation.Factory(obj.CloseSound);
             }
             yield break;
         }
         
         #region Duplicate
-        public Activator Duplicate(
-            IActivatorGetter item,
+        public Container Duplicate(
+            IContainerGetter item,
             FormKey formKey,
             TranslationCrystal? copyMask)
         {
-            var newRec = new Activator(formKey);
+            var newRec = new Container(formKey);
             newRec.DeepCopyIn(item, default(ErrorMaskBuilder?), copyMask);
             return newRec;
         }
@@ -2313,7 +2228,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TranslationCrystal? copyMask)
         {
             return this.Duplicate(
-                item: (IActivatorGetter)item,
+                item: (IContainerGetter)item,
                 formKey: formKey,
                 copyMask: copyMask);
         }
@@ -2324,7 +2239,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TranslationCrystal? copyMask)
         {
             return this.Duplicate(
-                item: (IActivatorGetter)item,
+                item: (IContainerGetter)item,
                 formKey: formKey,
                 copyMask: copyMask);
         }
@@ -2334,14 +2249,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         #endregion
         
     }
-    public partial class ActivatorSetterTranslationCommon : Fallout4MajorRecordSetterTranslationCommon
+    public partial class ContainerSetterTranslationCommon : Fallout4MajorRecordSetterTranslationCommon
     {
-        public new static readonly ActivatorSetterTranslationCommon Instance = new ActivatorSetterTranslationCommon();
+        public new static readonly ContainerSetterTranslationCommon Instance = new ContainerSetterTranslationCommon();
 
         #region DeepCopyIn
         public void DeepCopyIn(
-            IActivatorInternal item,
-            IActivatorGetter rhs,
+            IContainerInternal item,
+            IContainerGetter rhs,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask,
             bool deepCopy)
@@ -2355,8 +2270,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         public void DeepCopyIn(
-            IActivator item,
-            IActivatorGetter rhs,
+            IContainer item,
+            IContainerGetter rhs,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask,
             bool deepCopy)
@@ -2367,16 +2282,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 errorMask,
                 copyMask,
                 deepCopy: deepCopy);
-            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.VirtualMachineAdapter) ?? true))
+            if ((copyMask?.GetShouldTranslate((int)Container_FieldIndex.VirtualMachineAdapter) ?? true))
             {
-                errorMask?.PushIndex((int)Activator_FieldIndex.VirtualMachineAdapter);
+                errorMask?.PushIndex((int)Container_FieldIndex.VirtualMachineAdapter);
                 try
                 {
                     if(rhs.VirtualMachineAdapter is {} rhsVirtualMachineAdapter)
                     {
                         item.VirtualMachineAdapter = rhsVirtualMachineAdapter.DeepCopy(
                             errorMask: errorMask,
-                            copyMask?.GetSubCrystal((int)Activator_FieldIndex.VirtualMachineAdapter));
+                            copyMask?.GetSubCrystal((int)Container_FieldIndex.VirtualMachineAdapter));
                     }
                     else
                     {
@@ -2393,15 +2308,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     errorMask?.PopIndex();
                 }
             }
-            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.ObjectBounds) ?? true))
+            if ((copyMask?.GetShouldTranslate((int)Container_FieldIndex.ObjectBounds) ?? true))
             {
-                errorMask?.PushIndex((int)Activator_FieldIndex.ObjectBounds);
+                errorMask?.PushIndex((int)Container_FieldIndex.ObjectBounds);
                 try
                 {
-                    if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.ObjectBounds) ?? true))
+                    if ((copyMask?.GetShouldTranslate((int)Container_FieldIndex.ObjectBounds) ?? true))
                     {
                         item.ObjectBounds = rhs.ObjectBounds.DeepCopy(
-                            copyMask: copyMask?.GetSubCrystal((int)Activator_FieldIndex.ObjectBounds),
+                            copyMask: copyMask?.GetSubCrystal((int)Container_FieldIndex.ObjectBounds),
                             errorMask: errorMask);
                     }
                 }
@@ -2415,15 +2330,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     errorMask?.PopIndex();
                 }
             }
-            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.PreviewTransform) ?? true))
+            if ((copyMask?.GetShouldTranslate((int)Container_FieldIndex.PreviewTransform) ?? true))
             {
-                errorMask?.PushIndex((int)Activator_FieldIndex.PreviewTransform);
+                errorMask?.PushIndex((int)Container_FieldIndex.PreviewTransform);
                 try
                 {
-                    if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.PreviewTransform) ?? true))
+                    if ((copyMask?.GetShouldTranslate((int)Container_FieldIndex.PreviewTransform) ?? true))
                     {
                         item.PreviewTransform = rhs.PreviewTransform.DeepCopy(
-                            copyMask: copyMask?.GetSubCrystal((int)Activator_FieldIndex.PreviewTransform),
+                            copyMask: copyMask?.GetSubCrystal((int)Container_FieldIndex.PreviewTransform),
                             errorMask: errorMask);
                     }
                 }
@@ -2437,24 +2352,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     errorMask?.PopIndex();
                 }
             }
-            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.AnimationSound) ?? true))
-            {
-                item.AnimationSound.SetTo(rhs.AnimationSound.FormKeyNullable);
-            }
-            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.Name) ?? true))
+            if ((copyMask?.GetShouldTranslate((int)Container_FieldIndex.Name) ?? true))
             {
                 item.Name = rhs.Name?.DeepCopy();
             }
-            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.Model) ?? true))
+            if ((copyMask?.GetShouldTranslate((int)Container_FieldIndex.Model) ?? true))
             {
-                errorMask?.PushIndex((int)Activator_FieldIndex.Model);
+                errorMask?.PushIndex((int)Container_FieldIndex.Model);
                 try
                 {
                     if(rhs.Model is {} rhsModel)
                     {
                         item.Model = rhsModel.DeepCopy(
                             errorMask: errorMask,
-                            copyMask?.GetSubCrystal((int)Activator_FieldIndex.Model));
+                            copyMask?.GetSubCrystal((int)Container_FieldIndex.Model));
                     }
                     else
                     {
@@ -2471,16 +2382,48 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     errorMask?.PopIndex();
                 }
             }
-            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.Destructible) ?? true))
+            if ((copyMask?.GetShouldTranslate((int)Container_FieldIndex.Items) ?? true))
             {
-                errorMask?.PushIndex((int)Activator_FieldIndex.Destructible);
+                errorMask?.PushIndex((int)Container_FieldIndex.Items);
+                try
+                {
+                    if ((rhs.Items != null))
+                    {
+                        item.Items = 
+                            rhs.Items
+                            .Select(r =>
+                            {
+                                return r.DeepCopy(
+                                    errorMask: errorMask,
+                                    default(TranslationCrystal));
+                            })
+                            .ToExtendedList<ContainerEntry>();
+                    }
+                    else
+                    {
+                        item.Items = null;
+                    }
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Container_FieldIndex.Destructible) ?? true))
+            {
+                errorMask?.PushIndex((int)Container_FieldIndex.Destructible);
                 try
                 {
                     if(rhs.Destructible is {} rhsDestructible)
                     {
                         item.Destructible = rhsDestructible.DeepCopy(
                             errorMask: errorMask,
-                            copyMask?.GetSubCrystal((int)Activator_FieldIndex.Destructible));
+                            copyMask?.GetSubCrystal((int)Container_FieldIndex.Destructible));
                     }
                     else
                     {
@@ -2497,9 +2440,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     errorMask?.PopIndex();
                 }
             }
-            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.Keywords) ?? true))
+            if ((copyMask?.GetShouldTranslate((int)Container_FieldIndex.Flags) ?? true))
             {
-                errorMask?.PushIndex((int)Activator_FieldIndex.Keywords);
+                item.Flags = rhs.Flags;
+            }
+            if ((copyMask?.GetShouldTranslate((int)Container_FieldIndex.Weight) ?? true))
+            {
+                item.Weight = rhs.Weight;
+            }
+            if ((copyMask?.GetShouldTranslate((int)Container_FieldIndex.Keywords) ?? true))
+            {
+                errorMask?.PushIndex((int)Container_FieldIndex.Keywords);
                 try
                 {
                     if ((rhs.Keywords != null))
@@ -2524,16 +2475,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     errorMask?.PopIndex();
                 }
             }
-            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.Properties) ?? true))
+            if ((copyMask?.GetShouldTranslate((int)Container_FieldIndex.ForcedLocRefType) ?? true))
             {
-                errorMask?.PushIndex((int)Activator_FieldIndex.Properties);
+                item.ForcedLocRefType.SetTo(rhs.ForcedLocRefType.FormKeyNullable);
+            }
+            if ((copyMask?.GetShouldTranslate((int)Container_FieldIndex.Properties) ?? true))
+            {
+                errorMask?.PushIndex((int)Container_FieldIndex.Properties);
                 try
                 {
                     if(rhs.Properties is {} rhsProperties)
                     {
                         item.Properties = rhsProperties.DeepCopy(
                             errorMask: errorMask,
-                            copyMask?.GetSubCrystal((int)Activator_FieldIndex.Properties));
+                            copyMask?.GetSubCrystal((int)Container_FieldIndex.Properties));
                     }
                     else
                     {
@@ -2550,41 +2505,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     errorMask?.PopIndex();
                 }
             }
-            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.Terminal) ?? true))
+            if ((copyMask?.GetShouldTranslate((int)Container_FieldIndex.OpenSound) ?? true))
             {
-                item.Terminal.SetTo(rhs.Terminal.FormKeyNullable);
+                item.OpenSound.SetTo(rhs.OpenSound.FormKeyNullable);
             }
-            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.ForcedLocRefType) ?? true))
+            if ((copyMask?.GetShouldTranslate((int)Container_FieldIndex.CloseSound) ?? true))
             {
-                item.ForcedLocRefType.SetTo(rhs.ForcedLocRefType.FormKeyNullable);
+                item.CloseSound.SetTo(rhs.CloseSound.FormKeyNullable);
             }
-            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.MarkerColor) ?? true))
+            if ((copyMask?.GetShouldTranslate((int)Container_FieldIndex.DATADataTypeState) ?? true))
             {
-                item.MarkerColor = rhs.MarkerColor;
-            }
-            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.LoopingSound) ?? true))
-            {
-                item.LoopingSound.SetTo(rhs.LoopingSound.FormKeyNullable);
-            }
-            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.ActivationSound) ?? true))
-            {
-                item.ActivationSound.SetTo(rhs.ActivationSound.FormKeyNullable);
-            }
-            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.WaterType) ?? true))
-            {
-                item.WaterType.SetTo(rhs.WaterType.FormKeyNullable);
-            }
-            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.ActivateTextOverride) ?? true))
-            {
-                item.ActivateTextOverride = rhs.ActivateTextOverride?.DeepCopy();
-            }
-            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.Flags) ?? true))
-            {
-                item.Flags = rhs.Flags;
-            }
-            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.InteractionKeyword) ?? true))
-            {
-                item.InteractionKeyword.SetTo(rhs.InteractionKeyword.FormKeyNullable);
+                item.DATADataTypeState = rhs.DATADataTypeState;
             }
         }
         
@@ -2596,8 +2527,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             bool deepCopy)
         {
             this.DeepCopyIn(
-                item: (IActivatorInternal)item,
-                rhs: (IActivatorGetter)rhs,
+                item: (IContainerInternal)item,
+                rhs: (IContainerGetter)rhs,
                 errorMask: errorMask,
                 copyMask: copyMask,
                 deepCopy: deepCopy);
@@ -2611,8 +2542,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             bool deepCopy)
         {
             this.DeepCopyIn(
-                item: (IActivator)item,
-                rhs: (IActivatorGetter)rhs,
+                item: (IContainer)item,
+                rhs: (IContainerGetter)rhs,
                 errorMask: errorMask,
                 copyMask: copyMask,
                 deepCopy: deepCopy);
@@ -2626,8 +2557,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             bool deepCopy)
         {
             this.DeepCopyIn(
-                item: (IActivatorInternal)item,
-                rhs: (IActivatorGetter)rhs,
+                item: (IContainerInternal)item,
+                rhs: (IContainerGetter)rhs,
                 errorMask: errorMask,
                 copyMask: copyMask,
                 deepCopy: deepCopy);
@@ -2641,8 +2572,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             bool deepCopy)
         {
             this.DeepCopyIn(
-                item: (IActivator)item,
-                rhs: (IActivatorGetter)rhs,
+                item: (IContainer)item,
+                rhs: (IContainerGetter)rhs,
                 errorMask: errorMask,
                 copyMask: copyMask,
                 deepCopy: deepCopy);
@@ -2650,12 +2581,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         
         #endregion
         
-        public Activator DeepCopy(
-            IActivatorGetter item,
-            Activator.TranslationMask? copyMask = null)
+        public Container DeepCopy(
+            IContainerGetter item,
+            Container.TranslationMask? copyMask = null)
         {
-            Activator ret = (Activator)((ActivatorCommon)((IActivatorGetter)item).CommonInstance()!).GetNew();
-            ((ActivatorSetterTranslationCommon)((IActivatorGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
+            Container ret = (Container)((ContainerCommon)((IContainerGetter)item).CommonInstance()!).GetNew();
+            ((ContainerSetterTranslationCommon)((IContainerGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: ret,
                 rhs: item,
                 errorMask: null,
@@ -2664,30 +2595,30 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             return ret;
         }
         
-        public Activator DeepCopy(
-            IActivatorGetter item,
-            out Activator.ErrorMask errorMask,
-            Activator.TranslationMask? copyMask = null)
+        public Container DeepCopy(
+            IContainerGetter item,
+            out Container.ErrorMask errorMask,
+            Container.TranslationMask? copyMask = null)
         {
             var errorMaskBuilder = new ErrorMaskBuilder();
-            Activator ret = (Activator)((ActivatorCommon)((IActivatorGetter)item).CommonInstance()!).GetNew();
-            ((ActivatorSetterTranslationCommon)((IActivatorGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
+            Container ret = (Container)((ContainerCommon)((IContainerGetter)item).CommonInstance()!).GetNew();
+            ((ContainerSetterTranslationCommon)((IContainerGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
                 ret,
                 item,
                 errorMask: errorMaskBuilder,
                 copyMask: copyMask?.GetCrystal(),
                 deepCopy: true);
-            errorMask = Activator.ErrorMask.Factory(errorMaskBuilder);
+            errorMask = Container.ErrorMask.Factory(errorMaskBuilder);
             return ret;
         }
         
-        public Activator DeepCopy(
-            IActivatorGetter item,
+        public Container DeepCopy(
+            IContainerGetter item,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask = null)
         {
-            Activator ret = (Activator)((ActivatorCommon)((IActivatorGetter)item).CommonInstance()!).GetNew();
-            ((ActivatorSetterTranslationCommon)((IActivatorGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
+            Container ret = (Container)((ContainerCommon)((IContainerGetter)item).CommonInstance()!).GetNew();
+            ((ContainerSetterTranslationCommon)((IContainerGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: ret,
                 rhs: item,
                 errorMask: errorMask,
@@ -2703,21 +2634,21 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
 namespace Mutagen.Bethesda.Fallout4
 {
-    public partial class Activator
+    public partial class Container
     {
         #region Common Routing
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        ILoquiRegistration ILoquiObject.Registration => Activator_Registration.Instance;
-        public new static Activator_Registration StaticRegistration => Activator_Registration.Instance;
+        ILoquiRegistration ILoquiObject.Registration => Container_Registration.Instance;
+        public new static Container_Registration StaticRegistration => Container_Registration.Instance;
         [DebuggerStepThrough]
-        protected override object CommonInstance() => ActivatorCommon.Instance;
+        protected override object CommonInstance() => ContainerCommon.Instance;
         [DebuggerStepThrough]
         protected override object CommonSetterInstance()
         {
-            return ActivatorSetterCommon.Instance;
+            return ContainerSetterCommon.Instance;
         }
         [DebuggerStepThrough]
-        protected override object CommonSetterTranslationInstance() => ActivatorSetterTranslationCommon.Instance;
+        protected override object CommonSetterTranslationInstance() => ContainerSetterTranslationCommon.Instance;
 
         #endregion
 
@@ -2728,14 +2659,23 @@ namespace Mutagen.Bethesda.Fallout4
 #region Binary Translation
 namespace Mutagen.Bethesda.Fallout4.Internals
 {
-    public partial class ActivatorBinaryWriteTranslation :
+    public partial class ContainerBinaryWriteTranslation :
         Fallout4MajorRecordBinaryWriteTranslation,
         IBinaryWriteTranslator
     {
-        public new readonly static ActivatorBinaryWriteTranslation Instance = new ActivatorBinaryWriteTranslation();
+        public new readonly static ContainerBinaryWriteTranslation Instance = new ContainerBinaryWriteTranslation();
+
+        public static void WriteEmbedded(
+            IContainerGetter item,
+            MutagenWriter writer)
+        {
+            Fallout4MajorRecordBinaryWriteTranslation.WriteEmbedded(
+                item: item,
+                writer: writer);
+        }
 
         public static void WriteRecordTypes(
-            IActivatorGetter item,
+            IContainerGetter item,
             MutagenWriter writer,
             TypedWriteParams? translationParams)
         {
@@ -2760,10 +2700,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 item: PreviewTransformItem,
                 writer: writer,
                 translationParams: translationParams);
-            FormLinkBinaryTranslation.Instance.WriteNullable(
-                writer: writer,
-                item: item.AnimationSound,
-                header: translationParams.ConvertToCustom(RecordTypes.STCP));
             StringBinaryTranslation.Instance.WriteNullable(
                 writer: writer,
                 item: item.Name,
@@ -2777,12 +2713,35 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     writer: writer,
                     translationParams: translationParams);
             }
+            Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IContainerEntryGetter>.Instance.WriteWithCounter(
+                writer: writer,
+                items: item.Items,
+                counterType: RecordTypes.COCT,
+                counterLength: 4,
+                transl: (MutagenWriter subWriter, IContainerEntryGetter subItem, TypedWriteParams? conv) =>
+                {
+                    var Item = subItem;
+                    ((ContainerEntryBinaryWriteTranslation)((IBinaryItem)Item).BinaryWriteTranslator).Write(
+                        item: Item,
+                        writer: subWriter,
+                        translationParams: conv);
+                });
             if (item.Destructible is {} DestructibleItem)
             {
                 ((DestructibleBinaryWriteTranslation)((IBinaryItem)DestructibleItem).BinaryWriteTranslator).Write(
                     item: DestructibleItem,
                     writer: writer,
                     translationParams: translationParams);
+            }
+            using (HeaderExport.Subrecord(writer, translationParams.ConvertToCustom(RecordTypes.DATA)))
+            {
+                EnumBinaryTranslation<Container.Flag, MutagenFrame, MutagenWriter>.Instance.Write(
+                    writer,
+                    item.Flags,
+                    length: 1);
+                FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
+                    writer: writer,
+                    item: item.Weight);
             }
             Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IFormLinkGetter<IKeywordGetter>>.Instance.WriteWithCounter(
                 writer: writer,
@@ -2796,6 +2755,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         writer: subWriter,
                         item: subItem);
                 });
+            FormLinkBinaryTranslation.Instance.WriteNullable(
+                writer: writer,
+                item: item.ForcedLocRefType,
+                header: translationParams.ConvertToCustom(RecordTypes.FTYP));
             if (item.Properties is {} PropertiesItem)
             {
                 ((PropertiesBinaryWriteTranslation)((IBinaryItem)PropertiesItem).BinaryWriteTranslator).Write(
@@ -2805,57 +2768,26 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             }
             FormLinkBinaryTranslation.Instance.WriteNullable(
                 writer: writer,
-                item: item.Terminal,
-                header: translationParams.ConvertToCustom(RecordTypes.NTRM));
-            FormLinkBinaryTranslation.Instance.WriteNullable(
-                writer: writer,
-                item: item.ForcedLocRefType,
-                header: translationParams.ConvertToCustom(RecordTypes.FTYP));
-            ColorBinaryTranslation.Instance.WriteNullable(
-                writer: writer,
-                item: item.MarkerColor,
-                header: translationParams.ConvertToCustom(RecordTypes.PNAM));
-            FormLinkBinaryTranslation.Instance.WriteNullable(
-                writer: writer,
-                item: item.LoopingSound,
+                item: item.OpenSound,
                 header: translationParams.ConvertToCustom(RecordTypes.SNAM));
             FormLinkBinaryTranslation.Instance.WriteNullable(
                 writer: writer,
-                item: item.ActivationSound,
-                header: translationParams.ConvertToCustom(RecordTypes.VNAM));
-            FormLinkBinaryTranslation.Instance.WriteNullable(
-                writer: writer,
-                item: item.WaterType,
-                header: translationParams.ConvertToCustom(RecordTypes.WNAM));
-            StringBinaryTranslation.Instance.WriteNullable(
-                writer: writer,
-                item: item.ActivateTextOverride,
-                header: translationParams.ConvertToCustom(RecordTypes.RNAM),
-                binaryType: StringBinaryType.NullTerminate,
-                source: StringsSource.Normal);
-            EnumBinaryTranslation<Activator.Flag, MutagenFrame, MutagenWriter>.Instance.WriteNullable(
-                writer,
-                item.Flags,
-                length: 2,
-                header: translationParams.ConvertToCustom(RecordTypes.FNAM));
-            FormLinkBinaryTranslation.Instance.WriteNullable(
-                writer: writer,
-                item: item.InteractionKeyword,
-                header: translationParams.ConvertToCustom(RecordTypes.KNAM));
+                item: item.CloseSound,
+                header: translationParams.ConvertToCustom(RecordTypes.QNAM));
         }
 
         public void Write(
             MutagenWriter writer,
-            IActivatorGetter item,
+            IContainerGetter item,
             TypedWriteParams? translationParams = null)
         {
             using (HeaderExport.Record(
                 writer: writer,
-                record: translationParams.ConvertToCustom(RecordTypes.ACTI)))
+                record: translationParams.ConvertToCustom(RecordTypes.CONT)))
             {
                 try
                 {
-                    Fallout4MajorRecordBinaryWriteTranslation.WriteEmbedded(
+                    WriteEmbedded(
                         item: item,
                         writer: writer);
                     writer.MetaData.FormVersion = item.FormVersion;
@@ -2878,7 +2810,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TypedWriteParams? translationParams = null)
         {
             Write(
-                item: (IActivatorGetter)item,
+                item: (IContainerGetter)item,
                 writer: writer,
                 translationParams: translationParams);
         }
@@ -2889,7 +2821,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TypedWriteParams? translationParams = null)
         {
             Write(
-                item: (IActivatorGetter)item,
+                item: (IContainerGetter)item,
                 writer: writer,
                 translationParams: translationParams);
         }
@@ -2900,20 +2832,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TypedWriteParams? translationParams = null)
         {
             Write(
-                item: (IActivatorGetter)item,
+                item: (IContainerGetter)item,
                 writer: writer,
                 translationParams: translationParams);
         }
 
     }
 
-    public partial class ActivatorBinaryCreateTranslation : Fallout4MajorRecordBinaryCreateTranslation
+    public partial class ContainerBinaryCreateTranslation : Fallout4MajorRecordBinaryCreateTranslation
     {
-        public new readonly static ActivatorBinaryCreateTranslation Instance = new ActivatorBinaryCreateTranslation();
+        public new readonly static ContainerBinaryCreateTranslation Instance = new ContainerBinaryCreateTranslation();
 
-        public override RecordType RecordType => RecordTypes.ACTI;
+        public override RecordType RecordType => RecordTypes.CONT;
         public static void FillBinaryStructs(
-            IActivatorInternal item,
+            IContainerInternal item,
             MutagenFrame frame)
         {
             Fallout4MajorRecordBinaryCreateTranslation.FillBinaryStructs(
@@ -2922,7 +2854,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
 
         public static ParseResult FillBinaryRecordTypes(
-            IActivatorInternal item,
+            IContainerInternal item,
             MutagenFrame frame,
             PreviousParse lastParsed,
             Dictionary<RecordType, int>? recordParseCount,
@@ -2936,23 +2868,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case RecordTypeInts.VMAD:
                 {
                     item.VirtualMachineAdapter = Mutagen.Bethesda.Fallout4.VirtualMachineAdapter.CreateFromBinary(frame: frame);
-                    return (int)Activator_FieldIndex.VirtualMachineAdapter;
+                    return (int)Container_FieldIndex.VirtualMachineAdapter;
                 }
                 case RecordTypeInts.OBND:
                 {
                     item.ObjectBounds = Mutagen.Bethesda.Fallout4.ObjectBounds.CreateFromBinary(frame: frame);
-                    return (int)Activator_FieldIndex.ObjectBounds;
+                    return (int)Container_FieldIndex.ObjectBounds;
                 }
                 case RecordTypeInts.PTRN:
                 {
                     item.PreviewTransform = Mutagen.Bethesda.Fallout4.PreviewTransform.CreateFromBinary(frame: frame);
-                    return (int)Activator_FieldIndex.PreviewTransform;
-                }
-                case RecordTypeInts.STCP:
-                {
-                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
-                    item.AnimationSound.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
-                    return (int)Activator_FieldIndex.AnimationSound;
+                    return (int)Container_FieldIndex.PreviewTransform;
                 }
                 case RecordTypeInts.FULL:
                 {
@@ -2961,14 +2887,28 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         reader: frame.SpawnWithLength(contentLength),
                         source: StringsSource.Normal,
                         stringBinaryType: StringBinaryType.NullTerminate);
-                    return (int)Activator_FieldIndex.Name;
+                    return (int)Container_FieldIndex.Name;
                 }
                 case RecordTypeInts.MODL:
                 {
                     item.Model = Mutagen.Bethesda.Fallout4.Model.CreateFromBinary(
                         frame: frame,
                         translationParams: translationParams);
-                    return (int)Activator_FieldIndex.Model;
+                    return (int)Container_FieldIndex.Model;
+                }
+                case RecordTypeInts.CNTO:
+                case RecordTypeInts.COCT:
+                {
+                    item.Items = 
+                        Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<ContainerEntry>.Instance.ParsePerItem(
+                            reader: frame,
+                            countLengthLength: 4,
+                            countRecord: RecordTypes.COCT,
+                            triggeringRecord: RecordTypes.CNTO,
+                            translationParams: translationParams,
+                            transl: ContainerEntry.TryCreateFromBinary)
+                        .CastExtendedList<ContainerEntry>();
+                    return (int)Container_FieldIndex.Items;
                 }
                 case RecordTypeInts.DEST:
                 case RecordTypeInts.DAMC:
@@ -2979,7 +2919,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     item.Destructible = Mutagen.Bethesda.Fallout4.Destructible.CreateFromBinary(
                         frame: frame,
                         translationParams: translationParams);
-                    return (int)Activator_FieldIndex.Destructible;
+                    return (int)Container_FieldIndex.Destructible;
+                }
+                case RecordTypeInts.DATA:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    var dataFrame = frame.SpawnWithLength(contentLength);
+                    item.Flags = EnumBinaryTranslation<Container.Flag, MutagenFrame, MutagenWriter>.Instance.Parse(
+                        reader: dataFrame,
+                        length: 1);
+                    item.Weight = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
+                    return (int)Container_FieldIndex.Weight;
                 }
                 case RecordTypeInts.KWDA:
                 case RecordTypeInts.KSIZ:
@@ -2992,71 +2942,30 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                             triggeringRecord: translationParams.ConvertToCustom(RecordTypes.KWDA),
                             transl: FormLinkBinaryTranslation.Instance.Parse)
                         .CastExtendedList<IFormLinkGetter<IKeywordGetter>>();
-                    return (int)Activator_FieldIndex.Keywords;
-                }
-                case RecordTypeInts.PRPS:
-                {
-                    item.Properties = Mutagen.Bethesda.Fallout4.Properties.CreateFromBinary(frame: frame);
-                    return (int)Activator_FieldIndex.Properties;
-                }
-                case RecordTypeInts.NTRM:
-                {
-                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
-                    item.Terminal.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
-                    return (int)Activator_FieldIndex.Terminal;
+                    return (int)Container_FieldIndex.Keywords;
                 }
                 case RecordTypeInts.FTYP:
                 {
                     frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
                     item.ForcedLocRefType.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
-                    return (int)Activator_FieldIndex.ForcedLocRefType;
+                    return (int)Container_FieldIndex.ForcedLocRefType;
                 }
-                case RecordTypeInts.PNAM:
+                case RecordTypeInts.PRPS:
                 {
-                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
-                    item.MarkerColor = frame.ReadColor(ColorBinaryType.Alpha);
-                    return (int)Activator_FieldIndex.MarkerColor;
+                    item.Properties = Mutagen.Bethesda.Fallout4.Properties.CreateFromBinary(frame: frame);
+                    return (int)Container_FieldIndex.Properties;
                 }
                 case RecordTypeInts.SNAM:
                 {
                     frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
-                    item.LoopingSound.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
-                    return (int)Activator_FieldIndex.LoopingSound;
+                    item.OpenSound.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    return (int)Container_FieldIndex.OpenSound;
                 }
-                case RecordTypeInts.VNAM:
+                case RecordTypeInts.QNAM:
                 {
                     frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
-                    item.ActivationSound.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
-                    return (int)Activator_FieldIndex.ActivationSound;
-                }
-                case RecordTypeInts.WNAM:
-                {
-                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
-                    item.WaterType.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
-                    return (int)Activator_FieldIndex.WaterType;
-                }
-                case RecordTypeInts.RNAM:
-                {
-                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
-                    item.ActivateTextOverride = StringBinaryTranslation.Instance.Parse(
-                        reader: frame.SpawnWithLength(contentLength),
-                        source: StringsSource.Normal,
-                        stringBinaryType: StringBinaryType.NullTerminate);
-                    return (int)Activator_FieldIndex.ActivateTextOverride;
-                }
-                case RecordTypeInts.FNAM:
-                {
-                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
-                    item.Flags = EnumBinaryTranslation<Activator.Flag, MutagenFrame, MutagenWriter>.Instance.Parse(
-                        reader: frame,
-                        length: contentLength);
-                    return (int)Activator_FieldIndex.Flags;
-                }
-                case RecordTypeInts.KNAM:
-                {
-                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
-                    item.InteractionKeyword.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
-                    return (int)Activator_FieldIndex.InteractionKeyword;
+                    item.CloseSound.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    return (int)Container_FieldIndex.CloseSound;
                 }
                 default:
                     return Fallout4MajorRecordBinaryCreateTranslation.FillBinaryRecordTypes(
@@ -3075,7 +2984,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 namespace Mutagen.Bethesda.Fallout4
 {
     #region Binary Write Mixins
-    public static class ActivatorBinaryTranslationMixIn
+    public static class ContainerBinaryTranslationMixIn
     {
     }
     #endregion
@@ -3084,38 +2993,38 @@ namespace Mutagen.Bethesda.Fallout4
 }
 namespace Mutagen.Bethesda.Fallout4.Internals
 {
-    public partial class ActivatorBinaryOverlay :
+    public partial class ContainerBinaryOverlay :
         Fallout4MajorRecordBinaryOverlay,
-        IActivatorGetter
+        IContainerGetter
     {
         #region Common Routing
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        ILoquiRegistration ILoquiObject.Registration => Activator_Registration.Instance;
-        public new static Activator_Registration StaticRegistration => Activator_Registration.Instance;
+        ILoquiRegistration ILoquiObject.Registration => Container_Registration.Instance;
+        public new static Container_Registration StaticRegistration => Container_Registration.Instance;
         [DebuggerStepThrough]
-        protected override object CommonInstance() => ActivatorCommon.Instance;
+        protected override object CommonInstance() => ContainerCommon.Instance;
         [DebuggerStepThrough]
-        protected override object CommonSetterTranslationInstance() => ActivatorSetterTranslationCommon.Instance;
+        protected override object CommonSetterTranslationInstance() => ContainerSetterTranslationCommon.Instance;
 
         #endregion
 
         void IPrintable.ToString(FileGeneration fg, string? name) => this.ToString(fg, name);
 
-        public override IEnumerable<IFormLinkGetter> ContainedFormLinks => ActivatorCommon.Instance.GetContainedFormLinks(this);
+        public override IEnumerable<IFormLinkGetter> ContainedFormLinks => ContainerCommon.Instance.GetContainedFormLinks(this);
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected override object BinaryWriteTranslator => ActivatorBinaryWriteTranslation.Instance;
+        protected override object BinaryWriteTranslator => ContainerBinaryWriteTranslation.Instance;
         void IBinaryItem.WriteToBinary(
             MutagenWriter writer,
             TypedWriteParams? translationParams = null)
         {
-            ((ActivatorBinaryWriteTranslation)this.BinaryWriteTranslator).Write(
+            ((ContainerBinaryWriteTranslation)this.BinaryWriteTranslator).Write(
                 item: this,
                 writer: writer,
                 translationParams: translationParams);
         }
-        protected override Type LinkType => typeof(IActivator);
+        protected override Type LinkType => typeof(IContainer);
 
-        public Activator.MajorFlag MajorFlags => (Activator.MajorFlag)this.MajorRecordFlagsRaw;
+        public Container.MajorFlag MajorFlags => (Container.MajorFlag)this.MajorRecordFlagsRaw;
 
         #region VirtualMachineAdapter
         private RangeInt32? _VirtualMachineAdapterLocation;
@@ -3131,10 +3040,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private IPreviewTransformGetter? _PreviewTransform => _PreviewTransformLocation.HasValue ? PreviewTransformBinaryOverlay.PreviewTransformFactory(new OverlayStream(_data.Slice(_PreviewTransformLocation!.Value.Min), _package), _package) : default;
         public IPreviewTransformGetter PreviewTransform => _PreviewTransform ?? new PreviewTransform();
         #endregion
-        #region AnimationSound
-        private int? _AnimationSoundLocation;
-        public IFormLinkNullableGetter<IAnimationSoundTagSetGetter> AnimationSound => _AnimationSoundLocation.HasValue ? new FormLinkNullable<IAnimationSoundTagSetGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _AnimationSoundLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<IAnimationSoundTagSetGetter>.Null;
-        #endregion
         #region Name
         private int? _NameLocation;
         public ITranslatedStringGetter? Name => _NameLocation.HasValue ? StringBinaryTranslation.Instance.Parse(HeaderTranslation.ExtractSubrecordMemory(_data, _NameLocation.Value, _package.MetaData.Constants), StringsSource.Normal, _package.MetaData.StringsLookup) : default(TranslatedString?);
@@ -3148,50 +3053,39 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         #endregion
         #endregion
         public IModelGetter? Model { get; private set; }
+        public IReadOnlyList<IContainerEntryGetter>? Items { get; private set; }
         public IDestructibleGetter? Destructible { get; private set; }
+        private int? _DATALocation;
+        public Container.DATADataType DATADataTypeState { get; private set; }
+        #region Flags
+        private int _FlagsLocation => _DATALocation!.Value;
+        private bool _Flags_IsSet => _DATALocation.HasValue;
+        public Container.Flag Flags => _Flags_IsSet ? (Container.Flag)_data.Span.Slice(_FlagsLocation, 0x1)[0] : default;
+        #endregion
+        #region Weight
+        private int _WeightLocation => _DATALocation!.Value + 0x1;
+        private bool _Weight_IsSet => _DATALocation.HasValue;
+        public Single Weight => _Weight_IsSet ? _data.Slice(_WeightLocation, 4).Float() : default;
+        #endregion
         #region Keywords
         public IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? Keywords { get; private set; }
         IReadOnlyList<IFormLinkGetter<IKeywordCommonGetter>>? IKeywordedGetter.Keywords => this.Keywords;
-        #endregion
-        #region Properties
-        private RangeInt32? _PropertiesLocation;
-        public IPropertiesGetter? Properties => _PropertiesLocation.HasValue ? PropertiesBinaryOverlay.PropertiesFactory(new OverlayStream(_data.Slice(_PropertiesLocation!.Value.Min), _package), _package) : default;
-        #endregion
-        #region Terminal
-        private int? _TerminalLocation;
-        public IFormLinkNullableGetter<ITerminalGetter> Terminal => _TerminalLocation.HasValue ? new FormLinkNullable<ITerminalGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _TerminalLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<ITerminalGetter>.Null;
         #endregion
         #region ForcedLocRefType
         private int? _ForcedLocRefTypeLocation;
         public IFormLinkNullableGetter<ILocationReferenceTypeGetter> ForcedLocRefType => _ForcedLocRefTypeLocation.HasValue ? new FormLinkNullable<ILocationReferenceTypeGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _ForcedLocRefTypeLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<ILocationReferenceTypeGetter>.Null;
         #endregion
-        #region MarkerColor
-        private int? _MarkerColorLocation;
-        public Color? MarkerColor => _MarkerColorLocation.HasValue ? HeaderTranslation.ExtractSubrecordMemory(_data, _MarkerColorLocation.Value, _package.MetaData.Constants).ReadColor(ColorBinaryType.Alpha) : default(Color?);
+        #region Properties
+        private RangeInt32? _PropertiesLocation;
+        public IPropertiesGetter? Properties => _PropertiesLocation.HasValue ? PropertiesBinaryOverlay.PropertiesFactory(new OverlayStream(_data.Slice(_PropertiesLocation!.Value.Min), _package), _package) : default;
         #endregion
-        #region LoopingSound
-        private int? _LoopingSoundLocation;
-        public IFormLinkNullableGetter<ISoundDescriptorGetter> LoopingSound => _LoopingSoundLocation.HasValue ? new FormLinkNullable<ISoundDescriptorGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _LoopingSoundLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<ISoundDescriptorGetter>.Null;
+        #region OpenSound
+        private int? _OpenSoundLocation;
+        public IFormLinkNullableGetter<ISoundDescriptorGetter> OpenSound => _OpenSoundLocation.HasValue ? new FormLinkNullable<ISoundDescriptorGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _OpenSoundLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<ISoundDescriptorGetter>.Null;
         #endregion
-        #region ActivationSound
-        private int? _ActivationSoundLocation;
-        public IFormLinkNullableGetter<ISoundDescriptorGetter> ActivationSound => _ActivationSoundLocation.HasValue ? new FormLinkNullable<ISoundDescriptorGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _ActivationSoundLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<ISoundDescriptorGetter>.Null;
-        #endregion
-        #region WaterType
-        private int? _WaterTypeLocation;
-        public IFormLinkNullableGetter<IWaterGetter> WaterType => _WaterTypeLocation.HasValue ? new FormLinkNullable<IWaterGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _WaterTypeLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<IWaterGetter>.Null;
-        #endregion
-        #region ActivateTextOverride
-        private int? _ActivateTextOverrideLocation;
-        public ITranslatedStringGetter? ActivateTextOverride => _ActivateTextOverrideLocation.HasValue ? StringBinaryTranslation.Instance.Parse(HeaderTranslation.ExtractSubrecordMemory(_data, _ActivateTextOverrideLocation.Value, _package.MetaData.Constants), StringsSource.Normal, _package.MetaData.StringsLookup) : default(TranslatedString?);
-        #endregion
-        #region Flags
-        private int? _FlagsLocation;
-        public Activator.Flag? Flags => _FlagsLocation.HasValue ? (Activator.Flag)BinaryPrimitives.ReadUInt16LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _FlagsLocation!.Value, _package.MetaData.Constants)) : default(Activator.Flag?);
-        #endregion
-        #region InteractionKeyword
-        private int? _InteractionKeywordLocation;
-        public IFormLinkNullableGetter<IKeywordGetter> InteractionKeyword => _InteractionKeywordLocation.HasValue ? new FormLinkNullable<IKeywordGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _InteractionKeywordLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<IKeywordGetter>.Null;
+        #region CloseSound
+        private int? _CloseSoundLocation;
+        public IFormLinkNullableGetter<ISoundDescriptorGetter> CloseSound => _CloseSoundLocation.HasValue ? new FormLinkNullable<ISoundDescriptorGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _CloseSoundLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<ISoundDescriptorGetter>.Null;
         #endregion
         partial void CustomFactoryEnd(
             OverlayStream stream,
@@ -3199,7 +3093,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             int offset);
 
         partial void CustomCtor();
-        protected ActivatorBinaryOverlay(
+        protected ContainerBinaryOverlay(
             ReadOnlyMemorySlice<byte> bytes,
             BinaryOverlayFactoryPackage package)
             : base(
@@ -3209,13 +3103,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             this.CustomCtor();
         }
 
-        public static ActivatorBinaryOverlay ActivatorFactory(
+        public static ContainerBinaryOverlay ContainerFactory(
             OverlayStream stream,
             BinaryOverlayFactoryPackage package,
             TypedParseParams? parseParams = null)
         {
             stream = PluginUtilityTranslation.DecompressStream(stream);
-            var ret = new ActivatorBinaryOverlay(
+            var ret = new ContainerBinaryOverlay(
                 bytes: HeaderTranslation.ExtractRecordMemory(stream.RemainingMemory, package.MetaData.Constants),
                 package: package);
             var finalPos = checked((int)(stream.Position + stream.GetMajorRecord().TotalLength));
@@ -3236,12 +3130,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             return ret;
         }
 
-        public static ActivatorBinaryOverlay ActivatorFactory(
+        public static ContainerBinaryOverlay ContainerFactory(
             ReadOnlyMemorySlice<byte> slice,
             BinaryOverlayFactoryPackage package,
             TypedParseParams? parseParams = null)
         {
-            return ActivatorFactory(
+            return ContainerFactory(
                 stream: new OverlayStream(slice, package),
                 package: package,
                 parseParams: parseParams);
@@ -3262,27 +3156,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case RecordTypeInts.VMAD:
                 {
                     _VirtualMachineAdapterLocation = new RangeInt32((stream.Position - offset), finalPos - offset);
-                    return (int)Activator_FieldIndex.VirtualMachineAdapter;
+                    return (int)Container_FieldIndex.VirtualMachineAdapter;
                 }
                 case RecordTypeInts.OBND:
                 {
                     _ObjectBoundsLocation = new RangeInt32((stream.Position - offset), finalPos - offset);
-                    return (int)Activator_FieldIndex.ObjectBounds;
+                    return (int)Container_FieldIndex.ObjectBounds;
                 }
                 case RecordTypeInts.PTRN:
                 {
                     _PreviewTransformLocation = new RangeInt32((stream.Position - offset), finalPos - offset);
-                    return (int)Activator_FieldIndex.PreviewTransform;
-                }
-                case RecordTypeInts.STCP:
-                {
-                    _AnimationSoundLocation = (stream.Position - offset);
-                    return (int)Activator_FieldIndex.AnimationSound;
+                    return (int)Container_FieldIndex.PreviewTransform;
                 }
                 case RecordTypeInts.FULL:
                 {
                     _NameLocation = (stream.Position - offset);
-                    return (int)Activator_FieldIndex.Name;
+                    return (int)Container_FieldIndex.Name;
                 }
                 case RecordTypeInts.MODL:
                 {
@@ -3290,7 +3179,21 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         stream: stream,
                         package: _package,
                         parseParams: parseParams);
-                    return (int)Activator_FieldIndex.Model;
+                    return (int)Container_FieldIndex.Model;
+                }
+                case RecordTypeInts.CNTO:
+                case RecordTypeInts.COCT:
+                {
+                    this.Items = BinaryOverlayList.FactoryByCountPerItem<ContainerEntryBinaryOverlay>(
+                        stream: stream,
+                        package: _package,
+                        countLength: 4,
+                        subrecordType: RecordTypes.CNTO,
+                        countType: RecordTypes.COCT,
+                        parseParams: parseParams,
+                        getter: (s, p, recConv) => ContainerEntryBinaryOverlay.ContainerEntryFactory(new OverlayStream(s, p), p, recConv),
+                        skipHeader: false);
+                    return (int)Container_FieldIndex.Items;
                 }
                 case RecordTypeInts.DEST:
                 case RecordTypeInts.DAMC:
@@ -3302,7 +3205,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         stream: stream,
                         package: _package,
                         parseParams: parseParams);
-                    return (int)Activator_FieldIndex.Destructible;
+                    return (int)Container_FieldIndex.Destructible;
+                }
+                case RecordTypeInts.DATA:
+                {
+                    _DATALocation = (stream.Position - offset) + _package.MetaData.Constants.SubConstants.TypeAndLengthLength;
+                    return (int)Container_FieldIndex.Weight;
                 }
                 case RecordTypeInts.KWDA:
                 case RecordTypeInts.KSIZ:
@@ -3315,57 +3223,27 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         countType: RecordTypes.KSIZ,
                         subrecordType: RecordTypes.KWDA,
                         getter: (s, p) => new FormLink<IKeywordGetter>(FormKey.Factory(p.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(s))));
-                    return (int)Activator_FieldIndex.Keywords;
-                }
-                case RecordTypeInts.PRPS:
-                {
-                    _PropertiesLocation = new RangeInt32((stream.Position - offset), finalPos - offset);
-                    return (int)Activator_FieldIndex.Properties;
-                }
-                case RecordTypeInts.NTRM:
-                {
-                    _TerminalLocation = (stream.Position - offset);
-                    return (int)Activator_FieldIndex.Terminal;
+                    return (int)Container_FieldIndex.Keywords;
                 }
                 case RecordTypeInts.FTYP:
                 {
                     _ForcedLocRefTypeLocation = (stream.Position - offset);
-                    return (int)Activator_FieldIndex.ForcedLocRefType;
+                    return (int)Container_FieldIndex.ForcedLocRefType;
                 }
-                case RecordTypeInts.PNAM:
+                case RecordTypeInts.PRPS:
                 {
-                    _MarkerColorLocation = (stream.Position - offset);
-                    return (int)Activator_FieldIndex.MarkerColor;
+                    _PropertiesLocation = new RangeInt32((stream.Position - offset), finalPos - offset);
+                    return (int)Container_FieldIndex.Properties;
                 }
                 case RecordTypeInts.SNAM:
                 {
-                    _LoopingSoundLocation = (stream.Position - offset);
-                    return (int)Activator_FieldIndex.LoopingSound;
+                    _OpenSoundLocation = (stream.Position - offset);
+                    return (int)Container_FieldIndex.OpenSound;
                 }
-                case RecordTypeInts.VNAM:
+                case RecordTypeInts.QNAM:
                 {
-                    _ActivationSoundLocation = (stream.Position - offset);
-                    return (int)Activator_FieldIndex.ActivationSound;
-                }
-                case RecordTypeInts.WNAM:
-                {
-                    _WaterTypeLocation = (stream.Position - offset);
-                    return (int)Activator_FieldIndex.WaterType;
-                }
-                case RecordTypeInts.RNAM:
-                {
-                    _ActivateTextOverrideLocation = (stream.Position - offset);
-                    return (int)Activator_FieldIndex.ActivateTextOverride;
-                }
-                case RecordTypeInts.FNAM:
-                {
-                    _FlagsLocation = (stream.Position - offset);
-                    return (int)Activator_FieldIndex.Flags;
-                }
-                case RecordTypeInts.KNAM:
-                {
-                    _InteractionKeywordLocation = (stream.Position - offset);
-                    return (int)Activator_FieldIndex.InteractionKeyword;
+                    _CloseSoundLocation = (stream.Position - offset);
+                    return (int)Container_FieldIndex.CloseSound;
                 }
                 default:
                     return base.FillRecordType(
@@ -3383,7 +3261,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             FileGeneration fg,
             string? name = null)
         {
-            ActivatorMixIn.ToString(
+            ContainerMixIn.ToString(
                 item: this,
                 name: name);
         }
@@ -3392,7 +3270,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public override string ToString()
         {
-            return MajorRecordPrinter<Activator>.ToString(this);
+            return MajorRecordPrinter<Container>.ToString(this);
         }
 
         #region Equals and Hash
@@ -3402,16 +3280,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 return formLink.Equals(this);
             }
-            if (obj is not IActivatorGetter rhs) return false;
-            return ((ActivatorCommon)((IActivatorGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
+            if (obj is not IContainerGetter rhs) return false;
+            return ((ContainerCommon)((IContainerGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
         }
 
-        public bool Equals(IActivatorGetter? obj)
+        public bool Equals(IContainerGetter? obj)
         {
-            return ((ActivatorCommon)((IActivatorGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
+            return ((ContainerCommon)((IContainerGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
         }
 
-        public override int GetHashCode() => ((ActivatorCommon)((IActivatorGetter)this).CommonInstance()!).GetHashCode(this);
+        public override int GetHashCode() => ((ContainerCommon)((IContainerGetter)this).CommonInstance()!).GetHashCode(this);
 
         #endregion
 
