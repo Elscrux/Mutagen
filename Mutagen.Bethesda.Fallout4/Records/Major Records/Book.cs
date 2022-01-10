@@ -42,7 +42,7 @@ namespace Mutagen.Bethesda.Fallout4
                 }
                 else if ((((int)item.Flags) & PerkFlag) > 0)
                 {
-                    item.Teaches = new BookSpell()
+                    item.Teaches = new BookPerk()
                     {
                         Perk = new FormLink<IPerkGetter>(FormLinkBinaryTranslation.Instance.Parse(frame))
                     };
@@ -85,16 +85,8 @@ namespace Mutagen.Bethesda.Fallout4
                     case BookSpell spell:
                         FormLinkBinaryTranslation.Instance.Write(writer, spell.Spell);
                         break;
-                    case BookPerk skill:
-                        var skillVal = skill.Perk;
-                        if (skillVal == null)
-                        {
-                            writer.Write(-1);
-                        }
-                        else
-                        {
-                            writer.Write((int)skillVal);
-                        }
+                    case BookPerk perk:
+                        FormLinkBinaryTranslation.Instance.Write(writer, perk.Perk);
                         break;
                     case BookTeachesNothing nothing:
                         writer.Write(nothing.RawContent);
@@ -127,9 +119,9 @@ namespace Mutagen.Bethesda.Fallout4
                 }
                 else if ((flags & BookBinaryCreateTranslation.PerkFlag) > 0)
                 {
-                    return new BookPerk
+                    return new BookPerk()
                     {
-                        Perk = (Perk)BinaryPrimitives.ReadInt32LittleEndian(_data.Slice(_TeachesLocation, 4))
+                        Perk = new FormLink<IPerkGetter>(FormKeyBinaryTranslation.Instance.Parse(_data.Slice(_TeachesLocation, 4), _package.MetaData.MasterReferences!))
                     };
                 }
                 else
