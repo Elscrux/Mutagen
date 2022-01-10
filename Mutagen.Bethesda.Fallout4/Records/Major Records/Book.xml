@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="us-ascii"?>
 <Loqui xmlns="http://tempuri.org/LoquiSource.xsd">
-  <Object name="Book" objType="Record" recordType="BOOK" baseClass="Fallout4MajorRecord">
+  <Object name="Book" objType="Record" recordType="BOOK" baseClass="Fallout4MajorRecord" GUID="c56f0c8d-eb97-4ab3-9fd8-1eb891d6ac5a" ID="156">
     <Fields>
       <RefDirect name="VirtualMachineAdapter" refName="VirtualMachineAdapter" />
       <RefDirect name="ObjectBounds" refName="ObjectBounds" nullable="False" />
@@ -27,12 +27,8 @@
         <Fields>
           <Enum name="Flags" enumName="Book.Flag" byteLength="1" />
           <RefDirect name="Teaches" objType="Subrecord" nullable="True" refName="BookTeachTarget" binary="Custom" byteLength="4" />
-          <Data name="TextOffset">
-            <Fields>
-              <UInt32 name="X" />
-              <UInt32 name="Y" />
-            </Fields>
-          </Data>
+          <UInt32 name="TextOffsetX" />
+          <UInt32 name="TextOffsetY" />
         </Fields>
       </Data>
       <String name="Description" recordType="CNAM" translated="DL" />

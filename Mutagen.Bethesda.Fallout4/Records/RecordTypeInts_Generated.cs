@@ -17,6 +17,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int BNAM = 0x4D414E42;
         public const int BOD2 = 0x32444F42;
         public const int BODT = 0x54444F42;
+        public const int BOOK = 0x4B4F4F42;
         public const int CELL = 0x4C4C4543;
         public const int CITC = 0x43544943;
         public const int CLAS = 0x53414C43;
@@ -51,6 +52,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int ETYP = 0x50595445;
         public const int EXPL = 0x4C505845;
         public const int FACT = 0x54434146;
+        public const int FIMD = 0x444D4946;
         public const int FLST = 0x54534C46;
         public const int FLTV = 0x56544C46;
         public const int FNAM = 0x4D414E46;
@@ -72,6 +74,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int INDX = 0x58444E49;
         public const int INTV = 0x56544E49;
         public const int IPDS = 0x53445049;
+        public const int ITXT = 0x54585449;
         public const int JAIL = 0x4C49414A;
         public const int JOUT = 0x54554F4A;
         public const int KNAM = 0x4D414E4B;
@@ -83,6 +86,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int LVSP = 0x5053564C;
         public const int MAST = 0x5453414D;
         public const int MATT = 0x5454414D;
+        public const int MESG = 0x4753454D;
         public const int MGEF = 0x4645474D;
         public const int MICO = 0x4F43494D;
         public const int MISC = 0x4353494D;
@@ -112,6 +116,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int PNAM = 0x4D414E50;
         public const int PRPS = 0x53505250;
         public const int PTRN = 0x4E525450;
+        public const int QNAM = 0x4D414E51;
+        public const int QUST = 0x54535551;
         public const int RACE = 0x45434152;
         public const int RDAT = 0x54414452;
         public const int REFR = 0x52464552;
@@ -130,6 +136,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int SPIT = 0x54495053;
         public const int SPLO = 0x4F4C5053;
         public const int STAG = 0x47415453;
+        public const int STAT = 0x54415453;
         public const int STCP = 0x50435453;
         public const int STOL = 0x4C4F5453;
         public const int TACT = 0x54434154;

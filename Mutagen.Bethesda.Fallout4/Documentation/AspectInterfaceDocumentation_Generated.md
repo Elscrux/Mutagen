@@ -10,6 +10,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 ### IKeyworded
 - Activator
 - Armor
+- Book
 - Race
 - Spell
 - TalkingActivator
@@ -17,6 +18,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Activator
 - ArmorModel
 - ArtObject
+- Book
 - DestructionStage
 - Grass
 - HeadPart
@@ -25,12 +27,14 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - ActionRecord
 - Activator
 - Armor
+- Book
 - Class
 - Component
 - Faction
 - HeadPart
 - Keyword
 - MaterialType
+- Message
 - ObjectEffect
 - Race
 - ScriptBoolListProperty
@@ -52,6 +56,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Activator
 - Armor
 - ArtObject
+- Book
 - Component
 - Grass
 - ObjectEffect
@@ -62,9 +67,11 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 ### IScripted
 - Activator
 - Armor
+- Book
 - TalkingActivator
 ### IWeightValue
 - Armor
+- Book
 ## Concrete Classes to Interfaces
 ### AcousticSpace
 - IObjectBounded
@@ -88,6 +95,13 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 ### ArtObject
 - IModeled
 - IObjectBounded
+### Book
+- IKeyworded
+- IModeled
+- INamed
+- IObjectBounded
+- IScripted
+- IWeightValue
 ### Class
 - INamed
 ### Component
@@ -107,6 +121,8 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - IKeywordCommon
 - INamed
 ### MaterialType
+- INamed
+### Message
 - INamed
 ### ObjectEffect
 - INamed

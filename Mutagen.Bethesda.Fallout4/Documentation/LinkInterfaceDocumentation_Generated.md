@@ -9,6 +9,7 @@ A `FormLink<IItem>` could then point to all those record types by pointing to th
 - Armor
 ### IConstructible
 - Armor
+- Book
 ### IDamageTypeTarget
 - ActorValueInformation
 ### IEffectRecord
@@ -18,6 +19,7 @@ A `FormLink<IItem>` could then point to all those record types by pointing to th
 - ActionRecord
 ### IItem
 - Armor
+- Book
 ### IKeywordLinkedReference
 - Keyword
 ### ILocationRecord
@@ -27,6 +29,7 @@ A `FormLink<IItem>` could then point to all those record types by pointing to th
 ### IObjectId
 - Activator
 - Armor
+- Book
 - Door
 - Faction
 - Spell
@@ -56,6 +59,10 @@ A `FormLink<IItem>` could then point to all those record types by pointing to th
 - IItem
 - IObjectId
 - IOutfitTarget
+### Book
+- IConstructible
+- IItem
+- IObjectId
 ### Door
 - ILocationTargetable
 - IObjectId

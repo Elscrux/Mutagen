@@ -19,6 +19,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType BNAM = new(0x4D414E42);
         public static readonly RecordType BOD2 = new(0x32444F42);
         public static readonly RecordType BODT = new(0x54444F42);
+        public static readonly RecordType BOOK = new(0x4B4F4F42);
         public static readonly RecordType CELL = new(0x4C4C4543);
         public static readonly RecordType CITC = new(0x43544943);
         public static readonly RecordType CLAS = new(0x53414C43);
@@ -53,6 +54,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType ETYP = new(0x50595445);
         public static readonly RecordType EXPL = new(0x4C505845);
         public static readonly RecordType FACT = new(0x54434146);
+        public static readonly RecordType FIMD = new(0x444D4946);
         public static readonly RecordType FLST = new(0x54534C46);
         public static readonly RecordType FLTV = new(0x56544C46);
         public static readonly RecordType FNAM = new(0x4D414E46);
@@ -74,6 +76,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType INDX = new(0x58444E49);
         public static readonly RecordType INTV = new(0x56544E49);
         public static readonly RecordType IPDS = new(0x53445049);
+        public static readonly RecordType ITXT = new(0x54585449);
         public static readonly RecordType JAIL = new(0x4C49414A);
         public static readonly RecordType JOUT = new(0x54554F4A);
         public static readonly RecordType KNAM = new(0x4D414E4B);
@@ -85,6 +88,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType LVSP = new(0x5053564C);
         public static readonly RecordType MAST = new(0x5453414D);
         public static readonly RecordType MATT = new(0x5454414D);
+        public static readonly RecordType MESG = new(0x4753454D);
         public static readonly RecordType MGEF = new(0x4645474D);
         public static readonly RecordType MICO = new(0x4F43494D);
         public static readonly RecordType MISC = new(0x4353494D);
@@ -114,6 +118,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType PNAM = new(0x4D414E50);
         public static readonly RecordType PRPS = new(0x53505250);
         public static readonly RecordType PTRN = new(0x4E525450);
+        public static readonly RecordType QNAM = new(0x4D414E51);
+        public static readonly RecordType QUST = new(0x54535551);
         public static readonly RecordType RACE = new(0x45434152);
         public static readonly RecordType RDAT = new(0x54414452);
         public static readonly RecordType REFR = new(0x52464552);
@@ -132,6 +138,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType SPIT = new(0x54495053);
         public static readonly RecordType SPLO = new(0x4F4C5053);
         public static readonly RecordType STAG = new(0x47415453);
+        public static readonly RecordType STAT = new(0x54415453);
         public static readonly RecordType STCP = new(0x50435453);
         public static readonly RecordType STOL = new(0x4C4F5453);
         public static readonly RecordType TACT = new(0x54434154);
