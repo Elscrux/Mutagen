@@ -98,6 +98,7 @@
     <Compile Include="Records\Major Records\ArtObject.cs">
       <DependentUpon>ArtObject.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Major Records\Book.cs" />
     <Compile Include="Records\Major Records\Faction.cs">
       <DependentUpon>Faction.xml</DependentUpon>
     </Compile>
@@ -152,6 +153,8 @@
     <Compile Include="Records\Major Records\MaterialType.cs">
       <DependentUpon>MaterialType.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Major Records\Message.cs" />
+    <Compile Include="Records\Major Records\MessageButton.cs" />
     <Compile Include="Records\Major Records\ObjectEffect.cs">
       <DependentUpon>ObjectEffect.xml</DependentUpon>
     </Compile>

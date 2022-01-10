@@ -8,7 +8,7 @@ using Mutagen.Bethesda;
 namespace Mutagen.Bethesda.Fallout4
 {
     /// <summary>
-    /// Implemented by: [Armor]
+    /// Implemented by: [Armor, Book]
     /// </summary>
     public partial interface IItem :
         IFallout4MajorRecordInternal,
@@ -17,7 +17,7 @@ namespace Mutagen.Bethesda.Fallout4
     }
 
     /// <summary>
-    /// Implemented by: [Armor]
+    /// Implemented by: [Armor, Book]
     /// </summary>
     public partial interface IItemGetter : IFallout4MajorRecordGetter
     {

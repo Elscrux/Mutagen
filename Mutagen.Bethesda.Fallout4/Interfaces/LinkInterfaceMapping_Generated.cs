@@ -27,6 +27,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 typeof(Activator),
                 typeof(Armor),
+                typeof(Book),
                 typeof(Door),
                 typeof(Faction),
                 typeof(Spell),
@@ -41,6 +42,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             dict[typeof(IItem)] = new Type[]
             {
                 typeof(Armor),
+                typeof(Book),
             };
             dict[typeof(IItemGetter)] = dict[typeof(IItem)];
             dict[typeof(IOutfitTarget)] = new Type[]
@@ -51,6 +53,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             dict[typeof(IConstructible)] = new Type[]
             {
                 typeof(Armor),
+                typeof(Book),
             };
             dict[typeof(IConstructibleGetter)] = dict[typeof(IConstructible)];
             dict[typeof(IBindableEquipment)] = new Type[]
