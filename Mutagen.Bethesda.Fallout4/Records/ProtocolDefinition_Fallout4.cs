@@ -92,7 +92,6 @@ namespace Loqui
             LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.ObjectEffect_Registration.Instance);
             LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.Destructible_Registration.Instance);
             LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.DestructableData_Registration.Instance);
-            LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.Resistance_Registration.Instance);
             LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.DestructionStage_Registration.Instance);
             LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.DestructionStageData_Registration.Instance);
             LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.AVirtualMachineAdapter_Registration.Instance);
@@ -128,6 +127,9 @@ namespace Loqui
             LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.Footstep_Registration.Instance);
             LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.FootstepSet_Registration.Instance);
             LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.PreviewTransform_Registration.Instance);
+            LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.ResistanceDestructible_Registration.Instance);
+            LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.ArmorAddonModel_Registration.Instance);
+            LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.ResistanceArmor_Registration.Instance);
         }
     }
 }

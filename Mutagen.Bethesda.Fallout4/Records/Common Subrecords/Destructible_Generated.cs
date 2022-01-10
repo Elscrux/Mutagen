@@ -63,15 +63,15 @@ namespace Mutagen.Bethesda.Fallout4
         #endregion
         #region Resistances
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private ExtendedList<Resistance> _Resistances = new ExtendedList<Resistance>();
-        public ExtendedList<Resistance> Resistances
+        private ExtendedList<ResistanceDestructible> _Resistances = new ExtendedList<ResistanceDestructible>();
+        public ExtendedList<ResistanceDestructible> Resistances
         {
             get => this._Resistances;
             init => this._Resistances = value;
         }
         #region Interface Members
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IReadOnlyList<IResistanceGetter> IDestructibleGetter.Resistances => _Resistances;
+        IReadOnlyList<IResistanceDestructibleGetter> IDestructibleGetter.Resistances => _Resistances;
         #endregion
 
         #endregion
@@ -128,7 +128,7 @@ namespace Mutagen.Bethesda.Fallout4
             public Mask(TItem initialValue)
             {
                 this.Data = new MaskItem<TItem, DestructableData.Mask<TItem>?>(initialValue, new DestructableData.Mask<TItem>(initialValue));
-                this.Resistances = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, Resistance.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, Resistance.Mask<TItem>?>>());
+                this.Resistances = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ResistanceDestructible.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, ResistanceDestructible.Mask<TItem>?>>());
                 this.Stages = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, DestructionStage.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, DestructionStage.Mask<TItem>?>>());
             }
 
@@ -138,7 +138,7 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem Stages)
             {
                 this.Data = new MaskItem<TItem, DestructableData.Mask<TItem>?>(Data, new DestructableData.Mask<TItem>(Data));
-                this.Resistances = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, Resistance.Mask<TItem>?>>?>(Resistances, Enumerable.Empty<MaskItemIndexed<TItem, Resistance.Mask<TItem>?>>());
+                this.Resistances = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ResistanceDestructible.Mask<TItem>?>>?>(Resistances, Enumerable.Empty<MaskItemIndexed<TItem, ResistanceDestructible.Mask<TItem>?>>());
                 this.Stages = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, DestructionStage.Mask<TItem>?>>?>(Stages, Enumerable.Empty<MaskItemIndexed<TItem, DestructionStage.Mask<TItem>?>>());
             }
 
@@ -152,7 +152,7 @@ namespace Mutagen.Bethesda.Fallout4
 
             #region Members
             public MaskItem<TItem, DestructableData.Mask<TItem>?>? Data { get; set; }
-            public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, Resistance.Mask<TItem>?>>?>? Resistances;
+            public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ResistanceDestructible.Mask<TItem>?>>?>? Resistances;
             public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, DestructionStage.Mask<TItem>?>>?>? Stages;
             #endregion
 
@@ -267,14 +267,14 @@ namespace Mutagen.Bethesda.Fallout4
                 obj.Data = this.Data == null ? null : new MaskItem<R, DestructableData.Mask<R>?>(eval(this.Data.Overall), this.Data.Specific?.Translate(eval));
                 if (Resistances != null)
                 {
-                    obj.Resistances = new MaskItem<R, IEnumerable<MaskItemIndexed<R, Resistance.Mask<R>?>>?>(eval(this.Resistances.Overall), Enumerable.Empty<MaskItemIndexed<R, Resistance.Mask<R>?>>());
+                    obj.Resistances = new MaskItem<R, IEnumerable<MaskItemIndexed<R, ResistanceDestructible.Mask<R>?>>?>(eval(this.Resistances.Overall), Enumerable.Empty<MaskItemIndexed<R, ResistanceDestructible.Mask<R>?>>());
                     if (Resistances.Specific != null)
                     {
-                        var l = new List<MaskItemIndexed<R, Resistance.Mask<R>?>>();
+                        var l = new List<MaskItemIndexed<R, ResistanceDestructible.Mask<R>?>>();
                         obj.Resistances.Specific = l;
                         foreach (var item in Resistances.Specific.WithIndex())
                         {
-                            MaskItemIndexed<R, Resistance.Mask<R>?>? mask = item.Item == null ? null : new MaskItemIndexed<R, Resistance.Mask<R>?>(item.Item.Index, eval(item.Item.Overall), item.Item.Specific?.Translate(eval));
+                            MaskItemIndexed<R, ResistanceDestructible.Mask<R>?>? mask = item.Item == null ? null : new MaskItemIndexed<R, ResistanceDestructible.Mask<R>?>(item.Item.Index, eval(item.Item.Overall), item.Item.Specific?.Translate(eval));
                             if (mask == null) continue;
                             l.Add(mask);
                         }
@@ -393,7 +393,7 @@ namespace Mutagen.Bethesda.Fallout4
                 }
             }
             public MaskItem<Exception?, DestructableData.ErrorMask?>? Data;
-            public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, Resistance.ErrorMask?>>?>? Resistances;
+            public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ResistanceDestructible.ErrorMask?>>?>? Resistances;
             public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, DestructionStage.ErrorMask?>>?>? Stages;
             #endregion
 
@@ -423,7 +423,7 @@ namespace Mutagen.Bethesda.Fallout4
                         this.Data = new MaskItem<Exception?, DestructableData.ErrorMask?>(ex, null);
                         break;
                     case Destructible_FieldIndex.Resistances:
-                        this.Resistances = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, Resistance.ErrorMask?>>?>(ex, null);
+                        this.Resistances = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ResistanceDestructible.ErrorMask?>>?>(ex, null);
                         break;
                     case Destructible_FieldIndex.Stages:
                         this.Stages = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, DestructionStage.ErrorMask?>>?>(ex, null);
@@ -442,7 +442,7 @@ namespace Mutagen.Bethesda.Fallout4
                         this.Data = (MaskItem<Exception?, DestructableData.ErrorMask?>?)obj;
                         break;
                     case Destructible_FieldIndex.Resistances:
-                        this.Resistances = (MaskItem<Exception?, IEnumerable<MaskItem<Exception?, Resistance.ErrorMask?>>?>)obj;
+                        this.Resistances = (MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ResistanceDestructible.ErrorMask?>>?>)obj;
                         break;
                     case Destructible_FieldIndex.Stages:
                         this.Stages = (MaskItem<Exception?, IEnumerable<MaskItem<Exception?, DestructionStage.ErrorMask?>>?>)obj;
@@ -546,7 +546,7 @@ namespace Mutagen.Bethesda.Fallout4
                 if (rhs == null) return this;
                 var ret = new ErrorMask();
                 ret.Data = this.Data.Combine(rhs.Data, (l, r) => l.Combine(r));
-                ret.Resistances = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, Resistance.ErrorMask?>>?>(ExceptionExt.Combine(this.Resistances?.Overall, rhs.Resistances?.Overall), ExceptionExt.Combine(this.Resistances?.Specific, rhs.Resistances?.Specific));
+                ret.Resistances = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ResistanceDestructible.ErrorMask?>>?>(ExceptionExt.Combine(this.Resistances?.Overall, rhs.Resistances?.Overall), ExceptionExt.Combine(this.Resistances?.Specific, rhs.Resistances?.Specific));
                 ret.Stages = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, DestructionStage.ErrorMask?>>?>(ExceptionExt.Combine(this.Stages?.Overall, rhs.Stages?.Overall), ExceptionExt.Combine(this.Stages?.Specific, rhs.Stages?.Specific));
                 return ret;
             }
@@ -572,7 +572,7 @@ namespace Mutagen.Bethesda.Fallout4
             public readonly bool DefaultOn;
             public bool OnOverall;
             public DestructableData.TranslationMask? Data;
-            public Resistance.TranslationMask? Resistances;
+            public ResistanceDestructible.TranslationMask? Resistances;
             public DestructionStage.TranslationMask? Stages;
             #endregion
 
@@ -680,7 +680,7 @@ namespace Mutagen.Bethesda.Fallout4
         ILoquiObjectSetter<IDestructible>
     {
         new DestructableData? Data { get; set; }
-        new ExtendedList<Resistance> Resistances { get; }
+        new ExtendedList<ResistanceDestructible> Resistances { get; }
         new ExtendedList<DestructionStage> Stages { get; }
     }
 
@@ -698,7 +698,7 @@ namespace Mutagen.Bethesda.Fallout4
         object CommonSetterTranslationInstance();
         static ILoquiRegistration StaticRegistration => Destructible_Registration.Instance;
         IDestructableDataGetter? Data { get; }
-        IReadOnlyList<IResistanceGetter> Resistances { get; }
+        IReadOnlyList<IResistanceDestructibleGetter> Resistances { get; }
         IReadOnlyList<IDestructionStageGetter> Stages { get; }
 
     }
@@ -1385,13 +1385,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     writer: writer,
                     translationParams: translationParams);
             }
-            Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IResistanceGetter>.Instance.Write(
+            Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IResistanceDestructibleGetter>.Instance.Write(
                 writer: writer,
                 items: item.Resistances,
-                transl: (MutagenWriter subWriter, IResistanceGetter subItem, TypedWriteParams? conv) =>
+                transl: (MutagenWriter subWriter, IResistanceDestructibleGetter subItem, TypedWriteParams? conv) =>
                 {
                     var Item = subItem;
-                    ((ResistanceBinaryWriteTranslation)((IBinaryItem)Item).BinaryWriteTranslator).Write(
+                    ((ResistanceDestructibleBinaryWriteTranslation)((IBinaryItem)Item).BinaryWriteTranslator).Write(
                         item: Item,
                         writer: subWriter,
                         translationParams: conv);
@@ -1465,11 +1465,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 {
                     if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)Destructible_FieldIndex.Resistances) return ParseResult.Stop;
                     item.Resistances.SetTo(
-                        Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<Resistance>.Instance.Parse(
+                        Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<ResistanceDestructible>.Instance.Parse(
                             reader: frame,
                             triggeringRecord: RecordTypes.DAMC,
                             translationParams: translationParams,
-                            transl: Resistance.TryCreateFromBinary));
+                            transl: ResistanceDestructible.TryCreateFromBinary));
                     return (int)Destructible_FieldIndex.Resistances;
                 }
                 case RecordTypeInts.DSTD:
@@ -1558,7 +1558,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private RangeInt32? _DataLocation;
         public IDestructableDataGetter? Data => _DataLocation.HasValue ? DestructableDataBinaryOverlay.DestructableDataFactory(new OverlayStream(_data.Slice(_DataLocation!.Value.Min), _package), _package) : default;
         #endregion
-        public IReadOnlyList<IResistanceGetter> Resistances { get; private set; } = ListExt.Empty<ResistanceBinaryOverlay>();
+        public IReadOnlyList<IResistanceDestructibleGetter> Resistances { get; private set; } = ListExt.Empty<ResistanceDestructibleBinaryOverlay>();
         public IReadOnlyList<IDestructionStageGetter> Stages { get; private set; } = ListExt.Empty<DestructionStageBinaryOverlay>();
         partial void CustomFactoryEnd(
             OverlayStream stream,
@@ -1626,11 +1626,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case RecordTypeInts.DAMC:
                 {
                     if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)Destructible_FieldIndex.Resistances) return ParseResult.Stop;
-                    this.Resistances = BinaryOverlayList.FactoryByArray<ResistanceBinaryOverlay>(
+                    this.Resistances = BinaryOverlayList.FactoryByArray<ResistanceDestructibleBinaryOverlay>(
                         mem: stream.RemainingMemory,
                         package: _package,
                         parseParams: parseParams,
-                        getter: (s, p, recConv) => ResistanceBinaryOverlay.ResistanceFactory(new OverlayStream(s, p), p, recConv),
+                        getter: (s, p, recConv) => ResistanceDestructibleBinaryOverlay.ResistanceDestructibleFactory(new OverlayStream(s, p), p, recConv),
                         locs: ParseRecordLocations(
                             stream: stream,
                             trigger: type,

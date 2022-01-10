@@ -3,8 +3,8 @@
   <Object name="Armor" objType="Record" recordType="ARMO" baseClass="Fallout4MajorRecord" GUID="c4d097a3-85cc-49c7-8a94-606c9086f0ca" ID="136">
     <Fields>
       <RefDirect name="VirtualMachineAdapter" refName="VirtualMachineAdapter" />
-	  <RefDirect name="ObjectBounds" refName="ObjectBounds" nullable="False" />
-	  <RefDirect name="PreviewTransform" refName="PreviewTransform" nullable="False" />
+      <RefDirect name="ObjectBounds" refName="ObjectBounds" nullable="False" />
+      <RefDirect name="PreviewTransform" refName="PreviewTransform" nullable="False" />
       <String name="Name" recordType="FULL" translated="Normal" />
       <FormLink name="ObjectEffect" recordType="EITM">
         <Interface>IEffectRecord</Interface>
@@ -26,7 +26,7 @@
           <RefDirect refName="ArmorModel" />
         </Fields>
       </Gendered>
-      <RefDirect name="BipedBodyTemplate" refName="BipedBodyTemplate" binary="Custom" />
+      <RefDirect name="BodyTemplate" refName="BodyTemplate" binary="Custom" />
       <RefDirect name="Destructible" refName="Destructible" />
       <FormLink name="PickUpSound" refName="SoundDescriptor" recordType="YNAM" />
       <FormLink name="PutDownSound" refName="SoundDescriptor" recordType="ZNAM" />
@@ -38,23 +38,23 @@
         <FormLink refName="Keyword" />
       </List>
       <String name="Description" recordType="DESC" translated="DL" />
-	  <RefList name="Armatures" refName="ArmorAddonModel" />
+      <RefList name="Armatures" refName="ArmorAddonModel" />
       <Data>
         <Fields>
           <UInt32 name="Value" />
           <Float name="Weight" />
-		  <UInt32 name="Health" />
-		</Fields>
+          <UInt32 name="Health" />
+        </Fields>
       </Data>
-	  <Data recordType="FNAM">
-	  	<Fields>
-			<UInt16 name="ArmorRating" />
-			<UInt16 name="BaseAddonIndex" />
-			<UInt16 name="StaggerRating" />
-			<!--TODO wbUnknown(cpIgnore, False, wbNeverShow, nil)-->
-	  	</Fields>
-	  </Data>
-	  <RefList name="Resistances" refName="ResistanceArmor" />
+      <Data recordType="FNAM">
+        <Fields>
+          <UInt16 name="ArmorRating" />
+          <UInt16 name="BaseAddonIndex" />
+          <UInt16 name="StaggerRating" />
+          <!--TODO wbUnknown(cpIgnore, False, wbNeverShow, nil)-->
+        </Fields>
+      </Data>
+      <RefList name="Resistances" refName="ResistanceArmor" />
     </Fields>
     <LinkInterface>IItem</LinkInterface>
     <LinkInterface>IOutfitTarget</LinkInterface>
@@ -68,17 +68,16 @@
       <RefDirect name="Icons" refName="Icons" />
     </Fields>
   </Object>
-  <Object name="ArmorAddonModel" objType="Subrecord">
-  	<Fields>
-		<UInt16 name="AddonIndex" recordType="INDX"/>
-		<FormLink recordType="MODL" refName="ArmorAddon" />
-  	</Fields>
+  <Object name="ArmorAddonModel" objType="Subrecord" GUID="48cceadb-aa7c-4586-bf3b-48fff52d5059" ID="144">
+    <Fields>
+      <UInt16 name="AddonIndex" recordType="INDX" />
+      <FormLink name="AddonModel" recordType="MODL" refName="ArmorAddon" />
+    </Fields>
   </Object>
-  <Object name="ResistanceArmor" objType="Subrecord" recordType="DAMA">
-  	<Fields>
-  		<FormLink name="DamageType" refName="DamageType" />
-  		<Int32 name="Value" />
-  	</Fields>
+  <Object name="ResistanceArmor" objType="Subrecord" recordType="DAMA" GUID="376e43f7-2bef-4600-af06-4464f173d2fb" ID="145">
+    <Fields>
+      <FormLink name="DamageType" refName="DamageType" />
+      <Int32 name="Value" />
+    </Fields>
   </Object>
-	
 </Loqui>

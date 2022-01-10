@@ -190,11 +190,6 @@ namespace Mutagen.Bethesda.Fallout4
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IFormLinkNullableGetter<ISoundDescriptorGetter> IArmorGetter.PutDownSound => this.PutDownSound;
         #endregion
-        #region RagdollConstraintTemplate
-        public String? RagdollConstraintTemplate { get; set; }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        String? IArmorGetter.RagdollConstraintTemplate => this.RagdollConstraintTemplate;
-        #endregion
         #region EquipmentType
         private readonly IFormLinkNullable<IEquipTypeGetter> _EquipmentType = new FormLinkNullable<IEquipTypeGetter>();
         public IFormLinkNullable<IEquipTypeGetter> EquipmentType
@@ -261,17 +256,17 @@ namespace Mutagen.Bethesda.Fallout4
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         ITranslatedStringGetter? IArmorGetter.Description => this.Description;
         #endregion
-        #region Armature
+        #region Armatures
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private ExtendedList<IFormLinkGetter<IArmorAddonGetter>> _Armature = new ExtendedList<IFormLinkGetter<IArmorAddonGetter>>();
-        public ExtendedList<IFormLinkGetter<IArmorAddonGetter>> Armature
+        private ExtendedList<ArmorAddonModel> _Armatures = new ExtendedList<ArmorAddonModel>();
+        public ExtendedList<ArmorAddonModel> Armatures
         {
-            get => this._Armature;
-            init => this._Armature = value;
+            get => this._Armatures;
+            init => this._Armatures = value;
         }
         #region Interface Members
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IReadOnlyList<IFormLinkGetter<IArmorAddonGetter>> IArmorGetter.Armature => _Armature;
+        IReadOnlyList<IArmorAddonModelGetter> IArmorGetter.Armatures => _Armatures;
         #endregion
 
         #endregion
@@ -281,21 +276,37 @@ namespace Mutagen.Bethesda.Fallout4
         #region Weight
         public Single Weight { get; set; } = default;
         #endregion
-        #region ArmorRating
-        public Single ArmorRating { get; set; } = default;
+        #region Health
+        public UInt32 Health { get; set; } = default;
         #endregion
-        #region TemplateArmor
-        private readonly IFormLinkNullable<IArmorGetter> _TemplateArmor = new FormLinkNullable<IArmorGetter>();
-        public IFormLinkNullable<IArmorGetter> TemplateArmor
-        {
-            get => _TemplateArmor;
-            set => _TemplateArmor.SetTo(value);
-        }
+        #region ArmorRating
+        public UInt16 ArmorRating { get; set; } = default;
+        #endregion
+        #region BaseAddonIndex
+        public UInt16 BaseAddonIndex { get; set; } = default;
+        #endregion
+        #region StaggerRating
+        public UInt16 StaggerRating { get; set; } = default;
+        #endregion
+        #region Resistances
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IFormLinkNullableGetter<IArmorGetter> IArmorGetter.TemplateArmor => this.TemplateArmor;
+        private ExtendedList<ResistanceArmor> _Resistances = new ExtendedList<ResistanceArmor>();
+        public ExtendedList<ResistanceArmor> Resistances
+        {
+            get => this._Resistances;
+            init => this._Resistances = value;
+        }
+        #region Interface Members
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IReadOnlyList<IResistanceArmorGetter> IArmorGetter.Resistances => _Resistances;
+        #endregion
+
         #endregion
         #region DATADataTypeState
         public Armor.DATADataType DATADataTypeState { get; set; } = default;
+        #endregion
+        #region FNAMDataTypeState
+        public Armor.FNAMDataType FNAMDataTypeState { get; set; } = default;
         #endregion
 
         #region To String
@@ -331,19 +342,22 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Destructible = new MaskItem<TItem, Destructible.Mask<TItem>?>(initialValue, new Destructible.Mask<TItem>(initialValue));
                 this.PickUpSound = initialValue;
                 this.PutDownSound = initialValue;
-                this.RagdollConstraintTemplate = initialValue;
                 this.EquipmentType = initialValue;
                 this.BashImpactDataSet = initialValue;
                 this.AlternateBlockMaterial = initialValue;
                 this.Race = initialValue;
                 this.Keywords = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(initialValue, Enumerable.Empty<(int Index, TItem Value)>());
                 this.Description = initialValue;
-                this.Armature = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(initialValue, Enumerable.Empty<(int Index, TItem Value)>());
+                this.Armatures = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ArmorAddonModel.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, ArmorAddonModel.Mask<TItem>?>>());
                 this.Value = initialValue;
                 this.Weight = initialValue;
+                this.Health = initialValue;
                 this.ArmorRating = initialValue;
-                this.TemplateArmor = initialValue;
+                this.BaseAddonIndex = initialValue;
+                this.StaggerRating = initialValue;
+                this.Resistances = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ResistanceArmor.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, ResistanceArmor.Mask<TItem>?>>());
                 this.DATADataTypeState = initialValue;
+                this.FNAMDataTypeState = initialValue;
             }
 
             public Mask(
@@ -363,19 +377,22 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem Destructible,
                 TItem PickUpSound,
                 TItem PutDownSound,
-                TItem RagdollConstraintTemplate,
                 TItem EquipmentType,
                 TItem BashImpactDataSet,
                 TItem AlternateBlockMaterial,
                 TItem Race,
                 TItem Keywords,
                 TItem Description,
-                TItem Armature,
+                TItem Armatures,
                 TItem Value,
                 TItem Weight,
+                TItem Health,
                 TItem ArmorRating,
-                TItem TemplateArmor,
-                TItem DATADataTypeState)
+                TItem BaseAddonIndex,
+                TItem StaggerRating,
+                TItem Resistances,
+                TItem DATADataTypeState,
+                TItem FNAMDataTypeState)
             : base(
                 MajorRecordFlagsRaw: MajorRecordFlagsRaw,
                 FormKey: FormKey,
@@ -394,19 +411,22 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Destructible = new MaskItem<TItem, Destructible.Mask<TItem>?>(Destructible, new Destructible.Mask<TItem>(Destructible));
                 this.PickUpSound = PickUpSound;
                 this.PutDownSound = PutDownSound;
-                this.RagdollConstraintTemplate = RagdollConstraintTemplate;
                 this.EquipmentType = EquipmentType;
                 this.BashImpactDataSet = BashImpactDataSet;
                 this.AlternateBlockMaterial = AlternateBlockMaterial;
                 this.Race = Race;
                 this.Keywords = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(Keywords, Enumerable.Empty<(int Index, TItem Value)>());
                 this.Description = Description;
-                this.Armature = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(Armature, Enumerable.Empty<(int Index, TItem Value)>());
+                this.Armatures = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ArmorAddonModel.Mask<TItem>?>>?>(Armatures, Enumerable.Empty<MaskItemIndexed<TItem, ArmorAddonModel.Mask<TItem>?>>());
                 this.Value = Value;
                 this.Weight = Weight;
+                this.Health = Health;
                 this.ArmorRating = ArmorRating;
-                this.TemplateArmor = TemplateArmor;
+                this.BaseAddonIndex = BaseAddonIndex;
+                this.StaggerRating = StaggerRating;
+                this.Resistances = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ResistanceArmor.Mask<TItem>?>>?>(Resistances, Enumerable.Empty<MaskItemIndexed<TItem, ResistanceArmor.Mask<TItem>?>>());
                 this.DATADataTypeState = DATADataTypeState;
+                this.FNAMDataTypeState = FNAMDataTypeState;
             }
 
             #pragma warning disable CS8618
@@ -428,19 +448,22 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<TItem, Destructible.Mask<TItem>?>? Destructible { get; set; }
             public TItem PickUpSound;
             public TItem PutDownSound;
-            public TItem RagdollConstraintTemplate;
             public TItem EquipmentType;
             public TItem BashImpactDataSet;
             public TItem AlternateBlockMaterial;
             public TItem Race;
             public MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>? Keywords;
             public TItem Description;
-            public MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>? Armature;
+            public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ArmorAddonModel.Mask<TItem>?>>?>? Armatures;
             public TItem Value;
             public TItem Weight;
+            public TItem Health;
             public TItem ArmorRating;
-            public TItem TemplateArmor;
+            public TItem BaseAddonIndex;
+            public TItem StaggerRating;
+            public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ResistanceArmor.Mask<TItem>?>>?>? Resistances;
             public TItem DATADataTypeState;
+            public TItem FNAMDataTypeState;
             #endregion
 
             #region Equals
@@ -464,19 +487,22 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!object.Equals(this.Destructible, rhs.Destructible)) return false;
                 if (!object.Equals(this.PickUpSound, rhs.PickUpSound)) return false;
                 if (!object.Equals(this.PutDownSound, rhs.PutDownSound)) return false;
-                if (!object.Equals(this.RagdollConstraintTemplate, rhs.RagdollConstraintTemplate)) return false;
                 if (!object.Equals(this.EquipmentType, rhs.EquipmentType)) return false;
                 if (!object.Equals(this.BashImpactDataSet, rhs.BashImpactDataSet)) return false;
                 if (!object.Equals(this.AlternateBlockMaterial, rhs.AlternateBlockMaterial)) return false;
                 if (!object.Equals(this.Race, rhs.Race)) return false;
                 if (!object.Equals(this.Keywords, rhs.Keywords)) return false;
                 if (!object.Equals(this.Description, rhs.Description)) return false;
-                if (!object.Equals(this.Armature, rhs.Armature)) return false;
+                if (!object.Equals(this.Armatures, rhs.Armatures)) return false;
                 if (!object.Equals(this.Value, rhs.Value)) return false;
                 if (!object.Equals(this.Weight, rhs.Weight)) return false;
+                if (!object.Equals(this.Health, rhs.Health)) return false;
                 if (!object.Equals(this.ArmorRating, rhs.ArmorRating)) return false;
-                if (!object.Equals(this.TemplateArmor, rhs.TemplateArmor)) return false;
+                if (!object.Equals(this.BaseAddonIndex, rhs.BaseAddonIndex)) return false;
+                if (!object.Equals(this.StaggerRating, rhs.StaggerRating)) return false;
+                if (!object.Equals(this.Resistances, rhs.Resistances)) return false;
                 if (!object.Equals(this.DATADataTypeState, rhs.DATADataTypeState)) return false;
+                if (!object.Equals(this.FNAMDataTypeState, rhs.FNAMDataTypeState)) return false;
                 return true;
             }
             public override int GetHashCode()
@@ -492,19 +518,22 @@ namespace Mutagen.Bethesda.Fallout4
                 hash.Add(this.Destructible);
                 hash.Add(this.PickUpSound);
                 hash.Add(this.PutDownSound);
-                hash.Add(this.RagdollConstraintTemplate);
                 hash.Add(this.EquipmentType);
                 hash.Add(this.BashImpactDataSet);
                 hash.Add(this.AlternateBlockMaterial);
                 hash.Add(this.Race);
                 hash.Add(this.Keywords);
                 hash.Add(this.Description);
-                hash.Add(this.Armature);
+                hash.Add(this.Armatures);
                 hash.Add(this.Value);
                 hash.Add(this.Weight);
+                hash.Add(this.Health);
                 hash.Add(this.ArmorRating);
-                hash.Add(this.TemplateArmor);
+                hash.Add(this.BaseAddonIndex);
+                hash.Add(this.StaggerRating);
+                hash.Add(this.Resistances);
                 hash.Add(this.DATADataTypeState);
+                hash.Add(this.FNAMDataTypeState);
                 hash.Add(base.GetHashCode());
                 return hash.ToHashCode();
             }
@@ -547,7 +576,6 @@ namespace Mutagen.Bethesda.Fallout4
                 }
                 if (!eval(this.PickUpSound)) return false;
                 if (!eval(this.PutDownSound)) return false;
-                if (!eval(this.RagdollConstraintTemplate)) return false;
                 if (!eval(this.EquipmentType)) return false;
                 if (!eval(this.BashImpactDataSet)) return false;
                 if (!eval(this.AlternateBlockMaterial)) return false;
@@ -564,22 +592,38 @@ namespace Mutagen.Bethesda.Fallout4
                     }
                 }
                 if (!eval(this.Description)) return false;
-                if (this.Armature != null)
+                if (this.Armatures != null)
                 {
-                    if (!eval(this.Armature.Overall)) return false;
-                    if (this.Armature.Specific != null)
+                    if (!eval(this.Armatures.Overall)) return false;
+                    if (this.Armatures.Specific != null)
                     {
-                        foreach (var item in this.Armature.Specific)
+                        foreach (var item in this.Armatures.Specific)
                         {
-                            if (!eval(item.Value)) return false;
+                            if (!eval(item.Overall)) return false;
+                            if (item.Specific != null && !item.Specific.All(eval)) return false;
                         }
                     }
                 }
                 if (!eval(this.Value)) return false;
                 if (!eval(this.Weight)) return false;
+                if (!eval(this.Health)) return false;
                 if (!eval(this.ArmorRating)) return false;
-                if (!eval(this.TemplateArmor)) return false;
+                if (!eval(this.BaseAddonIndex)) return false;
+                if (!eval(this.StaggerRating)) return false;
+                if (this.Resistances != null)
+                {
+                    if (!eval(this.Resistances.Overall)) return false;
+                    if (this.Resistances.Specific != null)
+                    {
+                        foreach (var item in this.Resistances.Specific)
+                        {
+                            if (!eval(item.Overall)) return false;
+                            if (item.Specific != null && !item.Specific.All(eval)) return false;
+                        }
+                    }
+                }
                 if (!eval(this.DATADataTypeState)) return false;
+                if (!eval(this.FNAMDataTypeState)) return false;
                 return true;
             }
             #endregion
@@ -620,7 +664,6 @@ namespace Mutagen.Bethesda.Fallout4
                 }
                 if (eval(this.PickUpSound)) return true;
                 if (eval(this.PutDownSound)) return true;
-                if (eval(this.RagdollConstraintTemplate)) return true;
                 if (eval(this.EquipmentType)) return true;
                 if (eval(this.BashImpactDataSet)) return true;
                 if (eval(this.AlternateBlockMaterial)) return true;
@@ -637,22 +680,38 @@ namespace Mutagen.Bethesda.Fallout4
                     }
                 }
                 if (eval(this.Description)) return true;
-                if (this.Armature != null)
+                if (this.Armatures != null)
                 {
-                    if (eval(this.Armature.Overall)) return true;
-                    if (this.Armature.Specific != null)
+                    if (eval(this.Armatures.Overall)) return true;
+                    if (this.Armatures.Specific != null)
                     {
-                        foreach (var item in this.Armature.Specific)
+                        foreach (var item in this.Armatures.Specific)
                         {
-                            if (!eval(item.Value)) return false;
+                            if (!eval(item.Overall)) return false;
+                            if (item.Specific != null && !item.Specific.All(eval)) return false;
                         }
                     }
                 }
                 if (eval(this.Value)) return true;
                 if (eval(this.Weight)) return true;
+                if (eval(this.Health)) return true;
                 if (eval(this.ArmorRating)) return true;
-                if (eval(this.TemplateArmor)) return true;
+                if (eval(this.BaseAddonIndex)) return true;
+                if (eval(this.StaggerRating)) return true;
+                if (this.Resistances != null)
+                {
+                    if (eval(this.Resistances.Overall)) return true;
+                    if (this.Resistances.Specific != null)
+                    {
+                        foreach (var item in this.Resistances.Specific)
+                        {
+                            if (!eval(item.Overall)) return false;
+                            if (item.Specific != null && !item.Specific.All(eval)) return false;
+                        }
+                    }
+                }
                 if (eval(this.DATADataTypeState)) return true;
+                if (eval(this.FNAMDataTypeState)) return true;
                 return false;
             }
             #endregion
@@ -681,7 +740,6 @@ namespace Mutagen.Bethesda.Fallout4
                 obj.Destructible = this.Destructible == null ? null : new MaskItem<R, Destructible.Mask<R>?>(eval(this.Destructible.Overall), this.Destructible.Specific?.Translate(eval));
                 obj.PickUpSound = eval(this.PickUpSound);
                 obj.PutDownSound = eval(this.PutDownSound);
-                obj.RagdollConstraintTemplate = eval(this.RagdollConstraintTemplate);
                 obj.EquipmentType = eval(this.EquipmentType);
                 obj.BashImpactDataSet = eval(this.BashImpactDataSet);
                 obj.AlternateBlockMaterial = eval(this.AlternateBlockMaterial);
@@ -701,25 +759,44 @@ namespace Mutagen.Bethesda.Fallout4
                     }
                 }
                 obj.Description = eval(this.Description);
-                if (Armature != null)
+                if (Armatures != null)
                 {
-                    obj.Armature = new MaskItem<R, IEnumerable<(int Index, R Value)>?>(eval(this.Armature.Overall), Enumerable.Empty<(int Index, R Value)>());
-                    if (Armature.Specific != null)
+                    obj.Armatures = new MaskItem<R, IEnumerable<MaskItemIndexed<R, ArmorAddonModel.Mask<R>?>>?>(eval(this.Armatures.Overall), Enumerable.Empty<MaskItemIndexed<R, ArmorAddonModel.Mask<R>?>>());
+                    if (Armatures.Specific != null)
                     {
-                        var l = new List<(int Index, R Item)>();
-                        obj.Armature.Specific = l;
-                        foreach (var item in Armature.Specific.WithIndex())
+                        var l = new List<MaskItemIndexed<R, ArmorAddonModel.Mask<R>?>>();
+                        obj.Armatures.Specific = l;
+                        foreach (var item in Armatures.Specific.WithIndex())
                         {
-                            R mask = eval(item.Item.Value);
-                            l.Add((item.Index, mask));
+                            MaskItemIndexed<R, ArmorAddonModel.Mask<R>?>? mask = item.Item == null ? null : new MaskItemIndexed<R, ArmorAddonModel.Mask<R>?>(item.Item.Index, eval(item.Item.Overall), item.Item.Specific?.Translate(eval));
+                            if (mask == null) continue;
+                            l.Add(mask);
                         }
                     }
                 }
                 obj.Value = eval(this.Value);
                 obj.Weight = eval(this.Weight);
+                obj.Health = eval(this.Health);
                 obj.ArmorRating = eval(this.ArmorRating);
-                obj.TemplateArmor = eval(this.TemplateArmor);
+                obj.BaseAddonIndex = eval(this.BaseAddonIndex);
+                obj.StaggerRating = eval(this.StaggerRating);
+                if (Resistances != null)
+                {
+                    obj.Resistances = new MaskItem<R, IEnumerable<MaskItemIndexed<R, ResistanceArmor.Mask<R>?>>?>(eval(this.Resistances.Overall), Enumerable.Empty<MaskItemIndexed<R, ResistanceArmor.Mask<R>?>>());
+                    if (Resistances.Specific != null)
+                    {
+                        var l = new List<MaskItemIndexed<R, ResistanceArmor.Mask<R>?>>();
+                        obj.Resistances.Specific = l;
+                        foreach (var item in Resistances.Specific.WithIndex())
+                        {
+                            MaskItemIndexed<R, ResistanceArmor.Mask<R>?>? mask = item.Item == null ? null : new MaskItemIndexed<R, ResistanceArmor.Mask<R>?>(item.Item.Index, eval(item.Item.Overall), item.Item.Specific?.Translate(eval));
+                            if (mask == null) continue;
+                            l.Add(mask);
+                        }
+                    }
+                }
                 obj.DATADataTypeState = eval(this.DATADataTypeState);
+                obj.FNAMDataTypeState = eval(this.FNAMDataTypeState);
             }
             #endregion
 
@@ -783,10 +860,6 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         fg.AppendItem(PutDownSound, "PutDownSound");
                     }
-                    if (printMask?.RagdollConstraintTemplate ?? true)
-                    {
-                        fg.AppendItem(RagdollConstraintTemplate, "RagdollConstraintTemplate");
-                    }
                     if (printMask?.EquipmentType ?? true)
                     {
                         fg.AppendItem(EquipmentType, "EquipmentType");
@@ -830,22 +903,22 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         fg.AppendItem(Description, "Description");
                     }
-                    if ((printMask?.Armature?.Overall ?? true)
-                        && Armature is {} ArmatureItem)
+                    if ((printMask?.Armatures?.Overall ?? true)
+                        && Armatures is {} ArmaturesItem)
                     {
-                        fg.AppendLine("Armature =>");
+                        fg.AppendLine("Armatures =>");
                         fg.AppendLine("[");
                         using (new DepthWrapper(fg))
                         {
-                            fg.AppendItem(ArmatureItem.Overall);
-                            if (ArmatureItem.Specific != null)
+                            fg.AppendItem(ArmaturesItem.Overall);
+                            if (ArmaturesItem.Specific != null)
                             {
-                                foreach (var subItem in ArmatureItem.Specific)
+                                foreach (var subItem in ArmaturesItem.Specific)
                                 {
                                     fg.AppendLine("[");
                                     using (new DepthWrapper(fg))
                                     {
-                                        fg.AppendItem(subItem);
+                                        subItem?.ToString(fg);
                                     }
                                     fg.AppendLine("]");
                                 }
@@ -861,17 +934,52 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         fg.AppendItem(Weight, "Weight");
                     }
+                    if (printMask?.Health ?? true)
+                    {
+                        fg.AppendItem(Health, "Health");
+                    }
                     if (printMask?.ArmorRating ?? true)
                     {
                         fg.AppendItem(ArmorRating, "ArmorRating");
                     }
-                    if (printMask?.TemplateArmor ?? true)
+                    if (printMask?.BaseAddonIndex ?? true)
                     {
-                        fg.AppendItem(TemplateArmor, "TemplateArmor");
+                        fg.AppendItem(BaseAddonIndex, "BaseAddonIndex");
+                    }
+                    if (printMask?.StaggerRating ?? true)
+                    {
+                        fg.AppendItem(StaggerRating, "StaggerRating");
+                    }
+                    if ((printMask?.Resistances?.Overall ?? true)
+                        && Resistances is {} ResistancesItem)
+                    {
+                        fg.AppendLine("Resistances =>");
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            fg.AppendItem(ResistancesItem.Overall);
+                            if (ResistancesItem.Specific != null)
+                            {
+                                foreach (var subItem in ResistancesItem.Specific)
+                                {
+                                    fg.AppendLine("[");
+                                    using (new DepthWrapper(fg))
+                                    {
+                                        subItem?.ToString(fg);
+                                    }
+                                    fg.AppendLine("]");
+                                }
+                            }
+                        }
+                        fg.AppendLine("]");
                     }
                     if (printMask?.DATADataTypeState ?? true)
                     {
                         fg.AppendItem(DATADataTypeState, "DATADataTypeState");
+                    }
+                    if (printMask?.FNAMDataTypeState ?? true)
+                    {
+                        fg.AppendItem(FNAMDataTypeState, "FNAMDataTypeState");
                     }
                 }
                 fg.AppendLine("]");
@@ -895,19 +1003,22 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<Exception?, Destructible.ErrorMask?>? Destructible;
             public Exception? PickUpSound;
             public Exception? PutDownSound;
-            public Exception? RagdollConstraintTemplate;
             public Exception? EquipmentType;
             public Exception? BashImpactDataSet;
             public Exception? AlternateBlockMaterial;
             public Exception? Race;
             public MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>? Keywords;
             public Exception? Description;
-            public MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>? Armature;
+            public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ArmorAddonModel.ErrorMask?>>?>? Armatures;
             public Exception? Value;
             public Exception? Weight;
+            public Exception? Health;
             public Exception? ArmorRating;
-            public Exception? TemplateArmor;
+            public Exception? BaseAddonIndex;
+            public Exception? StaggerRating;
+            public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ResistanceArmor.ErrorMask?>>?>? Resistances;
             public Exception? DATADataTypeState;
+            public Exception? FNAMDataTypeState;
             #endregion
 
             #region IErrorMask
@@ -936,8 +1047,6 @@ namespace Mutagen.Bethesda.Fallout4
                         return PickUpSound;
                     case Armor_FieldIndex.PutDownSound:
                         return PutDownSound;
-                    case Armor_FieldIndex.RagdollConstraintTemplate:
-                        return RagdollConstraintTemplate;
                     case Armor_FieldIndex.EquipmentType:
                         return EquipmentType;
                     case Armor_FieldIndex.BashImpactDataSet:
@@ -950,18 +1059,26 @@ namespace Mutagen.Bethesda.Fallout4
                         return Keywords;
                     case Armor_FieldIndex.Description:
                         return Description;
-                    case Armor_FieldIndex.Armature:
-                        return Armature;
+                    case Armor_FieldIndex.Armatures:
+                        return Armatures;
                     case Armor_FieldIndex.Value:
                         return Value;
                     case Armor_FieldIndex.Weight:
                         return Weight;
+                    case Armor_FieldIndex.Health:
+                        return Health;
                     case Armor_FieldIndex.ArmorRating:
                         return ArmorRating;
-                    case Armor_FieldIndex.TemplateArmor:
-                        return TemplateArmor;
+                    case Armor_FieldIndex.BaseAddonIndex:
+                        return BaseAddonIndex;
+                    case Armor_FieldIndex.StaggerRating:
+                        return StaggerRating;
+                    case Armor_FieldIndex.Resistances:
+                        return Resistances;
                     case Armor_FieldIndex.DATADataTypeState:
                         return DATADataTypeState;
+                    case Armor_FieldIndex.FNAMDataTypeState:
+                        return FNAMDataTypeState;
                     default:
                         return base.GetNthMask(index);
                 }
@@ -1002,9 +1119,6 @@ namespace Mutagen.Bethesda.Fallout4
                     case Armor_FieldIndex.PutDownSound:
                         this.PutDownSound = ex;
                         break;
-                    case Armor_FieldIndex.RagdollConstraintTemplate:
-                        this.RagdollConstraintTemplate = ex;
-                        break;
                     case Armor_FieldIndex.EquipmentType:
                         this.EquipmentType = ex;
                         break;
@@ -1023,8 +1137,8 @@ namespace Mutagen.Bethesda.Fallout4
                     case Armor_FieldIndex.Description:
                         this.Description = ex;
                         break;
-                    case Armor_FieldIndex.Armature:
-                        this.Armature = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ex, null);
+                    case Armor_FieldIndex.Armatures:
+                        this.Armatures = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ArmorAddonModel.ErrorMask?>>?>(ex, null);
                         break;
                     case Armor_FieldIndex.Value:
                         this.Value = ex;
@@ -1032,14 +1146,26 @@ namespace Mutagen.Bethesda.Fallout4
                     case Armor_FieldIndex.Weight:
                         this.Weight = ex;
                         break;
+                    case Armor_FieldIndex.Health:
+                        this.Health = ex;
+                        break;
                     case Armor_FieldIndex.ArmorRating:
                         this.ArmorRating = ex;
                         break;
-                    case Armor_FieldIndex.TemplateArmor:
-                        this.TemplateArmor = ex;
+                    case Armor_FieldIndex.BaseAddonIndex:
+                        this.BaseAddonIndex = ex;
+                        break;
+                    case Armor_FieldIndex.StaggerRating:
+                        this.StaggerRating = ex;
+                        break;
+                    case Armor_FieldIndex.Resistances:
+                        this.Resistances = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ResistanceArmor.ErrorMask?>>?>(ex, null);
                         break;
                     case Armor_FieldIndex.DATADataTypeState:
                         this.DATADataTypeState = ex;
+                        break;
+                    case Armor_FieldIndex.FNAMDataTypeState:
+                        this.FNAMDataTypeState = ex;
                         break;
                     default:
                         base.SetNthException(index, ex);
@@ -1082,9 +1208,6 @@ namespace Mutagen.Bethesda.Fallout4
                     case Armor_FieldIndex.PutDownSound:
                         this.PutDownSound = (Exception?)obj;
                         break;
-                    case Armor_FieldIndex.RagdollConstraintTemplate:
-                        this.RagdollConstraintTemplate = (Exception?)obj;
-                        break;
                     case Armor_FieldIndex.EquipmentType:
                         this.EquipmentType = (Exception?)obj;
                         break;
@@ -1103,8 +1226,8 @@ namespace Mutagen.Bethesda.Fallout4
                     case Armor_FieldIndex.Description:
                         this.Description = (Exception?)obj;
                         break;
-                    case Armor_FieldIndex.Armature:
-                        this.Armature = (MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>)obj;
+                    case Armor_FieldIndex.Armatures:
+                        this.Armatures = (MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ArmorAddonModel.ErrorMask?>>?>)obj;
                         break;
                     case Armor_FieldIndex.Value:
                         this.Value = (Exception?)obj;
@@ -1112,14 +1235,26 @@ namespace Mutagen.Bethesda.Fallout4
                     case Armor_FieldIndex.Weight:
                         this.Weight = (Exception?)obj;
                         break;
+                    case Armor_FieldIndex.Health:
+                        this.Health = (Exception?)obj;
+                        break;
                     case Armor_FieldIndex.ArmorRating:
                         this.ArmorRating = (Exception?)obj;
                         break;
-                    case Armor_FieldIndex.TemplateArmor:
-                        this.TemplateArmor = (Exception?)obj;
+                    case Armor_FieldIndex.BaseAddonIndex:
+                        this.BaseAddonIndex = (Exception?)obj;
+                        break;
+                    case Armor_FieldIndex.StaggerRating:
+                        this.StaggerRating = (Exception?)obj;
+                        break;
+                    case Armor_FieldIndex.Resistances:
+                        this.Resistances = (MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ResistanceArmor.ErrorMask?>>?>)obj;
                         break;
                     case Armor_FieldIndex.DATADataTypeState:
                         this.DATADataTypeState = (Exception?)obj;
+                        break;
+                    case Armor_FieldIndex.FNAMDataTypeState:
+                        this.FNAMDataTypeState = (Exception?)obj;
                         break;
                     default:
                         base.SetNthMask(index, obj);
@@ -1140,19 +1275,22 @@ namespace Mutagen.Bethesda.Fallout4
                 if (Destructible != null) return true;
                 if (PickUpSound != null) return true;
                 if (PutDownSound != null) return true;
-                if (RagdollConstraintTemplate != null) return true;
                 if (EquipmentType != null) return true;
                 if (BashImpactDataSet != null) return true;
                 if (AlternateBlockMaterial != null) return true;
                 if (Race != null) return true;
                 if (Keywords != null) return true;
                 if (Description != null) return true;
-                if (Armature != null) return true;
+                if (Armatures != null) return true;
                 if (Value != null) return true;
                 if (Weight != null) return true;
+                if (Health != null) return true;
                 if (ArmorRating != null) return true;
-                if (TemplateArmor != null) return true;
+                if (BaseAddonIndex != null) return true;
+                if (StaggerRating != null) return true;
+                if (Resistances != null) return true;
                 if (DATADataTypeState != null) return true;
+                if (FNAMDataTypeState != null) return true;
                 return false;
             }
             #endregion
@@ -1201,7 +1339,6 @@ namespace Mutagen.Bethesda.Fallout4
                 Destructible?.ToString(fg);
                 fg.AppendItem(PickUpSound, "PickUpSound");
                 fg.AppendItem(PutDownSound, "PutDownSound");
-                fg.AppendItem(RagdollConstraintTemplate, "RagdollConstraintTemplate");
                 fg.AppendItem(EquipmentType, "EquipmentType");
                 fg.AppendItem(BashImpactDataSet, "BashImpactDataSet");
                 fg.AppendItem(AlternateBlockMaterial, "AlternateBlockMaterial");
@@ -1229,21 +1366,21 @@ namespace Mutagen.Bethesda.Fallout4
                     fg.AppendLine("]");
                 }
                 fg.AppendItem(Description, "Description");
-                if (Armature is {} ArmatureItem)
+                if (Armatures is {} ArmaturesItem)
                 {
-                    fg.AppendLine("Armature =>");
+                    fg.AppendLine("Armatures =>");
                     fg.AppendLine("[");
                     using (new DepthWrapper(fg))
                     {
-                        fg.AppendItem(ArmatureItem.Overall);
-                        if (ArmatureItem.Specific != null)
+                        fg.AppendItem(ArmaturesItem.Overall);
+                        if (ArmaturesItem.Specific != null)
                         {
-                            foreach (var subItem in ArmatureItem.Specific)
+                            foreach (var subItem in ArmaturesItem.Specific)
                             {
                                 fg.AppendLine("[");
                                 using (new DepthWrapper(fg))
                                 {
-                                    fg.AppendItem(subItem);
+                                    subItem?.ToString(fg);
                                 }
                                 fg.AppendLine("]");
                             }
@@ -1253,9 +1390,34 @@ namespace Mutagen.Bethesda.Fallout4
                 }
                 fg.AppendItem(Value, "Value");
                 fg.AppendItem(Weight, "Weight");
+                fg.AppendItem(Health, "Health");
                 fg.AppendItem(ArmorRating, "ArmorRating");
-                fg.AppendItem(TemplateArmor, "TemplateArmor");
+                fg.AppendItem(BaseAddonIndex, "BaseAddonIndex");
+                fg.AppendItem(StaggerRating, "StaggerRating");
+                if (Resistances is {} ResistancesItem)
+                {
+                    fg.AppendLine("Resistances =>");
+                    fg.AppendLine("[");
+                    using (new DepthWrapper(fg))
+                    {
+                        fg.AppendItem(ResistancesItem.Overall);
+                        if (ResistancesItem.Specific != null)
+                        {
+                            foreach (var subItem in ResistancesItem.Specific)
+                            {
+                                fg.AppendLine("[");
+                                using (new DepthWrapper(fg))
+                                {
+                                    subItem?.ToString(fg);
+                                }
+                                fg.AppendLine("]");
+                            }
+                        }
+                    }
+                    fg.AppendLine("]");
+                }
                 fg.AppendItem(DATADataTypeState, "DATADataTypeState");
+                fg.AppendItem(FNAMDataTypeState, "FNAMDataTypeState");
             }
             #endregion
 
@@ -1274,19 +1436,22 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Destructible = this.Destructible.Combine(rhs.Destructible, (l, r) => l.Combine(r));
                 ret.PickUpSound = this.PickUpSound.Combine(rhs.PickUpSound);
                 ret.PutDownSound = this.PutDownSound.Combine(rhs.PutDownSound);
-                ret.RagdollConstraintTemplate = this.RagdollConstraintTemplate.Combine(rhs.RagdollConstraintTemplate);
                 ret.EquipmentType = this.EquipmentType.Combine(rhs.EquipmentType);
                 ret.BashImpactDataSet = this.BashImpactDataSet.Combine(rhs.BashImpactDataSet);
                 ret.AlternateBlockMaterial = this.AlternateBlockMaterial.Combine(rhs.AlternateBlockMaterial);
                 ret.Race = this.Race.Combine(rhs.Race);
                 ret.Keywords = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ExceptionExt.Combine(this.Keywords?.Overall, rhs.Keywords?.Overall), ExceptionExt.Combine(this.Keywords?.Specific, rhs.Keywords?.Specific));
                 ret.Description = this.Description.Combine(rhs.Description);
-                ret.Armature = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ExceptionExt.Combine(this.Armature?.Overall, rhs.Armature?.Overall), ExceptionExt.Combine(this.Armature?.Specific, rhs.Armature?.Specific));
+                ret.Armatures = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ArmorAddonModel.ErrorMask?>>?>(ExceptionExt.Combine(this.Armatures?.Overall, rhs.Armatures?.Overall), ExceptionExt.Combine(this.Armatures?.Specific, rhs.Armatures?.Specific));
                 ret.Value = this.Value.Combine(rhs.Value);
                 ret.Weight = this.Weight.Combine(rhs.Weight);
+                ret.Health = this.Health.Combine(rhs.Health);
                 ret.ArmorRating = this.ArmorRating.Combine(rhs.ArmorRating);
-                ret.TemplateArmor = this.TemplateArmor.Combine(rhs.TemplateArmor);
+                ret.BaseAddonIndex = this.BaseAddonIndex.Combine(rhs.BaseAddonIndex);
+                ret.StaggerRating = this.StaggerRating.Combine(rhs.StaggerRating);
+                ret.Resistances = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ResistanceArmor.ErrorMask?>>?>(ExceptionExt.Combine(this.Resistances?.Overall, rhs.Resistances?.Overall), ExceptionExt.Combine(this.Resistances?.Specific, rhs.Resistances?.Specific));
                 ret.DATADataTypeState = this.DATADataTypeState.Combine(rhs.DATADataTypeState);
+                ret.FNAMDataTypeState = this.FNAMDataTypeState.Combine(rhs.FNAMDataTypeState);
                 return ret;
             }
             public static ErrorMask? Combine(ErrorMask? lhs, ErrorMask? rhs)
@@ -1319,19 +1484,22 @@ namespace Mutagen.Bethesda.Fallout4
             public Destructible.TranslationMask? Destructible;
             public bool PickUpSound;
             public bool PutDownSound;
-            public bool RagdollConstraintTemplate;
             public bool EquipmentType;
             public bool BashImpactDataSet;
             public bool AlternateBlockMaterial;
             public bool Race;
             public bool Keywords;
             public bool Description;
-            public bool Armature;
+            public ArmorAddonModel.TranslationMask? Armatures;
             public bool Value;
             public bool Weight;
+            public bool Health;
             public bool ArmorRating;
-            public bool TemplateArmor;
+            public bool BaseAddonIndex;
+            public bool StaggerRating;
+            public ResistanceArmor.TranslationMask? Resistances;
             public bool DATADataTypeState;
+            public bool FNAMDataTypeState;
             #endregion
 
             #region Ctors
@@ -1344,19 +1512,20 @@ namespace Mutagen.Bethesda.Fallout4
                 this.ObjectEffect = defaultOn;
                 this.PickUpSound = defaultOn;
                 this.PutDownSound = defaultOn;
-                this.RagdollConstraintTemplate = defaultOn;
                 this.EquipmentType = defaultOn;
                 this.BashImpactDataSet = defaultOn;
                 this.AlternateBlockMaterial = defaultOn;
                 this.Race = defaultOn;
                 this.Keywords = defaultOn;
                 this.Description = defaultOn;
-                this.Armature = defaultOn;
                 this.Value = defaultOn;
                 this.Weight = defaultOn;
+                this.Health = defaultOn;
                 this.ArmorRating = defaultOn;
-                this.TemplateArmor = defaultOn;
+                this.BaseAddonIndex = defaultOn;
+                this.StaggerRating = defaultOn;
                 this.DATADataTypeState = defaultOn;
+                this.FNAMDataTypeState = defaultOn;
             }
 
             #endregion
@@ -1374,19 +1543,22 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((Destructible != null ? Destructible.OnOverall : DefaultOn, Destructible?.GetCrystal()));
                 ret.Add((PickUpSound, null));
                 ret.Add((PutDownSound, null));
-                ret.Add((RagdollConstraintTemplate, null));
                 ret.Add((EquipmentType, null));
                 ret.Add((BashImpactDataSet, null));
                 ret.Add((AlternateBlockMaterial, null));
                 ret.Add((Race, null));
                 ret.Add((Keywords, null));
                 ret.Add((Description, null));
-                ret.Add((Armature, null));
+                ret.Add((Armatures == null ? DefaultOn : !Armatures.GetCrystal().CopyNothing, Armatures?.GetCrystal()));
                 ret.Add((Value, null));
                 ret.Add((Weight, null));
+                ret.Add((Health, null));
                 ret.Add((ArmorRating, null));
-                ret.Add((TemplateArmor, null));
+                ret.Add((BaseAddonIndex, null));
+                ret.Add((StaggerRating, null));
+                ret.Add((Resistances == null ? DefaultOn : !Resistances.GetCrystal().CopyNothing, Resistances?.GetCrystal()));
                 ret.Add((DATADataTypeState, null));
+                ret.Add((FNAMDataTypeState, null));
             }
 
             public static implicit operator TranslationMask(bool defaultOn)
@@ -1445,6 +1617,10 @@ namespace Mutagen.Bethesda.Fallout4
 
         [Flags]
         public enum DATADataType
+        {
+        }
+        [Flags]
+        public enum FNAMDataType
         {
         }
         #region Equals and Hash
@@ -1564,7 +1740,6 @@ namespace Mutagen.Bethesda.Fallout4
         new Destructible? Destructible { get; set; }
         new IFormLinkNullable<ISoundDescriptorGetter> PickUpSound { get; set; }
         new IFormLinkNullable<ISoundDescriptorGetter> PutDownSound { get; set; }
-        new String? RagdollConstraintTemplate { get; set; }
         new IFormLinkNullable<IEquipTypeGetter> EquipmentType { get; set; }
         new IFormLinkNullable<IImpactDataSetGetter> BashImpactDataSet { get; set; }
         new IFormLinkNullable<IMaterialTypeGetter> AlternateBlockMaterial { get; set; }
@@ -1574,12 +1749,16 @@ namespace Mutagen.Bethesda.Fallout4
         /// </summary>
         new ExtendedList<IFormLinkGetter<IKeywordGetter>>? Keywords { get; set; }
         new TranslatedString? Description { get; set; }
-        new ExtendedList<IFormLinkGetter<IArmorAddonGetter>> Armature { get; }
+        new ExtendedList<ArmorAddonModel> Armatures { get; }
         new UInt32 Value { get; set; }
         new Single Weight { get; set; }
-        new Single ArmorRating { get; set; }
-        new IFormLinkNullable<IArmorGetter> TemplateArmor { get; set; }
+        new UInt32 Health { get; set; }
+        new UInt16 ArmorRating { get; set; }
+        new UInt16 BaseAddonIndex { get; set; }
+        new UInt16 StaggerRating { get; set; }
+        new ExtendedList<ResistanceArmor> Resistances { get; }
         new Armor.DATADataType DATADataTypeState { get; set; }
+        new Armor.FNAMDataType FNAMDataTypeState { get; set; }
     }
 
     public partial interface IArmorInternal :
@@ -1638,7 +1817,6 @@ namespace Mutagen.Bethesda.Fallout4
         IDestructibleGetter? Destructible { get; }
         IFormLinkNullableGetter<ISoundDescriptorGetter> PickUpSound { get; }
         IFormLinkNullableGetter<ISoundDescriptorGetter> PutDownSound { get; }
-        String? RagdollConstraintTemplate { get; }
         IFormLinkNullableGetter<IEquipTypeGetter> EquipmentType { get; }
         IFormLinkNullableGetter<IImpactDataSetGetter> BashImpactDataSet { get; }
         IFormLinkNullableGetter<IMaterialTypeGetter> AlternateBlockMaterial { get; }
@@ -1650,12 +1828,16 @@ namespace Mutagen.Bethesda.Fallout4
         IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? Keywords { get; }
         #endregion
         ITranslatedStringGetter? Description { get; }
-        IReadOnlyList<IFormLinkGetter<IArmorAddonGetter>> Armature { get; }
+        IReadOnlyList<IArmorAddonModelGetter> Armatures { get; }
         UInt32 Value { get; }
         Single Weight { get; }
-        Single ArmorRating { get; }
-        IFormLinkNullableGetter<IArmorGetter> TemplateArmor { get; }
+        UInt32 Health { get; }
+        UInt16 ArmorRating { get; }
+        UInt16 BaseAddonIndex { get; }
+        UInt16 StaggerRating { get; }
+        IReadOnlyList<IResistanceArmorGetter> Resistances { get; }
         Armor.DATADataType DATADataTypeState { get; }
+        Armor.FNAMDataType FNAMDataTypeState { get; }
 
     }
 
@@ -1830,19 +2012,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         Destructible = 13,
         PickUpSound = 14,
         PutDownSound = 15,
-        RagdollConstraintTemplate = 16,
-        EquipmentType = 17,
-        BashImpactDataSet = 18,
-        AlternateBlockMaterial = 19,
-        Race = 20,
-        Keywords = 21,
-        Description = 22,
-        Armature = 23,
-        Value = 24,
-        Weight = 25,
+        EquipmentType = 16,
+        BashImpactDataSet = 17,
+        AlternateBlockMaterial = 18,
+        Race = 19,
+        Keywords = 20,
+        Description = 21,
+        Armatures = 22,
+        Value = 23,
+        Weight = 24,
+        Health = 25,
         ArmorRating = 26,
-        TemplateArmor = 27,
-        DATADataTypeState = 28,
+        BaseAddonIndex = 27,
+        StaggerRating = 28,
+        Resistances = 29,
+        DATADataTypeState = 30,
+        FNAMDataTypeState = 31,
     }
     #endregion
 
@@ -1860,9 +2045,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public const string GUID = "c4d097a3-85cc-49c7-8a94-606c9086f0ca";
 
-        public const ushort AdditionalFieldCount = 23;
+        public const ushort AdditionalFieldCount = 26;
 
-        public const ushort FieldCount = 29;
+        public const ushort FieldCount = 32;
 
         public static readonly Type MaskType = typeof(Armor.Mask<>);
 
@@ -1967,19 +2152,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.Destructible = null;
             item.PickUpSound.Clear();
             item.PutDownSound.Clear();
-            item.RagdollConstraintTemplate = default;
             item.EquipmentType.Clear();
             item.BashImpactDataSet.Clear();
             item.AlternateBlockMaterial.Clear();
             item.Race.Clear();
             item.Keywords = null;
             item.Description = default;
-            item.Armature.Clear();
+            item.Armatures.Clear();
             item.Value = default;
             item.Weight = default;
+            item.Health = default;
             item.ArmorRating = default;
-            item.TemplateArmor.Clear();
+            item.BaseAddonIndex = default;
+            item.StaggerRating = default;
+            item.Resistances.Clear();
             item.DATADataTypeState = default;
+            item.FNAMDataTypeState = default;
             base.Clear(item);
         }
         
@@ -2009,8 +2197,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.AlternateBlockMaterial.Relink(mapping);
             obj.Race.Relink(mapping);
             obj.Keywords?.RemapLinks(mapping);
-            obj.Armature.RemapLinks(mapping);
-            obj.TemplateArmor.Relink(mapping);
+            obj.Armatures.RemapLinks(mapping);
+            obj.Resistances.RemapLinks(mapping);
         }
         
         #endregion
@@ -2105,7 +2293,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 include);
             ret.PickUpSound = item.PickUpSound.Equals(rhs.PickUpSound);
             ret.PutDownSound = item.PutDownSound.Equals(rhs.PutDownSound);
-            ret.RagdollConstraintTemplate = string.Equals(item.RagdollConstraintTemplate, rhs.RagdollConstraintTemplate);
             ret.EquipmentType = item.EquipmentType.Equals(rhs.EquipmentType);
             ret.BashImpactDataSet = item.BashImpactDataSet.Equals(rhs.BashImpactDataSet);
             ret.AlternateBlockMaterial = item.AlternateBlockMaterial.Equals(rhs.AlternateBlockMaterial);
@@ -2115,15 +2302,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 (l, r) => object.Equals(l, r),
                 include);
             ret.Description = object.Equals(item.Description, rhs.Description);
-            ret.Armature = item.Armature.CollectionEqualsHelper(
-                rhs.Armature,
-                (l, r) => object.Equals(l, r),
+            ret.Armatures = item.Armatures.CollectionEqualsHelper(
+                rhs.Armatures,
+                (loqLhs, loqRhs) => loqLhs.GetEqualsMask(loqRhs, include),
                 include);
             ret.Value = item.Value == rhs.Value;
             ret.Weight = item.Weight.EqualsWithin(rhs.Weight);
-            ret.ArmorRating = item.ArmorRating.EqualsWithin(rhs.ArmorRating);
-            ret.TemplateArmor = item.TemplateArmor.Equals(rhs.TemplateArmor);
+            ret.Health = item.Health == rhs.Health;
+            ret.ArmorRating = item.ArmorRating == rhs.ArmorRating;
+            ret.BaseAddonIndex = item.BaseAddonIndex == rhs.BaseAddonIndex;
+            ret.StaggerRating = item.StaggerRating == rhs.StaggerRating;
+            ret.Resistances = item.Resistances.CollectionEqualsHelper(
+                rhs.Resistances,
+                (loqLhs, loqRhs) => loqLhs.GetEqualsMask(loqRhs, include),
+                include);
             ret.DATADataTypeState = item.DATADataTypeState == rhs.DATADataTypeState;
+            ret.FNAMDataTypeState = item.FNAMDataTypeState == rhs.FNAMDataTypeState;
             base.FillEqualsMask(item, rhs, ret, include);
         }
         
@@ -2220,11 +2414,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 fg.AppendItem(item.PutDownSound.FormKeyNullable, "PutDownSound");
             }
-            if ((printMask?.RagdollConstraintTemplate ?? true)
-                && item.RagdollConstraintTemplate is {} RagdollConstraintTemplateItem)
-            {
-                fg.AppendItem(RagdollConstraintTemplateItem, "RagdollConstraintTemplate");
-            }
             if (printMask?.EquipmentType ?? true)
             {
                 fg.AppendItem(item.EquipmentType.FormKeyNullable, "EquipmentType");
@@ -2265,18 +2454,18 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 fg.AppendItem(DescriptionItem, "Description");
             }
-            if (printMask?.Armature?.Overall ?? true)
+            if (printMask?.Armatures?.Overall ?? true)
             {
-                fg.AppendLine("Armature =>");
+                fg.AppendLine("Armatures =>");
                 fg.AppendLine("[");
                 using (new DepthWrapper(fg))
                 {
-                    foreach (var subItem in item.Armature)
+                    foreach (var subItem in item.Armatures)
                     {
                         fg.AppendLine("[");
                         using (new DepthWrapper(fg))
                         {
-                            fg.AppendItem(subItem.FormKey);
+                            subItem?.ToString(fg, "Item");
                         }
                         fg.AppendLine("]");
                     }
@@ -2291,17 +2480,47 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 fg.AppendItem(item.Weight, "Weight");
             }
+            if (printMask?.Health ?? true)
+            {
+                fg.AppendItem(item.Health, "Health");
+            }
             if (printMask?.ArmorRating ?? true)
             {
                 fg.AppendItem(item.ArmorRating, "ArmorRating");
             }
-            if (printMask?.TemplateArmor ?? true)
+            if (printMask?.BaseAddonIndex ?? true)
             {
-                fg.AppendItem(item.TemplateArmor.FormKeyNullable, "TemplateArmor");
+                fg.AppendItem(item.BaseAddonIndex, "BaseAddonIndex");
+            }
+            if (printMask?.StaggerRating ?? true)
+            {
+                fg.AppendItem(item.StaggerRating, "StaggerRating");
+            }
+            if (printMask?.Resistances?.Overall ?? true)
+            {
+                fg.AppendLine("Resistances =>");
+                fg.AppendLine("[");
+                using (new DepthWrapper(fg))
+                {
+                    foreach (var subItem in item.Resistances)
+                    {
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            subItem?.ToString(fg, "Item");
+                        }
+                        fg.AppendLine("]");
+                    }
+                }
+                fg.AppendLine("]");
             }
             if (printMask?.DATADataTypeState ?? true)
             {
                 fg.AppendItem(item.DATADataTypeState, "DATADataTypeState");
+            }
+            if (printMask?.FNAMDataTypeState ?? true)
+            {
+                fg.AppendItem(item.FNAMDataTypeState, "FNAMDataTypeState");
             }
         }
         
@@ -2411,10 +2630,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 if (!lhs.PutDownSound.Equals(rhs.PutDownSound)) return false;
             }
-            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.RagdollConstraintTemplate) ?? true))
-            {
-                if (!string.Equals(lhs.RagdollConstraintTemplate, rhs.RagdollConstraintTemplate)) return false;
-            }
             if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.EquipmentType) ?? true))
             {
                 if (!lhs.EquipmentType.Equals(rhs.EquipmentType)) return false;
@@ -2439,9 +2654,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 if (!object.Equals(lhs.Description, rhs.Description)) return false;
             }
-            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.Armature) ?? true))
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.Armatures) ?? true))
             {
-                if (!lhs.Armature.SequenceEqualNullable(rhs.Armature)) return false;
+                if (!lhs.Armatures.SequenceEqualNullable(rhs.Armatures)) return false;
             }
             if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.Value) ?? true))
             {
@@ -2451,17 +2666,33 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 if (!lhs.Weight.EqualsWithin(rhs.Weight)) return false;
             }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.Health) ?? true))
+            {
+                if (lhs.Health != rhs.Health) return false;
+            }
             if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.ArmorRating) ?? true))
             {
-                if (!lhs.ArmorRating.EqualsWithin(rhs.ArmorRating)) return false;
+                if (lhs.ArmorRating != rhs.ArmorRating) return false;
             }
-            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.TemplateArmor) ?? true))
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.BaseAddonIndex) ?? true))
             {
-                if (!lhs.TemplateArmor.Equals(rhs.TemplateArmor)) return false;
+                if (lhs.BaseAddonIndex != rhs.BaseAddonIndex) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.StaggerRating) ?? true))
+            {
+                if (lhs.StaggerRating != rhs.StaggerRating) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.Resistances) ?? true))
+            {
+                if (!lhs.Resistances.SequenceEqualNullable(rhs.Resistances)) return false;
             }
             if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.DATADataTypeState) ?? true))
             {
                 if (lhs.DATADataTypeState != rhs.DATADataTypeState) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.FNAMDataTypeState) ?? true))
+            {
+                if (lhs.FNAMDataTypeState != rhs.FNAMDataTypeState) return false;
             }
             return true;
         }
@@ -2516,10 +2747,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             }
             hash.Add(item.PickUpSound);
             hash.Add(item.PutDownSound);
-            if (item.RagdollConstraintTemplate is {} RagdollConstraintTemplateitem)
-            {
-                hash.Add(RagdollConstraintTemplateitem);
-            }
             hash.Add(item.EquipmentType);
             hash.Add(item.BashImpactDataSet);
             hash.Add(item.AlternateBlockMaterial);
@@ -2529,12 +2756,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 hash.Add(Descriptionitem);
             }
-            hash.Add(item.Armature);
+            hash.Add(item.Armatures);
             hash.Add(item.Value);
             hash.Add(item.Weight);
+            hash.Add(item.Health);
             hash.Add(item.ArmorRating);
-            hash.Add(item.TemplateArmor);
+            hash.Add(item.BaseAddonIndex);
+            hash.Add(item.StaggerRating);
+            hash.Add(item.Resistances);
             hash.Add(item.DATADataTypeState);
+            hash.Add(item.FNAMDataTypeState);
             hash.Add(base.GetHashCode());
             return hash.ToHashCode();
         }
@@ -2624,13 +2855,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     yield return FormLinkInformation.Factory(item);
                 }
             }
-            foreach (var item in obj.Armature)
+            foreach (var item in obj.Armatures.SelectMany(f => f.ContainedFormLinks))
             {
                 yield return FormLinkInformation.Factory(item);
             }
-            if (obj.TemplateArmor.FormKeyNullable.HasValue)
+            foreach (var item in obj.Resistances.SelectMany(f => f.ContainedFormLinks))
             {
-                yield return FormLinkInformation.Factory(obj.TemplateArmor);
+                yield return FormLinkInformation.Factory(item);
             }
             yield break;
         }
@@ -2858,10 +3089,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 item.PutDownSound.SetTo(rhs.PutDownSound.FormKeyNullable);
             }
-            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.RagdollConstraintTemplate) ?? true))
-            {
-                item.RagdollConstraintTemplate = rhs.RagdollConstraintTemplate;
-            }
             if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.EquipmentType) ?? true))
             {
                 item.EquipmentType.SetTo(rhs.EquipmentType.FormKeyNullable);
@@ -2909,14 +3136,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 item.Description = rhs.Description?.DeepCopy();
             }
-            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.Armature) ?? true))
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.Armatures) ?? true))
             {
-                errorMask?.PushIndex((int)Armor_FieldIndex.Armature);
+                errorMask?.PushIndex((int)Armor_FieldIndex.Armatures);
                 try
                 {
-                    item.Armature.SetTo(
-                        rhs.Armature
-                        .Select(r => (IFormLinkGetter<IArmorAddonGetter>)new FormLink<IArmorAddonGetter>(r.FormKey)));
+                    item.Armatures.SetTo(
+                        rhs.Armatures
+                        .Select(r =>
+                        {
+                            return r.DeepCopy(
+                                errorMask: errorMask,
+                                default(TranslationCrystal));
+                        }));
                 }
                 catch (Exception ex)
                 when (errorMask != null)
@@ -2936,17 +3168,53 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 item.Weight = rhs.Weight;
             }
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.Health) ?? true))
+            {
+                item.Health = rhs.Health;
+            }
             if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.ArmorRating) ?? true))
             {
                 item.ArmorRating = rhs.ArmorRating;
             }
-            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.TemplateArmor) ?? true))
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.BaseAddonIndex) ?? true))
             {
-                item.TemplateArmor.SetTo(rhs.TemplateArmor.FormKeyNullable);
+                item.BaseAddonIndex = rhs.BaseAddonIndex;
+            }
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.StaggerRating) ?? true))
+            {
+                item.StaggerRating = rhs.StaggerRating;
+            }
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.Resistances) ?? true))
+            {
+                errorMask?.PushIndex((int)Armor_FieldIndex.Resistances);
+                try
+                {
+                    item.Resistances.SetTo(
+                        rhs.Resistances
+                        .Select(r =>
+                        {
+                            return r.DeepCopy(
+                                errorMask: errorMask,
+                                default(TranslationCrystal));
+                        }));
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
             }
             if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.DATADataTypeState) ?? true))
             {
                 item.DATADataTypeState = rhs.DATADataTypeState;
+            }
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.FNAMDataTypeState) ?? true))
+            {
+                item.FNAMDataTypeState = rhs.FNAMDataTypeState;
             }
         }
         
@@ -3174,11 +3442,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 writer: writer,
                 item: item.PutDownSound,
                 header: translationParams.ConvertToCustom(RecordTypes.ZNAM));
-            StringBinaryTranslation.Instance.WriteNullable(
-                writer: writer,
-                item: item.RagdollConstraintTemplate,
-                header: translationParams.ConvertToCustom(RecordTypes.BMCT),
-                binaryType: StringBinaryType.NullTerminate);
             FormLinkBinaryTranslation.Instance.WriteNullable(
                 writer: writer,
                 item: item.EquipmentType,
@@ -3213,15 +3476,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 header: translationParams.ConvertToCustom(RecordTypes.DESC),
                 binaryType: StringBinaryType.NullTerminate,
                 source: StringsSource.DL);
-            Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IFormLinkGetter<IArmorAddonGetter>>.Instance.Write(
+            Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IArmorAddonModelGetter>.Instance.Write(
                 writer: writer,
-                items: item.Armature,
-                transl: (MutagenWriter subWriter, IFormLinkGetter<IArmorAddonGetter> subItem, TypedWriteParams? conv) =>
+                items: item.Armatures,
+                transl: (MutagenWriter subWriter, IArmorAddonModelGetter subItem, TypedWriteParams? conv) =>
                 {
-                    FormLinkBinaryTranslation.Instance.Write(
+                    var Item = subItem;
+                    ((ArmorAddonModelBinaryWriteTranslation)((IBinaryItem)Item).BinaryWriteTranslator).Write(
+                        item: Item,
                         writer: subWriter,
-                        item: subItem,
-                        header: translationParams.ConvertToCustom(RecordTypes.MODL));
+                        translationParams: conv);
                 });
             using (HeaderExport.Subrecord(writer, translationParams.ConvertToCustom(RecordTypes.DATA)))
             {
@@ -3229,17 +3493,25 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
                     writer: writer,
                     item: item.Weight);
+                writer.Write(item.Health);
             }
-            FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
+            using (HeaderExport.Subrecord(writer, translationParams.ConvertToCustom(RecordTypes.FNAM)))
+            {
+                writer.Write(item.ArmorRating);
+                writer.Write(item.BaseAddonIndex);
+                writer.Write(item.StaggerRating);
+            }
+            Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IResistanceArmorGetter>.Instance.Write(
                 writer: writer,
-                item: item.ArmorRating,
-                integerType: FloatIntegerType.UInt,
-                multiplier: 0.01,
-                header: translationParams.ConvertToCustom(RecordTypes.DNAM));
-            FormLinkBinaryTranslation.Instance.WriteNullable(
-                writer: writer,
-                item: item.TemplateArmor,
-                header: translationParams.ConvertToCustom(RecordTypes.TNAM));
+                items: item.Resistances,
+                transl: (MutagenWriter subWriter, IResistanceArmorGetter subItem, TypedWriteParams? conv) =>
+                {
+                    var Item = subItem;
+                    ((ResistanceArmorBinaryWriteTranslation)((IBinaryItem)Item).BinaryWriteTranslator).Write(
+                        item: Item,
+                        writer: subWriter,
+                        translationParams: conv);
+                });
         }
 
         public static partial void WriteBinaryBodyTemplateCustom(
@@ -3417,14 +3689,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     item.PutDownSound.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
                     return (int)Armor_FieldIndex.PutDownSound;
                 }
-                case RecordTypeInts.BMCT:
-                {
-                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
-                    item.RagdollConstraintTemplate = StringBinaryTranslation.Instance.Parse(
-                        reader: frame.SpawnWithLength(contentLength),
-                        stringBinaryType: StringBinaryType.NullTerminate);
-                    return (int)Armor_FieldIndex.RagdollConstraintTemplate;
-                }
                 case RecordTypeInts.ETYP:
                 {
                     frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
@@ -3471,14 +3735,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         stringBinaryType: StringBinaryType.NullTerminate);
                     return (int)Armor_FieldIndex.Description;
                 }
+                case RecordTypeInts.INDX:
                 case RecordTypeInts.MODL:
                 {
-                    item.Armature.SetTo(
-                        Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IFormLinkGetter<IArmorAddonGetter>>.Instance.Parse(
+                    item.Armatures.SetTo(
+                        Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<ArmorAddonModel>.Instance.Parse(
                             reader: frame,
-                            triggeringRecord: translationParams.ConvertToCustom(RecordTypes.MODL),
-                            transl: FormLinkBinaryTranslation.Instance.Parse));
-                    return (int)Armor_FieldIndex.Armature;
+                            triggeringRecord: ArmorAddonModel_Registration.TriggeringRecordTypes,
+                            translationParams: translationParams,
+                            transl: ArmorAddonModel.TryCreateFromBinary));
+                    return (int)Armor_FieldIndex.Armatures;
                 }
                 case RecordTypeInts.DATA:
                 {
@@ -3486,22 +3752,27 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     var dataFrame = frame.SpawnWithLength(contentLength);
                     item.Value = dataFrame.ReadUInt32();
                     item.Weight = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
-                    return (int)Armor_FieldIndex.Weight;
+                    item.Health = dataFrame.ReadUInt32();
+                    return (int)Armor_FieldIndex.Health;
                 }
-                case RecordTypeInts.DNAM:
+                case RecordTypeInts.FNAM:
                 {
                     frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
-                    item.ArmorRating = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(
-                        reader: frame,
-                        integerType: FloatIntegerType.UInt,
-                        multiplier: 0.01);
-                    return (int)Armor_FieldIndex.ArmorRating;
+                    var dataFrame = frame.SpawnWithLength(contentLength);
+                    item.ArmorRating = dataFrame.ReadUInt16();
+                    item.BaseAddonIndex = dataFrame.ReadUInt16();
+                    item.StaggerRating = dataFrame.ReadUInt16();
+                    return (int)Armor_FieldIndex.StaggerRating;
                 }
-                case RecordTypeInts.TNAM:
+                case RecordTypeInts.DAMA:
                 {
-                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
-                    item.TemplateArmor.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
-                    return (int)Armor_FieldIndex.TemplateArmor;
+                    item.Resistances.SetTo(
+                        Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<ResistanceArmor>.Instance.Parse(
+                            reader: frame,
+                            triggeringRecord: RecordTypes.DAMA,
+                            translationParams: translationParams,
+                            transl: ResistanceArmor.TryCreateFromBinary));
+                    return (int)Armor_FieldIndex.Resistances;
                 }
                 default:
                     return Fallout4MajorRecordBinaryCreateTranslation.FillBinaryRecordTypes(
@@ -3615,10 +3886,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private int? _PutDownSoundLocation;
         public IFormLinkNullableGetter<ISoundDescriptorGetter> PutDownSound => _PutDownSoundLocation.HasValue ? new FormLinkNullable<ISoundDescriptorGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _PutDownSoundLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<ISoundDescriptorGetter>.Null;
         #endregion
-        #region RagdollConstraintTemplate
-        private int? _RagdollConstraintTemplateLocation;
-        public String? RagdollConstraintTemplate => _RagdollConstraintTemplateLocation.HasValue ? BinaryStringUtility.ProcessWholeToZString(HeaderTranslation.ExtractSubrecordMemory(_data, _RagdollConstraintTemplateLocation.Value, _package.MetaData.Constants)) : default(string?);
-        #endregion
         #region EquipmentType
         private int? _EquipmentTypeLocation;
         public IFormLinkNullableGetter<IEquipTypeGetter> EquipmentType => _EquipmentTypeLocation.HasValue ? new FormLinkNullable<IEquipTypeGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _EquipmentTypeLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<IEquipTypeGetter>.Null;
@@ -3643,7 +3910,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private int? _DescriptionLocation;
         public ITranslatedStringGetter? Description => _DescriptionLocation.HasValue ? StringBinaryTranslation.Instance.Parse(HeaderTranslation.ExtractSubrecordMemory(_data, _DescriptionLocation.Value, _package.MetaData.Constants), StringsSource.DL, _package.MetaData.StringsLookup) : default(TranslatedString?);
         #endregion
-        public IReadOnlyList<IFormLinkGetter<IArmorAddonGetter>> Armature { get; private set; } = ListExt.Empty<IFormLinkGetter<IArmorAddonGetter>>();
+        public IReadOnlyList<IArmorAddonModelGetter> Armatures { get; private set; } = ListExt.Empty<ArmorAddonModelBinaryOverlay>();
         private int? _DATALocation;
         public Armor.DATADataType DATADataTypeState { get; private set; }
         #region Value
@@ -3656,14 +3923,29 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private bool _Weight_IsSet => _DATALocation.HasValue;
         public Single Weight => _Weight_IsSet ? _data.Slice(_WeightLocation, 4).Float() : default;
         #endregion
+        #region Health
+        private int _HealthLocation => _DATALocation!.Value + 0x8;
+        private bool _Health_IsSet => _DATALocation.HasValue;
+        public UInt32 Health => _Health_IsSet ? BinaryPrimitives.ReadUInt32LittleEndian(_data.Slice(_HealthLocation, 4)) : default;
+        #endregion
+        private int? _FNAMLocation;
+        public Armor.FNAMDataType FNAMDataTypeState { get; private set; }
         #region ArmorRating
-        private int? _ArmorRatingLocation;
-        public Single ArmorRating => _ArmorRatingLocation.HasValue ? FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.GetFloat(HeaderTranslation.ExtractSubrecordMemory(_data, _ArmorRatingLocation.Value, _package.MetaData.Constants), FloatIntegerType.UInt, 0.01) : default;
+        private int _ArmorRatingLocation => _FNAMLocation!.Value;
+        private bool _ArmorRating_IsSet => _FNAMLocation.HasValue;
+        public UInt16 ArmorRating => _ArmorRating_IsSet ? BinaryPrimitives.ReadUInt16LittleEndian(_data.Slice(_ArmorRatingLocation, 2)) : default;
         #endregion
-        #region TemplateArmor
-        private int? _TemplateArmorLocation;
-        public IFormLinkNullableGetter<IArmorGetter> TemplateArmor => _TemplateArmorLocation.HasValue ? new FormLinkNullable<IArmorGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _TemplateArmorLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<IArmorGetter>.Null;
+        #region BaseAddonIndex
+        private int _BaseAddonIndexLocation => _FNAMLocation!.Value + 0x2;
+        private bool _BaseAddonIndex_IsSet => _FNAMLocation.HasValue;
+        public UInt16 BaseAddonIndex => _BaseAddonIndex_IsSet ? BinaryPrimitives.ReadUInt16LittleEndian(_data.Slice(_BaseAddonIndexLocation, 2)) : default;
         #endregion
+        #region StaggerRating
+        private int _StaggerRatingLocation => _FNAMLocation!.Value + 0x4;
+        private bool _StaggerRating_IsSet => _FNAMLocation.HasValue;
+        public UInt16 StaggerRating => _StaggerRating_IsSet ? BinaryPrimitives.ReadUInt16LittleEndian(_data.Slice(_StaggerRatingLocation, 2)) : default;
+        #endregion
+        public IReadOnlyList<IResistanceArmorGetter> Resistances { get; private set; } = ListExt.Empty<ResistanceArmorBinaryOverlay>();
         partial void CustomFactoryEnd(
             OverlayStream stream,
             int finalPos,
@@ -3799,11 +4081,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     _PutDownSoundLocation = (stream.Position - offset);
                     return (int)Armor_FieldIndex.PutDownSound;
                 }
-                case RecordTypeInts.BMCT:
-                {
-                    _RagdollConstraintTemplateLocation = (stream.Position - offset);
-                    return (int)Armor_FieldIndex.RagdollConstraintTemplate;
-                }
                 case RecordTypeInts.ETYP:
                 {
                     _EquipmentTypeLocation = (stream.Position - offset);
@@ -3842,34 +4119,39 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     _DescriptionLocation = (stream.Position - offset);
                     return (int)Armor_FieldIndex.Description;
                 }
+                case RecordTypeInts.INDX:
                 case RecordTypeInts.MODL:
                 {
-                    this.Armature = BinaryOverlayList.FactoryByArray<IFormLinkGetter<IArmorAddonGetter>>(
-                        mem: stream.RemainingMemory,
-                        package: _package,
-                        getter: (s, p) => new FormLink<IArmorAddonGetter>(FormKey.Factory(p.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(s))),
-                        locs: ParseRecordLocations(
-                            stream: stream,
-                            constants: _package.MetaData.Constants.SubConstants,
-                            trigger: type,
-                            skipHeader: true,
-                            parseParams: parseParams));
-                    return (int)Armor_FieldIndex.Armature;
+                    this.Armatures = this.ParseRepeatedTypelessSubrecord<ArmorAddonModelBinaryOverlay>(
+                        stream: stream,
+                        parseParams: parseParams,
+                        trigger: ArmorAddonModel_Registration.TriggeringRecordTypes,
+                        factory: ArmorAddonModelBinaryOverlay.ArmorAddonModelFactory);
+                    return (int)Armor_FieldIndex.Armatures;
                 }
                 case RecordTypeInts.DATA:
                 {
                     _DATALocation = (stream.Position - offset) + _package.MetaData.Constants.SubConstants.TypeAndLengthLength;
-                    return (int)Armor_FieldIndex.Weight;
+                    return (int)Armor_FieldIndex.Health;
                 }
-                case RecordTypeInts.DNAM:
+                case RecordTypeInts.FNAM:
                 {
-                    _ArmorRatingLocation = (stream.Position - offset);
-                    return (int)Armor_FieldIndex.ArmorRating;
+                    _FNAMLocation = (stream.Position - offset) + _package.MetaData.Constants.SubConstants.TypeAndLengthLength;
+                    return (int)Armor_FieldIndex.StaggerRating;
                 }
-                case RecordTypeInts.TNAM:
+                case RecordTypeInts.DAMA:
                 {
-                    _TemplateArmorLocation = (stream.Position - offset);
-                    return (int)Armor_FieldIndex.TemplateArmor;
+                    this.Resistances = BinaryOverlayList.FactoryByArray<ResistanceArmorBinaryOverlay>(
+                        mem: stream.RemainingMemory,
+                        package: _package,
+                        parseParams: parseParams,
+                        getter: (s, p, recConv) => ResistanceArmorBinaryOverlay.ResistanceArmorFactory(new OverlayStream(s, p), p, recConv),
+                        locs: ParseRecordLocations(
+                            stream: stream,
+                            trigger: type,
+                            constants: _package.MetaData.Constants.SubConstants,
+                            skipHeader: false));
+                    return (int)Armor_FieldIndex.Resistances;
                 }
                 default:
                     return base.FillRecordType(

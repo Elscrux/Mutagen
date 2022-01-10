@@ -14,7 +14,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int AVIF = 0x46495641;
         public const int BAMT = 0x544D4142;
         public const int BIDS = 0x53444942;
-        public const int BMCT = 0x54434D42;
         public const int BNAM = 0x4D414E42;
         public const int BOD2 = 0x32444F42;
         public const int BODT = 0x54444F42;
@@ -28,6 +27,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int CRVA = 0x41565243;
         public const int CTDA = 0x41445443;
         public const int CUSD = 0x44535543;
+        public const int DAMA = 0x414D4144;
         public const int DAMC = 0x434D4144;
         public const int DATA = 0x41544144;
         public const int DEBR = 0x52424544;
@@ -69,6 +69,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int ICON = 0x4E4F4349;
         public const int INAM = 0x4D414E49;
         public const int INCC = 0x43434E49;
+        public const int INDX = 0x58444E49;
         public const int INTV = 0x56544E49;
         public const int IPDS = 0x53445049;
         public const int JAIL = 0x4C49414A;

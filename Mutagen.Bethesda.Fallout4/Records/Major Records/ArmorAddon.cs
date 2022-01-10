@@ -12,6 +12,13 @@ namespace Mutagen.Bethesda.Fallout4
 {
     public partial class ArmorAddon
     {
+        [Flags]
+        public enum MajorFlag
+        {
+            NoUnderarmorScaling = 0x0000_0040,
+            HiRes1stPersonOnly = 0x40000000
+        }
+
         public IGenderedItem<Boolean> WeightSliderEnabled { get; set; } = new GenderedItem<Boolean>(default, default);
         IGenderedItemGetter<Boolean> IArmorAddonGetter.WeightSliderEnabled => this.WeightSliderEnabled;
     }

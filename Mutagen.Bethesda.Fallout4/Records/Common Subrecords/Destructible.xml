@@ -15,7 +15,7 @@
       <Int16 name="Unknown" />
     </Fields>
   </Object>
-  <Object name="ResistanceDestructible" objType="Subrecord" recordType="DAMC">
+  <Object name="ResistanceDestructible" objType="Subrecord" recordType="DAMC" GUID="53c2a9a0-bd8e-461e-92c5-ef7f9daafce5" ID="143">
     <Fields>
       <!--DMGT-->
       <FormLink name="DamageType" refName="DamageType" />

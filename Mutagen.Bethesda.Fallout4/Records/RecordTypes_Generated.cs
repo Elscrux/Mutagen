@@ -16,7 +16,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType AVIF = new(0x46495641);
         public static readonly RecordType BAMT = new(0x544D4142);
         public static readonly RecordType BIDS = new(0x53444942);
-        public static readonly RecordType BMCT = new(0x54434D42);
         public static readonly RecordType BNAM = new(0x4D414E42);
         public static readonly RecordType BOD2 = new(0x32444F42);
         public static readonly RecordType BODT = new(0x54444F42);
@@ -30,6 +29,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType CRVA = new(0x41565243);
         public static readonly RecordType CTDA = new(0x41445443);
         public static readonly RecordType CUSD = new(0x44535543);
+        public static readonly RecordType DAMA = new(0x414D4144);
         public static readonly RecordType DAMC = new(0x434D4144);
         public static readonly RecordType DATA = new(0x41544144);
         public static readonly RecordType DEBR = new(0x52424544);
@@ -71,6 +71,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType ICON = new(0x4E4F4349);
         public static readonly RecordType INAM = new(0x4D414E49);
         public static readonly RecordType INCC = new(0x43434E49);
+        public static readonly RecordType INDX = new(0x58444E49);
         public static readonly RecordType INTV = new(0x56544E49);
         public static readonly RecordType IPDS = new(0x53445049);
         public static readonly RecordType JAIL = new(0x4C49414A);
