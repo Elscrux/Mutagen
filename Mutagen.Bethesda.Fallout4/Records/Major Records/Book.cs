@@ -42,9 +42,9 @@ namespace Mutagen.Bethesda.Fallout4
                 }
                 else if ((((int)item.Flags) & PerkFlag) > 0)
                 {
-                    item.Teaches = new BookPerk
+                    item.Teaches = new BookSpell()
                     {
-                        Perk = (Perk)frame.ReadInt32()
+                        Perk = new FormLink<IPerkGetter>(FormLinkBinaryTranslation.Instance.Parse(frame))
                     };
                 }
                 else
