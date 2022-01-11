@@ -16,6 +16,8 @@ A `FormLink<IItem>` could then point to all those record types by pointing to th
 ### IEffectRecord
 - ObjectEffect
 - Spell
+### IEmittance
+- Region
 ### IHarvestTarget
 - MiscItem
 ### IIdleRelation
@@ -95,6 +97,8 @@ A `FormLink<IItem>` could then point to all those record types by pointing to th
 - IEffectRecord
 ### Race
 - IRelatable
+### Region
+- IEmittance
 ### Spell
 - IEffectRecord
 - IObjectId

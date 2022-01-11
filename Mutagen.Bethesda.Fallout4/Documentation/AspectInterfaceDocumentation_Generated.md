@@ -5,6 +5,13 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 ## Interfaces to Concrete Classes
 ### IHasIcons
 - ArmorModel
+- RegionData
+- RegionGrasses
+- RegionLand
+- RegionMap
+- RegionObjects
+- RegionSounds
+- RegionWeather
 ### IKeywordCommon
 - Keyword
 ### IKeyworded
@@ -46,6 +53,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - MiscItem
 - ObjectEffect
 - Race
+- RegionMap
 - ScriptBoolListProperty
 - ScriptBoolProperty
 - ScriptEntry
@@ -161,6 +169,21 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 ### Race
 - IKeyworded
 - INamed
+### RegionData
+- IHasIcons
+### RegionGrasses
+- IHasIcons
+### RegionLand
+- IHasIcons
+### RegionMap
+- IHasIcons
+- INamed
+### RegionObjects
+- IHasIcons
+### RegionSounds
+- IHasIcons
+### RegionWeather
+- IHasIcons
 ### ScriptBoolListProperty
 - INamed
 ### ScriptBoolProperty

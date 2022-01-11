@@ -86,7 +86,10 @@ namespace Mutagen.Bethesda.Fallout4
             _VoiceTypes_Object = new Fallout4Group<VoiceType>(this);
             _Quests_Object = new Fallout4Group<Quest>(this);
             _MaterialTypes_Object = new Fallout4Group<MaterialType>(this);
+            _ArmorAddons_Object = new Fallout4Group<ArmorAddon>(this);
             _Messages_Object = new Fallout4Group<Message>(this);
+            _MusicTypes_Object = new Fallout4Group<MusicType>(this);
+            _MusicTracks_Object = new Fallout4Group<MusicTrack>(this);
             CustomCtor();
         }
         partial void CustomCtor();
@@ -302,12 +305,33 @@ namespace Mutagen.Bethesda.Fallout4
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IFallout4GroupGetter<IMaterialTypeGetter> IFallout4ModGetter.MaterialTypes => _MaterialTypes_Object;
         #endregion
+        #region ArmorAddons
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Fallout4Group<ArmorAddon> _ArmorAddons_Object;
+        public Fallout4Group<ArmorAddon> ArmorAddons => _ArmorAddons_Object;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFallout4GroupGetter<IArmorAddonGetter> IFallout4ModGetter.ArmorAddons => _ArmorAddons_Object;
+        #endregion
         #region Messages
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private Fallout4Group<Message> _Messages_Object;
         public Fallout4Group<Message> Messages => _Messages_Object;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IFallout4GroupGetter<IMessageGetter> IFallout4ModGetter.Messages => _Messages_Object;
+        #endregion
+        #region MusicTypes
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Fallout4Group<MusicType> _MusicTypes_Object;
+        public Fallout4Group<MusicType> MusicTypes => _MusicTypes_Object;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFallout4GroupGetter<IMusicTypeGetter> IFallout4ModGetter.MusicTypes => _MusicTypes_Object;
+        #endregion
+        #region MusicTracks
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Fallout4Group<MusicTrack> _MusicTracks_Object;
+        public Fallout4Group<MusicTrack> MusicTracks => _MusicTracks_Object;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFallout4GroupGetter<IMusicTrackGetter> IFallout4ModGetter.MusicTracks => _MusicTracks_Object;
         #endregion
 
         #region To String
@@ -377,7 +401,10 @@ namespace Mutagen.Bethesda.Fallout4
                 this.VoiceTypes = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Quests = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.MaterialTypes = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
+                this.ArmorAddons = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Messages = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
+                this.MusicTypes = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
+                this.MusicTracks = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
             }
 
             public Mask(
@@ -411,7 +438,10 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem VoiceTypes,
                 TItem Quests,
                 TItem MaterialTypes,
-                TItem Messages)
+                TItem ArmorAddons,
+                TItem Messages,
+                TItem MusicTypes,
+                TItem MusicTracks)
             {
                 this.ModHeader = new MaskItem<TItem, Fallout4ModHeader.Mask<TItem>?>(ModHeader, new Fallout4ModHeader.Mask<TItem>(ModHeader));
                 this.GameSettings = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(GameSettings, new Fallout4Group.Mask<TItem>(GameSettings));
@@ -443,7 +473,10 @@ namespace Mutagen.Bethesda.Fallout4
                 this.VoiceTypes = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(VoiceTypes, new Fallout4Group.Mask<TItem>(VoiceTypes));
                 this.Quests = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Quests, new Fallout4Group.Mask<TItem>(Quests));
                 this.MaterialTypes = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(MaterialTypes, new Fallout4Group.Mask<TItem>(MaterialTypes));
+                this.ArmorAddons = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(ArmorAddons, new Fallout4Group.Mask<TItem>(ArmorAddons));
                 this.Messages = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Messages, new Fallout4Group.Mask<TItem>(Messages));
+                this.MusicTypes = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(MusicTypes, new Fallout4Group.Mask<TItem>(MusicTypes));
+                this.MusicTracks = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(MusicTracks, new Fallout4Group.Mask<TItem>(MusicTracks));
             }
 
             #pragma warning disable CS8618
@@ -485,7 +518,10 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? VoiceTypes { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Quests { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? MaterialTypes { get; set; }
+            public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? ArmorAddons { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Messages { get; set; }
+            public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? MusicTypes { get; set; }
+            public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? MusicTracks { get; set; }
             #endregion
 
             #region Equals
@@ -528,7 +564,10 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!object.Equals(this.VoiceTypes, rhs.VoiceTypes)) return false;
                 if (!object.Equals(this.Quests, rhs.Quests)) return false;
                 if (!object.Equals(this.MaterialTypes, rhs.MaterialTypes)) return false;
+                if (!object.Equals(this.ArmorAddons, rhs.ArmorAddons)) return false;
                 if (!object.Equals(this.Messages, rhs.Messages)) return false;
+                if (!object.Equals(this.MusicTypes, rhs.MusicTypes)) return false;
+                if (!object.Equals(this.MusicTracks, rhs.MusicTracks)) return false;
                 return true;
             }
             public override int GetHashCode()
@@ -564,7 +603,10 @@ namespace Mutagen.Bethesda.Fallout4
                 hash.Add(this.VoiceTypes);
                 hash.Add(this.Quests);
                 hash.Add(this.MaterialTypes);
+                hash.Add(this.ArmorAddons);
                 hash.Add(this.Messages);
+                hash.Add(this.MusicTypes);
+                hash.Add(this.MusicTracks);
                 return hash.ToHashCode();
             }
 
@@ -723,10 +765,25 @@ namespace Mutagen.Bethesda.Fallout4
                     if (!eval(this.MaterialTypes.Overall)) return false;
                     if (this.MaterialTypes.Specific != null && !this.MaterialTypes.Specific.All(eval)) return false;
                 }
+                if (ArmorAddons != null)
+                {
+                    if (!eval(this.ArmorAddons.Overall)) return false;
+                    if (this.ArmorAddons.Specific != null && !this.ArmorAddons.Specific.All(eval)) return false;
+                }
                 if (Messages != null)
                 {
                     if (!eval(this.Messages.Overall)) return false;
                     if (this.Messages.Specific != null && !this.Messages.Specific.All(eval)) return false;
+                }
+                if (MusicTypes != null)
+                {
+                    if (!eval(this.MusicTypes.Overall)) return false;
+                    if (this.MusicTypes.Specific != null && !this.MusicTypes.Specific.All(eval)) return false;
+                }
+                if (MusicTracks != null)
+                {
+                    if (!eval(this.MusicTracks.Overall)) return false;
+                    if (this.MusicTracks.Specific != null && !this.MusicTracks.Specific.All(eval)) return false;
                 }
                 return true;
             }
@@ -885,10 +942,25 @@ namespace Mutagen.Bethesda.Fallout4
                     if (eval(this.MaterialTypes.Overall)) return true;
                     if (this.MaterialTypes.Specific != null && this.MaterialTypes.Specific.Any(eval)) return true;
                 }
+                if (ArmorAddons != null)
+                {
+                    if (eval(this.ArmorAddons.Overall)) return true;
+                    if (this.ArmorAddons.Specific != null && this.ArmorAddons.Specific.Any(eval)) return true;
+                }
                 if (Messages != null)
                 {
                     if (eval(this.Messages.Overall)) return true;
                     if (this.Messages.Specific != null && this.Messages.Specific.Any(eval)) return true;
+                }
+                if (MusicTypes != null)
+                {
+                    if (eval(this.MusicTypes.Overall)) return true;
+                    if (this.MusicTypes.Specific != null && this.MusicTypes.Specific.Any(eval)) return true;
+                }
+                if (MusicTracks != null)
+                {
+                    if (eval(this.MusicTracks.Overall)) return true;
+                    if (this.MusicTracks.Specific != null && this.MusicTracks.Specific.Any(eval)) return true;
                 }
                 return false;
             }
@@ -934,7 +1006,10 @@ namespace Mutagen.Bethesda.Fallout4
                 obj.VoiceTypes = this.VoiceTypes == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.VoiceTypes.Overall), this.VoiceTypes.Specific?.Translate(eval));
                 obj.Quests = this.Quests == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Quests.Overall), this.Quests.Specific?.Translate(eval));
                 obj.MaterialTypes = this.MaterialTypes == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.MaterialTypes.Overall), this.MaterialTypes.Specific?.Translate(eval));
+                obj.ArmorAddons = this.ArmorAddons == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.ArmorAddons.Overall), this.ArmorAddons.Specific?.Translate(eval));
                 obj.Messages = this.Messages == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Messages.Overall), this.Messages.Specific?.Translate(eval));
+                obj.MusicTypes = this.MusicTypes == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.MusicTypes.Overall), this.MusicTypes.Specific?.Translate(eval));
+                obj.MusicTracks = this.MusicTracks == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.MusicTracks.Overall), this.MusicTracks.Specific?.Translate(eval));
             }
             #endregion
 
@@ -1077,9 +1152,21 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         MaterialTypes?.ToString(fg);
                     }
+                    if (printMask?.ArmorAddons?.Overall ?? true)
+                    {
+                        ArmorAddons?.ToString(fg);
+                    }
                     if (printMask?.Messages?.Overall ?? true)
                     {
                         Messages?.ToString(fg);
+                    }
+                    if (printMask?.MusicTypes?.Overall ?? true)
+                    {
+                        MusicTypes?.ToString(fg);
+                    }
+                    if (printMask?.MusicTracks?.Overall ?? true)
+                    {
+                        MusicTracks?.ToString(fg);
                     }
                 }
                 fg.AppendLine("]");
@@ -1136,7 +1223,10 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<Exception?, Fallout4Group.ErrorMask<VoiceType.ErrorMask>?>? VoiceTypes;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Quest.ErrorMask>?>? Quests;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<MaterialType.ErrorMask>?>? MaterialTypes;
+            public MaskItem<Exception?, Fallout4Group.ErrorMask<ArmorAddon.ErrorMask>?>? ArmorAddons;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Message.ErrorMask>?>? Messages;
+            public MaskItem<Exception?, Fallout4Group.ErrorMask<MusicType.ErrorMask>?>? MusicTypes;
+            public MaskItem<Exception?, Fallout4Group.ErrorMask<MusicTrack.ErrorMask>?>? MusicTracks;
             #endregion
 
             #region IErrorMask
@@ -1205,8 +1295,14 @@ namespace Mutagen.Bethesda.Fallout4
                         return Quests;
                     case Fallout4Mod_FieldIndex.MaterialTypes:
                         return MaterialTypes;
+                    case Fallout4Mod_FieldIndex.ArmorAddons:
+                        return ArmorAddons;
                     case Fallout4Mod_FieldIndex.Messages:
                         return Messages;
+                    case Fallout4Mod_FieldIndex.MusicTypes:
+                        return MusicTypes;
+                    case Fallout4Mod_FieldIndex.MusicTracks:
+                        return MusicTracks;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
                 }
@@ -1307,8 +1403,17 @@ namespace Mutagen.Bethesda.Fallout4
                     case Fallout4Mod_FieldIndex.MaterialTypes:
                         this.MaterialTypes = new MaskItem<Exception?, Fallout4Group.ErrorMask<MaterialType.ErrorMask>?>(ex, null);
                         break;
+                    case Fallout4Mod_FieldIndex.ArmorAddons:
+                        this.ArmorAddons = new MaskItem<Exception?, Fallout4Group.ErrorMask<ArmorAddon.ErrorMask>?>(ex, null);
+                        break;
                     case Fallout4Mod_FieldIndex.Messages:
                         this.Messages = new MaskItem<Exception?, Fallout4Group.ErrorMask<Message.ErrorMask>?>(ex, null);
+                        break;
+                    case Fallout4Mod_FieldIndex.MusicTypes:
+                        this.MusicTypes = new MaskItem<Exception?, Fallout4Group.ErrorMask<MusicType.ErrorMask>?>(ex, null);
+                        break;
+                    case Fallout4Mod_FieldIndex.MusicTracks:
+                        this.MusicTracks = new MaskItem<Exception?, Fallout4Group.ErrorMask<MusicTrack.ErrorMask>?>(ex, null);
                         break;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
@@ -1410,8 +1515,17 @@ namespace Mutagen.Bethesda.Fallout4
                     case Fallout4Mod_FieldIndex.MaterialTypes:
                         this.MaterialTypes = (MaskItem<Exception?, Fallout4Group.ErrorMask<MaterialType.ErrorMask>?>?)obj;
                         break;
+                    case Fallout4Mod_FieldIndex.ArmorAddons:
+                        this.ArmorAddons = (MaskItem<Exception?, Fallout4Group.ErrorMask<ArmorAddon.ErrorMask>?>?)obj;
+                        break;
                     case Fallout4Mod_FieldIndex.Messages:
                         this.Messages = (MaskItem<Exception?, Fallout4Group.ErrorMask<Message.ErrorMask>?>?)obj;
+                        break;
+                    case Fallout4Mod_FieldIndex.MusicTypes:
+                        this.MusicTypes = (MaskItem<Exception?, Fallout4Group.ErrorMask<MusicType.ErrorMask>?>?)obj;
+                        break;
+                    case Fallout4Mod_FieldIndex.MusicTracks:
+                        this.MusicTracks = (MaskItem<Exception?, Fallout4Group.ErrorMask<MusicTrack.ErrorMask>?>?)obj;
                         break;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
@@ -1451,7 +1565,10 @@ namespace Mutagen.Bethesda.Fallout4
                 if (VoiceTypes != null) return true;
                 if (Quests != null) return true;
                 if (MaterialTypes != null) return true;
+                if (ArmorAddons != null) return true;
                 if (Messages != null) return true;
+                if (MusicTypes != null) return true;
+                if (MusicTracks != null) return true;
                 return false;
             }
             #endregion
@@ -1516,7 +1633,10 @@ namespace Mutagen.Bethesda.Fallout4
                 VoiceTypes?.ToString(fg);
                 Quests?.ToString(fg);
                 MaterialTypes?.ToString(fg);
+                ArmorAddons?.ToString(fg);
                 Messages?.ToString(fg);
+                MusicTypes?.ToString(fg);
+                MusicTracks?.ToString(fg);
             }
             #endregion
 
@@ -1555,7 +1675,10 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.VoiceTypes = this.VoiceTypes.Combine(rhs.VoiceTypes, (l, r) => l.Combine(r));
                 ret.Quests = this.Quests.Combine(rhs.Quests, (l, r) => l.Combine(r));
                 ret.MaterialTypes = this.MaterialTypes.Combine(rhs.MaterialTypes, (l, r) => l.Combine(r));
+                ret.ArmorAddons = this.ArmorAddons.Combine(rhs.ArmorAddons, (l, r) => l.Combine(r));
                 ret.Messages = this.Messages.Combine(rhs.Messages, (l, r) => l.Combine(r));
+                ret.MusicTypes = this.MusicTypes.Combine(rhs.MusicTypes, (l, r) => l.Combine(r));
+                ret.MusicTracks = this.MusicTracks.Combine(rhs.MusicTracks, (l, r) => l.Combine(r));
                 return ret;
             }
             public static ErrorMask? Combine(ErrorMask? lhs, ErrorMask? rhs)
@@ -1609,7 +1732,10 @@ namespace Mutagen.Bethesda.Fallout4
             public Fallout4Group.TranslationMask<VoiceType.TranslationMask>? VoiceTypes;
             public Fallout4Group.TranslationMask<Quest.TranslationMask>? Quests;
             public Fallout4Group.TranslationMask<MaterialType.TranslationMask>? MaterialTypes;
+            public Fallout4Group.TranslationMask<ArmorAddon.TranslationMask>? ArmorAddons;
             public Fallout4Group.TranslationMask<Message.TranslationMask>? Messages;
+            public Fallout4Group.TranslationMask<MusicType.TranslationMask>? MusicTypes;
+            public Fallout4Group.TranslationMask<MusicTrack.TranslationMask>? MusicTracks;
             #endregion
 
             #region Ctors
@@ -1664,7 +1790,10 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((VoiceTypes != null ? VoiceTypes.OnOverall : DefaultOn, VoiceTypes?.GetCrystal()));
                 ret.Add((Quests != null ? Quests.OnOverall : DefaultOn, Quests?.GetCrystal()));
                 ret.Add((MaterialTypes != null ? MaterialTypes.OnOverall : DefaultOn, MaterialTypes?.GetCrystal()));
+                ret.Add((ArmorAddons != null ? ArmorAddons.OnOverall : DefaultOn, ArmorAddons?.GetCrystal()));
                 ret.Add((Messages != null ? Messages.OnOverall : DefaultOn, Messages?.GetCrystal()));
+                ret.Add((MusicTypes != null ? MusicTypes.OnOverall : DefaultOn, MusicTypes?.GetCrystal()));
+                ret.Add((MusicTracks != null ? MusicTracks.OnOverall : DefaultOn, MusicTracks?.GetCrystal()));
             }
 
             public static implicit operator TranslationMask(bool defaultOn)
@@ -1736,7 +1865,10 @@ namespace Mutagen.Bethesda.Fallout4
             _VoiceTypes_Object = new Fallout4Group<VoiceType>(this);
             _Quests_Object = new Fallout4Group<Quest>(this);
             _MaterialTypes_Object = new Fallout4Group<MaterialType>(this);
+            _ArmorAddons_Object = new Fallout4Group<ArmorAddon>(this);
             _Messages_Object = new Fallout4Group<Message>(this);
+            _MusicTypes_Object = new Fallout4Group<MusicType>(this);
+            _MusicTracks_Object = new Fallout4Group<MusicTrack>(this);
             CustomCtor();
         }
         public void AddRecords(
@@ -1859,9 +1991,21 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 this.MaterialTypes.RecordCache.Set(rhsMod.MaterialTypes.RecordCache.Items);
             }
+            if (mask?.ArmorAddons ?? true)
+            {
+                this.ArmorAddons.RecordCache.Set(rhsMod.ArmorAddons.RecordCache.Items);
+            }
             if (mask?.Messages ?? true)
             {
                 this.Messages.RecordCache.Set(rhsMod.Messages.RecordCache.Items);
+            }
+            if (mask?.MusicTypes ?? true)
+            {
+                this.MusicTypes.RecordCache.Set(rhsMod.MusicTypes.RecordCache.Items);
+            }
+            if (mask?.MusicTracks ?? true)
+            {
+                this.MusicTracks.RecordCache.Set(rhsMod.MusicTracks.RecordCache.Items);
             }
         }
 
@@ -1902,7 +2046,10 @@ namespace Mutagen.Bethesda.Fallout4
             count += VoiceTypes.RecordCache.Count > 0 ? 1 : default(uint);
             count += Quests.RecordCache.Count > 0 ? 1 : default(uint);
             count += MaterialTypes.RecordCache.Count > 0 ? 1 : default(uint);
+            count += ArmorAddons.RecordCache.Count > 0 ? 1 : default(uint);
             count += Messages.RecordCache.Count > 0 ? 1 : default(uint);
+            count += MusicTypes.RecordCache.Count > 0 ? 1 : default(uint);
+            count += MusicTracks.RecordCache.Count > 0 ? 1 : default(uint);
             GetCustomRecordCount((customCount) => count += customCount);
             return count;
         }
@@ -2179,7 +2326,10 @@ namespace Mutagen.Bethesda.Fallout4
         new Fallout4Group<VoiceType> VoiceTypes { get; }
         new Fallout4Group<Quest> Quests { get; }
         new Fallout4Group<MaterialType> MaterialTypes { get; }
+        new Fallout4Group<ArmorAddon> ArmorAddons { get; }
         new Fallout4Group<Message> Messages { get; }
+        new Fallout4Group<MusicType> MusicTypes { get; }
+        new Fallout4Group<MusicTrack> MusicTracks { get; }
     }
 
     public partial interface IFallout4ModGetter :
@@ -2228,7 +2378,10 @@ namespace Mutagen.Bethesda.Fallout4
         IFallout4GroupGetter<IVoiceTypeGetter> VoiceTypes { get; }
         IFallout4GroupGetter<IQuestGetter> Quests { get; }
         IFallout4GroupGetter<IMaterialTypeGetter> MaterialTypes { get; }
+        IFallout4GroupGetter<IArmorAddonGetter> ArmorAddons { get; }
         IFallout4GroupGetter<IMessageGetter> Messages { get; }
+        IFallout4GroupGetter<IMusicTypeGetter> MusicTypes { get; }
+        IFallout4GroupGetter<IMusicTrackGetter> MusicTracks { get; }
 
     }
 
@@ -2815,7 +2968,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         VoiceTypes = 27,
         Quests = 28,
         MaterialTypes = 29,
-        Messages = 30,
+        ArmorAddons = 30,
+        Messages = 31,
+        MusicTypes = 32,
+        MusicTracks = 33,
     }
     #endregion
 
@@ -2833,9 +2989,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public const string GUID = "9cae6baa-1084-4862-ae0a-07c79b9f2a3a";
 
-        public const ushort AdditionalFieldCount = 31;
+        public const ushort AdditionalFieldCount = 34;
 
-        public const ushort FieldCount = 31;
+        public const ushort FieldCount = 34;
 
         public static readonly Type MaskType = typeof(Fallout4Mod.Mask<>);
 
@@ -2933,7 +3089,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.VoiceTypes.Clear();
             item.Quests.Clear();
             item.MaterialTypes.Clear();
+            item.ArmorAddons.Clear();
             item.Messages.Clear();
+            item.MusicTypes.Clear();
+            item.MusicTracks.Clear();
         }
         
         #region Mutagen
@@ -2969,7 +3128,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.VoiceTypes.RemapLinks(mapping);
             obj.Quests.RemapLinks(mapping);
             obj.MaterialTypes.RemapLinks(mapping);
+            obj.ArmorAddons.RemapLinks(mapping);
             obj.Messages.RemapLinks(mapping);
+            obj.MusicTypes.RemapLinks(mapping);
+            obj.MusicTracks.RemapLinks(mapping);
         }
         
         public IEnumerable<IMajorRecord> EnumerateMajorRecords(IFallout4Mod obj)
@@ -3033,7 +3195,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.VoiceTypes.Remove(keys);
             obj.Quests.Remove(keys);
             obj.MaterialTypes.Remove(keys);
+            obj.ArmorAddons.Remove(keys);
             obj.Messages.Remove(keys);
+            obj.MusicTypes.Remove(keys);
+            obj.MusicTracks.Remove(keys);
         }
         
         public void Remove(
@@ -3285,11 +3450,35 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         type: type,
                         keys: keys);
                     break;
+                case "ArmorAddon":
+                case "IArmorAddonGetter":
+                case "IArmorAddon":
+                case "IArmorAddonInternal":
+                    obj.ArmorAddons.Remove(
+                        type: type,
+                        keys: keys);
+                    break;
                 case "Message":
                 case "IMessageGetter":
                 case "IMessage":
                 case "IMessageInternal":
                     obj.Messages.Remove(
+                        type: type,
+                        keys: keys);
+                    break;
+                case "MusicType":
+                case "IMusicTypeGetter":
+                case "IMusicType":
+                case "IMusicTypeInternal":
+                    obj.MusicTypes.Remove(
+                        type: type,
+                        keys: keys);
+                    break;
+                case "MusicTrack":
+                case "IMusicTrackGetter":
+                case "IMusicTrack":
+                case "IMusicTrackInternal":
+                    obj.MusicTracks.Remove(
                         type: type,
                         keys: keys);
                     break;
@@ -3447,7 +3636,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ret.VoiceTypes = MaskItemExt.Factory(item.VoiceTypes.GetEqualsMask(rhs.VoiceTypes, include), include);
             ret.Quests = MaskItemExt.Factory(item.Quests.GetEqualsMask(rhs.Quests, include), include);
             ret.MaterialTypes = MaskItemExt.Factory(item.MaterialTypes.GetEqualsMask(rhs.MaterialTypes, include), include);
+            ret.ArmorAddons = MaskItemExt.Factory(item.ArmorAddons.GetEqualsMask(rhs.ArmorAddons, include), include);
             ret.Messages = MaskItemExt.Factory(item.Messages.GetEqualsMask(rhs.Messages, include), include);
+            ret.MusicTypes = MaskItemExt.Factory(item.MusicTypes.GetEqualsMask(rhs.MusicTypes, include), include);
+            ret.MusicTracks = MaskItemExt.Factory(item.MusicTracks.GetEqualsMask(rhs.MusicTracks, include), include);
         }
         
         public string ToString(
@@ -3614,9 +3806,21 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 item.MaterialTypes?.ToString(fg, "MaterialTypes");
             }
+            if (printMask?.ArmorAddons?.Overall ?? true)
+            {
+                item.ArmorAddons?.ToString(fg, "ArmorAddons");
+            }
             if (printMask?.Messages?.Overall ?? true)
             {
                 item.Messages?.ToString(fg, "Messages");
+            }
+            if (printMask?.MusicTypes?.Overall ?? true)
+            {
+                item.MusicTypes?.ToString(fg, "MusicTypes");
+            }
+            if (printMask?.MusicTracks?.Overall ?? true)
+            {
+                item.MusicTracks?.ToString(fg, "MusicTracks");
             }
         }
         
@@ -3867,6 +4071,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 else if (!isMaterialTypesEqual) return false;
             }
+            if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.ArmorAddons) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.ArmorAddons, rhs.ArmorAddons, out var lhsArmorAddons, out var rhsArmorAddons, out var isArmorAddonsEqual))
+                {
+                    if (!object.Equals(lhsArmorAddons, rhsArmorAddons)) return false;
+                }
+                else if (!isArmorAddonsEqual) return false;
+            }
             if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.Messages) ?? true))
             {
                 if (EqualsMaskHelper.RefEquality(lhs.Messages, rhs.Messages, out var lhsMessages, out var rhsMessages, out var isMessagesEqual))
@@ -3874,6 +4086,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     if (!object.Equals(lhsMessages, rhsMessages)) return false;
                 }
                 else if (!isMessagesEqual) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.MusicTypes) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.MusicTypes, rhs.MusicTypes, out var lhsMusicTypes, out var rhsMusicTypes, out var isMusicTypesEqual))
+                {
+                    if (!object.Equals(lhsMusicTypes, rhsMusicTypes)) return false;
+                }
+                else if (!isMusicTypesEqual) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.MusicTracks) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.MusicTracks, rhs.MusicTracks, out var lhsMusicTracks, out var rhsMusicTracks, out var isMusicTracksEqual))
+                {
+                    if (!object.Equals(lhsMusicTracks, rhsMusicTracks)) return false;
+                }
+                else if (!isMusicTracksEqual) return false;
             }
             return true;
         }
@@ -3911,7 +4139,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             hash.Add(item.VoiceTypes);
             hash.Add(item.Quests);
             hash.Add(item.MaterialTypes);
+            hash.Add(item.ArmorAddons);
             hash.Add(item.Messages);
+            hash.Add(item.MusicTypes);
+            hash.Add(item.MusicTracks);
             return hash.ToHashCode();
         }
         
@@ -4075,11 +4306,26 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IMaterialType":
                 case "IMaterialTypeInternal":
                     return obj.MaterialTypes;
+                case "ArmorAddon":
+                case "IArmorAddonGetter":
+                case "IArmorAddon":
+                case "IArmorAddonInternal":
+                    return obj.ArmorAddons;
                 case "Message":
                 case "IMessageGetter":
                 case "IMessage":
                 case "IMessageInternal":
                     return obj.Messages;
+                case "MusicType":
+                case "IMusicTypeGetter":
+                case "IMusicType":
+                case "IMusicTypeInternal":
+                    return obj.MusicTypes;
+                case "MusicTrack":
+                case "IMusicTrackGetter":
+                case "IMusicTrack":
+                case "IMusicTrackInternal":
+                    return obj.MusicTracks;
                 default:
                     throw new ArgumentException($"Unknown major record type: {type}");
             }
@@ -4100,7 +4346,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 mod: item,
                 modHeader: item.ModHeader.DeepCopy(),
                 modKey: modKey);
-            Stream[] outputStreams = new Stream[30];
+            Stream[] outputStreams = new Stream[33];
             List<Action> toDo = new List<Action>();
             toDo.Add(() => WriteGroupParallel(item.GameSettings, writer.MetaData.MasterReferences!, 0, outputStreams, param.StringsWriter));
             toDo.Add(() => WriteGroupParallel(item.Keywords, writer.MetaData.MasterReferences!, 1, outputStreams, param.StringsWriter));
@@ -4131,7 +4377,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             toDo.Add(() => WriteGroupParallel(item.VoiceTypes, writer.MetaData.MasterReferences!, 26, outputStreams, param.StringsWriter));
             toDo.Add(() => WriteGroupParallel(item.Quests, writer.MetaData.MasterReferences!, 27, outputStreams, param.StringsWriter));
             toDo.Add(() => WriteGroupParallel(item.MaterialTypes, writer.MetaData.MasterReferences!, 28, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Messages, writer.MetaData.MasterReferences!, 29, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.ArmorAddons, writer.MetaData.MasterReferences!, 29, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Messages, writer.MetaData.MasterReferences!, 30, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.MusicTypes, writer.MetaData.MasterReferences!, 31, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.MusicTracks, writer.MetaData.MasterReferences!, 32, outputStreams, param.StringsWriter));
             Parallel.Invoke(toDo.ToArray());
             PluginUtilityTranslation.CompileStreamsInto(
                 outputStreams.NotNull(),
@@ -4388,9 +4637,30 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     yield return item;
                 }
             }
+            if (obj.ArmorAddons is IFormLinkContainerGetter ArmorAddonslinkCont)
+            {
+                foreach (var item in ArmorAddonslinkCont.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
             if (obj.Messages is IFormLinkContainerGetter MessageslinkCont)
             {
                 foreach (var item in MessageslinkCont.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
+            if (obj.MusicTypes is IFormLinkContainerGetter MusicTypeslinkCont)
+            {
+                foreach (var item in MusicTypeslinkCont.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
+            if (obj.MusicTracks is IFormLinkContainerGetter MusicTrackslinkCont)
+            {
+                foreach (var item in MusicTrackslinkCont.ContainedFormLinks)
                 {
                     yield return item;
                 }
@@ -4516,7 +4786,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 yield return item;
             }
+            foreach (var item in obj.ArmorAddons.EnumerateMajorRecords())
+            {
+                yield return item;
+            }
             foreach (var item in obj.Messages.EnumerateMajorRecords())
+            {
+                yield return item;
+            }
+            foreach (var item in obj.MusicTypes.EnumerateMajorRecords())
+            {
+                yield return item;
+            }
+            foreach (var item in obj.MusicTracks.EnumerateMajorRecords())
             {
                 yield return item;
             }
@@ -4816,11 +5098,38 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         yield return item;
                     }
                     yield break;
+                case "ArmorAddon":
+                case "IArmorAddonGetter":
+                case "IArmorAddon":
+                case "IArmorAddonInternal":
+                    foreach (var item in obj.ArmorAddons.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
                 case "Message":
                 case "IMessageGetter":
                 case "IMessage":
                 case "IMessageInternal":
                     foreach (var item in obj.Messages.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                case "MusicType":
+                case "IMusicTypeGetter":
+                case "IMusicType":
+                case "IMusicTypeInternal":
+                    foreach (var item in obj.MusicTypes.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                case "MusicTrack":
+                case "IMusicTrackGetter":
+                case "IMusicTrack":
+                case "IMusicTrackInternal":
+                    foreach (var item in obj.MusicTracks.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -5407,6 +5716,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     group: (m) => m.MaterialTypes,
                     groupGetter: (m) => m.MaterialTypes);
             }
+            foreach (var item in obj.ArmorAddons)
+            {
+                yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, ArmorAddon, IArmorAddonGetter>(
+                    modKey: obj.ModKey,
+                    record: item,
+                    group: (m) => m.ArmorAddons,
+                    groupGetter: (m) => m.ArmorAddons);
+            }
             foreach (var item in obj.Messages)
             {
                 yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, Message, IMessageGetter>(
@@ -5414,6 +5731,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     record: item,
                     group: (m) => m.Messages,
                     groupGetter: (m) => m.Messages);
+            }
+            foreach (var item in obj.MusicTypes)
+            {
+                yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, MusicType, IMusicTypeGetter>(
+                    modKey: obj.ModKey,
+                    record: item,
+                    group: (m) => m.MusicTypes,
+                    groupGetter: (m) => m.MusicTypes);
+            }
+            foreach (var item in obj.MusicTracks)
+            {
+                yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, MusicTrack, IMusicTrackGetter>(
+                    modKey: obj.ModKey,
+                    record: item,
+                    group: (m) => m.MusicTracks,
+                    groupGetter: (m) => m.MusicTracks);
             }
         }
         
@@ -5823,6 +6156,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                             groupGetter: (m) => m.MaterialTypes);
                     }
                     yield break;
+                case "ArmorAddon":
+                case "IArmorAddonGetter":
+                case "IArmorAddon":
+                case "IArmorAddonInternal":
+                    foreach (var item in obj.ArmorAddons)
+                    {
+                        yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, ArmorAddon, IArmorAddonGetter>(
+                            modKey: obj.ModKey,
+                            record: item,
+                            group: (m) => m.ArmorAddons,
+                            groupGetter: (m) => m.ArmorAddons);
+                    }
+                    yield break;
                 case "Message":
                 case "IMessageGetter":
                 case "IMessage":
@@ -5834,6 +6180,32 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                             record: item,
                             group: (m) => m.Messages,
                             groupGetter: (m) => m.Messages);
+                    }
+                    yield break;
+                case "MusicType":
+                case "IMusicTypeGetter":
+                case "IMusicType":
+                case "IMusicTypeInternal":
+                    foreach (var item in obj.MusicTypes)
+                    {
+                        yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, MusicType, IMusicTypeGetter>(
+                            modKey: obj.ModKey,
+                            record: item,
+                            group: (m) => m.MusicTypes,
+                            groupGetter: (m) => m.MusicTypes);
+                    }
+                    yield break;
+                case "MusicTrack":
+                case "IMusicTrackGetter":
+                case "IMusicTrack":
+                case "IMusicTrackInternal":
+                    foreach (var item in obj.MusicTracks)
+                    {
+                        yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, MusicTrack, IMusicTrackGetter>(
+                            modKey: obj.ModKey,
+                            record: item,
+                            group: (m) => m.MusicTracks,
+                            groupGetter: (m) => m.MusicTracks);
                     }
                     yield break;
                 case "IIdleRelation":
@@ -6741,6 +7113,26 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     errorMask?.PopIndex();
                 }
             }
+            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.ArmorAddons) ?? true))
+            {
+                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.ArmorAddons);
+                try
+                {
+                    item.ArmorAddons.DeepCopyIn(
+                        rhs: rhs.ArmorAddons,
+                        errorMask: errorMask,
+                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.ArmorAddons));
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
             if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.Messages) ?? true))
             {
                 errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.Messages);
@@ -6750,6 +7142,46 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         rhs: rhs.Messages,
                         errorMask: errorMask,
                         copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.Messages));
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.MusicTypes) ?? true))
+            {
+                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.MusicTypes);
+                try
+                {
+                    item.MusicTypes.DeepCopyIn(
+                        rhs: rhs.MusicTypes,
+                        errorMask: errorMask,
+                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.MusicTypes));
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.MusicTracks) ?? true))
+            {
+                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.MusicTracks);
+                try
+                {
+                    item.MusicTracks.DeepCopyIn(
+                        rhs: rhs.MusicTracks,
+                        errorMask: errorMask,
+                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.MusicTracks));
                 }
                 catch (Exception ex)
                 when (errorMask != null)
@@ -6880,7 +7312,10 @@ namespace Mutagen.Bethesda.Fallout4
         public bool VoiceTypes;
         public bool Quests;
         public bool MaterialTypes;
+        public bool ArmorAddons;
         public bool Messages;
+        public bool MusicTypes;
+        public bool MusicTracks;
         public GroupMask()
         {
         }
@@ -6915,7 +7350,10 @@ namespace Mutagen.Bethesda.Fallout4
             VoiceTypes = defaultValue;
             Quests = defaultValue;
             MaterialTypes = defaultValue;
+            ArmorAddons = defaultValue;
             Messages = defaultValue;
+            MusicTypes = defaultValue;
+            MusicTracks = defaultValue;
         }
     }
 
@@ -7266,6 +7704,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         translationParams: translationParams);
                 }
             }
+            if (importMask?.ArmorAddons ?? true)
+            {
+                var ArmorAddonsItem = item.ArmorAddons;
+                if (ArmorAddonsItem.RecordCache.Count > 0)
+                {
+                    ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)ArmorAddonsItem).BinaryWriteTranslator).Write<IArmorAddonGetter>(
+                        item: ArmorAddonsItem,
+                        writer: writer,
+                        translationParams: translationParams);
+                }
+            }
             if (importMask?.Messages ?? true)
             {
                 var MessagesItem = item.Messages;
@@ -7273,6 +7722,28 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 {
                     ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)MessagesItem).BinaryWriteTranslator).Write<IMessageGetter>(
                         item: MessagesItem,
+                        writer: writer,
+                        translationParams: translationParams);
+                }
+            }
+            if (importMask?.MusicTypes ?? true)
+            {
+                var MusicTypesItem = item.MusicTypes;
+                if (MusicTypesItem.RecordCache.Count > 0)
+                {
+                    ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)MusicTypesItem).BinaryWriteTranslator).Write<IMusicTypeGetter>(
+                        item: MusicTypesItem,
+                        writer: writer,
+                        translationParams: translationParams);
+                }
+            }
+            if (importMask?.MusicTracks ?? true)
+            {
+                var MusicTracksItem = item.MusicTracks;
+                if (MusicTracksItem.RecordCache.Count > 0)
+                {
+                    ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)MusicTracksItem).BinaryWriteTranslator).Write<IMusicTrackGetter>(
+                        item: MusicTracksItem,
                         writer: writer,
                         translationParams: translationParams);
                 }
@@ -7749,6 +8220,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     }
                     return (int)Fallout4Mod_FieldIndex.MaterialTypes;
                 }
+                case RecordTypeInts.ARMA:
+                {
+                    if (importMask?.ArmorAddons ?? true)
+                    {
+                        item.ArmorAddons.CopyInFromBinary(
+                            frame: frame,
+                            translationParams: null);
+                    }
+                    else
+                    {
+                        frame.Position += contentLength;
+                    }
+                    return (int)Fallout4Mod_FieldIndex.ArmorAddons;
+                }
                 case RecordTypeInts.MESG:
                 {
                     if (importMask?.Messages ?? true)
@@ -7762,6 +8247,34 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         frame.Position += contentLength;
                     }
                     return (int)Fallout4Mod_FieldIndex.Messages;
+                }
+                case RecordTypeInts.MUSC:
+                {
+                    if (importMask?.MusicTypes ?? true)
+                    {
+                        item.MusicTypes.CopyInFromBinary(
+                            frame: frame,
+                            translationParams: null);
+                    }
+                    else
+                    {
+                        frame.Position += contentLength;
+                    }
+                    return (int)Fallout4Mod_FieldIndex.MusicTypes;
+                }
+                case RecordTypeInts.MUST:
+                {
+                    if (importMask?.MusicTracks ?? true)
+                    {
+                        item.MusicTracks.CopyInFromBinary(
+                            frame: frame,
+                            translationParams: null);
+                    }
+                    else
+                    {
+                        frame.Position += contentLength;
+                    }
+                    return (int)Fallout4Mod_FieldIndex.MusicTracks;
                 }
                 default:
                     frame.Position += contentLength;
@@ -8068,10 +8581,25 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private IFallout4GroupGetter<IMaterialTypeGetter>? _MaterialTypes => _MaterialTypesLocation.HasValue ? Fallout4GroupBinaryOverlay<IMaterialTypeGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _MaterialTypesLocation!.Value.Min, _MaterialTypesLocation!.Value.Max), _package), _package) : default;
         public IFallout4GroupGetter<IMaterialTypeGetter> MaterialTypes => _MaterialTypes ?? new Fallout4Group<MaterialType>(this);
         #endregion
+        #region ArmorAddons
+        private RangeInt64? _ArmorAddonsLocation;
+        private IFallout4GroupGetter<IArmorAddonGetter>? _ArmorAddons => _ArmorAddonsLocation.HasValue ? Fallout4GroupBinaryOverlay<IArmorAddonGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _ArmorAddonsLocation!.Value.Min, _ArmorAddonsLocation!.Value.Max), _package), _package) : default;
+        public IFallout4GroupGetter<IArmorAddonGetter> ArmorAddons => _ArmorAddons ?? new Fallout4Group<ArmorAddon>(this);
+        #endregion
         #region Messages
         private RangeInt64? _MessagesLocation;
         private IFallout4GroupGetter<IMessageGetter>? _Messages => _MessagesLocation.HasValue ? Fallout4GroupBinaryOverlay<IMessageGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _MessagesLocation!.Value.Min, _MessagesLocation!.Value.Max), _package), _package) : default;
         public IFallout4GroupGetter<IMessageGetter> Messages => _Messages ?? new Fallout4Group<Message>(this);
+        #endregion
+        #region MusicTypes
+        private RangeInt64? _MusicTypesLocation;
+        private IFallout4GroupGetter<IMusicTypeGetter>? _MusicTypes => _MusicTypesLocation.HasValue ? Fallout4GroupBinaryOverlay<IMusicTypeGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _MusicTypesLocation!.Value.Min, _MusicTypesLocation!.Value.Max), _package), _package) : default;
+        public IFallout4GroupGetter<IMusicTypeGetter> MusicTypes => _MusicTypes ?? new Fallout4Group<MusicType>(this);
+        #endregion
+        #region MusicTracks
+        private RangeInt64? _MusicTracksLocation;
+        private IFallout4GroupGetter<IMusicTrackGetter>? _MusicTracks => _MusicTracksLocation.HasValue ? Fallout4GroupBinaryOverlay<IMusicTrackGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _MusicTracksLocation!.Value.Min, _MusicTracksLocation!.Value.Max), _package), _package) : default;
+        public IFallout4GroupGetter<IMusicTrackGetter> MusicTracks => _MusicTracks ?? new Fallout4Group<MusicTrack>(this);
         #endregion
         protected Fallout4ModBinaryOverlay(
             IMutagenReadStream stream,
@@ -8305,10 +8833,25 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     _MaterialTypesLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
                     return (int)Fallout4Mod_FieldIndex.MaterialTypes;
                 }
+                case RecordTypeInts.ARMA:
+                {
+                    _ArmorAddonsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    return (int)Fallout4Mod_FieldIndex.ArmorAddons;
+                }
                 case RecordTypeInts.MESG:
                 {
                     _MessagesLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
                     return (int)Fallout4Mod_FieldIndex.Messages;
+                }
+                case RecordTypeInts.MUSC:
+                {
+                    _MusicTypesLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    return (int)Fallout4Mod_FieldIndex.MusicTypes;
+                }
+                case RecordTypeInts.MUST:
+                {
+                    _MusicTracksLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    return (int)Fallout4Mod_FieldIndex.MusicTracks;
                 }
                 default:
                     return default(int?);

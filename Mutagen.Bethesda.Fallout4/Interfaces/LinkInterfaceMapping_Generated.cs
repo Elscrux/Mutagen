@@ -113,6 +113,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Spell),
             };
             dict[typeof(IEffectRecordGetter)] = dict[typeof(IEffectRecord)];
+            dict[typeof(IEmittance)] = new Type[]
+            {
+                typeof(Region),
+            };
+            dict[typeof(IEmittanceGetter)] = dict[typeof(IEmittance)];
             InterfaceToObjectTypes = dict;
         }
     }
