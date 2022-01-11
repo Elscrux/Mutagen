@@ -7,6 +7,7 @@
 using Loqui;
 using Loqui.Internal;
 using Mutagen.Bethesda.Binary;
+using Mutagen.Bethesda.Fallout4;
 using Mutagen.Bethesda.Fallout4.Internals;
 using Mutagen.Bethesda.Internals;
 using Mutagen.Bethesda.Plugins;
@@ -16,6 +17,8 @@ using Mutagen.Bethesda.Plugins.Binary.Translations;
 using Mutagen.Bethesda.Plugins.Exceptions;
 using Mutagen.Bethesda.Plugins.Records;
 using Mutagen.Bethesda.Plugins.Records.Internals;
+using Mutagen.Bethesda.Plugins.RecordTypeMapping;
+using Mutagen.Bethesda.Plugins.Utility;
 using Mutagen.Bethesda.Translations.Binary;
 using Noggog;
 using System;
@@ -35,12 +38,13 @@ namespace Mutagen.Bethesda.Fallout4
 {
     #region Class
     public partial class Terminal :
+        Fallout4MajorRecord,
         IEquatable<ITerminalGetter>,
         ILoquiObjectSetter<Terminal>,
-        ITerminal
+        ITerminalInternal
     {
         #region Ctor
-        public Terminal()
+        protected Terminal()
         {
             CustomCtor();
         }
@@ -50,7 +54,7 @@ namespace Mutagen.Bethesda.Fallout4
 
         #region To String
 
-        public void ToString(
+        public override void ToString(
             FileGeneration fg,
             string? name = null)
         {
@@ -61,32 +65,34 @@ namespace Mutagen.Bethesda.Fallout4
 
         #endregion
 
-        #region Equals and Hash
-        public override bool Equals(object? obj)
-        {
-            if (obj is not ITerminalGetter rhs) return false;
-            return ((TerminalCommon)((ITerminalGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
-        }
-
-        public bool Equals(ITerminalGetter? obj)
-        {
-            return ((TerminalCommon)((ITerminalGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
-        }
-
-        public override int GetHashCode() => ((TerminalCommon)((ITerminalGetter)this).CommonInstance()!).GetHashCode(this);
-
-        #endregion
-
         #region Mask
-        public class Mask<TItem> :
+        public new class Mask<TItem> :
+            Fallout4MajorRecord.Mask<TItem>,
             IEquatable<Mask<TItem>>,
             IMask<TItem>
         {
             #region Ctors
             public Mask(TItem initialValue)
+            : base(initialValue)
             {
             }
 
+            public Mask(
+                TItem MajorRecordFlagsRaw,
+                TItem FormKey,
+                TItem VersionControl,
+                TItem EditorID,
+                TItem FormVersion,
+                TItem Version2)
+            : base(
+                MajorRecordFlagsRaw: MajorRecordFlagsRaw,
+                FormKey: FormKey,
+                VersionControl: VersionControl,
+                EditorID: EditorID,
+                FormVersion: FormVersion,
+                Version2: Version2)
+            {
+            }
 
             #pragma warning disable CS8618
             protected Mask()
@@ -106,32 +112,36 @@ namespace Mutagen.Bethesda.Fallout4
             public bool Equals(Mask<TItem>? rhs)
             {
                 if (rhs == null) return false;
+                if (!base.Equals(rhs)) return false;
                 return true;
             }
             public override int GetHashCode()
             {
                 var hash = new HashCode();
+                hash.Add(base.GetHashCode());
                 return hash.ToHashCode();
             }
 
             #endregion
 
             #region All
-            public bool All(Func<TItem, bool> eval)
+            public override bool All(Func<TItem, bool> eval)
             {
+                if (!base.All(eval)) return false;
                 return true;
             }
             #endregion
 
             #region Any
-            public bool Any(Func<TItem, bool> eval)
+            public override bool Any(Func<TItem, bool> eval)
             {
+                if (base.Any(eval)) return true;
                 return false;
             }
             #endregion
 
             #region Translate
-            public Mask<R> Translate<R>(Func<TItem, R> eval)
+            public new Mask<R> Translate<R>(Func<TItem, R> eval)
             {
                 var ret = new Terminal.Mask<R>();
                 this.Translate_InternalFill(ret, eval);
@@ -140,6 +150,7 @@ namespace Mutagen.Bethesda.Fallout4
 
             protected void Translate_InternalFill<R>(Mask<R> obj, Func<TItem, R> eval)
             {
+                base.Translate_InternalFill(obj, eval);
             }
             #endregion
 
@@ -169,58 +180,44 @@ namespace Mutagen.Bethesda.Fallout4
 
         }
 
-        public class ErrorMask :
-            IErrorMask,
+        public new class ErrorMask :
+            Fallout4MajorRecord.ErrorMask,
             IErrorMask<ErrorMask>
         {
-            #region Members
-            public Exception? Overall { get; set; }
-            private List<string>? _warnings;
-            public List<string> Warnings
-            {
-                get
-                {
-                    if (_warnings == null)
-                    {
-                        _warnings = new List<string>();
-                    }
-                    return _warnings;
-                }
-            }
-            #endregion
-
             #region IErrorMask
-            public object? GetNthMask(int index)
+            public override object? GetNthMask(int index)
             {
                 Terminal_FieldIndex enu = (Terminal_FieldIndex)index;
                 switch (enu)
                 {
                     default:
-                        throw new ArgumentException($"Index is out of range: {index}");
+                        return base.GetNthMask(index);
                 }
             }
 
-            public void SetNthException(int index, Exception ex)
+            public override void SetNthException(int index, Exception ex)
             {
                 Terminal_FieldIndex enu = (Terminal_FieldIndex)index;
                 switch (enu)
                 {
                     default:
-                        throw new ArgumentException($"Index is out of range: {index}");
+                        base.SetNthException(index, ex);
+                        break;
                 }
             }
 
-            public void SetNthMask(int index, object obj)
+            public override void SetNthMask(int index, object obj)
             {
                 Terminal_FieldIndex enu = (Terminal_FieldIndex)index;
                 switch (enu)
                 {
                     default:
-                        throw new ArgumentException($"Index is out of range: {index}");
+                        base.SetNthMask(index, obj);
+                        break;
                 }
             }
 
-            public bool IsInError()
+            public override bool IsInError()
             {
                 if (Overall != null) return true;
                 return false;
@@ -235,7 +232,7 @@ namespace Mutagen.Bethesda.Fallout4
                 return fg.ToString();
             }
 
-            public void ToString(FileGeneration fg, string? name = null)
+            public override void ToString(FileGeneration fg, string? name = null)
             {
                 fg.AppendLine($"{(name ?? "ErrorMask")} =>");
                 fg.AppendLine("[");
@@ -255,8 +252,9 @@ namespace Mutagen.Bethesda.Fallout4
                 }
                 fg.AppendLine("]");
             }
-            protected void ToString_FillInternal(FileGeneration fg)
+            protected override void ToString_FillInternal(FileGeneration fg)
             {
+                base.ToString_FillInternal(fg);
             }
             #endregion
 
@@ -275,44 +273,26 @@ namespace Mutagen.Bethesda.Fallout4
             #endregion
 
             #region Factory
-            public static ErrorMask Factory(ErrorMaskBuilder errorMask)
+            public static new ErrorMask Factory(ErrorMaskBuilder errorMask)
             {
                 return new ErrorMask();
             }
             #endregion
 
         }
-        public class TranslationMask : ITranslationMask
+        public new class TranslationMask :
+            Fallout4MajorRecord.TranslationMask,
+            ITranslationMask
         {
-            #region Members
-            private TranslationCrystal? _crystal;
-            public readonly bool DefaultOn;
-            public bool OnOverall;
-            #endregion
-
             #region Ctors
             public TranslationMask(
                 bool defaultOn,
                 bool onOverall = true)
+                : base(defaultOn, onOverall)
             {
-                this.DefaultOn = defaultOn;
-                this.OnOverall = onOverall;
             }
 
             #endregion
-
-            public TranslationCrystal GetCrystal()
-            {
-                if (_crystal != null) return _crystal;
-                var ret = new List<(bool On, TranslationCrystal? SubCrystal)>();
-                GetCrystal(ret);
-                _crystal = new TranslationCrystal(ret.ToArray());
-                return _crystal;
-            }
-
-            protected void GetCrystal(List<(bool On, TranslationCrystal? SubCrystal)> ret)
-            {
-            }
 
             public static implicit operator TranslationMask(bool defaultOn)
             {
@@ -324,13 +304,73 @@ namespace Mutagen.Bethesda.Fallout4
 
         #region Mutagen
         public static readonly RecordType GrupRecordType = Terminal_Registration.TriggeringRecordType;
+        public Terminal(FormKey formKey)
+        {
+            this.FormKey = formKey;
+            CustomCtor();
+        }
+
+        private Terminal(
+            FormKey formKey,
+            GameRelease gameRelease)
+        {
+            this.FormKey = formKey;
+            this.FormVersion = gameRelease.GetDefaultFormVersion()!.Value;
+            CustomCtor();
+        }
+
+        internal Terminal(
+            FormKey formKey,
+            ushort formVersion)
+        {
+            this.FormKey = formKey;
+            this.FormVersion = formVersion;
+            CustomCtor();
+        }
+
+        public Terminal(IFallout4Mod mod)
+            : this(mod.GetNextFormKey())
+        {
+        }
+
+        public Terminal(IFallout4Mod mod, string editorID)
+            : this(mod.GetNextFormKey(editorID))
+        {
+            this.EditorID = editorID;
+        }
+
+        public override string ToString()
+        {
+            return MajorRecordPrinter<Terminal>.ToString(this);
+        }
+
+        protected override Type LinkType => typeof(ITerminal);
+
+        #region Equals and Hash
+        public override bool Equals(object? obj)
+        {
+            if (obj is IFormLinkGetter formLink)
+            {
+                return formLink.Equals(this);
+            }
+            if (obj is not ITerminalGetter rhs) return false;
+            return ((TerminalCommon)((ITerminalGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
+        }
+
+        public bool Equals(ITerminalGetter? obj)
+        {
+            return ((TerminalCommon)((ITerminalGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
+        }
+
+        public override int GetHashCode() => ((TerminalCommon)((ITerminalGetter)this).CommonInstance()!).GetHashCode(this);
+
+        #endregion
+
         #endregion
 
         #region Binary Translation
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected object BinaryWriteTranslator => TerminalBinaryWriteTranslation.Instance;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        object IBinaryItem.BinaryWriteTranslator => this.BinaryWriteTranslator;
+        protected override object BinaryWriteTranslator => TerminalBinaryWriteTranslation.Instance;
         void IBinaryItem.WriteToBinary(
             MutagenWriter writer,
             TypedWriteParams? translationParams = null)
@@ -341,7 +381,7 @@ namespace Mutagen.Bethesda.Fallout4
                 translationParams: translationParams);
         }
         #region Binary Create
-        public static Terminal CreateFromBinary(
+        public new static Terminal CreateFromBinary(
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
@@ -375,7 +415,7 @@ namespace Mutagen.Bethesda.Fallout4
             ((TerminalSetterCommon)((ITerminalGetter)this).CommonSetterInstance()!).Clear(this);
         }
 
-        internal static Terminal GetNew()
+        internal static new Terminal GetNew()
         {
             return new Terminal();
         }
@@ -385,23 +425,27 @@ namespace Mutagen.Bethesda.Fallout4
 
     #region Interface
     public partial interface ITerminal :
-        ILoquiObjectSetter<ITerminal>,
+        IFallout4MajorRecordInternal,
+        ILoquiObjectSetter<ITerminalInternal>,
         ITerminalGetter
     {
     }
 
-    public partial interface ITerminalGetter :
-        ILoquiObject,
-        IBinaryItem,
-        ILoquiObject<ITerminalGetter>
+    public partial interface ITerminalInternal :
+        IFallout4MajorRecordInternal,
+        ITerminal,
+        ITerminalGetter
     {
-        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-        object CommonInstance();
-        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-        object? CommonSetterInstance();
-        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-        object CommonSetterTranslationInstance();
-        static ILoquiRegistration StaticRegistration => Terminal_Registration.Instance;
+    }
+
+    [AssociatedRecordTypesAttribute(Mutagen.Bethesda.Fallout4.Internals.RecordTypeInts.TERM)]
+    public partial interface ITerminalGetter :
+        IFallout4MajorRecordGetter,
+        IBinaryItem,
+        ILoquiObject<ITerminalGetter>,
+        IMapsToGetter<ITerminalGetter>
+    {
+        static new ILoquiRegistration StaticRegistration => Terminal_Registration.Instance;
 
     }
 
@@ -410,7 +454,7 @@ namespace Mutagen.Bethesda.Fallout4
     #region Common MixIn
     public static partial class TerminalMixIn
     {
-        public static void Clear(this ITerminal item)
+        public static void Clear(this ITerminalInternal item)
         {
             ((TerminalSetterCommon)((ITerminalGetter)item).CommonSetterInstance()!).Clear(item: item);
         }
@@ -462,32 +506,7 @@ namespace Mutagen.Bethesda.Fallout4
         }
 
         public static void DeepCopyIn(
-            this ITerminal lhs,
-            ITerminalGetter rhs)
-        {
-            ((TerminalSetterTranslationCommon)((ITerminalGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
-                item: lhs,
-                rhs: rhs,
-                errorMask: default,
-                copyMask: default,
-                deepCopy: false);
-        }
-
-        public static void DeepCopyIn(
-            this ITerminal lhs,
-            ITerminalGetter rhs,
-            Terminal.TranslationMask? copyMask = null)
-        {
-            ((TerminalSetterTranslationCommon)((ITerminalGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
-                item: lhs,
-                rhs: rhs,
-                errorMask: default,
-                copyMask: copyMask?.GetCrystal(),
-                deepCopy: false);
-        }
-
-        public static void DeepCopyIn(
-            this ITerminal lhs,
+            this ITerminalInternal lhs,
             ITerminalGetter rhs,
             out Terminal.ErrorMask errorMask,
             Terminal.TranslationMask? copyMask = null)
@@ -503,7 +522,7 @@ namespace Mutagen.Bethesda.Fallout4
         }
 
         public static void DeepCopyIn(
-            this ITerminal lhs,
+            this ITerminalInternal lhs,
             ITerminalGetter rhs,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask)
@@ -547,9 +566,23 @@ namespace Mutagen.Bethesda.Fallout4
                 errorMask: errorMask);
         }
 
+        #region Mutagen
+        public static Terminal Duplicate(
+            this ITerminalGetter item,
+            FormKey formKey,
+            Terminal.TranslationMask? copyMask = null)
+        {
+            return ((TerminalCommon)((ITerminalGetter)item).CommonInstance()!).Duplicate(
+                item: item,
+                formKey: formKey,
+                copyMask: copyMask?.GetCrystal());
+        }
+
+        #endregion
+
         #region Binary Translation
         public static void CopyInFromBinary(
-            this ITerminal item,
+            this ITerminalInternal item,
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
@@ -571,6 +604,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
     #region Field Index
     public enum Terminal_FieldIndex
     {
+        MajorRecordFlagsRaw = 0,
+        FormKey = 1,
+        VersionControl = 2,
+        EditorID = 3,
+        FormVersion = 4,
+        Version2 = 5,
     }
     #endregion
 
@@ -583,14 +622,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public static readonly ObjectKey ObjectKey = new ObjectKey(
             protocolKey: ProtocolDefinition_Fallout4.ProtocolKey,
-            msgID: 164,
+            msgID: 193,
             version: 0);
 
-        public const string GUID = "70acac3f-37b6-4d5a-abde-836c6928f63f";
+        public const string GUID = "fc083bd7-24db-4bc1-995b-b6a767179566";
 
         public const ushort AdditionalFieldCount = 0;
 
-        public const ushort FieldCount = 0;
+        public const ushort FieldCount = 6;
 
         public static readonly Type MaskType = typeof(Terminal.Mask<>);
 
@@ -604,7 +643,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public static readonly Type SetterType = typeof(ITerminal);
 
-        public static readonly Type? InternalSetterType = null;
+        public static readonly Type? InternalSetterType = typeof(ITerminalInternal);
 
         public const string FullName = "Mutagen.Bethesda.Fallout4.Terminal";
 
@@ -650,47 +689,78 @@ namespace Mutagen.Bethesda.Fallout4.Internals
     #endregion
 
     #region Common
-    public partial class TerminalSetterCommon
+    public partial class TerminalSetterCommon : Fallout4MajorRecordSetterCommon
     {
-        public static readonly TerminalSetterCommon Instance = new TerminalSetterCommon();
+        public new static readonly TerminalSetterCommon Instance = new TerminalSetterCommon();
 
         partial void ClearPartial();
         
-        public void Clear(ITerminal item)
+        public void Clear(ITerminalInternal item)
         {
             ClearPartial();
+            base.Clear(item);
+        }
+        
+        public override void Clear(IFallout4MajorRecordInternal item)
+        {
+            Clear(item: (ITerminalInternal)item);
+        }
+        
+        public override void Clear(IMajorRecordInternal item)
+        {
+            Clear(item: (ITerminalInternal)item);
         }
         
         #region Mutagen
         public void RemapLinks(ITerminal obj, IReadOnlyDictionary<FormKey, FormKey> mapping)
         {
+            base.RemapLinks(obj, mapping);
         }
         
         #endregion
         
         #region Binary Translation
         public virtual void CopyInFromBinary(
-            ITerminal item,
+            ITerminalInternal item,
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
-            frame = frame.SpawnWithFinalPosition(HeaderTranslation.ParseSubrecord(
-                frame.Reader,
-                translationParams.ConvertToCustom(RecordTypes.TERM),
-                translationParams?.LengthOverride));
-            PluginUtilityTranslation.SubrecordParse(
+            PluginUtilityTranslation.MajorRecordParse<ITerminalInternal>(
                 record: item,
                 frame: frame,
                 translationParams: translationParams,
-                fillStructs: TerminalBinaryCreateTranslation.FillBinaryStructs);
+                fillStructs: TerminalBinaryCreateTranslation.FillBinaryStructs,
+                fillTyped: TerminalBinaryCreateTranslation.FillBinaryRecordTypes);
+        }
+        
+        public override void CopyInFromBinary(
+            IFallout4MajorRecordInternal item,
+            MutagenFrame frame,
+            TypedParseParams? translationParams = null)
+        {
+            CopyInFromBinary(
+                item: (Terminal)item,
+                frame: frame,
+                translationParams: translationParams);
+        }
+        
+        public override void CopyInFromBinary(
+            IMajorRecordInternal item,
+            MutagenFrame frame,
+            TypedParseParams? translationParams = null)
+        {
+            CopyInFromBinary(
+                item: (Terminal)item,
+                frame: frame,
+                translationParams: translationParams);
         }
         
         #endregion
         
     }
-    public partial class TerminalCommon
+    public partial class TerminalCommon : Fallout4MajorRecordCommon
     {
-        public static readonly TerminalCommon Instance = new TerminalCommon();
+        public new static readonly TerminalCommon Instance = new TerminalCommon();
 
         public Terminal.Mask<bool> GetEqualsMask(
             ITerminalGetter item,
@@ -713,6 +783,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             EqualsMaskHelper.Include include = EqualsMaskHelper.Include.All)
         {
             if (rhs == null) return;
+            base.FillEqualsMask(item, rhs, ret, include);
         }
         
         public string ToString(
@@ -759,6 +830,48 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             FileGeneration fg,
             Terminal.Mask<bool>? printMask = null)
         {
+            Fallout4MajorRecordCommon.ToStringFields(
+                item: item,
+                fg: fg,
+                printMask: printMask);
+        }
+        
+        public static Terminal_FieldIndex ConvertFieldIndex(Fallout4MajorRecord_FieldIndex index)
+        {
+            switch (index)
+            {
+                case Fallout4MajorRecord_FieldIndex.MajorRecordFlagsRaw:
+                    return (Terminal_FieldIndex)((int)index);
+                case Fallout4MajorRecord_FieldIndex.FormKey:
+                    return (Terminal_FieldIndex)((int)index);
+                case Fallout4MajorRecord_FieldIndex.VersionControl:
+                    return (Terminal_FieldIndex)((int)index);
+                case Fallout4MajorRecord_FieldIndex.EditorID:
+                    return (Terminal_FieldIndex)((int)index);
+                case Fallout4MajorRecord_FieldIndex.FormVersion:
+                    return (Terminal_FieldIndex)((int)index);
+                case Fallout4MajorRecord_FieldIndex.Version2:
+                    return (Terminal_FieldIndex)((int)index);
+                default:
+                    throw new ArgumentException($"Index is out of range: {index.ToStringFast_Enum_Only()}");
+            }
+        }
+        
+        public static new Terminal_FieldIndex ConvertFieldIndex(MajorRecord_FieldIndex index)
+        {
+            switch (index)
+            {
+                case MajorRecord_FieldIndex.MajorRecordFlagsRaw:
+                    return (Terminal_FieldIndex)((int)index);
+                case MajorRecord_FieldIndex.FormKey:
+                    return (Terminal_FieldIndex)((int)index);
+                case MajorRecord_FieldIndex.VersionControl:
+                    return (Terminal_FieldIndex)((int)index);
+                case MajorRecord_FieldIndex.EditorID:
+                    return (Terminal_FieldIndex)((int)index);
+                default:
+                    throw new ArgumentException($"Index is out of range: {index.ToStringFast_Enum_Only()}");
+            }
         }
         
         #region Equals and Hash
@@ -768,19 +881,53 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TranslationCrystal? crystal)
         {
             if (!EqualsMaskHelper.RefEquality(lhs, rhs, out var isEqual)) return isEqual;
+            if (!base.Equals((IFallout4MajorRecordGetter)lhs, (IFallout4MajorRecordGetter)rhs, crystal)) return false;
             return true;
+        }
+        
+        public override bool Equals(
+            IFallout4MajorRecordGetter? lhs,
+            IFallout4MajorRecordGetter? rhs,
+            TranslationCrystal? crystal)
+        {
+            return Equals(
+                lhs: (ITerminalGetter?)lhs,
+                rhs: rhs as ITerminalGetter,
+                crystal: crystal);
+        }
+        
+        public override bool Equals(
+            IMajorRecordGetter? lhs,
+            IMajorRecordGetter? rhs,
+            TranslationCrystal? crystal)
+        {
+            return Equals(
+                lhs: (ITerminalGetter?)lhs,
+                rhs: rhs as ITerminalGetter,
+                crystal: crystal);
         }
         
         public virtual int GetHashCode(ITerminalGetter item)
         {
             var hash = new HashCode();
+            hash.Add(base.GetHashCode());
             return hash.ToHashCode();
+        }
+        
+        public override int GetHashCode(IFallout4MajorRecordGetter item)
+        {
+            return GetHashCode(item: (ITerminalGetter)item);
+        }
+        
+        public override int GetHashCode(IMajorRecordGetter item)
+        {
+            return GetHashCode(item: (ITerminalGetter)item);
         }
         
         #endregion
         
         
-        public object GetNew()
+        public override object GetNew()
         {
             return Terminal.GetNew();
         }
@@ -788,17 +935,71 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         #region Mutagen
         public IEnumerable<IFormLinkGetter> GetContainedFormLinks(ITerminalGetter obj)
         {
+            foreach (var item in base.GetContainedFormLinks(obj))
+            {
+                yield return item;
+            }
             yield break;
+        }
+        
+        #region Duplicate
+        public Terminal Duplicate(
+            ITerminalGetter item,
+            FormKey formKey,
+            TranslationCrystal? copyMask)
+        {
+            var newRec = new Terminal(formKey);
+            newRec.DeepCopyIn(item, default(ErrorMaskBuilder?), copyMask);
+            return newRec;
+        }
+        
+        public override Fallout4MajorRecord Duplicate(
+            IFallout4MajorRecordGetter item,
+            FormKey formKey,
+            TranslationCrystal? copyMask)
+        {
+            return this.Duplicate(
+                item: (ITerminalGetter)item,
+                formKey: formKey,
+                copyMask: copyMask);
+        }
+        
+        public override MajorRecord Duplicate(
+            IMajorRecordGetter item,
+            FormKey formKey,
+            TranslationCrystal? copyMask)
+        {
+            return this.Duplicate(
+                item: (ITerminalGetter)item,
+                formKey: formKey,
+                copyMask: copyMask);
         }
         
         #endregion
         
+        #endregion
+        
     }
-    public partial class TerminalSetterTranslationCommon
+    public partial class TerminalSetterTranslationCommon : Fallout4MajorRecordSetterTranslationCommon
     {
-        public static readonly TerminalSetterTranslationCommon Instance = new TerminalSetterTranslationCommon();
+        public new static readonly TerminalSetterTranslationCommon Instance = new TerminalSetterTranslationCommon();
 
         #region DeepCopyIn
+        public void DeepCopyIn(
+            ITerminalInternal item,
+            ITerminalGetter rhs,
+            ErrorMaskBuilder? errorMask,
+            TranslationCrystal? copyMask,
+            bool deepCopy)
+        {
+            base.DeepCopyIn(
+                item,
+                rhs,
+                errorMask,
+                copyMask,
+                deepCopy: deepCopy);
+        }
+        
         public void DeepCopyIn(
             ITerminal item,
             ITerminalGetter rhs,
@@ -806,6 +1007,72 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TranslationCrystal? copyMask,
             bool deepCopy)
         {
+            base.DeepCopyIn(
+                (IFallout4MajorRecord)item,
+                (IFallout4MajorRecordGetter)rhs,
+                errorMask,
+                copyMask,
+                deepCopy: deepCopy);
+        }
+        
+        public override void DeepCopyIn(
+            IFallout4MajorRecordInternal item,
+            IFallout4MajorRecordGetter rhs,
+            ErrorMaskBuilder? errorMask,
+            TranslationCrystal? copyMask,
+            bool deepCopy)
+        {
+            this.DeepCopyIn(
+                item: (ITerminalInternal)item,
+                rhs: (ITerminalGetter)rhs,
+                errorMask: errorMask,
+                copyMask: copyMask,
+                deepCopy: deepCopy);
+        }
+        
+        public override void DeepCopyIn(
+            IFallout4MajorRecord item,
+            IFallout4MajorRecordGetter rhs,
+            ErrorMaskBuilder? errorMask,
+            TranslationCrystal? copyMask,
+            bool deepCopy)
+        {
+            this.DeepCopyIn(
+                item: (ITerminal)item,
+                rhs: (ITerminalGetter)rhs,
+                errorMask: errorMask,
+                copyMask: copyMask,
+                deepCopy: deepCopy);
+        }
+        
+        public override void DeepCopyIn(
+            IMajorRecordInternal item,
+            IMajorRecordGetter rhs,
+            ErrorMaskBuilder? errorMask,
+            TranslationCrystal? copyMask,
+            bool deepCopy)
+        {
+            this.DeepCopyIn(
+                item: (ITerminalInternal)item,
+                rhs: (ITerminalGetter)rhs,
+                errorMask: errorMask,
+                copyMask: copyMask,
+                deepCopy: deepCopy);
+        }
+        
+        public override void DeepCopyIn(
+            IMajorRecord item,
+            IMajorRecordGetter rhs,
+            ErrorMaskBuilder? errorMask,
+            TranslationCrystal? copyMask,
+            bool deepCopy)
+        {
+            this.DeepCopyIn(
+                item: (ITerminal)item,
+                rhs: (ITerminalGetter)rhs,
+                errorMask: errorMask,
+                copyMask: copyMask,
+                deepCopy: deepCopy);
         }
         
         #endregion
@@ -868,22 +1135,16 @@ namespace Mutagen.Bethesda.Fallout4
         #region Common Routing
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         ILoquiRegistration ILoquiObject.Registration => Terminal_Registration.Instance;
-        public static Terminal_Registration StaticRegistration => Terminal_Registration.Instance;
+        public new static Terminal_Registration StaticRegistration => Terminal_Registration.Instance;
         [DebuggerStepThrough]
-        protected object CommonInstance() => TerminalCommon.Instance;
+        protected override object CommonInstance() => TerminalCommon.Instance;
         [DebuggerStepThrough]
-        protected object CommonSetterInstance()
+        protected override object CommonSetterInstance()
         {
             return TerminalSetterCommon.Instance;
         }
         [DebuggerStepThrough]
-        protected object CommonSetterTranslationInstance() => TerminalSetterTranslationCommon.Instance;
-        [DebuggerStepThrough]
-        object ITerminalGetter.CommonInstance() => this.CommonInstance();
-        [DebuggerStepThrough]
-        object ITerminalGetter.CommonSetterInstance() => this.CommonSetterInstance();
-        [DebuggerStepThrough]
-        object ITerminalGetter.CommonSetterTranslationInstance() => this.CommonSetterTranslationInstance();
+        protected override object CommonSetterTranslationInstance() => TerminalSetterTranslationCommon.Instance;
 
         #endregion
 
@@ -894,25 +1155,39 @@ namespace Mutagen.Bethesda.Fallout4
 #region Binary Translation
 namespace Mutagen.Bethesda.Fallout4.Internals
 {
-    public partial class TerminalBinaryWriteTranslation : IBinaryWriteTranslator
+    public partial class TerminalBinaryWriteTranslation :
+        Fallout4MajorRecordBinaryWriteTranslation,
+        IBinaryWriteTranslator
     {
-        public readonly static TerminalBinaryWriteTranslation Instance = new TerminalBinaryWriteTranslation();
+        public new readonly static TerminalBinaryWriteTranslation Instance = new TerminalBinaryWriteTranslation();
 
         public void Write(
             MutagenWriter writer,
             ITerminalGetter item,
             TypedWriteParams? translationParams = null)
         {
-            using (HeaderExport.Subrecord(
+            using (HeaderExport.Record(
                 writer: writer,
-                record: translationParams.ConvertToCustom(RecordTypes.TERM),
-                overflowRecord: translationParams?.OverflowRecordType,
-                out var writerToUse))
+                record: translationParams.ConvertToCustom(RecordTypes.TERM)))
             {
+                try
+                {
+                    Fallout4MajorRecordBinaryWriteTranslation.WriteEmbedded(
+                        item: item,
+                        writer: writer);
+                    MajorRecordBinaryWriteTranslation.WriteRecordTypes(
+                        item: item,
+                        writer: writer,
+                        translationParams: translationParams);
+                }
+                catch (Exception ex)
+                {
+                    throw RecordException.Enrich(ex, item);
+                }
             }
         }
 
-        public void Write(
+        public override void Write(
             MutagenWriter writer,
             object item,
             TypedWriteParams? translationParams = null)
@@ -923,16 +1198,42 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 translationParams: translationParams);
         }
 
+        public override void Write(
+            MutagenWriter writer,
+            IFallout4MajorRecordGetter item,
+            TypedWriteParams? translationParams = null)
+        {
+            Write(
+                item: (ITerminalGetter)item,
+                writer: writer,
+                translationParams: translationParams);
+        }
+
+        public override void Write(
+            MutagenWriter writer,
+            IMajorRecordGetter item,
+            TypedWriteParams? translationParams = null)
+        {
+            Write(
+                item: (ITerminalGetter)item,
+                writer: writer,
+                translationParams: translationParams);
+        }
+
     }
 
-    public partial class TerminalBinaryCreateTranslation
+    public partial class TerminalBinaryCreateTranslation : Fallout4MajorRecordBinaryCreateTranslation
     {
-        public readonly static TerminalBinaryCreateTranslation Instance = new TerminalBinaryCreateTranslation();
+        public new readonly static TerminalBinaryCreateTranslation Instance = new TerminalBinaryCreateTranslation();
 
+        public override RecordType RecordType => RecordTypes.TERM;
         public static void FillBinaryStructs(
-            ITerminal item,
+            ITerminalInternal item,
             MutagenFrame frame)
         {
+            Fallout4MajorRecordBinaryCreateTranslation.FillBinaryStructs(
+                item: item,
+                frame: frame);
         }
 
     }
@@ -943,17 +1244,6 @@ namespace Mutagen.Bethesda.Fallout4
     #region Binary Write Mixins
     public static class TerminalBinaryTranslationMixIn
     {
-        public static void WriteToBinary(
-            this ITerminalGetter item,
-            MutagenWriter writer,
-            TypedWriteParams? translationParams = null)
-        {
-            ((TerminalBinaryWriteTranslation)item.BinaryWriteTranslator).Write(
-                item: item,
-                writer: writer,
-                translationParams: translationParams);
-        }
-
     }
     #endregion
 
@@ -962,32 +1252,24 @@ namespace Mutagen.Bethesda.Fallout4
 namespace Mutagen.Bethesda.Fallout4.Internals
 {
     public partial class TerminalBinaryOverlay :
-        PluginBinaryOverlay,
+        Fallout4MajorRecordBinaryOverlay,
         ITerminalGetter
     {
         #region Common Routing
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         ILoquiRegistration ILoquiObject.Registration => Terminal_Registration.Instance;
-        public static Terminal_Registration StaticRegistration => Terminal_Registration.Instance;
+        public new static Terminal_Registration StaticRegistration => Terminal_Registration.Instance;
         [DebuggerStepThrough]
-        protected object CommonInstance() => TerminalCommon.Instance;
+        protected override object CommonInstance() => TerminalCommon.Instance;
         [DebuggerStepThrough]
-        protected object CommonSetterTranslationInstance() => TerminalSetterTranslationCommon.Instance;
-        [DebuggerStepThrough]
-        object ITerminalGetter.CommonInstance() => this.CommonInstance();
-        [DebuggerStepThrough]
-        object? ITerminalGetter.CommonSetterInstance() => null;
-        [DebuggerStepThrough]
-        object ITerminalGetter.CommonSetterTranslationInstance() => this.CommonSetterTranslationInstance();
+        protected override object CommonSetterTranslationInstance() => TerminalSetterTranslationCommon.Instance;
 
         #endregion
 
         void IPrintable.ToString(FileGeneration fg, string? name) => this.ToString(fg, name);
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected object BinaryWriteTranslator => TerminalBinaryWriteTranslation.Instance;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        object IBinaryItem.BinaryWriteTranslator => this.BinaryWriteTranslator;
+        protected override object BinaryWriteTranslator => TerminalBinaryWriteTranslation.Instance;
         void IBinaryItem.WriteToBinary(
             MutagenWriter writer,
             TypedWriteParams? translationParams = null)
@@ -997,6 +1279,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 writer: writer,
                 translationParams: translationParams);
         }
+        protected override Type LinkType => typeof(ITerminal);
+
 
         partial void CustomFactoryEnd(
             OverlayStream stream,
@@ -1019,16 +1303,25 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             BinaryOverlayFactoryPackage package,
             TypedParseParams? parseParams = null)
         {
+            stream = PluginUtilityTranslation.DecompressStream(stream);
             var ret = new TerminalBinaryOverlay(
-                bytes: HeaderTranslation.ExtractSubrecordMemory(stream.RemainingMemory, package.MetaData.Constants, parseParams),
+                bytes: HeaderTranslation.ExtractRecordMemory(stream.RemainingMemory, package.MetaData.Constants),
                 package: package);
-            var finalPos = checked((int)(stream.Position + stream.GetSubrecord().TotalLength));
-            int offset = stream.Position + package.MetaData.Constants.SubConstants.TypeAndLengthLength;
-            stream.Position += 0x0 + package.MetaData.Constants.SubConstants.HeaderLength;
+            var finalPos = checked((int)(stream.Position + stream.GetMajorRecord().TotalLength));
+            int offset = stream.Position + package.MetaData.Constants.MajorConstants.TypeAndLengthLength;
+            ret._package.FormVersion = ret;
+            stream.Position += 0x10 + package.MetaData.Constants.MajorConstants.TypeAndLengthLength;
             ret.CustomFactoryEnd(
                 stream: stream,
-                finalPos: stream.Length,
+                finalPos: finalPos,
                 offset: offset);
+            ret.FillSubrecordTypes(
+                majorReference: ret,
+                stream: stream,
+                finalPos: finalPos,
+                offset: offset,
+                parseParams: parseParams,
+                fill: ret.FillRecordType);
             return ret;
         }
 
@@ -1045,7 +1338,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         #region To String
 
-        public void ToString(
+        public override void ToString(
             FileGeneration fg,
             string? name = null)
         {
@@ -1056,9 +1349,18 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         #endregion
 
+        public override string ToString()
+        {
+            return MajorRecordPrinter<Terminal>.ToString(this);
+        }
+
         #region Equals and Hash
         public override bool Equals(object? obj)
         {
+            if (obj is IFormLinkGetter formLink)
+            {
+                return formLink.Equals(this);
+            }
             if (obj is not ITerminalGetter rhs) return false;
             return ((TerminalCommon)((ITerminalGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
         }

@@ -145,6 +145,7 @@ namespace Mutagen.Bethesda.Plugins.Records.Internals
         public const int STAG = 0x47415453;
         public const int STAT = 0x54415453;
         public const int TACT = 0x54434154;
+        public const int TERM = 0x4D524554;
         public const int TREE = 0x45455254;
         public const int TRNS = 0x534E5254;
         public const int TXST = 0x54535854;

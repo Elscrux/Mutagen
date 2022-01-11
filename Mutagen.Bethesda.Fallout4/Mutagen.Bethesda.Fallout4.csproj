@@ -664,9 +664,6 @@
     <Compile Include="Records\Common Subrecords\NoOwner_Generated.cs">
       <DependentUpon>ExtraData.xml</DependentUpon>
     </Compile>
-    <Compile Include="Records\Common Subrecords\Terminal_Generated.cs">
-      <DependentUpon>Terminal.xml</DependentUpon>
-    </Compile>
     <Compile Include="Records\Major Records\Container_Generated.cs">
       <DependentUpon>Container.xml</DependentUpon>
     </Compile>
@@ -746,6 +743,9 @@
     <Compile Include="Interfaces\IEmittance_Generated.cs" />
     <Compile Include="Records\Major Records\Ingredient_Generated.cs">
       <DependentUpon>Ingredient.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Terminal_Generated.cs">
+      <DependentUpon>Terminal.xml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

@@ -13,7 +13,7 @@
 				<FormLink refName="Keyword" />
 			</List>
 			<RefDirect name="Properties" refName="Properties" />
-			<FormLink name="Terminal" refName="Terminal" recordType="NTRM" />
+			<FormLink name="NativeTerminal" refName="Terminal" recordType="NTRM" />
 			<FormLink name="ForcedLocRefType" refName="LocationReferenceType" recordType="FTYP" />
 			<Color name="MarkerColor" recordType="PNAM" binaryType="Alpha" />
 			<FormLink name="LoopingSound" refName="SoundDescriptor" recordType="SNAM" />

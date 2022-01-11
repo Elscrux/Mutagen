@@ -147,6 +147,7 @@ namespace Mutagen.Bethesda.Plugins.Records.Internals
         public static readonly RecordType STAG = new(0x47415453);
         public static readonly RecordType STAT = new(0x54415453);
         public static readonly RecordType TACT = new(0x54434154);
+        public static readonly RecordType TERM = new(0x4D524554);
         public static readonly RecordType TREE = new(0x45455254);
         public static readonly RecordType TRNS = new(0x534E5254);
         public static readonly RecordType TXST = new(0x54535854);

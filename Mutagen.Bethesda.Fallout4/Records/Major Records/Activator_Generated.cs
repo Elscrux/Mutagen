@@ -206,15 +206,15 @@ namespace Mutagen.Bethesda.Fallout4
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IPropertiesGetter? IActivatorGetter.Properties => this.Properties;
         #endregion
-        #region Terminal
-        private readonly IFormLinkNullable<ITerminalGetter> _Terminal = new FormLinkNullable<ITerminalGetter>();
-        public IFormLinkNullable<ITerminalGetter> Terminal
+        #region NativeTerminal
+        private readonly IFormLinkNullable<ITerminalGetter> _NativeTerminal = new FormLinkNullable<ITerminalGetter>();
+        public IFormLinkNullable<ITerminalGetter> NativeTerminal
         {
-            get => _Terminal;
-            set => _Terminal.SetTo(value);
+            get => _NativeTerminal;
+            set => _NativeTerminal.SetTo(value);
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IFormLinkNullableGetter<ITerminalGetter> IActivatorGetter.Terminal => this.Terminal;
+        IFormLinkNullableGetter<ITerminalGetter> IActivatorGetter.NativeTerminal => this.NativeTerminal;
         #endregion
         #region ForcedLocRefType
         private readonly IFormLinkNullable<ILocationReferenceTypeGetter> _ForcedLocRefType = new FormLinkNullable<ILocationReferenceTypeGetter>();
@@ -353,7 +353,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Destructible = new MaskItem<TItem, Destructible.Mask<TItem>?>(initialValue, new Destructible.Mask<TItem>(initialValue));
                 this.Keywords = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(initialValue, Enumerable.Empty<(int Index, TItem Value)>());
                 this.Properties = new MaskItem<TItem, Properties.Mask<TItem>?>(initialValue, new Properties.Mask<TItem>(initialValue));
-                this.Terminal = initialValue;
+                this.NativeTerminal = initialValue;
                 this.ForcedLocRefType = initialValue;
                 this.MarkerColor = initialValue;
                 this.LoopingSound = initialValue;
@@ -387,7 +387,7 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem Destructible,
                 TItem Keywords,
                 TItem Properties,
-                TItem Terminal,
+                TItem NativeTerminal,
                 TItem ForcedLocRefType,
                 TItem MarkerColor,
                 TItem LoopingSound,
@@ -420,7 +420,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Destructible = new MaskItem<TItem, Destructible.Mask<TItem>?>(Destructible, new Destructible.Mask<TItem>(Destructible));
                 this.Keywords = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(Keywords, Enumerable.Empty<(int Index, TItem Value)>());
                 this.Properties = new MaskItem<TItem, Properties.Mask<TItem>?>(Properties, new Properties.Mask<TItem>(Properties));
-                this.Terminal = Terminal;
+                this.NativeTerminal = NativeTerminal;
                 this.ForcedLocRefType = ForcedLocRefType;
                 this.MarkerColor = MarkerColor;
                 this.LoopingSound = LoopingSound;
@@ -456,7 +456,7 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<TItem, Destructible.Mask<TItem>?>? Destructible { get; set; }
             public MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>? Keywords;
             public MaskItem<TItem, Properties.Mask<TItem>?>? Properties { get; set; }
-            public TItem Terminal;
+            public TItem NativeTerminal;
             public TItem ForcedLocRefType;
             public TItem MarkerColor;
             public TItem LoopingSound;
@@ -494,7 +494,7 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!object.Equals(this.Destructible, rhs.Destructible)) return false;
                 if (!object.Equals(this.Keywords, rhs.Keywords)) return false;
                 if (!object.Equals(this.Properties, rhs.Properties)) return false;
-                if (!object.Equals(this.Terminal, rhs.Terminal)) return false;
+                if (!object.Equals(this.NativeTerminal, rhs.NativeTerminal)) return false;
                 if (!object.Equals(this.ForcedLocRefType, rhs.ForcedLocRefType)) return false;
                 if (!object.Equals(this.MarkerColor, rhs.MarkerColor)) return false;
                 if (!object.Equals(this.LoopingSound, rhs.LoopingSound)) return false;
@@ -524,7 +524,7 @@ namespace Mutagen.Bethesda.Fallout4
                 hash.Add(this.Destructible);
                 hash.Add(this.Keywords);
                 hash.Add(this.Properties);
-                hash.Add(this.Terminal);
+                hash.Add(this.NativeTerminal);
                 hash.Add(this.ForcedLocRefType);
                 hash.Add(this.MarkerColor);
                 hash.Add(this.LoopingSound);
@@ -593,7 +593,7 @@ namespace Mutagen.Bethesda.Fallout4
                     if (!eval(this.Properties.Overall)) return false;
                     if (this.Properties.Specific != null && !this.Properties.Specific.All(eval)) return false;
                 }
-                if (!eval(this.Terminal)) return false;
+                if (!eval(this.NativeTerminal)) return false;
                 if (!eval(this.ForcedLocRefType)) return false;
                 if (!eval(this.MarkerColor)) return false;
                 if (!eval(this.LoopingSound)) return false;
@@ -671,7 +671,7 @@ namespace Mutagen.Bethesda.Fallout4
                     if (eval(this.Properties.Overall)) return true;
                     if (this.Properties.Specific != null && this.Properties.Specific.Any(eval)) return true;
                 }
-                if (eval(this.Terminal)) return true;
+                if (eval(this.NativeTerminal)) return true;
                 if (eval(this.ForcedLocRefType)) return true;
                 if (eval(this.MarkerColor)) return true;
                 if (eval(this.LoopingSound)) return true;
@@ -735,7 +735,7 @@ namespace Mutagen.Bethesda.Fallout4
                     }
                 }
                 obj.Properties = this.Properties == null ? null : new MaskItem<R, Properties.Mask<R>?>(eval(this.Properties.Overall), this.Properties.Specific?.Translate(eval));
-                obj.Terminal = eval(this.Terminal);
+                obj.NativeTerminal = eval(this.NativeTerminal);
                 obj.ForcedLocRefType = eval(this.ForcedLocRefType);
                 obj.MarkerColor = eval(this.MarkerColor);
                 obj.LoopingSound = eval(this.LoopingSound);
@@ -842,9 +842,9 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         Properties?.ToString(fg);
                     }
-                    if (printMask?.Terminal ?? true)
+                    if (printMask?.NativeTerminal ?? true)
                     {
-                        fg.AppendItem(Terminal, "Terminal");
+                        fg.AppendItem(NativeTerminal, "NativeTerminal");
                     }
                     if (printMask?.ForcedLocRefType ?? true)
                     {
@@ -946,7 +946,7 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<Exception?, Destructible.ErrorMask?>? Destructible;
             public MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>? Keywords;
             public MaskItem<Exception?, Properties.ErrorMask?>? Properties;
-            public Exception? Terminal;
+            public Exception? NativeTerminal;
             public Exception? ForcedLocRefType;
             public Exception? MarkerColor;
             public Exception? LoopingSound;
@@ -988,8 +988,8 @@ namespace Mutagen.Bethesda.Fallout4
                         return Keywords;
                     case Activator_FieldIndex.Properties:
                         return Properties;
-                    case Activator_FieldIndex.Terminal:
-                        return Terminal;
+                    case Activator_FieldIndex.NativeTerminal:
+                        return NativeTerminal;
                     case Activator_FieldIndex.ForcedLocRefType:
                         return ForcedLocRefType;
                     case Activator_FieldIndex.MarkerColor:
@@ -1057,8 +1057,8 @@ namespace Mutagen.Bethesda.Fallout4
                     case Activator_FieldIndex.Properties:
                         this.Properties = new MaskItem<Exception?, Properties.ErrorMask?>(ex, null);
                         break;
-                    case Activator_FieldIndex.Terminal:
-                        this.Terminal = ex;
+                    case Activator_FieldIndex.NativeTerminal:
+                        this.NativeTerminal = ex;
                         break;
                     case Activator_FieldIndex.ForcedLocRefType:
                         this.ForcedLocRefType = ex;
@@ -1143,8 +1143,8 @@ namespace Mutagen.Bethesda.Fallout4
                     case Activator_FieldIndex.Properties:
                         this.Properties = (MaskItem<Exception?, Properties.ErrorMask?>?)obj;
                         break;
-                    case Activator_FieldIndex.Terminal:
-                        this.Terminal = (Exception?)obj;
+                    case Activator_FieldIndex.NativeTerminal:
+                        this.NativeTerminal = (Exception?)obj;
                         break;
                     case Activator_FieldIndex.ForcedLocRefType:
                         this.ForcedLocRefType = (Exception?)obj;
@@ -1209,7 +1209,7 @@ namespace Mutagen.Bethesda.Fallout4
                 if (Destructible != null) return true;
                 if (Keywords != null) return true;
                 if (Properties != null) return true;
-                if (Terminal != null) return true;
+                if (NativeTerminal != null) return true;
                 if (ForcedLocRefType != null) return true;
                 if (MarkerColor != null) return true;
                 if (LoopingSound != null) return true;
@@ -1290,7 +1290,7 @@ namespace Mutagen.Bethesda.Fallout4
                     fg.AppendLine("]");
                 }
                 Properties?.ToString(fg);
-                fg.AppendItem(Terminal, "Terminal");
+                fg.AppendItem(NativeTerminal, "NativeTerminal");
                 fg.AppendItem(ForcedLocRefType, "ForcedLocRefType");
                 fg.AppendItem(MarkerColor, "MarkerColor");
                 fg.AppendItem(LoopingSound, "LoopingSound");
@@ -1344,7 +1344,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Destructible = this.Destructible.Combine(rhs.Destructible, (l, r) => l.Combine(r));
                 ret.Keywords = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ExceptionExt.Combine(this.Keywords?.Overall, rhs.Keywords?.Overall), ExceptionExt.Combine(this.Keywords?.Specific, rhs.Keywords?.Specific));
                 ret.Properties = this.Properties.Combine(rhs.Properties, (l, r) => l.Combine(r));
-                ret.Terminal = this.Terminal.Combine(rhs.Terminal);
+                ret.NativeTerminal = this.NativeTerminal.Combine(rhs.NativeTerminal);
                 ret.ForcedLocRefType = this.ForcedLocRefType.Combine(rhs.ForcedLocRefType);
                 ret.MarkerColor = this.MarkerColor.Combine(rhs.MarkerColor);
                 ret.LoopingSound = this.LoopingSound.Combine(rhs.LoopingSound);
@@ -1391,7 +1391,7 @@ namespace Mutagen.Bethesda.Fallout4
             public Destructible.TranslationMask? Destructible;
             public bool Keywords;
             public Properties.TranslationMask? Properties;
-            public bool Terminal;
+            public bool NativeTerminal;
             public bool ForcedLocRefType;
             public bool MarkerColor;
             public bool LoopingSound;
@@ -1418,7 +1418,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.AnimationSound = defaultOn;
                 this.Name = defaultOn;
                 this.Keywords = defaultOn;
-                this.Terminal = defaultOn;
+                this.NativeTerminal = defaultOn;
                 this.ForcedLocRefType = defaultOn;
                 this.MarkerColor = defaultOn;
                 this.LoopingSound = defaultOn;
@@ -1449,7 +1449,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((Destructible != null ? Destructible.OnOverall : DefaultOn, Destructible?.GetCrystal()));
                 ret.Add((Keywords, null));
                 ret.Add((Properties != null ? Properties.OnOverall : DefaultOn, Properties?.GetCrystal()));
-                ret.Add((Terminal, null));
+                ret.Add((NativeTerminal, null));
                 ret.Add((ForcedLocRefType, null));
                 ret.Add((MarkerColor, null));
                 ret.Add((LoopingSound, null));
@@ -1648,7 +1648,7 @@ namespace Mutagen.Bethesda.Fallout4
         /// </summary>
         new ExtendedList<IFormLinkGetter<IKeywordGetter>>? Keywords { get; set; }
         new Properties? Properties { get; set; }
-        new IFormLinkNullable<ITerminalGetter> Terminal { get; set; }
+        new IFormLinkNullable<ITerminalGetter> NativeTerminal { get; set; }
         new IFormLinkNullable<ILocationReferenceTypeGetter> ForcedLocRefType { get; set; }
         new Color? MarkerColor { get; set; }
         new IFormLinkNullable<ISoundDescriptorGetter> LoopingSound { get; set; }
@@ -1730,7 +1730,7 @@ namespace Mutagen.Bethesda.Fallout4
         IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? Keywords { get; }
         #endregion
         IPropertiesGetter? Properties { get; }
-        IFormLinkNullableGetter<ITerminalGetter> Terminal { get; }
+        IFormLinkNullableGetter<ITerminalGetter> NativeTerminal { get; }
         IFormLinkNullableGetter<ILocationReferenceTypeGetter> ForcedLocRefType { get; }
         Color? MarkerColor { get; }
         IFormLinkNullableGetter<ISoundDescriptorGetter> LoopingSound { get; }
@@ -1923,7 +1923,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         Destructible = 12,
         Keywords = 13,
         Properties = 14,
-        Terminal = 15,
+        NativeTerminal = 15,
         ForcedLocRefType = 16,
         MarkerColor = 17,
         LoopingSound = 18,
@@ -2036,7 +2036,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.Destructible = null;
             item.Keywords = null;
             item.Properties = null;
-            item.Terminal.Clear();
+            item.NativeTerminal.Clear();
             item.ForcedLocRefType.Clear();
             item.MarkerColor = default;
             item.LoopingSound.Clear();
@@ -2075,7 +2075,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.Model?.RemapLinks(mapping);
             obj.Destructible?.RemapLinks(mapping);
             obj.Keywords?.RemapLinks(mapping);
-            obj.Terminal.Relink(mapping);
+            obj.NativeTerminal.Relink(mapping);
             obj.ForcedLocRefType.Relink(mapping);
             obj.LoopingSound.Relink(mapping);
             obj.ActivationSound.Relink(mapping);
@@ -2179,7 +2179,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 rhs.Properties,
                 (loqLhs, loqRhs, incl) => loqLhs.GetEqualsMask(loqRhs, incl),
                 include);
-            ret.Terminal = item.Terminal.Equals(rhs.Terminal);
+            ret.NativeTerminal = item.NativeTerminal.Equals(rhs.NativeTerminal);
             ret.ForcedLocRefType = item.ForcedLocRefType.Equals(rhs.ForcedLocRefType);
             ret.MarkerColor = item.MarkerColor.ColorOnlyEquals(rhs.MarkerColor);
             ret.LoopingSound = item.LoopingSound.Equals(rhs.LoopingSound);
@@ -2305,9 +2305,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 PropertiesItem?.ToString(fg, "Properties");
             }
-            if (printMask?.Terminal ?? true)
+            if (printMask?.NativeTerminal ?? true)
             {
-                fg.AppendItem(item.Terminal.FormKeyNullable, "Terminal");
+                fg.AppendItem(item.NativeTerminal.FormKeyNullable, "NativeTerminal");
             }
             if (printMask?.ForcedLocRefType ?? true)
             {
@@ -2495,9 +2495,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 else if (!isPropertiesEqual) return false;
             }
-            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.Terminal) ?? true))
+            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.NativeTerminal) ?? true))
             {
-                if (!lhs.Terminal.Equals(rhs.Terminal)) return false;
+                if (!lhs.NativeTerminal.Equals(rhs.NativeTerminal)) return false;
             }
             if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.ForcedLocRefType) ?? true))
             {
@@ -2611,7 +2611,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 hash.Add(Propertiesitem);
             }
-            hash.Add(item.Terminal);
+            hash.Add(item.NativeTerminal);
             hash.Add(item.ForcedLocRefType);
             if (item.MarkerColor is {} MarkerColoritem)
             {
@@ -2701,9 +2701,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     yield return FormLinkInformation.Factory(item);
                 }
             }
-            if (obj.Terminal.FormKeyNullable.HasValue)
+            if (obj.NativeTerminal.FormKeyNullable.HasValue)
             {
-                yield return FormLinkInformation.Factory(obj.Terminal);
+                yield return FormLinkInformation.Factory(obj.NativeTerminal);
             }
             if (obj.ForcedLocRefType.FormKeyNullable.HasValue)
             {
@@ -2991,9 +2991,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     errorMask?.PopIndex();
                 }
             }
-            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.Terminal) ?? true))
+            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.NativeTerminal) ?? true))
             {
-                item.Terminal.SetTo(rhs.Terminal.FormKeyNullable);
+                item.NativeTerminal.SetTo(rhs.NativeTerminal.FormKeyNullable);
             }
             if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.ForcedLocRefType) ?? true))
             {
@@ -3311,7 +3311,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             }
             FormLinkBinaryTranslation.Instance.WriteNullable(
                 writer: writer,
-                item: item.Terminal,
+                item: item.NativeTerminal,
                 header: translationParams.ConvertToCustom(RecordTypes.NTRM));
             FormLinkBinaryTranslation.Instance.WriteNullable(
                 writer: writer,
@@ -3535,8 +3535,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case RecordTypeInts.NTRM:
                 {
                     frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
-                    item.Terminal.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
-                    return (int)Activator_FieldIndex.Terminal;
+                    item.NativeTerminal.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    return (int)Activator_FieldIndex.NativeTerminal;
                 }
                 case RecordTypeInts.FTYP:
                 {
@@ -3715,9 +3715,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private RangeInt32? _PropertiesLocation;
         public IPropertiesGetter? Properties => _PropertiesLocation.HasValue ? PropertiesBinaryOverlay.PropertiesFactory(new OverlayStream(_data.Slice(_PropertiesLocation!.Value.Min), _package), _package) : default;
         #endregion
-        #region Terminal
-        private int? _TerminalLocation;
-        public IFormLinkNullableGetter<ITerminalGetter> Terminal => _TerminalLocation.HasValue ? new FormLinkNullable<ITerminalGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _TerminalLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<ITerminalGetter>.Null;
+        #region NativeTerminal
+        private int? _NativeTerminalLocation;
+        public IFormLinkNullableGetter<ITerminalGetter> NativeTerminal => _NativeTerminalLocation.HasValue ? new FormLinkNullable<ITerminalGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _NativeTerminalLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<ITerminalGetter>.Null;
         #endregion
         #region ForcedLocRefType
         private int? _ForcedLocRefTypeLocation;
@@ -3917,8 +3917,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.NTRM:
                 {
-                    _TerminalLocation = (stream.Position - offset);
-                    return (int)Activator_FieldIndex.Terminal;
+                    _NativeTerminalLocation = (stream.Position - offset);
+                    return (int)Activator_FieldIndex.NativeTerminal;
                 }
                 case RecordTypeInts.FTYP:
                 {
