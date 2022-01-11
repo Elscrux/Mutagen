@@ -39,7 +39,7 @@ namespace Mutagen.Bethesda.Fallout4
 {
     #region Class
     /// <summary>
-    /// Implemented by: [AcousticSpace, ActionRecord, Activator, ActorValueInformation, AnimationSoundTagSet, Armor, ArmorAddon, ArtObject, AttractionRule, Book, Cell, Class, ColorRecord, Component, Container, ADamageType, Debris, Door, EquipType, Explosion, Faction, Footstep, FootstepSet, FormList, GameSetting, Global, Grass, HeadPart, ImpactDataSet, Keyword, LandscapeTexture, LeveledSpell, LocationReferenceType, MagicEffect, MaterialSwap, MaterialType, Message, MiscItem, MusicTrack, MusicType, NavigationMesh, Npc, ObjectEffect, Outfit, Perk, PlacedObject, Quest, Race, Region, ReverbParameters, SoundDescriptor, SoundMarker, SoundOutputModel, Spell, Static, TalkingActivator, TextureSet, Transform, VoiceType, Water, Weather, Worldspace]
+    /// Implemented by: [AcousticSpace, ActionRecord, Activator, ActorValueInformation, AnimationSoundTagSet, Armor, ArmorAddon, ArtObject, AttractionRule, Book, Cell, Class, ColorRecord, Component, Container, ADamageType, Debris, Door, EquipType, Explosion, Faction, Footstep, FootstepSet, FormList, GameSetting, Global, Grass, HeadPart, ImpactDataSet, Ingredient, Keyword, LandscapeTexture, LeveledSpell, LocationReferenceType, MagicEffect, MaterialSwap, MaterialType, Message, MiscItem, MusicTrack, MusicType, NavigationMesh, Npc, ObjectEffect, Outfit, Perk, PlacedObject, Quest, Race, Region, ReverbParameters, SoundDescriptor, SoundMarker, SoundOutputModel, Spell, Static, TalkingActivator, TextureSet, Transform, VoiceType, Water, Weather, Worldspace]
     /// </summary>
     public abstract partial class Fallout4MajorRecord :
         MajorRecord,
@@ -474,7 +474,7 @@ namespace Mutagen.Bethesda.Fallout4
 
     #region Interface
     /// <summary>
-    /// Implemented by: [AcousticSpace, ActionRecord, Activator, ActorValueInformation, AnimationSoundTagSet, Armor, ArmorAddon, ArtObject, AttractionRule, Book, Cell, Class, ColorRecord, Component, Container, ADamageType, Debris, Door, EquipType, Explosion, Faction, Footstep, FootstepSet, FormList, GameSetting, Global, Grass, HeadPart, ImpactDataSet, Keyword, LandscapeTexture, LeveledSpell, LocationReferenceType, MagicEffect, MaterialSwap, MaterialType, Message, MiscItem, MusicTrack, MusicType, NavigationMesh, Npc, ObjectEffect, Outfit, Perk, PlacedObject, Quest, Race, Region, ReverbParameters, SoundDescriptor, SoundMarker, SoundOutputModel, Spell, Static, TalkingActivator, TextureSet, Transform, VoiceType, Water, Weather, Worldspace]
+    /// Implemented by: [AcousticSpace, ActionRecord, Activator, ActorValueInformation, AnimationSoundTagSet, Armor, ArmorAddon, ArtObject, AttractionRule, Book, Cell, Class, ColorRecord, Component, Container, ADamageType, Debris, Door, EquipType, Explosion, Faction, Footstep, FootstepSet, FormList, GameSetting, Global, Grass, HeadPart, ImpactDataSet, Ingredient, Keyword, LandscapeTexture, LeveledSpell, LocationReferenceType, MagicEffect, MaterialSwap, MaterialType, Message, MiscItem, MusicTrack, MusicType, NavigationMesh, Npc, ObjectEffect, Outfit, Perk, PlacedObject, Quest, Race, Region, ReverbParameters, SoundDescriptor, SoundMarker, SoundOutputModel, Spell, Static, TalkingActivator, TextureSet, Transform, VoiceType, Water, Weather, Worldspace]
     /// </summary>
     public partial interface IFallout4MajorRecord :
         IFallout4MajorRecordGetter,
@@ -494,7 +494,7 @@ namespace Mutagen.Bethesda.Fallout4
     }
 
     /// <summary>
-    /// Implemented by: [AcousticSpace, ActionRecord, Activator, ActorValueInformation, AnimationSoundTagSet, Armor, ArmorAddon, ArtObject, AttractionRule, Book, Cell, Class, ColorRecord, Component, Container, ADamageType, Debris, Door, EquipType, Explosion, Faction, Footstep, FootstepSet, FormList, GameSetting, Global, Grass, HeadPart, ImpactDataSet, Keyword, LandscapeTexture, LeveledSpell, LocationReferenceType, MagicEffect, MaterialSwap, MaterialType, Message, MiscItem, MusicTrack, MusicType, NavigationMesh, Npc, ObjectEffect, Outfit, Perk, PlacedObject, Quest, Race, Region, ReverbParameters, SoundDescriptor, SoundMarker, SoundOutputModel, Spell, Static, TalkingActivator, TextureSet, Transform, VoiceType, Water, Weather, Worldspace]
+    /// Implemented by: [AcousticSpace, ActionRecord, Activator, ActorValueInformation, AnimationSoundTagSet, Armor, ArmorAddon, ArtObject, AttractionRule, Book, Cell, Class, ColorRecord, Component, Container, ADamageType, Debris, Door, EquipType, Explosion, Faction, Footstep, FootstepSet, FormList, GameSetting, Global, Grass, HeadPart, ImpactDataSet, Ingredient, Keyword, LandscapeTexture, LeveledSpell, LocationReferenceType, MagicEffect, MaterialSwap, MaterialType, Message, MiscItem, MusicTrack, MusicType, NavigationMesh, Npc, ObjectEffect, Outfit, Perk, PlacedObject, Quest, Race, Region, ReverbParameters, SoundDescriptor, SoundMarker, SoundOutputModel, Spell, Static, TalkingActivator, TextureSet, Transform, VoiceType, Water, Weather, Worldspace]
     /// </summary>
     public partial interface IFallout4MajorRecordGetter :
         IMajorRecordGetter,

@@ -158,6 +158,9 @@
     <Compile Include="Records\Major Records\HeadPart.cs">
       <DependentUpon>HeadPart.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Major Records\Ingredient.cs">
+      <DependentUpon>Ingredient.xml</DependentUpon>
+    </Compile>
     <Compile Include="Records\Major Records\Keyword.cs">
       <DependentUpon>Keyword.xml</DependentUpon>
     </Compile>
@@ -741,6 +744,9 @@
       <DependentUpon>Worldspace.xml</DependentUpon>
     </Compile>
     <Compile Include="Interfaces\IEmittance_Generated.cs" />
+    <Compile Include="Records\Major Records\Ingredient_Generated.cs">
+      <DependentUpon>Ingredient.xml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="GitInfo" Version="2.2.0">

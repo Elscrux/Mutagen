@@ -80,6 +80,8 @@ namespace Mutagen.Bethesda.Fallout4
             _Armors_Object = new Fallout4Group<Armor>(this);
             _Books_Object = new Fallout4Group<Book>(this);
             _Containers_Object = new Fallout4Group<Container>(this);
+            _Doors_Object = new Fallout4Group<Door>(this);
+            _Ingredients_Object = new Fallout4Group<Ingredient>(this);
             _MiscItems_Object = new Fallout4Group<MiscItem>(this);
             _Statics_Object = new Fallout4Group<Static>(this);
             _Grasses_Object = new Fallout4Group<Grass>(this);
@@ -263,6 +265,20 @@ namespace Mutagen.Bethesda.Fallout4
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IFallout4GroupGetter<IContainerGetter> IFallout4ModGetter.Containers => _Containers_Object;
         #endregion
+        #region Doors
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Fallout4Group<Door> _Doors_Object;
+        public Fallout4Group<Door> Doors => _Doors_Object;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFallout4GroupGetter<IDoorGetter> IFallout4ModGetter.Doors => _Doors_Object;
+        #endregion
+        #region Ingredients
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Fallout4Group<Ingredient> _Ingredients_Object;
+        public Fallout4Group<Ingredient> Ingredients => _Ingredients_Object;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFallout4GroupGetter<IIngredientGetter> IFallout4ModGetter.Ingredients => _Ingredients_Object;
+        #endregion
         #region MiscItems
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private Fallout4Group<MiscItem> _MiscItems_Object;
@@ -395,6 +411,8 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Armors = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Books = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Containers = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
+                this.Doors = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
+                this.Ingredients = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.MiscItems = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Statics = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Grasses = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
@@ -432,6 +450,8 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem Armors,
                 TItem Books,
                 TItem Containers,
+                TItem Doors,
+                TItem Ingredients,
                 TItem MiscItems,
                 TItem Statics,
                 TItem Grasses,
@@ -467,6 +487,8 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Armors = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Armors, new Fallout4Group.Mask<TItem>(Armors));
                 this.Books = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Books, new Fallout4Group.Mask<TItem>(Books));
                 this.Containers = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Containers, new Fallout4Group.Mask<TItem>(Containers));
+                this.Doors = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Doors, new Fallout4Group.Mask<TItem>(Doors));
+                this.Ingredients = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Ingredients, new Fallout4Group.Mask<TItem>(Ingredients));
                 this.MiscItems = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(MiscItems, new Fallout4Group.Mask<TItem>(MiscItems));
                 this.Statics = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Statics, new Fallout4Group.Mask<TItem>(Statics));
                 this.Grasses = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Grasses, new Fallout4Group.Mask<TItem>(Grasses));
@@ -512,6 +534,8 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Armors { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Books { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Containers { get; set; }
+            public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Doors { get; set; }
+            public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Ingredients { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? MiscItems { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Statics { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Grasses { get; set; }
@@ -558,6 +582,8 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!object.Equals(this.Armors, rhs.Armors)) return false;
                 if (!object.Equals(this.Books, rhs.Books)) return false;
                 if (!object.Equals(this.Containers, rhs.Containers)) return false;
+                if (!object.Equals(this.Doors, rhs.Doors)) return false;
+                if (!object.Equals(this.Ingredients, rhs.Ingredients)) return false;
                 if (!object.Equals(this.MiscItems, rhs.MiscItems)) return false;
                 if (!object.Equals(this.Statics, rhs.Statics)) return false;
                 if (!object.Equals(this.Grasses, rhs.Grasses)) return false;
@@ -597,6 +623,8 @@ namespace Mutagen.Bethesda.Fallout4
                 hash.Add(this.Armors);
                 hash.Add(this.Books);
                 hash.Add(this.Containers);
+                hash.Add(this.Doors);
+                hash.Add(this.Ingredients);
                 hash.Add(this.MiscItems);
                 hash.Add(this.Statics);
                 hash.Add(this.Grasses);
@@ -734,6 +762,16 @@ namespace Mutagen.Bethesda.Fallout4
                 {
                     if (!eval(this.Containers.Overall)) return false;
                     if (this.Containers.Specific != null && !this.Containers.Specific.All(eval)) return false;
+                }
+                if (Doors != null)
+                {
+                    if (!eval(this.Doors.Overall)) return false;
+                    if (this.Doors.Specific != null && !this.Doors.Specific.All(eval)) return false;
+                }
+                if (Ingredients != null)
+                {
+                    if (!eval(this.Ingredients.Overall)) return false;
+                    if (this.Ingredients.Specific != null && !this.Ingredients.Specific.All(eval)) return false;
                 }
                 if (MiscItems != null)
                 {
@@ -912,6 +950,16 @@ namespace Mutagen.Bethesda.Fallout4
                     if (eval(this.Containers.Overall)) return true;
                     if (this.Containers.Specific != null && this.Containers.Specific.Any(eval)) return true;
                 }
+                if (Doors != null)
+                {
+                    if (eval(this.Doors.Overall)) return true;
+                    if (this.Doors.Specific != null && this.Doors.Specific.Any(eval)) return true;
+                }
+                if (Ingredients != null)
+                {
+                    if (eval(this.Ingredients.Overall)) return true;
+                    if (this.Ingredients.Specific != null && this.Ingredients.Specific.Any(eval)) return true;
+                }
                 if (MiscItems != null)
                 {
                     if (eval(this.MiscItems.Overall)) return true;
@@ -1000,6 +1048,8 @@ namespace Mutagen.Bethesda.Fallout4
                 obj.Armors = this.Armors == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Armors.Overall), this.Armors.Specific?.Translate(eval));
                 obj.Books = this.Books == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Books.Overall), this.Books.Specific?.Translate(eval));
                 obj.Containers = this.Containers == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Containers.Overall), this.Containers.Specific?.Translate(eval));
+                obj.Doors = this.Doors == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Doors.Overall), this.Doors.Specific?.Translate(eval));
+                obj.Ingredients = this.Ingredients == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Ingredients.Overall), this.Ingredients.Specific?.Translate(eval));
                 obj.MiscItems = this.MiscItems == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.MiscItems.Overall), this.MiscItems.Specific?.Translate(eval));
                 obj.Statics = this.Statics == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Statics.Overall), this.Statics.Specific?.Translate(eval));
                 obj.Grasses = this.Grasses == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Grasses.Overall), this.Grasses.Specific?.Translate(eval));
@@ -1128,6 +1178,14 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         Containers?.ToString(fg);
                     }
+                    if (printMask?.Doors?.Overall ?? true)
+                    {
+                        Doors?.ToString(fg);
+                    }
+                    if (printMask?.Ingredients?.Overall ?? true)
+                    {
+                        Ingredients?.ToString(fg);
+                    }
                     if (printMask?.MiscItems?.Overall ?? true)
                     {
                         MiscItems?.ToString(fg);
@@ -1217,6 +1275,8 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Armor.ErrorMask>?>? Armors;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Book.ErrorMask>?>? Books;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Container.ErrorMask>?>? Containers;
+            public MaskItem<Exception?, Fallout4Group.ErrorMask<Door.ErrorMask>?>? Doors;
+            public MaskItem<Exception?, Fallout4Group.ErrorMask<Ingredient.ErrorMask>?>? Ingredients;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<MiscItem.ErrorMask>?>? MiscItems;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Static.ErrorMask>?>? Statics;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Grass.ErrorMask>?>? Grasses;
@@ -1283,6 +1343,10 @@ namespace Mutagen.Bethesda.Fallout4
                         return Books;
                     case Fallout4Mod_FieldIndex.Containers:
                         return Containers;
+                    case Fallout4Mod_FieldIndex.Doors:
+                        return Doors;
+                    case Fallout4Mod_FieldIndex.Ingredients:
+                        return Ingredients;
                     case Fallout4Mod_FieldIndex.MiscItems:
                         return MiscItems;
                     case Fallout4Mod_FieldIndex.Statics:
@@ -1384,6 +1448,12 @@ namespace Mutagen.Bethesda.Fallout4
                         break;
                     case Fallout4Mod_FieldIndex.Containers:
                         this.Containers = new MaskItem<Exception?, Fallout4Group.ErrorMask<Container.ErrorMask>?>(ex, null);
+                        break;
+                    case Fallout4Mod_FieldIndex.Doors:
+                        this.Doors = new MaskItem<Exception?, Fallout4Group.ErrorMask<Door.ErrorMask>?>(ex, null);
+                        break;
+                    case Fallout4Mod_FieldIndex.Ingredients:
+                        this.Ingredients = new MaskItem<Exception?, Fallout4Group.ErrorMask<Ingredient.ErrorMask>?>(ex, null);
                         break;
                     case Fallout4Mod_FieldIndex.MiscItems:
                         this.MiscItems = new MaskItem<Exception?, Fallout4Group.ErrorMask<MiscItem.ErrorMask>?>(ex, null);
@@ -1497,6 +1567,12 @@ namespace Mutagen.Bethesda.Fallout4
                     case Fallout4Mod_FieldIndex.Containers:
                         this.Containers = (MaskItem<Exception?, Fallout4Group.ErrorMask<Container.ErrorMask>?>?)obj;
                         break;
+                    case Fallout4Mod_FieldIndex.Doors:
+                        this.Doors = (MaskItem<Exception?, Fallout4Group.ErrorMask<Door.ErrorMask>?>?)obj;
+                        break;
+                    case Fallout4Mod_FieldIndex.Ingredients:
+                        this.Ingredients = (MaskItem<Exception?, Fallout4Group.ErrorMask<Ingredient.ErrorMask>?>?)obj;
+                        break;
                     case Fallout4Mod_FieldIndex.MiscItems:
                         this.MiscItems = (MaskItem<Exception?, Fallout4Group.ErrorMask<MiscItem.ErrorMask>?>?)obj;
                         break;
@@ -1559,6 +1635,8 @@ namespace Mutagen.Bethesda.Fallout4
                 if (Armors != null) return true;
                 if (Books != null) return true;
                 if (Containers != null) return true;
+                if (Doors != null) return true;
+                if (Ingredients != null) return true;
                 if (MiscItems != null) return true;
                 if (Statics != null) return true;
                 if (Grasses != null) return true;
@@ -1627,6 +1705,8 @@ namespace Mutagen.Bethesda.Fallout4
                 Armors?.ToString(fg);
                 Books?.ToString(fg);
                 Containers?.ToString(fg);
+                Doors?.ToString(fg);
+                Ingredients?.ToString(fg);
                 MiscItems?.ToString(fg);
                 Statics?.ToString(fg);
                 Grasses?.ToString(fg);
@@ -1669,6 +1749,8 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Armors = this.Armors.Combine(rhs.Armors, (l, r) => l.Combine(r));
                 ret.Books = this.Books.Combine(rhs.Books, (l, r) => l.Combine(r));
                 ret.Containers = this.Containers.Combine(rhs.Containers, (l, r) => l.Combine(r));
+                ret.Doors = this.Doors.Combine(rhs.Doors, (l, r) => l.Combine(r));
+                ret.Ingredients = this.Ingredients.Combine(rhs.Ingredients, (l, r) => l.Combine(r));
                 ret.MiscItems = this.MiscItems.Combine(rhs.MiscItems, (l, r) => l.Combine(r));
                 ret.Statics = this.Statics.Combine(rhs.Statics, (l, r) => l.Combine(r));
                 ret.Grasses = this.Grasses.Combine(rhs.Grasses, (l, r) => l.Combine(r));
@@ -1726,6 +1808,8 @@ namespace Mutagen.Bethesda.Fallout4
             public Fallout4Group.TranslationMask<Armor.TranslationMask>? Armors;
             public Fallout4Group.TranslationMask<Book.TranslationMask>? Books;
             public Fallout4Group.TranslationMask<Container.TranslationMask>? Containers;
+            public Fallout4Group.TranslationMask<Door.TranslationMask>? Doors;
+            public Fallout4Group.TranslationMask<Ingredient.TranslationMask>? Ingredients;
             public Fallout4Group.TranslationMask<MiscItem.TranslationMask>? MiscItems;
             public Fallout4Group.TranslationMask<Static.TranslationMask>? Statics;
             public Fallout4Group.TranslationMask<Grass.TranslationMask>? Grasses;
@@ -1784,6 +1868,8 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((Armors != null ? Armors.OnOverall : DefaultOn, Armors?.GetCrystal()));
                 ret.Add((Books != null ? Books.OnOverall : DefaultOn, Books?.GetCrystal()));
                 ret.Add((Containers != null ? Containers.OnOverall : DefaultOn, Containers?.GetCrystal()));
+                ret.Add((Doors != null ? Doors.OnOverall : DefaultOn, Doors?.GetCrystal()));
+                ret.Add((Ingredients != null ? Ingredients.OnOverall : DefaultOn, Ingredients?.GetCrystal()));
                 ret.Add((MiscItems != null ? MiscItems.OnOverall : DefaultOn, MiscItems?.GetCrystal()));
                 ret.Add((Statics != null ? Statics.OnOverall : DefaultOn, Statics?.GetCrystal()));
                 ret.Add((Grasses != null ? Grasses.OnOverall : DefaultOn, Grasses?.GetCrystal()));
@@ -1859,6 +1945,8 @@ namespace Mutagen.Bethesda.Fallout4
             _Armors_Object = new Fallout4Group<Armor>(this);
             _Books_Object = new Fallout4Group<Book>(this);
             _Containers_Object = new Fallout4Group<Container>(this);
+            _Doors_Object = new Fallout4Group<Door>(this);
+            _Ingredients_Object = new Fallout4Group<Ingredient>(this);
             _MiscItems_Object = new Fallout4Group<MiscItem>(this);
             _Statics_Object = new Fallout4Group<Static>(this);
             _Grasses_Object = new Fallout4Group<Grass>(this);
@@ -1967,6 +2055,14 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 this.Containers.RecordCache.Set(rhsMod.Containers.RecordCache.Items);
             }
+            if (mask?.Doors ?? true)
+            {
+                this.Doors.RecordCache.Set(rhsMod.Doors.RecordCache.Items);
+            }
+            if (mask?.Ingredients ?? true)
+            {
+                this.Ingredients.RecordCache.Set(rhsMod.Ingredients.RecordCache.Items);
+            }
             if (mask?.MiscItems ?? true)
             {
                 this.MiscItems.RecordCache.Set(rhsMod.MiscItems.RecordCache.Items);
@@ -2040,6 +2136,8 @@ namespace Mutagen.Bethesda.Fallout4
             count += Armors.RecordCache.Count > 0 ? 1 : default(uint);
             count += Books.RecordCache.Count > 0 ? 1 : default(uint);
             count += Containers.RecordCache.Count > 0 ? 1 : default(uint);
+            count += Doors.RecordCache.Count > 0 ? 1 : default(uint);
+            count += Ingredients.RecordCache.Count > 0 ? 1 : default(uint);
             count += MiscItems.RecordCache.Count > 0 ? 1 : default(uint);
             count += Statics.RecordCache.Count > 0 ? 1 : default(uint);
             count += Grasses.RecordCache.Count > 0 ? 1 : default(uint);
@@ -2320,6 +2418,8 @@ namespace Mutagen.Bethesda.Fallout4
         new Fallout4Group<Armor> Armors { get; }
         new Fallout4Group<Book> Books { get; }
         new Fallout4Group<Container> Containers { get; }
+        new Fallout4Group<Door> Doors { get; }
+        new Fallout4Group<Ingredient> Ingredients { get; }
         new Fallout4Group<MiscItem> MiscItems { get; }
         new Fallout4Group<Static> Statics { get; }
         new Fallout4Group<Grass> Grasses { get; }
@@ -2372,6 +2472,8 @@ namespace Mutagen.Bethesda.Fallout4
         IFallout4GroupGetter<IArmorGetter> Armors { get; }
         IFallout4GroupGetter<IBookGetter> Books { get; }
         IFallout4GroupGetter<IContainerGetter> Containers { get; }
+        IFallout4GroupGetter<IDoorGetter> Doors { get; }
+        IFallout4GroupGetter<IIngredientGetter> Ingredients { get; }
         IFallout4GroupGetter<IMiscItemGetter> MiscItems { get; }
         IFallout4GroupGetter<IStaticGetter> Statics { get; }
         IFallout4GroupGetter<IGrassGetter> Grasses { get; }
@@ -2962,16 +3064,18 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         Armors = 21,
         Books = 22,
         Containers = 23,
-        MiscItems = 24,
-        Statics = 25,
-        Grasses = 26,
-        VoiceTypes = 27,
-        Quests = 28,
-        MaterialTypes = 29,
-        ArmorAddons = 30,
-        Messages = 31,
-        MusicTypes = 32,
-        MusicTracks = 33,
+        Doors = 24,
+        Ingredients = 25,
+        MiscItems = 26,
+        Statics = 27,
+        Grasses = 28,
+        VoiceTypes = 29,
+        Quests = 30,
+        MaterialTypes = 31,
+        ArmorAddons = 32,
+        Messages = 33,
+        MusicTypes = 34,
+        MusicTracks = 35,
     }
     #endregion
 
@@ -2989,9 +3093,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public const string GUID = "9cae6baa-1084-4862-ae0a-07c79b9f2a3a";
 
-        public const ushort AdditionalFieldCount = 34;
+        public const ushort AdditionalFieldCount = 36;
 
-        public const ushort FieldCount = 34;
+        public const ushort FieldCount = 36;
 
         public static readonly Type MaskType = typeof(Fallout4Mod.Mask<>);
 
@@ -3083,6 +3187,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.Armors.Clear();
             item.Books.Clear();
             item.Containers.Clear();
+            item.Doors.Clear();
+            item.Ingredients.Clear();
             item.MiscItems.Clear();
             item.Statics.Clear();
             item.Grasses.Clear();
@@ -3122,6 +3228,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.Armors.RemapLinks(mapping);
             obj.Books.RemapLinks(mapping);
             obj.Containers.RemapLinks(mapping);
+            obj.Doors.RemapLinks(mapping);
+            obj.Ingredients.RemapLinks(mapping);
             obj.MiscItems.RemapLinks(mapping);
             obj.Statics.RemapLinks(mapping);
             obj.Grasses.RemapLinks(mapping);
@@ -3189,6 +3297,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.Armors.Remove(keys);
             obj.Books.Remove(keys);
             obj.Containers.Remove(keys);
+            obj.Doors.Remove(keys);
+            obj.Ingredients.Remove(keys);
             obj.MiscItems.Remove(keys);
             obj.Statics.Remove(keys);
             obj.Grasses.Remove(keys);
@@ -3402,6 +3512,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         type: type,
                         keys: keys);
                     break;
+                case "Door":
+                case "IDoorGetter":
+                case "IDoor":
+                case "IDoorInternal":
+                    obj.Doors.Remove(
+                        type: type,
+                        keys: keys);
+                    break;
+                case "Ingredient":
+                case "IIngredientGetter":
+                case "IIngredient":
+                case "IIngredientInternal":
+                    obj.Ingredients.Remove(
+                        type: type,
+                        keys: keys);
+                    break;
                 case "MiscItem":
                 case "IMiscItemGetter":
                 case "IMiscItem":
@@ -3492,6 +3618,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     Remove(obj, keys, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IBookGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IContainerGetter), throwIfUnknown: throwIfUnknown);
+                    Remove(obj, keys, typeof(IDoorGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IFactionGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(ISpellGetter), throwIfUnknown: throwIfUnknown);
@@ -3501,6 +3628,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IItemGetter":
                     Remove(obj, keys, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IBookGetter), throwIfUnknown: throwIfUnknown);
+                    Remove(obj, keys, typeof(IIngredientGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown);
                     break;
                 case "IOutfitTarget":
@@ -3511,11 +3639,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IConstructibleGetter":
                     Remove(obj, keys, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IBookGetter), throwIfUnknown: throwIfUnknown);
+                    Remove(obj, keys, typeof(IIngredientGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown);
                     break;
                 case "IBindableEquipment":
                 case "IBindableEquipmentGetter":
                     Remove(obj, keys, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown);
+                    break;
+                case "ILocationTargetable":
+                case "ILocationTargetableGetter":
+                    Remove(obj, keys, typeof(IDoorGetter), throwIfUnknown: throwIfUnknown);
                     break;
                 case "IOwner":
                 case "IOwnerGetter":
@@ -3524,6 +3657,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IRelatable":
                 case "IRelatableGetter":
                     Remove(obj, keys, typeof(IFactionGetter), throwIfUnknown: throwIfUnknown);
+                    break;
+                case "IHarvestTarget":
+                case "IHarvestTargetGetter":
+                    Remove(obj, keys, typeof(IIngredientGetter), throwIfUnknown: throwIfUnknown);
+                    Remove(obj, keys, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown);
                     break;
                 case "IKeywordLinkedReference":
                 case "IKeywordLinkedReferenceGetter":
@@ -3540,10 +3678,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "ILocationRecord":
                 case "ILocationRecordGetter":
                     Remove(obj, keys, typeof(ILocationReferenceTypeGetter), throwIfUnknown: throwIfUnknown);
-                    break;
-                case "IHarvestTarget":
-                case "IHarvestTargetGetter":
-                    Remove(obj, keys, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown);
                     break;
                 case "IEffectRecord":
                 case "IEffectRecordGetter":
@@ -3630,6 +3764,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ret.Armors = MaskItemExt.Factory(item.Armors.GetEqualsMask(rhs.Armors, include), include);
             ret.Books = MaskItemExt.Factory(item.Books.GetEqualsMask(rhs.Books, include), include);
             ret.Containers = MaskItemExt.Factory(item.Containers.GetEqualsMask(rhs.Containers, include), include);
+            ret.Doors = MaskItemExt.Factory(item.Doors.GetEqualsMask(rhs.Doors, include), include);
+            ret.Ingredients = MaskItemExt.Factory(item.Ingredients.GetEqualsMask(rhs.Ingredients, include), include);
             ret.MiscItems = MaskItemExt.Factory(item.MiscItems.GetEqualsMask(rhs.MiscItems, include), include);
             ret.Statics = MaskItemExt.Factory(item.Statics.GetEqualsMask(rhs.Statics, include), include);
             ret.Grasses = MaskItemExt.Factory(item.Grasses.GetEqualsMask(rhs.Grasses, include), include);
@@ -3781,6 +3917,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             if (printMask?.Containers?.Overall ?? true)
             {
                 item.Containers?.ToString(fg, "Containers");
+            }
+            if (printMask?.Doors?.Overall ?? true)
+            {
+                item.Doors?.ToString(fg, "Doors");
+            }
+            if (printMask?.Ingredients?.Overall ?? true)
+            {
+                item.Ingredients?.ToString(fg, "Ingredients");
             }
             if (printMask?.MiscItems?.Overall ?? true)
             {
@@ -4023,6 +4167,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 else if (!isContainersEqual) return false;
             }
+            if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.Doors) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.Doors, rhs.Doors, out var lhsDoors, out var rhsDoors, out var isDoorsEqual))
+                {
+                    if (!object.Equals(lhsDoors, rhsDoors)) return false;
+                }
+                else if (!isDoorsEqual) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.Ingredients) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.Ingredients, rhs.Ingredients, out var lhsIngredients, out var rhsIngredients, out var isIngredientsEqual))
+                {
+                    if (!object.Equals(lhsIngredients, rhsIngredients)) return false;
+                }
+                else if (!isIngredientsEqual) return false;
+            }
             if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.MiscItems) ?? true))
             {
                 if (EqualsMaskHelper.RefEquality(lhs.MiscItems, rhs.MiscItems, out var lhsMiscItems, out var rhsMiscItems, out var isMiscItemsEqual))
@@ -4133,6 +4293,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             hash.Add(item.Armors);
             hash.Add(item.Books);
             hash.Add(item.Containers);
+            hash.Add(item.Doors);
+            hash.Add(item.Ingredients);
             hash.Add(item.MiscItems);
             hash.Add(item.Statics);
             hash.Add(item.Grasses);
@@ -4276,6 +4438,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IContainer":
                 case "IContainerInternal":
                     return obj.Containers;
+                case "Door":
+                case "IDoorGetter":
+                case "IDoor":
+                case "IDoorInternal":
+                    return obj.Doors;
+                case "Ingredient":
+                case "IIngredientGetter":
+                case "IIngredient":
+                case "IIngredientInternal":
+                    return obj.Ingredients;
                 case "MiscItem":
                 case "IMiscItemGetter":
                 case "IMiscItem":
@@ -4346,7 +4518,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 mod: item,
                 modHeader: item.ModHeader.DeepCopy(),
                 modKey: modKey);
-            Stream[] outputStreams = new Stream[33];
+            Stream[] outputStreams = new Stream[35];
             List<Action> toDo = new List<Action>();
             toDo.Add(() => WriteGroupParallel(item.GameSettings, writer.MetaData.MasterReferences!, 0, outputStreams, param.StringsWriter));
             toDo.Add(() => WriteGroupParallel(item.Keywords, writer.MetaData.MasterReferences!, 1, outputStreams, param.StringsWriter));
@@ -4371,16 +4543,18 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             toDo.Add(() => WriteGroupParallel(item.Armors, writer.MetaData.MasterReferences!, 20, outputStreams, param.StringsWriter));
             toDo.Add(() => WriteGroupParallel(item.Books, writer.MetaData.MasterReferences!, 21, outputStreams, param.StringsWriter));
             toDo.Add(() => WriteGroupParallel(item.Containers, writer.MetaData.MasterReferences!, 22, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.MiscItems, writer.MetaData.MasterReferences!, 23, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Statics, writer.MetaData.MasterReferences!, 24, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Grasses, writer.MetaData.MasterReferences!, 25, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.VoiceTypes, writer.MetaData.MasterReferences!, 26, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Quests, writer.MetaData.MasterReferences!, 27, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.MaterialTypes, writer.MetaData.MasterReferences!, 28, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.ArmorAddons, writer.MetaData.MasterReferences!, 29, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Messages, writer.MetaData.MasterReferences!, 30, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.MusicTypes, writer.MetaData.MasterReferences!, 31, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.MusicTracks, writer.MetaData.MasterReferences!, 32, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Doors, writer.MetaData.MasterReferences!, 23, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Ingredients, writer.MetaData.MasterReferences!, 24, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.MiscItems, writer.MetaData.MasterReferences!, 25, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Statics, writer.MetaData.MasterReferences!, 26, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Grasses, writer.MetaData.MasterReferences!, 27, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.VoiceTypes, writer.MetaData.MasterReferences!, 28, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Quests, writer.MetaData.MasterReferences!, 29, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.MaterialTypes, writer.MetaData.MasterReferences!, 30, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.ArmorAddons, writer.MetaData.MasterReferences!, 31, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Messages, writer.MetaData.MasterReferences!, 32, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.MusicTypes, writer.MetaData.MasterReferences!, 33, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.MusicTracks, writer.MetaData.MasterReferences!, 34, outputStreams, param.StringsWriter));
             Parallel.Invoke(toDo.ToArray());
             PluginUtilityTranslation.CompileStreamsInto(
                 outputStreams.NotNull(),
@@ -4595,6 +4769,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     yield return item;
                 }
             }
+            if (obj.Doors is IFormLinkContainerGetter DoorslinkCont)
+            {
+                foreach (var item in DoorslinkCont.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
+            if (obj.Ingredients is IFormLinkContainerGetter IngredientslinkCont)
+            {
+                foreach (var item in IngredientslinkCont.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
             if (obj.MiscItems is IFormLinkContainerGetter MiscItemslinkCont)
             {
                 foreach (var item in MiscItemslinkCont.ContainedFormLinks)
@@ -4759,6 +4947,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 yield return item;
             }
             foreach (var item in obj.Containers.EnumerateMajorRecords())
+            {
+                yield return item;
+            }
+            foreach (var item in obj.Doors.EnumerateMajorRecords())
+            {
+                yield return item;
+            }
+            foreach (var item in obj.Ingredients.EnumerateMajorRecords())
             {
                 yield return item;
             }
@@ -5044,6 +5240,24 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         yield return item;
                     }
                     yield break;
+                case "Door":
+                case "IDoorGetter":
+                case "IDoor":
+                case "IDoorInternal":
+                    foreach (var item in obj.Doors.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                case "Ingredient":
+                case "IIngredientGetter":
+                case "IIngredient":
+                case "IIngredientInternal":
+                    foreach (var item in obj.Ingredients.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
                 case "MiscItem":
                 case "IMiscItemGetter":
                 case "IMiscItem":
@@ -5170,6 +5384,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IDoorGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IFactionGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -5206,6 +5424,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IDoorGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IFactionGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -5235,6 +5457,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IIngredientGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -5248,6 +5474,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         yield return item;
                     }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IBookGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IIngredientGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -5285,6 +5515,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IIngredientGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -5298,6 +5532,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         yield return item;
                     }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IBookGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IIngredientGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -5319,6 +5557,23 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IBindableEquipmentGetter":
                 {
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "ILocationTargetable":
+                {
+                    if (!Fallout4Mod_Registration.SetterType.IsAssignableFrom(obj.GetType())) yield break;
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IDoorGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "ILocationTargetableGetter":
+                {
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IDoorGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -5353,6 +5608,31 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IRelatableGetter":
                 {
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IFactionGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "IHarvestTarget":
+                {
+                    if (!Fallout4Mod_Registration.SetterType.IsAssignableFrom(obj.GetType())) yield break;
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IIngredientGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "IHarvestTargetGetter":
+                {
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IIngredientGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -5421,23 +5701,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "ILocationRecordGetter":
                 {
                     foreach (var item in EnumerateMajorRecords(obj, typeof(ILocationReferenceTypeGetter), throwIfUnknown: throwIfUnknown))
-                    {
-                        yield return item;
-                    }
-                    yield break;
-                }
-                case "IHarvestTarget":
-                {
-                    if (!Fallout4Mod_Registration.SetterType.IsAssignableFrom(obj.GetType())) yield break;
-                    foreach (var item in EnumerateMajorRecords(obj, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown))
-                    {
-                        yield return item;
-                    }
-                    yield break;
-                }
-                case "IHarvestTargetGetter":
-                {
-                    foreach (var item in EnumerateMajorRecords(obj, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -5667,6 +5930,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     record: item,
                     group: (m) => m.Containers,
                     groupGetter: (m) => m.Containers);
+            }
+            foreach (var item in obj.Doors)
+            {
+                yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, Door, IDoorGetter>(
+                    modKey: obj.ModKey,
+                    record: item,
+                    group: (m) => m.Doors,
+                    groupGetter: (m) => m.Doors);
+            }
+            foreach (var item in obj.Ingredients)
+            {
+                yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, Ingredient, IIngredientGetter>(
+                    modKey: obj.ModKey,
+                    record: item,
+                    group: (m) => m.Ingredients,
+                    groupGetter: (m) => m.Ingredients);
             }
             foreach (var item in obj.MiscItems)
             {
@@ -6078,6 +6357,32 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                             groupGetter: (m) => m.Containers);
                     }
                     yield break;
+                case "Door":
+                case "IDoorGetter":
+                case "IDoor":
+                case "IDoorInternal":
+                    foreach (var item in obj.Doors)
+                    {
+                        yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, Door, IDoorGetter>(
+                            modKey: obj.ModKey,
+                            record: item,
+                            group: (m) => m.Doors,
+                            groupGetter: (m) => m.Doors);
+                    }
+                    yield break;
+                case "Ingredient":
+                case "IIngredientGetter":
+                case "IIngredient":
+                case "IIngredientInternal":
+                    foreach (var item in obj.Ingredients)
+                    {
+                        yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, Ingredient, IIngredientGetter>(
+                            modKey: obj.ModKey,
+                            record: item,
+                            group: (m) => m.Ingredients,
+                            groupGetter: (m) => m.Ingredients);
+                    }
+                    yield break;
                 case "MiscItem":
                 case "IMiscItemGetter":
                 case "IMiscItem":
@@ -6259,6 +6564,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     foreach (var item in EnumerateMajorRecordContexts(
                         obj,
                         linkCache: linkCache,
+                        type: typeof(IDoorGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
                         type: typeof(IFactionGetter),
                         throwIfUnknown: throwIfUnknown))
                     {
@@ -6312,6 +6625,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     foreach (var item in EnumerateMajorRecordContexts(
                         obj,
                         linkCache: linkCache,
+                        type: typeof(IIngredientGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
                         type: typeof(IMiscItemGetter),
                         throwIfUnknown: throwIfUnknown))
                     {
@@ -6354,6 +6675,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     foreach (var item in EnumerateMajorRecordContexts(
                         obj,
                         linkCache: linkCache,
+                        type: typeof(IIngredientGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
                         type: typeof(IMiscItemGetter),
                         throwIfUnknown: throwIfUnknown))
                     {
@@ -6368,6 +6697,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         obj,
                         linkCache: linkCache,
                         type: typeof(IArmorGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "ILocationTargetable":
+                case "ILocationTargetableGetter":
+                {
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
+                        type: typeof(IDoorGetter),
                         throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -6394,6 +6736,27 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         obj,
                         linkCache: linkCache,
                         type: typeof(IFactionGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "IHarvestTarget":
+                case "IHarvestTargetGetter":
+                {
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
+                        type: typeof(IIngredientGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
+                        type: typeof(IMiscItemGetter),
                         throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -6446,19 +6809,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         obj,
                         linkCache: linkCache,
                         type: typeof(ILocationReferenceTypeGetter),
-                        throwIfUnknown: throwIfUnknown))
-                    {
-                        yield return item;
-                    }
-                    yield break;
-                }
-                case "IHarvestTarget":
-                case "IHarvestTargetGetter":
-                {
-                    foreach (var item in EnumerateMajorRecordContexts(
-                        obj,
-                        linkCache: linkCache,
-                        type: typeof(IMiscItemGetter),
                         throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -6993,6 +7343,46 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     errorMask?.PopIndex();
                 }
             }
+            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.Doors) ?? true))
+            {
+                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.Doors);
+                try
+                {
+                    item.Doors.DeepCopyIn(
+                        rhs: rhs.Doors,
+                        errorMask: errorMask,
+                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.Doors));
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.Ingredients) ?? true))
+            {
+                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.Ingredients);
+                try
+                {
+                    item.Ingredients.DeepCopyIn(
+                        rhs: rhs.Ingredients,
+                        errorMask: errorMask,
+                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.Ingredients));
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
             if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.MiscItems) ?? true))
             {
                 errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.MiscItems);
@@ -7306,6 +7696,8 @@ namespace Mutagen.Bethesda.Fallout4
         public bool Armors;
         public bool Books;
         public bool Containers;
+        public bool Doors;
+        public bool Ingredients;
         public bool MiscItems;
         public bool Statics;
         public bool Grasses;
@@ -7344,6 +7736,8 @@ namespace Mutagen.Bethesda.Fallout4
             Armors = defaultValue;
             Books = defaultValue;
             Containers = defaultValue;
+            Doors = defaultValue;
+            Ingredients = defaultValue;
             MiscItems = defaultValue;
             Statics = defaultValue;
             Grasses = defaultValue;
@@ -7634,6 +8028,28 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 {
                     ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)ContainersItem).BinaryWriteTranslator).Write<IContainerGetter>(
                         item: ContainersItem,
+                        writer: writer,
+                        translationParams: translationParams);
+                }
+            }
+            if (importMask?.Doors ?? true)
+            {
+                var DoorsItem = item.Doors;
+                if (DoorsItem.RecordCache.Count > 0)
+                {
+                    ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)DoorsItem).BinaryWriteTranslator).Write<IDoorGetter>(
+                        item: DoorsItem,
+                        writer: writer,
+                        translationParams: translationParams);
+                }
+            }
+            if (importMask?.Ingredients ?? true)
+            {
+                var IngredientsItem = item.Ingredients;
+                if (IngredientsItem.RecordCache.Count > 0)
+                {
+                    ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)IngredientsItem).BinaryWriteTranslator).Write<IIngredientGetter>(
+                        item: IngredientsItem,
                         writer: writer,
                         translationParams: translationParams);
                 }
@@ -8136,6 +8552,34 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     }
                     return (int)Fallout4Mod_FieldIndex.Containers;
                 }
+                case RecordTypeInts.DOOR:
+                {
+                    if (importMask?.Doors ?? true)
+                    {
+                        item.Doors.CopyInFromBinary(
+                            frame: frame,
+                            translationParams: null);
+                    }
+                    else
+                    {
+                        frame.Position += contentLength;
+                    }
+                    return (int)Fallout4Mod_FieldIndex.Doors;
+                }
+                case RecordTypeInts.INGR:
+                {
+                    if (importMask?.Ingredients ?? true)
+                    {
+                        item.Ingredients.CopyInFromBinary(
+                            frame: frame,
+                            translationParams: null);
+                    }
+                    else
+                    {
+                        frame.Position += contentLength;
+                    }
+                    return (int)Fallout4Mod_FieldIndex.Ingredients;
+                }
                 case RecordTypeInts.MISC:
                 {
                     if (importMask?.MiscItems ?? true)
@@ -8551,6 +8995,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private IFallout4GroupGetter<IContainerGetter>? _Containers => _ContainersLocation.HasValue ? Fallout4GroupBinaryOverlay<IContainerGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _ContainersLocation!.Value.Min, _ContainersLocation!.Value.Max), _package), _package) : default;
         public IFallout4GroupGetter<IContainerGetter> Containers => _Containers ?? new Fallout4Group<Container>(this);
         #endregion
+        #region Doors
+        private RangeInt64? _DoorsLocation;
+        private IFallout4GroupGetter<IDoorGetter>? _Doors => _DoorsLocation.HasValue ? Fallout4GroupBinaryOverlay<IDoorGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _DoorsLocation!.Value.Min, _DoorsLocation!.Value.Max), _package), _package) : default;
+        public IFallout4GroupGetter<IDoorGetter> Doors => _Doors ?? new Fallout4Group<Door>(this);
+        #endregion
+        #region Ingredients
+        private RangeInt64? _IngredientsLocation;
+        private IFallout4GroupGetter<IIngredientGetter>? _Ingredients => _IngredientsLocation.HasValue ? Fallout4GroupBinaryOverlay<IIngredientGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _IngredientsLocation!.Value.Min, _IngredientsLocation!.Value.Max), _package), _package) : default;
+        public IFallout4GroupGetter<IIngredientGetter> Ingredients => _Ingredients ?? new Fallout4Group<Ingredient>(this);
+        #endregion
         #region MiscItems
         private RangeInt64? _MiscItemsLocation;
         private IFallout4GroupGetter<IMiscItemGetter>? _MiscItems => _MiscItemsLocation.HasValue ? Fallout4GroupBinaryOverlay<IMiscItemGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _MiscItemsLocation!.Value.Min, _MiscItemsLocation!.Value.Max), _package), _package) : default;
@@ -8802,6 +9256,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 {
                     _ContainersLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
                     return (int)Fallout4Mod_FieldIndex.Containers;
+                }
+                case RecordTypeInts.DOOR:
+                {
+                    _DoorsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    return (int)Fallout4Mod_FieldIndex.Doors;
+                }
+                case RecordTypeInts.INGR:
+                {
+                    _IngredientsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    return (int)Fallout4Mod_FieldIndex.Ingredients;
                 }
                 case RecordTypeInts.MISC:
                 {

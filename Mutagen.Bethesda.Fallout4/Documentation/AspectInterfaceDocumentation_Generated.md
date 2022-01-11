@@ -20,6 +20,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Book
 - Container
 - Door
+- Ingredient
 - MiscItem
 - Race
 - Spell
@@ -34,6 +35,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Door
 - Grass
 - HeadPart
+- Ingredient
 - MiscItem
 - TalkingActivator
 ### INamed
@@ -47,6 +49,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Door
 - Faction
 - HeadPart
+- Ingredient
 - Keyword
 - MaterialType
 - Message
@@ -78,6 +81,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Container
 - Door
 - Grass
+- Ingredient
 - MiscItem
 - ObjectEffect
 - SoundMarker
@@ -90,6 +94,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Book
 - Container
 - Door
+- Ingredient
 - MiscItem
 - TalkingActivator
 ### IWeightValue
@@ -150,6 +155,12 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 ### HeadPart
 - IModeled
 - INamed
+### Ingredient
+- IKeyworded
+- IModeled
+- INamed
+- IObjectBounded
+- IScripted
 ### Keyword
 - IKeywordCommon
 - INamed

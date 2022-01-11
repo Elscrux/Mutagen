@@ -79,6 +79,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int INAM = 0x4D414E49;
         public const int INCC = 0x43434E49;
         public const int INDX = 0x58444E49;
+        public const int INGR = 0x52474E49;
         public const int INTV = 0x56544E49;
         public const int IPDS = 0x53445049;
         public const int ITXT = 0x54585449;

@@ -27,6 +27,8 @@
 			<Group name="Armors" refName="Armor" />
 			<Group name="Books" refName="Book" />
 			<Group name="Containers" refName="Container" />
+			<Group name="Doors" refName="Door" />
+			<Group name="Ingredients" refName="Ingredient" />
 			<Group name="MiscItems" refName="MiscItem" />
 			<Group name="Statics" refName="Static" />
 			<Group name="Grasses" refName="Grass" />

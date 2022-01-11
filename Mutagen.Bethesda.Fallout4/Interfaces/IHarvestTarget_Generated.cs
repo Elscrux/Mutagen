@@ -8,7 +8,7 @@ using Mutagen.Bethesda;
 namespace Mutagen.Bethesda.Fallout4
 {
     /// <summary>
-    /// Implemented by: [MiscItem]
+    /// Implemented by: [Ingredient, MiscItem]
     /// </summary>
     public partial interface IHarvestTarget :
         IFallout4MajorRecordInternal,
@@ -17,7 +17,7 @@ namespace Mutagen.Bethesda.Fallout4
     }
 
     /// <summary>
-    /// Implemented by: [MiscItem]
+    /// Implemented by: [Ingredient, MiscItem]
     /// </summary>
     public partial interface IHarvestTargetGetter : IFallout4MajorRecordGetter
     {
