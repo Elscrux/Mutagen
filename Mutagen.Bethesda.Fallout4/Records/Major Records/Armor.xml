@@ -41,7 +41,7 @@
       <RefList name="Armatures" refName="ArmorAddonModel" />
       <Data>
         <Fields>
-          <UInt32 name="Value" />
+          <Int32 name="Value" />
           <Float name="Weight" />
           <UInt32 name="Health" />
         </Fields>
@@ -77,7 +77,7 @@
   <Object name="ResistanceArmor" objType="Subrecord" recordType="DAMA" GUID="376e43f7-2bef-4600-af06-4464f173d2fb" ID="145">
     <Fields>
       <FormLink name="DamageType" refName="DamageType" />
-      <Int32 name="Value" />
+      <UInt32 name="Value" />
     </Fields>
   </Object>
 </Loqui>

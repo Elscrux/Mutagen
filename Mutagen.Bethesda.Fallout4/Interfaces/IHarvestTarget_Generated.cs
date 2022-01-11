@@ -8,18 +8,18 @@ using Mutagen.Bethesda;
 namespace Mutagen.Bethesda.Fallout4
 {
     /// <summary>
-    /// Implemented by: [Armor, Book, MiscItem]
+    /// Implemented by: [MiscItem]
     /// </summary>
-    public partial interface IItem :
+    public partial interface IHarvestTarget :
         IFallout4MajorRecordInternal,
-        IItemGetter
+        IHarvestTargetGetter
     {
     }
 
     /// <summary>
-    /// Implemented by: [Armor, Book, MiscItem]
+    /// Implemented by: [MiscItem]
     /// </summary>
-    public partial interface IItemGetter : IFallout4MajorRecordGetter
+    public partial interface IHarvestTargetGetter : IFallout4MajorRecordGetter
     {
     }
 }

@@ -19,7 +19,7 @@
     <Fields>
       <!--DMGT-->
       <FormLink name="DamageType" refName="DamageType" />
-      <Int32 name="Value" />
+      <UInt32 name="Value" />
     </Fields>
   </Object>
   <Object name="DestructionStage" objType="Subrecord" endMarkerType="DSTF" GUID="54a3e642-e581-4a85-8837-267614ca6e48" ID="108">

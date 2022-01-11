@@ -36,31 +36,31 @@ using System.Text;
 namespace Mutagen.Bethesda.Fallout4
 {
     #region Class
-    public partial class ResistanceDestructible :
-        IEquatable<IResistanceDestructibleGetter>,
-        ILoquiObjectSetter<ResistanceDestructible>,
-        IResistanceDestructible
+    public partial class MiscItemComponent :
+        IEquatable<IMiscItemComponentGetter>,
+        ILoquiObjectSetter<MiscItemComponent>,
+        IMiscItemComponent
     {
         #region Ctor
-        public ResistanceDestructible()
+        public MiscItemComponent()
         {
             CustomCtor();
         }
         partial void CustomCtor();
         #endregion
 
-        #region DamageType
-        private readonly IFormLink<IDamageTypeGetter> _DamageType = new FormLink<IDamageTypeGetter>();
-        public IFormLink<IDamageTypeGetter> DamageType
+        #region Component
+        private readonly IFormLink<IComponentGetter> _Component = new FormLink<IComponentGetter>();
+        public IFormLink<IComponentGetter> Component
         {
-            get => _DamageType;
-            set => _DamageType.SetTo(value);
+            get => _Component;
+            set => _Component.SetTo(value);
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IFormLinkGetter<IDamageTypeGetter> IResistanceDestructibleGetter.DamageType => this.DamageType;
+        IFormLinkGetter<IComponentGetter> IMiscItemComponentGetter.Component => this.Component;
         #endregion
-        #region Value
-        public UInt32 Value { get; set; } = default;
+        #region Count
+        public UInt32 Count { get; set; } = default;
         #endregion
 
         #region To String
@@ -69,7 +69,7 @@ namespace Mutagen.Bethesda.Fallout4
             FileGeneration fg,
             string? name = null)
         {
-            ResistanceDestructibleMixIn.ToString(
+            MiscItemComponentMixIn.ToString(
                 item: this,
                 name: name);
         }
@@ -79,16 +79,16 @@ namespace Mutagen.Bethesda.Fallout4
         #region Equals and Hash
         public override bool Equals(object? obj)
         {
-            if (obj is not IResistanceDestructibleGetter rhs) return false;
-            return ((ResistanceDestructibleCommon)((IResistanceDestructibleGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
+            if (obj is not IMiscItemComponentGetter rhs) return false;
+            return ((MiscItemComponentCommon)((IMiscItemComponentGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
         }
 
-        public bool Equals(IResistanceDestructibleGetter? obj)
+        public bool Equals(IMiscItemComponentGetter? obj)
         {
-            return ((ResistanceDestructibleCommon)((IResistanceDestructibleGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
+            return ((MiscItemComponentCommon)((IMiscItemComponentGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
         }
 
-        public override int GetHashCode() => ((ResistanceDestructibleCommon)((IResistanceDestructibleGetter)this).CommonInstance()!).GetHashCode(this);
+        public override int GetHashCode() => ((MiscItemComponentCommon)((IMiscItemComponentGetter)this).CommonInstance()!).GetHashCode(this);
 
         #endregion
 
@@ -100,16 +100,16 @@ namespace Mutagen.Bethesda.Fallout4
             #region Ctors
             public Mask(TItem initialValue)
             {
-                this.DamageType = initialValue;
-                this.Value = initialValue;
+                this.Component = initialValue;
+                this.Count = initialValue;
             }
 
             public Mask(
-                TItem DamageType,
-                TItem Value)
+                TItem Component,
+                TItem Count)
             {
-                this.DamageType = DamageType;
-                this.Value = Value;
+                this.Component = Component;
+                this.Count = Count;
             }
 
             #pragma warning disable CS8618
@@ -121,8 +121,8 @@ namespace Mutagen.Bethesda.Fallout4
             #endregion
 
             #region Members
-            public TItem DamageType;
-            public TItem Value;
+            public TItem Component;
+            public TItem Count;
             #endregion
 
             #region Equals
@@ -135,15 +135,15 @@ namespace Mutagen.Bethesda.Fallout4
             public bool Equals(Mask<TItem>? rhs)
             {
                 if (rhs == null) return false;
-                if (!object.Equals(this.DamageType, rhs.DamageType)) return false;
-                if (!object.Equals(this.Value, rhs.Value)) return false;
+                if (!object.Equals(this.Component, rhs.Component)) return false;
+                if (!object.Equals(this.Count, rhs.Count)) return false;
                 return true;
             }
             public override int GetHashCode()
             {
                 var hash = new HashCode();
-                hash.Add(this.DamageType);
-                hash.Add(this.Value);
+                hash.Add(this.Component);
+                hash.Add(this.Count);
                 return hash.ToHashCode();
             }
 
@@ -152,8 +152,8 @@ namespace Mutagen.Bethesda.Fallout4
             #region All
             public bool All(Func<TItem, bool> eval)
             {
-                if (!eval(this.DamageType)) return false;
-                if (!eval(this.Value)) return false;
+                if (!eval(this.Component)) return false;
+                if (!eval(this.Count)) return false;
                 return true;
             }
             #endregion
@@ -161,8 +161,8 @@ namespace Mutagen.Bethesda.Fallout4
             #region Any
             public bool Any(Func<TItem, bool> eval)
             {
-                if (eval(this.DamageType)) return true;
-                if (eval(this.Value)) return true;
+                if (eval(this.Component)) return true;
+                if (eval(this.Count)) return true;
                 return false;
             }
             #endregion
@@ -170,15 +170,15 @@ namespace Mutagen.Bethesda.Fallout4
             #region Translate
             public Mask<R> Translate<R>(Func<TItem, R> eval)
             {
-                var ret = new ResistanceDestructible.Mask<R>();
+                var ret = new MiscItemComponent.Mask<R>();
                 this.Translate_InternalFill(ret, eval);
                 return ret;
             }
 
             protected void Translate_InternalFill<R>(Mask<R> obj, Func<TItem, R> eval)
             {
-                obj.DamageType = eval(this.DamageType);
-                obj.Value = eval(this.Value);
+                obj.Component = eval(this.Component);
+                obj.Count = eval(this.Count);
             }
             #endregion
 
@@ -188,26 +188,26 @@ namespace Mutagen.Bethesda.Fallout4
                 return ToString(printMask: null);
             }
 
-            public string ToString(ResistanceDestructible.Mask<bool>? printMask = null)
+            public string ToString(MiscItemComponent.Mask<bool>? printMask = null)
             {
                 var fg = new FileGeneration();
                 ToString(fg, printMask);
                 return fg.ToString();
             }
 
-            public void ToString(FileGeneration fg, ResistanceDestructible.Mask<bool>? printMask = null)
+            public void ToString(FileGeneration fg, MiscItemComponent.Mask<bool>? printMask = null)
             {
-                fg.AppendLine($"{nameof(ResistanceDestructible.Mask<TItem>)} =>");
+                fg.AppendLine($"{nameof(MiscItemComponent.Mask<TItem>)} =>");
                 fg.AppendLine("[");
                 using (new DepthWrapper(fg))
                 {
-                    if (printMask?.DamageType ?? true)
+                    if (printMask?.Component ?? true)
                     {
-                        fg.AppendItem(DamageType, "DamageType");
+                        fg.AppendItem(Component, "Component");
                     }
-                    if (printMask?.Value ?? true)
+                    if (printMask?.Count ?? true)
                     {
-                        fg.AppendItem(Value, "Value");
+                        fg.AppendItem(Count, "Count");
                     }
                 }
                 fg.AppendLine("]");
@@ -234,20 +234,20 @@ namespace Mutagen.Bethesda.Fallout4
                     return _warnings;
                 }
             }
-            public Exception? DamageType;
-            public Exception? Value;
+            public Exception? Component;
+            public Exception? Count;
             #endregion
 
             #region IErrorMask
             public object? GetNthMask(int index)
             {
-                ResistanceDestructible_FieldIndex enu = (ResistanceDestructible_FieldIndex)index;
+                MiscItemComponent_FieldIndex enu = (MiscItemComponent_FieldIndex)index;
                 switch (enu)
                 {
-                    case ResistanceDestructible_FieldIndex.DamageType:
-                        return DamageType;
-                    case ResistanceDestructible_FieldIndex.Value:
-                        return Value;
+                    case MiscItemComponent_FieldIndex.Component:
+                        return Component;
+                    case MiscItemComponent_FieldIndex.Count:
+                        return Count;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
                 }
@@ -255,14 +255,14 @@ namespace Mutagen.Bethesda.Fallout4
 
             public void SetNthException(int index, Exception ex)
             {
-                ResistanceDestructible_FieldIndex enu = (ResistanceDestructible_FieldIndex)index;
+                MiscItemComponent_FieldIndex enu = (MiscItemComponent_FieldIndex)index;
                 switch (enu)
                 {
-                    case ResistanceDestructible_FieldIndex.DamageType:
-                        this.DamageType = ex;
+                    case MiscItemComponent_FieldIndex.Component:
+                        this.Component = ex;
                         break;
-                    case ResistanceDestructible_FieldIndex.Value:
-                        this.Value = ex;
+                    case MiscItemComponent_FieldIndex.Count:
+                        this.Count = ex;
                         break;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
@@ -271,14 +271,14 @@ namespace Mutagen.Bethesda.Fallout4
 
             public void SetNthMask(int index, object obj)
             {
-                ResistanceDestructible_FieldIndex enu = (ResistanceDestructible_FieldIndex)index;
+                MiscItemComponent_FieldIndex enu = (MiscItemComponent_FieldIndex)index;
                 switch (enu)
                 {
-                    case ResistanceDestructible_FieldIndex.DamageType:
-                        this.DamageType = (Exception?)obj;
+                    case MiscItemComponent_FieldIndex.Component:
+                        this.Component = (Exception?)obj;
                         break;
-                    case ResistanceDestructible_FieldIndex.Value:
-                        this.Value = (Exception?)obj;
+                    case MiscItemComponent_FieldIndex.Count:
+                        this.Count = (Exception?)obj;
                         break;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
@@ -288,8 +288,8 @@ namespace Mutagen.Bethesda.Fallout4
             public bool IsInError()
             {
                 if (Overall != null) return true;
-                if (DamageType != null) return true;
-                if (Value != null) return true;
+                if (Component != null) return true;
+                if (Count != null) return true;
                 return false;
             }
             #endregion
@@ -324,8 +324,8 @@ namespace Mutagen.Bethesda.Fallout4
             }
             protected void ToString_FillInternal(FileGeneration fg)
             {
-                fg.AppendItem(DamageType, "DamageType");
-                fg.AppendItem(Value, "Value");
+                fg.AppendItem(Component, "Component");
+                fg.AppendItem(Count, "Count");
             }
             #endregion
 
@@ -334,8 +334,8 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 if (rhs == null) return this;
                 var ret = new ErrorMask();
-                ret.DamageType = this.DamageType.Combine(rhs.DamageType);
-                ret.Value = this.Value.Combine(rhs.Value);
+                ret.Component = this.Component.Combine(rhs.Component);
+                ret.Count = this.Count.Combine(rhs.Count);
                 return ret;
             }
             public static ErrorMask? Combine(ErrorMask? lhs, ErrorMask? rhs)
@@ -359,8 +359,8 @@ namespace Mutagen.Bethesda.Fallout4
             private TranslationCrystal? _crystal;
             public readonly bool DefaultOn;
             public bool OnOverall;
-            public bool DamageType;
-            public bool Value;
+            public bool Component;
+            public bool Count;
             #endregion
 
             #region Ctors
@@ -370,8 +370,8 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 this.DefaultOn = defaultOn;
                 this.OnOverall = onOverall;
-                this.DamageType = defaultOn;
-                this.Value = defaultOn;
+                this.Component = defaultOn;
+                this.Count = defaultOn;
             }
 
             #endregion
@@ -387,8 +387,8 @@ namespace Mutagen.Bethesda.Fallout4
 
             protected void GetCrystal(List<(bool On, TranslationCrystal? SubCrystal)> ret)
             {
-                ret.Add((DamageType, null));
-                ret.Add((Value, null));
+                ret.Add((Component, null));
+                ret.Add((Count, null));
             }
 
             public static implicit operator TranslationMask(bool defaultOn)
@@ -400,32 +400,32 @@ namespace Mutagen.Bethesda.Fallout4
         #endregion
 
         #region Mutagen
-        public static readonly RecordType GrupRecordType = ResistanceDestructible_Registration.TriggeringRecordType;
-        public IEnumerable<IFormLinkGetter> ContainedFormLinks => ResistanceDestructibleCommon.Instance.GetContainedFormLinks(this);
-        public void RemapLinks(IReadOnlyDictionary<FormKey, FormKey> mapping) => ResistanceDestructibleSetterCommon.Instance.RemapLinks(this, mapping);
+        public static readonly RecordType GrupRecordType = MiscItemComponent_Registration.TriggeringRecordType;
+        public IEnumerable<IFormLinkGetter> ContainedFormLinks => MiscItemComponentCommon.Instance.GetContainedFormLinks(this);
+        public void RemapLinks(IReadOnlyDictionary<FormKey, FormKey> mapping) => MiscItemComponentSetterCommon.Instance.RemapLinks(this, mapping);
         #endregion
 
         #region Binary Translation
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected object BinaryWriteTranslator => ResistanceDestructibleBinaryWriteTranslation.Instance;
+        protected object BinaryWriteTranslator => MiscItemComponentBinaryWriteTranslation.Instance;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         object IBinaryItem.BinaryWriteTranslator => this.BinaryWriteTranslator;
         void IBinaryItem.WriteToBinary(
             MutagenWriter writer,
             TypedWriteParams? translationParams = null)
         {
-            ((ResistanceDestructibleBinaryWriteTranslation)this.BinaryWriteTranslator).Write(
+            ((MiscItemComponentBinaryWriteTranslation)this.BinaryWriteTranslator).Write(
                 item: this,
                 writer: writer,
                 translationParams: translationParams);
         }
         #region Binary Create
-        public static ResistanceDestructible CreateFromBinary(
+        public static MiscItemComponent CreateFromBinary(
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
-            var ret = new ResistanceDestructible();
-            ((ResistanceDestructibleSetterCommon)((IResistanceDestructibleGetter)ret).CommonSetterInstance()!).CopyInFromBinary(
+            var ret = new MiscItemComponent();
+            ((MiscItemComponentSetterCommon)((IMiscItemComponentGetter)ret).CommonSetterInstance()!).CopyInFromBinary(
                 item: ret,
                 frame: frame,
                 translationParams: translationParams);
@@ -436,7 +436,7 @@ namespace Mutagen.Bethesda.Fallout4
 
         public static bool TryCreateFromBinary(
             MutagenFrame frame,
-            out ResistanceDestructible item,
+            out MiscItemComponent item,
             TypedParseParams? translationParams = null)
         {
             var startPos = frame.Position;
@@ -451,32 +451,32 @@ namespace Mutagen.Bethesda.Fallout4
 
         void IClearable.Clear()
         {
-            ((ResistanceDestructibleSetterCommon)((IResistanceDestructibleGetter)this).CommonSetterInstance()!).Clear(this);
+            ((MiscItemComponentSetterCommon)((IMiscItemComponentGetter)this).CommonSetterInstance()!).Clear(this);
         }
 
-        internal static ResistanceDestructible GetNew()
+        internal static MiscItemComponent GetNew()
         {
-            return new ResistanceDestructible();
+            return new MiscItemComponent();
         }
 
     }
     #endregion
 
     #region Interface
-    public partial interface IResistanceDestructible :
+    public partial interface IMiscItemComponent :
         IFormLinkContainer,
-        ILoquiObjectSetter<IResistanceDestructible>,
-        IResistanceDestructibleGetter
+        ILoquiObjectSetter<IMiscItemComponent>,
+        IMiscItemComponentGetter
     {
-        new IFormLink<IDamageTypeGetter> DamageType { get; set; }
-        new UInt32 Value { get; set; }
+        new IFormLink<IComponentGetter> Component { get; set; }
+        new UInt32 Count { get; set; }
     }
 
-    public partial interface IResistanceDestructibleGetter :
+    public partial interface IMiscItemComponentGetter :
         ILoquiObject,
         IBinaryItem,
         IFormLinkContainerGetter,
-        ILoquiObject<IResistanceDestructibleGetter>
+        ILoquiObject<IMiscItemComponentGetter>
     {
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         object CommonInstance();
@@ -484,51 +484,51 @@ namespace Mutagen.Bethesda.Fallout4
         object? CommonSetterInstance();
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         object CommonSetterTranslationInstance();
-        static ILoquiRegistration StaticRegistration => ResistanceDestructible_Registration.Instance;
-        IFormLinkGetter<IDamageTypeGetter> DamageType { get; }
-        UInt32 Value { get; }
+        static ILoquiRegistration StaticRegistration => MiscItemComponent_Registration.Instance;
+        IFormLinkGetter<IComponentGetter> Component { get; }
+        UInt32 Count { get; }
 
     }
 
     #endregion
 
     #region Common MixIn
-    public static partial class ResistanceDestructibleMixIn
+    public static partial class MiscItemComponentMixIn
     {
-        public static void Clear(this IResistanceDestructible item)
+        public static void Clear(this IMiscItemComponent item)
         {
-            ((ResistanceDestructibleSetterCommon)((IResistanceDestructibleGetter)item).CommonSetterInstance()!).Clear(item: item);
+            ((MiscItemComponentSetterCommon)((IMiscItemComponentGetter)item).CommonSetterInstance()!).Clear(item: item);
         }
 
-        public static ResistanceDestructible.Mask<bool> GetEqualsMask(
-            this IResistanceDestructibleGetter item,
-            IResistanceDestructibleGetter rhs,
+        public static MiscItemComponent.Mask<bool> GetEqualsMask(
+            this IMiscItemComponentGetter item,
+            IMiscItemComponentGetter rhs,
             EqualsMaskHelper.Include include = EqualsMaskHelper.Include.All)
         {
-            return ((ResistanceDestructibleCommon)((IResistanceDestructibleGetter)item).CommonInstance()!).GetEqualsMask(
+            return ((MiscItemComponentCommon)((IMiscItemComponentGetter)item).CommonInstance()!).GetEqualsMask(
                 item: item,
                 rhs: rhs,
                 include: include);
         }
 
         public static string ToString(
-            this IResistanceDestructibleGetter item,
+            this IMiscItemComponentGetter item,
             string? name = null,
-            ResistanceDestructible.Mask<bool>? printMask = null)
+            MiscItemComponent.Mask<bool>? printMask = null)
         {
-            return ((ResistanceDestructibleCommon)((IResistanceDestructibleGetter)item).CommonInstance()!).ToString(
+            return ((MiscItemComponentCommon)((IMiscItemComponentGetter)item).CommonInstance()!).ToString(
                 item: item,
                 name: name,
                 printMask: printMask);
         }
 
         public static void ToString(
-            this IResistanceDestructibleGetter item,
+            this IMiscItemComponentGetter item,
             FileGeneration fg,
             string? name = null,
-            ResistanceDestructible.Mask<bool>? printMask = null)
+            MiscItemComponent.Mask<bool>? printMask = null)
         {
-            ((ResistanceDestructibleCommon)((IResistanceDestructibleGetter)item).CommonInstance()!).ToString(
+            ((MiscItemComponentCommon)((IMiscItemComponentGetter)item).CommonInstance()!).ToString(
                 item: item,
                 fg: fg,
                 name: name,
@@ -536,21 +536,21 @@ namespace Mutagen.Bethesda.Fallout4
         }
 
         public static bool Equals(
-            this IResistanceDestructibleGetter item,
-            IResistanceDestructibleGetter rhs,
-            ResistanceDestructible.TranslationMask? equalsMask = null)
+            this IMiscItemComponentGetter item,
+            IMiscItemComponentGetter rhs,
+            MiscItemComponent.TranslationMask? equalsMask = null)
         {
-            return ((ResistanceDestructibleCommon)((IResistanceDestructibleGetter)item).CommonInstance()!).Equals(
+            return ((MiscItemComponentCommon)((IMiscItemComponentGetter)item).CommonInstance()!).Equals(
                 lhs: item,
                 rhs: rhs,
                 crystal: equalsMask?.GetCrystal());
         }
 
         public static void DeepCopyIn(
-            this IResistanceDestructible lhs,
-            IResistanceDestructibleGetter rhs)
+            this IMiscItemComponent lhs,
+            IMiscItemComponentGetter rhs)
         {
-            ((ResistanceDestructibleSetterTranslationCommon)((IResistanceDestructibleGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
+            ((MiscItemComponentSetterTranslationCommon)((IMiscItemComponentGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: lhs,
                 rhs: rhs,
                 errorMask: default,
@@ -559,11 +559,11 @@ namespace Mutagen.Bethesda.Fallout4
         }
 
         public static void DeepCopyIn(
-            this IResistanceDestructible lhs,
-            IResistanceDestructibleGetter rhs,
-            ResistanceDestructible.TranslationMask? copyMask = null)
+            this IMiscItemComponent lhs,
+            IMiscItemComponentGetter rhs,
+            MiscItemComponent.TranslationMask? copyMask = null)
         {
-            ((ResistanceDestructibleSetterTranslationCommon)((IResistanceDestructibleGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
+            ((MiscItemComponentSetterTranslationCommon)((IMiscItemComponentGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: lhs,
                 rhs: rhs,
                 errorMask: default,
@@ -572,28 +572,28 @@ namespace Mutagen.Bethesda.Fallout4
         }
 
         public static void DeepCopyIn(
-            this IResistanceDestructible lhs,
-            IResistanceDestructibleGetter rhs,
-            out ResistanceDestructible.ErrorMask errorMask,
-            ResistanceDestructible.TranslationMask? copyMask = null)
+            this IMiscItemComponent lhs,
+            IMiscItemComponentGetter rhs,
+            out MiscItemComponent.ErrorMask errorMask,
+            MiscItemComponent.TranslationMask? copyMask = null)
         {
             var errorMaskBuilder = new ErrorMaskBuilder();
-            ((ResistanceDestructibleSetterTranslationCommon)((IResistanceDestructibleGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
+            ((MiscItemComponentSetterTranslationCommon)((IMiscItemComponentGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: lhs,
                 rhs: rhs,
                 errorMask: errorMaskBuilder,
                 copyMask: copyMask?.GetCrystal(),
                 deepCopy: false);
-            errorMask = ResistanceDestructible.ErrorMask.Factory(errorMaskBuilder);
+            errorMask = MiscItemComponent.ErrorMask.Factory(errorMaskBuilder);
         }
 
         public static void DeepCopyIn(
-            this IResistanceDestructible lhs,
-            IResistanceDestructibleGetter rhs,
+            this IMiscItemComponent lhs,
+            IMiscItemComponentGetter rhs,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask)
         {
-            ((ResistanceDestructibleSetterTranslationCommon)((IResistanceDestructibleGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
+            ((MiscItemComponentSetterTranslationCommon)((IMiscItemComponentGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: lhs,
                 rhs: rhs,
                 errorMask: errorMask,
@@ -601,32 +601,32 @@ namespace Mutagen.Bethesda.Fallout4
                 deepCopy: false);
         }
 
-        public static ResistanceDestructible DeepCopy(
-            this IResistanceDestructibleGetter item,
-            ResistanceDestructible.TranslationMask? copyMask = null)
+        public static MiscItemComponent DeepCopy(
+            this IMiscItemComponentGetter item,
+            MiscItemComponent.TranslationMask? copyMask = null)
         {
-            return ((ResistanceDestructibleSetterTranslationCommon)((IResistanceDestructibleGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
+            return ((MiscItemComponentSetterTranslationCommon)((IMiscItemComponentGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
                 item: item,
                 copyMask: copyMask);
         }
 
-        public static ResistanceDestructible DeepCopy(
-            this IResistanceDestructibleGetter item,
-            out ResistanceDestructible.ErrorMask errorMask,
-            ResistanceDestructible.TranslationMask? copyMask = null)
+        public static MiscItemComponent DeepCopy(
+            this IMiscItemComponentGetter item,
+            out MiscItemComponent.ErrorMask errorMask,
+            MiscItemComponent.TranslationMask? copyMask = null)
         {
-            return ((ResistanceDestructibleSetterTranslationCommon)((IResistanceDestructibleGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
+            return ((MiscItemComponentSetterTranslationCommon)((IMiscItemComponentGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
                 item: item,
                 copyMask: copyMask,
                 errorMask: out errorMask);
         }
 
-        public static ResistanceDestructible DeepCopy(
-            this IResistanceDestructibleGetter item,
+        public static MiscItemComponent DeepCopy(
+            this IMiscItemComponentGetter item,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask = null)
         {
-            return ((ResistanceDestructibleSetterTranslationCommon)((IResistanceDestructibleGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
+            return ((MiscItemComponentSetterTranslationCommon)((IMiscItemComponentGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
                 item: item,
                 copyMask: copyMask,
                 errorMask: errorMask);
@@ -634,11 +634,11 @@ namespace Mutagen.Bethesda.Fallout4
 
         #region Binary Translation
         public static void CopyInFromBinary(
-            this IResistanceDestructible item,
+            this IMiscItemComponent item,
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
-            ((ResistanceDestructibleSetterCommon)((IResistanceDestructibleGetter)item).CommonSetterInstance()!).CopyInFromBinary(
+            ((MiscItemComponentSetterCommon)((IMiscItemComponentGetter)item).CommonSetterInstance()!).CopyInFromBinary(
                 item: item,
                 frame: frame,
                 translationParams: translationParams);
@@ -654,48 +654,48 @@ namespace Mutagen.Bethesda.Fallout4
 namespace Mutagen.Bethesda.Fallout4.Internals
 {
     #region Field Index
-    public enum ResistanceDestructible_FieldIndex
+    public enum MiscItemComponent_FieldIndex
     {
-        DamageType = 0,
-        Value = 1,
+        Component = 0,
+        Count = 1,
     }
     #endregion
 
     #region Registration
-    public partial class ResistanceDestructible_Registration : ILoquiRegistration
+    public partial class MiscItemComponent_Registration : ILoquiRegistration
     {
-        public static readonly ResistanceDestructible_Registration Instance = new ResistanceDestructible_Registration();
+        public static readonly MiscItemComponent_Registration Instance = new MiscItemComponent_Registration();
 
         public static ProtocolKey ProtocolKey => ProtocolDefinition_Fallout4.ProtocolKey;
 
         public static readonly ObjectKey ObjectKey = new ObjectKey(
             protocolKey: ProtocolDefinition_Fallout4.ProtocolKey,
-            msgID: 143,
+            msgID: 170,
             version: 0);
 
-        public const string GUID = "53c2a9a0-bd8e-461e-92c5-ef7f9daafce5";
+        public const string GUID = "2b777f92-de56-4260-a32d-5c28592a7fe8";
 
         public const ushort AdditionalFieldCount = 2;
 
         public const ushort FieldCount = 2;
 
-        public static readonly Type MaskType = typeof(ResistanceDestructible.Mask<>);
+        public static readonly Type MaskType = typeof(MiscItemComponent.Mask<>);
 
-        public static readonly Type ErrorMaskType = typeof(ResistanceDestructible.ErrorMask);
+        public static readonly Type ErrorMaskType = typeof(MiscItemComponent.ErrorMask);
 
-        public static readonly Type ClassType = typeof(ResistanceDestructible);
+        public static readonly Type ClassType = typeof(MiscItemComponent);
 
-        public static readonly Type GetterType = typeof(IResistanceDestructibleGetter);
+        public static readonly Type GetterType = typeof(IMiscItemComponentGetter);
 
         public static readonly Type? InternalGetterType = null;
 
-        public static readonly Type SetterType = typeof(IResistanceDestructible);
+        public static readonly Type SetterType = typeof(IMiscItemComponent);
 
         public static readonly Type? InternalSetterType = null;
 
-        public const string FullName = "Mutagen.Bethesda.Fallout4.ResistanceDestructible";
+        public const string FullName = "Mutagen.Bethesda.Fallout4.MiscItemComponent";
 
-        public const string Name = "ResistanceDestructible";
+        public const string Name = "MiscItemComponent";
 
         public const string Namespace = "Mutagen.Bethesda.Fallout4";
 
@@ -703,8 +703,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public static readonly Type? GenericRegistrationType = null;
 
-        public static readonly RecordType TriggeringRecordType = RecordTypes.DAMC;
-        public static readonly Type BinaryWriteTranslation = typeof(ResistanceDestructibleBinaryWriteTranslation);
+        public static readonly RecordType TriggeringRecordType = RecordTypes.CVPA;
+        public static readonly Type BinaryWriteTranslation = typeof(MiscItemComponentBinaryWriteTranslation);
         #region Interface
         ProtocolKey ILoquiRegistration.ProtocolKey => ProtocolKey;
         ObjectKey ILoquiRegistration.ObjectKey => ObjectKey;
@@ -737,58 +737,58 @@ namespace Mutagen.Bethesda.Fallout4.Internals
     #endregion
 
     #region Common
-    public partial class ResistanceDestructibleSetterCommon
+    public partial class MiscItemComponentSetterCommon
     {
-        public static readonly ResistanceDestructibleSetterCommon Instance = new ResistanceDestructibleSetterCommon();
+        public static readonly MiscItemComponentSetterCommon Instance = new MiscItemComponentSetterCommon();
 
         partial void ClearPartial();
         
-        public void Clear(IResistanceDestructible item)
+        public void Clear(IMiscItemComponent item)
         {
             ClearPartial();
-            item.DamageType.Clear();
-            item.Value = default;
+            item.Component.Clear();
+            item.Count = default;
         }
         
         #region Mutagen
-        public void RemapLinks(IResistanceDestructible obj, IReadOnlyDictionary<FormKey, FormKey> mapping)
+        public void RemapLinks(IMiscItemComponent obj, IReadOnlyDictionary<FormKey, FormKey> mapping)
         {
-            obj.DamageType.Relink(mapping);
+            obj.Component.Relink(mapping);
         }
         
         #endregion
         
         #region Binary Translation
         public virtual void CopyInFromBinary(
-            IResistanceDestructible item,
+            IMiscItemComponent item,
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
             frame = frame.SpawnWithFinalPosition(HeaderTranslation.ParseSubrecord(
                 frame.Reader,
-                translationParams.ConvertToCustom(RecordTypes.DAMC),
+                translationParams.ConvertToCustom(RecordTypes.CVPA),
                 translationParams?.LengthOverride));
             PluginUtilityTranslation.SubrecordParse(
                 record: item,
                 frame: frame,
                 translationParams: translationParams,
-                fillStructs: ResistanceDestructibleBinaryCreateTranslation.FillBinaryStructs);
+                fillStructs: MiscItemComponentBinaryCreateTranslation.FillBinaryStructs);
         }
         
         #endregion
         
     }
-    public partial class ResistanceDestructibleCommon
+    public partial class MiscItemComponentCommon
     {
-        public static readonly ResistanceDestructibleCommon Instance = new ResistanceDestructibleCommon();
+        public static readonly MiscItemComponentCommon Instance = new MiscItemComponentCommon();
 
-        public ResistanceDestructible.Mask<bool> GetEqualsMask(
-            IResistanceDestructibleGetter item,
-            IResistanceDestructibleGetter rhs,
+        public MiscItemComponent.Mask<bool> GetEqualsMask(
+            IMiscItemComponentGetter item,
+            IMiscItemComponentGetter rhs,
             EqualsMaskHelper.Include include = EqualsMaskHelper.Include.All)
         {
-            var ret = new ResistanceDestructible.Mask<bool>(false);
-            ((ResistanceDestructibleCommon)((IResistanceDestructibleGetter)item).CommonInstance()!).FillEqualsMask(
+            var ret = new MiscItemComponent.Mask<bool>(false);
+            ((MiscItemComponentCommon)((IMiscItemComponentGetter)item).CommonInstance()!).FillEqualsMask(
                 item: item,
                 rhs: rhs,
                 ret: ret,
@@ -797,20 +797,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         public void FillEqualsMask(
-            IResistanceDestructibleGetter item,
-            IResistanceDestructibleGetter rhs,
-            ResistanceDestructible.Mask<bool> ret,
+            IMiscItemComponentGetter item,
+            IMiscItemComponentGetter rhs,
+            MiscItemComponent.Mask<bool> ret,
             EqualsMaskHelper.Include include = EqualsMaskHelper.Include.All)
         {
             if (rhs == null) return;
-            ret.DamageType = item.DamageType.Equals(rhs.DamageType);
-            ret.Value = item.Value == rhs.Value;
+            ret.Component = item.Component.Equals(rhs.Component);
+            ret.Count = item.Count == rhs.Count;
         }
         
         public string ToString(
-            IResistanceDestructibleGetter item,
+            IMiscItemComponentGetter item,
             string? name = null,
-            ResistanceDestructible.Mask<bool>? printMask = null)
+            MiscItemComponent.Mask<bool>? printMask = null)
         {
             var fg = new FileGeneration();
             ToString(
@@ -822,18 +822,18 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         public void ToString(
-            IResistanceDestructibleGetter item,
+            IMiscItemComponentGetter item,
             FileGeneration fg,
             string? name = null,
-            ResistanceDestructible.Mask<bool>? printMask = null)
+            MiscItemComponent.Mask<bool>? printMask = null)
         {
             if (name == null)
             {
-                fg.AppendLine($"ResistanceDestructible =>");
+                fg.AppendLine($"MiscItemComponent =>");
             }
             else
             {
-                fg.AppendLine($"{name} (ResistanceDestructible) =>");
+                fg.AppendLine($"{name} (MiscItemComponent) =>");
             }
             fg.AppendLine("[");
             using (new DepthWrapper(fg))
@@ -847,43 +847,43 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         protected static void ToStringFields(
-            IResistanceDestructibleGetter item,
+            IMiscItemComponentGetter item,
             FileGeneration fg,
-            ResistanceDestructible.Mask<bool>? printMask = null)
+            MiscItemComponent.Mask<bool>? printMask = null)
         {
-            if (printMask?.DamageType ?? true)
+            if (printMask?.Component ?? true)
             {
-                fg.AppendItem(item.DamageType.FormKey, "DamageType");
+                fg.AppendItem(item.Component.FormKey, "Component");
             }
-            if (printMask?.Value ?? true)
+            if (printMask?.Count ?? true)
             {
-                fg.AppendItem(item.Value, "Value");
+                fg.AppendItem(item.Count, "Count");
             }
         }
         
         #region Equals and Hash
         public virtual bool Equals(
-            IResistanceDestructibleGetter? lhs,
-            IResistanceDestructibleGetter? rhs,
+            IMiscItemComponentGetter? lhs,
+            IMiscItemComponentGetter? rhs,
             TranslationCrystal? crystal)
         {
             if (!EqualsMaskHelper.RefEquality(lhs, rhs, out var isEqual)) return isEqual;
-            if ((crystal?.GetShouldTranslate((int)ResistanceDestructible_FieldIndex.DamageType) ?? true))
+            if ((crystal?.GetShouldTranslate((int)MiscItemComponent_FieldIndex.Component) ?? true))
             {
-                if (!lhs.DamageType.Equals(rhs.DamageType)) return false;
+                if (!lhs.Component.Equals(rhs.Component)) return false;
             }
-            if ((crystal?.GetShouldTranslate((int)ResistanceDestructible_FieldIndex.Value) ?? true))
+            if ((crystal?.GetShouldTranslate((int)MiscItemComponent_FieldIndex.Count) ?? true))
             {
-                if (lhs.Value != rhs.Value) return false;
+                if (lhs.Count != rhs.Count) return false;
             }
             return true;
         }
         
-        public virtual int GetHashCode(IResistanceDestructibleGetter item)
+        public virtual int GetHashCode(IMiscItemComponentGetter item)
         {
             var hash = new HashCode();
-            hash.Add(item.DamageType);
-            hash.Add(item.Value);
+            hash.Add(item.Component);
+            hash.Add(item.Count);
             return hash.ToHashCode();
         }
         
@@ -892,49 +892,49 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         
         public object GetNew()
         {
-            return ResistanceDestructible.GetNew();
+            return MiscItemComponent.GetNew();
         }
         
         #region Mutagen
-        public IEnumerable<IFormLinkGetter> GetContainedFormLinks(IResistanceDestructibleGetter obj)
+        public IEnumerable<IFormLinkGetter> GetContainedFormLinks(IMiscItemComponentGetter obj)
         {
-            yield return FormLinkInformation.Factory(obj.DamageType);
+            yield return FormLinkInformation.Factory(obj.Component);
             yield break;
         }
         
         #endregion
         
     }
-    public partial class ResistanceDestructibleSetterTranslationCommon
+    public partial class MiscItemComponentSetterTranslationCommon
     {
-        public static readonly ResistanceDestructibleSetterTranslationCommon Instance = new ResistanceDestructibleSetterTranslationCommon();
+        public static readonly MiscItemComponentSetterTranslationCommon Instance = new MiscItemComponentSetterTranslationCommon();
 
         #region DeepCopyIn
         public void DeepCopyIn(
-            IResistanceDestructible item,
-            IResistanceDestructibleGetter rhs,
+            IMiscItemComponent item,
+            IMiscItemComponentGetter rhs,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask,
             bool deepCopy)
         {
-            if ((copyMask?.GetShouldTranslate((int)ResistanceDestructible_FieldIndex.DamageType) ?? true))
+            if ((copyMask?.GetShouldTranslate((int)MiscItemComponent_FieldIndex.Component) ?? true))
             {
-                item.DamageType.SetTo(rhs.DamageType.FormKey);
+                item.Component.SetTo(rhs.Component.FormKey);
             }
-            if ((copyMask?.GetShouldTranslate((int)ResistanceDestructible_FieldIndex.Value) ?? true))
+            if ((copyMask?.GetShouldTranslate((int)MiscItemComponent_FieldIndex.Count) ?? true))
             {
-                item.Value = rhs.Value;
+                item.Count = rhs.Count;
             }
         }
         
         #endregion
         
-        public ResistanceDestructible DeepCopy(
-            IResistanceDestructibleGetter item,
-            ResistanceDestructible.TranslationMask? copyMask = null)
+        public MiscItemComponent DeepCopy(
+            IMiscItemComponentGetter item,
+            MiscItemComponent.TranslationMask? copyMask = null)
         {
-            ResistanceDestructible ret = (ResistanceDestructible)((ResistanceDestructibleCommon)((IResistanceDestructibleGetter)item).CommonInstance()!).GetNew();
-            ((ResistanceDestructibleSetterTranslationCommon)((IResistanceDestructibleGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
+            MiscItemComponent ret = (MiscItemComponent)((MiscItemComponentCommon)((IMiscItemComponentGetter)item).CommonInstance()!).GetNew();
+            ((MiscItemComponentSetterTranslationCommon)((IMiscItemComponentGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: ret,
                 rhs: item,
                 errorMask: null,
@@ -943,30 +943,30 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             return ret;
         }
         
-        public ResistanceDestructible DeepCopy(
-            IResistanceDestructibleGetter item,
-            out ResistanceDestructible.ErrorMask errorMask,
-            ResistanceDestructible.TranslationMask? copyMask = null)
+        public MiscItemComponent DeepCopy(
+            IMiscItemComponentGetter item,
+            out MiscItemComponent.ErrorMask errorMask,
+            MiscItemComponent.TranslationMask? copyMask = null)
         {
             var errorMaskBuilder = new ErrorMaskBuilder();
-            ResistanceDestructible ret = (ResistanceDestructible)((ResistanceDestructibleCommon)((IResistanceDestructibleGetter)item).CommonInstance()!).GetNew();
-            ((ResistanceDestructibleSetterTranslationCommon)((IResistanceDestructibleGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
+            MiscItemComponent ret = (MiscItemComponent)((MiscItemComponentCommon)((IMiscItemComponentGetter)item).CommonInstance()!).GetNew();
+            ((MiscItemComponentSetterTranslationCommon)((IMiscItemComponentGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
                 ret,
                 item,
                 errorMask: errorMaskBuilder,
                 copyMask: copyMask?.GetCrystal(),
                 deepCopy: true);
-            errorMask = ResistanceDestructible.ErrorMask.Factory(errorMaskBuilder);
+            errorMask = MiscItemComponent.ErrorMask.Factory(errorMaskBuilder);
             return ret;
         }
         
-        public ResistanceDestructible DeepCopy(
-            IResistanceDestructibleGetter item,
+        public MiscItemComponent DeepCopy(
+            IMiscItemComponentGetter item,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask = null)
         {
-            ResistanceDestructible ret = (ResistanceDestructible)((ResistanceDestructibleCommon)((IResistanceDestructibleGetter)item).CommonInstance()!).GetNew();
-            ((ResistanceDestructibleSetterTranslationCommon)((IResistanceDestructibleGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
+            MiscItemComponent ret = (MiscItemComponent)((MiscItemComponentCommon)((IMiscItemComponentGetter)item).CommonInstance()!).GetNew();
+            ((MiscItemComponentSetterTranslationCommon)((IMiscItemComponentGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: ret,
                 rhs: item,
                 errorMask: errorMask,
@@ -982,27 +982,27 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
 namespace Mutagen.Bethesda.Fallout4
 {
-    public partial class ResistanceDestructible
+    public partial class MiscItemComponent
     {
         #region Common Routing
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        ILoquiRegistration ILoquiObject.Registration => ResistanceDestructible_Registration.Instance;
-        public static ResistanceDestructible_Registration StaticRegistration => ResistanceDestructible_Registration.Instance;
+        ILoquiRegistration ILoquiObject.Registration => MiscItemComponent_Registration.Instance;
+        public static MiscItemComponent_Registration StaticRegistration => MiscItemComponent_Registration.Instance;
         [DebuggerStepThrough]
-        protected object CommonInstance() => ResistanceDestructibleCommon.Instance;
+        protected object CommonInstance() => MiscItemComponentCommon.Instance;
         [DebuggerStepThrough]
         protected object CommonSetterInstance()
         {
-            return ResistanceDestructibleSetterCommon.Instance;
+            return MiscItemComponentSetterCommon.Instance;
         }
         [DebuggerStepThrough]
-        protected object CommonSetterTranslationInstance() => ResistanceDestructibleSetterTranslationCommon.Instance;
+        protected object CommonSetterTranslationInstance() => MiscItemComponentSetterTranslationCommon.Instance;
         [DebuggerStepThrough]
-        object IResistanceDestructibleGetter.CommonInstance() => this.CommonInstance();
+        object IMiscItemComponentGetter.CommonInstance() => this.CommonInstance();
         [DebuggerStepThrough]
-        object IResistanceDestructibleGetter.CommonSetterInstance() => this.CommonSetterInstance();
+        object IMiscItemComponentGetter.CommonSetterInstance() => this.CommonSetterInstance();
         [DebuggerStepThrough]
-        object IResistanceDestructibleGetter.CommonSetterTranslationInstance() => this.CommonSetterTranslationInstance();
+        object IMiscItemComponentGetter.CommonSetterTranslationInstance() => this.CommonSetterTranslationInstance();
 
         #endregion
 
@@ -1013,28 +1013,28 @@ namespace Mutagen.Bethesda.Fallout4
 #region Binary Translation
 namespace Mutagen.Bethesda.Fallout4.Internals
 {
-    public partial class ResistanceDestructibleBinaryWriteTranslation : IBinaryWriteTranslator
+    public partial class MiscItemComponentBinaryWriteTranslation : IBinaryWriteTranslator
     {
-        public readonly static ResistanceDestructibleBinaryWriteTranslation Instance = new ResistanceDestructibleBinaryWriteTranslation();
+        public readonly static MiscItemComponentBinaryWriteTranslation Instance = new MiscItemComponentBinaryWriteTranslation();
 
         public static void WriteEmbedded(
-            IResistanceDestructibleGetter item,
+            IMiscItemComponentGetter item,
             MutagenWriter writer)
         {
             FormLinkBinaryTranslation.Instance.Write(
                 writer: writer,
-                item: item.DamageType);
-            writer.Write(item.Value);
+                item: item.Component);
+            writer.Write(item.Count);
         }
 
         public void Write(
             MutagenWriter writer,
-            IResistanceDestructibleGetter item,
+            IMiscItemComponentGetter item,
             TypedWriteParams? translationParams = null)
         {
             using (HeaderExport.Subrecord(
                 writer: writer,
-                record: translationParams.ConvertToCustom(RecordTypes.DAMC),
+                record: translationParams.ConvertToCustom(RecordTypes.CVPA),
                 overflowRecord: translationParams?.OverflowRecordType,
                 out var writerToUse))
             {
@@ -1050,23 +1050,23 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TypedWriteParams? translationParams = null)
         {
             Write(
-                item: (IResistanceDestructibleGetter)item,
+                item: (IMiscItemComponentGetter)item,
                 writer: writer,
                 translationParams: translationParams);
         }
 
     }
 
-    public partial class ResistanceDestructibleBinaryCreateTranslation
+    public partial class MiscItemComponentBinaryCreateTranslation
     {
-        public readonly static ResistanceDestructibleBinaryCreateTranslation Instance = new ResistanceDestructibleBinaryCreateTranslation();
+        public readonly static MiscItemComponentBinaryCreateTranslation Instance = new MiscItemComponentBinaryCreateTranslation();
 
         public static void FillBinaryStructs(
-            IResistanceDestructible item,
+            IMiscItemComponent item,
             MutagenFrame frame)
         {
-            item.DamageType.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
-            item.Value = frame.ReadUInt32();
+            item.Component.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+            item.Count = frame.ReadUInt32();
         }
 
     }
@@ -1075,14 +1075,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 namespace Mutagen.Bethesda.Fallout4
 {
     #region Binary Write Mixins
-    public static class ResistanceDestructibleBinaryTranslationMixIn
+    public static class MiscItemComponentBinaryTranslationMixIn
     {
         public static void WriteToBinary(
-            this IResistanceDestructibleGetter item,
+            this IMiscItemComponentGetter item,
             MutagenWriter writer,
             TypedWriteParams? translationParams = null)
         {
-            ((ResistanceDestructibleBinaryWriteTranslation)item.BinaryWriteTranslator).Write(
+            ((MiscItemComponentBinaryWriteTranslation)item.BinaryWriteTranslator).Write(
                 item: item,
                 writer: writer,
                 translationParams: translationParams);
@@ -1095,53 +1095,53 @@ namespace Mutagen.Bethesda.Fallout4
 }
 namespace Mutagen.Bethesda.Fallout4.Internals
 {
-    public partial class ResistanceDestructibleBinaryOverlay :
+    public partial class MiscItemComponentBinaryOverlay :
         PluginBinaryOverlay,
-        IResistanceDestructibleGetter
+        IMiscItemComponentGetter
     {
         #region Common Routing
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        ILoquiRegistration ILoquiObject.Registration => ResistanceDestructible_Registration.Instance;
-        public static ResistanceDestructible_Registration StaticRegistration => ResistanceDestructible_Registration.Instance;
+        ILoquiRegistration ILoquiObject.Registration => MiscItemComponent_Registration.Instance;
+        public static MiscItemComponent_Registration StaticRegistration => MiscItemComponent_Registration.Instance;
         [DebuggerStepThrough]
-        protected object CommonInstance() => ResistanceDestructibleCommon.Instance;
+        protected object CommonInstance() => MiscItemComponentCommon.Instance;
         [DebuggerStepThrough]
-        protected object CommonSetterTranslationInstance() => ResistanceDestructibleSetterTranslationCommon.Instance;
+        protected object CommonSetterTranslationInstance() => MiscItemComponentSetterTranslationCommon.Instance;
         [DebuggerStepThrough]
-        object IResistanceDestructibleGetter.CommonInstance() => this.CommonInstance();
+        object IMiscItemComponentGetter.CommonInstance() => this.CommonInstance();
         [DebuggerStepThrough]
-        object? IResistanceDestructibleGetter.CommonSetterInstance() => null;
+        object? IMiscItemComponentGetter.CommonSetterInstance() => null;
         [DebuggerStepThrough]
-        object IResistanceDestructibleGetter.CommonSetterTranslationInstance() => this.CommonSetterTranslationInstance();
+        object IMiscItemComponentGetter.CommonSetterTranslationInstance() => this.CommonSetterTranslationInstance();
 
         #endregion
 
         void IPrintable.ToString(FileGeneration fg, string? name) => this.ToString(fg, name);
 
-        public IEnumerable<IFormLinkGetter> ContainedFormLinks => ResistanceDestructibleCommon.Instance.GetContainedFormLinks(this);
+        public IEnumerable<IFormLinkGetter> ContainedFormLinks => MiscItemComponentCommon.Instance.GetContainedFormLinks(this);
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected object BinaryWriteTranslator => ResistanceDestructibleBinaryWriteTranslation.Instance;
+        protected object BinaryWriteTranslator => MiscItemComponentBinaryWriteTranslation.Instance;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         object IBinaryItem.BinaryWriteTranslator => this.BinaryWriteTranslator;
         void IBinaryItem.WriteToBinary(
             MutagenWriter writer,
             TypedWriteParams? translationParams = null)
         {
-            ((ResistanceDestructibleBinaryWriteTranslation)this.BinaryWriteTranslator).Write(
+            ((MiscItemComponentBinaryWriteTranslation)this.BinaryWriteTranslator).Write(
                 item: this,
                 writer: writer,
                 translationParams: translationParams);
         }
 
-        public IFormLinkGetter<IDamageTypeGetter> DamageType => new FormLink<IDamageTypeGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(_data.Span.Slice(0x0, 0x4))));
-        public UInt32 Value => BinaryPrimitives.ReadUInt32LittleEndian(_data.Slice(0x4, 0x4));
+        public IFormLinkGetter<IComponentGetter> Component => new FormLink<IComponentGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(_data.Span.Slice(0x0, 0x4))));
+        public UInt32 Count => BinaryPrimitives.ReadUInt32LittleEndian(_data.Slice(0x4, 0x4));
         partial void CustomFactoryEnd(
             OverlayStream stream,
             int finalPos,
             int offset);
 
         partial void CustomCtor();
-        protected ResistanceDestructibleBinaryOverlay(
+        protected MiscItemComponentBinaryOverlay(
             ReadOnlyMemorySlice<byte> bytes,
             BinaryOverlayFactoryPackage package)
             : base(
@@ -1151,12 +1151,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             this.CustomCtor();
         }
 
-        public static ResistanceDestructibleBinaryOverlay ResistanceDestructibleFactory(
+        public static MiscItemComponentBinaryOverlay MiscItemComponentFactory(
             OverlayStream stream,
             BinaryOverlayFactoryPackage package,
             TypedParseParams? parseParams = null)
         {
-            var ret = new ResistanceDestructibleBinaryOverlay(
+            var ret = new MiscItemComponentBinaryOverlay(
                 bytes: HeaderTranslation.ExtractSubrecordMemory(stream.RemainingMemory, package.MetaData.Constants, parseParams),
                 package: package);
             var finalPos = checked((int)(stream.Position + stream.GetSubrecord().TotalLength));
@@ -1169,12 +1169,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             return ret;
         }
 
-        public static ResistanceDestructibleBinaryOverlay ResistanceDestructibleFactory(
+        public static MiscItemComponentBinaryOverlay MiscItemComponentFactory(
             ReadOnlyMemorySlice<byte> slice,
             BinaryOverlayFactoryPackage package,
             TypedParseParams? parseParams = null)
         {
-            return ResistanceDestructibleFactory(
+            return MiscItemComponentFactory(
                 stream: new OverlayStream(slice, package),
                 package: package,
                 parseParams: parseParams);
@@ -1186,7 +1186,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             FileGeneration fg,
             string? name = null)
         {
-            ResistanceDestructibleMixIn.ToString(
+            MiscItemComponentMixIn.ToString(
                 item: this,
                 name: name);
         }
@@ -1196,16 +1196,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         #region Equals and Hash
         public override bool Equals(object? obj)
         {
-            if (obj is not IResistanceDestructibleGetter rhs) return false;
-            return ((ResistanceDestructibleCommon)((IResistanceDestructibleGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
+            if (obj is not IMiscItemComponentGetter rhs) return false;
+            return ((MiscItemComponentCommon)((IMiscItemComponentGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
         }
 
-        public bool Equals(IResistanceDestructibleGetter? obj)
+        public bool Equals(IMiscItemComponentGetter? obj)
         {
-            return ((ResistanceDestructibleCommon)((IResistanceDestructibleGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
+            return ((MiscItemComponentCommon)((IMiscItemComponentGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
         }
 
-        public override int GetHashCode() => ((ResistanceDestructibleCommon)((IResistanceDestructibleGetter)this).CommonInstance()!).GetHashCode(this);
+        public override int GetHashCode() => ((MiscItemComponentCommon)((IMiscItemComponentGetter)this).CommonInstance()!).GetHashCode(this);
 
         #endregion
 

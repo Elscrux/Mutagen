@@ -18,6 +18,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int BOD2 = 0x32444F42;
         public const int BODT = 0x54444F42;
         public const int BOOK = 0x4B4F4F42;
+        public const int CDIX = 0x58494443;
         public const int CELL = 0x4C4C4543;
         public const int CITC = 0x43544943;
         public const int CLAS = 0x53414C43;
@@ -32,6 +33,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int CRVA = 0x41565243;
         public const int CTDA = 0x41445443;
         public const int CUSD = 0x44535543;
+        public const int CVPA = 0x41505643;
         public const int DAMA = 0x414D4144;
         public const int DAMC = 0x434D4144;
         public const int DATA = 0x41544144;
@@ -110,6 +112,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int NAM1 = 0x314D414E;
         public const int NAM2 = 0x324D414E;
         public const int NAM3 = 0x334D414E;
+        public const int NAVM = 0x4D56414E;
         public const int NNAM = 0x4D414E4E;
         public const int NPC_ = 0x5F43504E;
         public const int NTRM = 0x4D52544E;
@@ -126,6 +129,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int QNAM = 0x4D414E51;
         public const int QUST = 0x54535551;
         public const int RACE = 0x45434152;
+        public const int RADR = 0x52444152;
         public const int RDAT = 0x54414452;
         public const int REFR = 0x52464552;
         public const int REGN = 0x4E474552;
@@ -137,6 +141,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int SNAM = 0x4D414E53;
         public const int SNDD = 0x44444E53;
         public const int SNDR = 0x52444E53;
+        public const int SOPM = 0x4D504F53;
         public const int SOUN = 0x4E554F53;
         public const int SPCT = 0x54435053;
         public const int SPEL = 0x4C455053;

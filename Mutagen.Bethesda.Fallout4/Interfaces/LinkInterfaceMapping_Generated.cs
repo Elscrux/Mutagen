@@ -31,6 +31,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Container),
                 typeof(Door),
                 typeof(Faction),
+                typeof(MiscItem),
                 typeof(Spell),
                 typeof(TextureSet),
             };
@@ -44,6 +45,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 typeof(Armor),
                 typeof(Book),
+                typeof(MiscItem),
             };
             dict[typeof(IItemGetter)] = dict[typeof(IItem)];
             dict[typeof(IOutfitTarget)] = new Type[]
@@ -55,6 +57,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 typeof(Armor),
                 typeof(Book),
+                typeof(MiscItem),
             };
             dict[typeof(IConstructibleGetter)] = dict[typeof(IConstructible)];
             dict[typeof(IBindableEquipment)] = new Type[]
@@ -99,6 +102,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(LocationReferenceType),
             };
             dict[typeof(ILocationRecordGetter)] = dict[typeof(ILocationRecord)];
+            dict[typeof(IHarvestTarget)] = new Type[]
+            {
+                typeof(MiscItem),
+            };
+            dict[typeof(IHarvestTargetGetter)] = dict[typeof(IHarvestTarget)];
             dict[typeof(IEffectRecord)] = new Type[]
             {
                 typeof(ObjectEffect),

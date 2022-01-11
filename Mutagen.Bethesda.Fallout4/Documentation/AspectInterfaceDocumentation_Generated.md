@@ -12,6 +12,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Armor
 - Book
 - Container
+- MiscItem
 - Race
 - Spell
 - TalkingActivator
@@ -24,6 +25,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - DestructionStage
 - Grass
 - HeadPart
+- MiscItem
 - TalkingActivator
 ### INamed
 - ActionRecord
@@ -38,6 +40,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Keyword
 - MaterialType
 - Message
+- MiscItem
 - ObjectEffect
 - Race
 - ScriptBoolListProperty
@@ -63,6 +66,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Component
 - Container
 - Grass
+- MiscItem
 - ObjectEffect
 - SoundMarker
 - Spell
@@ -73,9 +77,9 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Armor
 - Book
 - Container
+- MiscItem
 - TalkingActivator
 ### IWeightValue
-- Armor
 - Book
 ## Concrete Classes to Interfaces
 ### AcousticSpace
@@ -93,7 +97,6 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - INamed
 - IObjectBounded
 - IScripted
-- IWeightValue
 ### ArmorModel
 - IHasIcons
 - IModeled
@@ -135,6 +138,12 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - INamed
 ### Message
 - INamed
+### MiscItem
+- IKeyworded
+- IModeled
+- INamed
+- IObjectBounded
+- IScripted
 ### ObjectEffect
 - INamed
 - IObjectBounded

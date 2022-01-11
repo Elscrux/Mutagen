@@ -25,7 +25,7 @@
 			<FormLink name="InteractionKeyword" refName="Keyword" recordType="KNAM" />
 			<Data recordType="RADR">
 				<Fields>
-					<FormLink name="SoundModel" refName="SoundOutputModel" recordType="SOPM" />
+					<FormLink name="SoundModel" refName="SoundOutputModel"/>
 					<Float name="Frequency" />
 					<Float name="Volume" />
 					<Bool name="StartsActive" byteLength="1" />
