@@ -23,18 +23,44 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(ActionRecord),
             };
             dict[typeof(IIdleRelationGetter)] = dict[typeof(IIdleRelation)];
+            dict[typeof(IObjectId)] = new Type[]
+            {
+                typeof(Activator),
+                typeof(Armor),
+                typeof(Book),
+                typeof(Door),
+                typeof(Faction),
+                typeof(Spell),
+                typeof(TextureSet),
+            };
+            dict[typeof(IObjectIdGetter)] = dict[typeof(IObjectId)];
             dict[typeof(IDamageTypeTarget)] = new Type[]
             {
                 typeof(ActorValueInformation),
             };
             dict[typeof(IDamageTypeTargetGetter)] = dict[typeof(IDamageTypeTarget)];
-            dict[typeof(IObjectId)] = new Type[]
+            dict[typeof(IItem)] = new Type[]
             {
-                typeof(Door),
-                typeof(Faction),
-                typeof(TextureSet),
+                typeof(Armor),
+                typeof(Book),
             };
-            dict[typeof(IObjectIdGetter)] = dict[typeof(IObjectId)];
+            dict[typeof(IItemGetter)] = dict[typeof(IItem)];
+            dict[typeof(IOutfitTarget)] = new Type[]
+            {
+                typeof(Armor),
+            };
+            dict[typeof(IOutfitTargetGetter)] = dict[typeof(IOutfitTarget)];
+            dict[typeof(IConstructible)] = new Type[]
+            {
+                typeof(Armor),
+                typeof(Book),
+            };
+            dict[typeof(IConstructibleGetter)] = dict[typeof(IConstructible)];
+            dict[typeof(IBindableEquipment)] = new Type[]
+            {
+                typeof(Armor),
+            };
+            dict[typeof(IBindableEquipmentGetter)] = dict[typeof(IBindableEquipment)];
             dict[typeof(ILocationTargetable)] = new Type[]
             {
                 typeof(Door),
@@ -64,6 +90,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             dict[typeof(ISpellRecord)] = new Type[]
             {
                 typeof(LeveledSpell),
+                typeof(Spell),
             };
             dict[typeof(ISpellRecordGetter)] = dict[typeof(ISpellRecord)];
             dict[typeof(ILocationRecord)] = new Type[]
@@ -71,6 +98,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(LocationReferenceType),
             };
             dict[typeof(ILocationRecordGetter)] = dict[typeof(ILocationRecord)];
+            dict[typeof(IEffectRecord)] = new Type[]
+            {
+                typeof(ObjectEffect),
+                typeof(Spell),
+            };
+            dict[typeof(IEffectRecordGetter)] = dict[typeof(IEffectRecord)];
             InterfaceToObjectTypes = dict;
         }
     }

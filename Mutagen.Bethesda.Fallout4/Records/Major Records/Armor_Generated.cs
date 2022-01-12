@@ -11,14 +11,18 @@ using Mutagen.Bethesda.Fallout4;
 using Mutagen.Bethesda.Fallout4.Internals;
 using Mutagen.Bethesda.Internals;
 using Mutagen.Bethesda.Plugins;
+using Mutagen.Bethesda.Plugins.Aspects;
 using Mutagen.Bethesda.Plugins.Binary.Overlay;
 using Mutagen.Bethesda.Plugins.Binary.Streams;
 using Mutagen.Bethesda.Plugins.Binary.Translations;
+using Mutagen.Bethesda.Plugins.Cache;
 using Mutagen.Bethesda.Plugins.Exceptions;
+using Mutagen.Bethesda.Plugins.Internals;
 using Mutagen.Bethesda.Plugins.Records;
 using Mutagen.Bethesda.Plugins.Records.Internals;
 using Mutagen.Bethesda.Plugins.RecordTypeMapping;
 using Mutagen.Bethesda.Plugins.Utility;
+using Mutagen.Bethesda.Strings;
 using Mutagen.Bethesda.Translations.Binary;
 using Noggog;
 using System;
@@ -51,6 +55,259 @@ namespace Mutagen.Bethesda.Fallout4
         partial void CustomCtor();
         #endregion
 
+        #region VirtualMachineAdapter
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private VirtualMachineAdapter? _VirtualMachineAdapter;
+        /// <summary>
+        /// Aspects: IScripted
+        /// </summary>
+        public VirtualMachineAdapter? VirtualMachineAdapter
+        {
+            get => _VirtualMachineAdapter;
+            set => _VirtualMachineAdapter = value;
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IVirtualMachineAdapterGetter? IArmorGetter.VirtualMachineAdapter => this.VirtualMachineAdapter;
+        #region Aspects
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IVirtualMachineAdapterGetter? IScriptedGetter.VirtualMachineAdapter => this.VirtualMachineAdapter;
+        #endregion
+        #endregion
+        #region ObjectBounds
+        /// <summary>
+        /// Aspects: IObjectBounded, IObjectBoundedOptional
+        /// </summary>
+        public ObjectBounds ObjectBounds { get; set; } = new ObjectBounds();
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IObjectBoundsGetter IArmorGetter.ObjectBounds => ObjectBounds;
+        #region Aspects
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        ObjectBounds? IObjectBoundedOptional.ObjectBounds
+        {
+            get => this.ObjectBounds;
+            set => this.ObjectBounds = value ?? new ObjectBounds();
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IObjectBoundsGetter IObjectBoundedGetter.ObjectBounds => this.ObjectBounds;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IObjectBoundsGetter? IObjectBoundedOptionalGetter.ObjectBounds => this.ObjectBounds;
+        #endregion
+        #endregion
+        #region PreviewTransform
+        public PreviewTransform PreviewTransform { get; set; } = new PreviewTransform();
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IPreviewTransformGetter IArmorGetter.PreviewTransform => PreviewTransform;
+        #endregion
+        #region Name
+        /// <summary>
+        /// Aspects: INamed, INamedRequired, ITranslatedNamed, ITranslatedNamedRequired
+        /// </summary>
+        public TranslatedString? Name { get; set; }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        ITranslatedStringGetter? IArmorGetter.Name => this.Name;
+        #region Aspects
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        string INamedRequiredGetter.Name => this.Name?.String ?? string.Empty;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        string? INamedGetter.Name => this.Name?.String;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        ITranslatedStringGetter? ITranslatedNamedGetter.Name => this.Name;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        ITranslatedStringGetter ITranslatedNamedRequiredGetter.Name => this.Name ?? string.Empty;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        string? INamed.Name
+        {
+            get => this.Name?.String;
+            set => this.Name = value;
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        string INamedRequired.Name
+        {
+            get => this.Name?.String ?? string.Empty;
+            set => this.Name = value;
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        TranslatedString ITranslatedNamedRequired.Name
+        {
+            get => this.Name ?? string.Empty;
+            set => this.Name = value;
+        }
+        #endregion
+        #endregion
+        #region ObjectEffect
+        private readonly IFormLinkNullable<IEffectRecordGetter> _ObjectEffect = new FormLinkNullable<IEffectRecordGetter>();
+        public IFormLinkNullable<IEffectRecordGetter> ObjectEffect
+        {
+            get => _ObjectEffect;
+            set => _ObjectEffect.SetTo(value);
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFormLinkNullableGetter<IEffectRecordGetter> IArmorGetter.ObjectEffect => this.ObjectEffect;
+        #endregion
+        #region WorldModel
+        public IGenderedItem<ArmorModel?>? WorldModel { get; set; }
+        IGenderedItemGetter<IArmorModelGetter?>? IArmorGetter.WorldModel => this.WorldModel;
+        #endregion
+        #region BodyTemplate
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private BodyTemplate? _BodyTemplate;
+        public BodyTemplate? BodyTemplate
+        {
+            get => _BodyTemplate;
+            set => _BodyTemplate = value;
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IBodyTemplateGetter? IArmorGetter.BodyTemplate => this.BodyTemplate;
+        #endregion
+        #region Destructible
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Destructible? _Destructible;
+        public Destructible? Destructible
+        {
+            get => _Destructible;
+            set => _Destructible = value;
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IDestructibleGetter? IArmorGetter.Destructible => this.Destructible;
+        #endregion
+        #region PickUpSound
+        private readonly IFormLinkNullable<ISoundDescriptorGetter> _PickUpSound = new FormLinkNullable<ISoundDescriptorGetter>();
+        public IFormLinkNullable<ISoundDescriptorGetter> PickUpSound
+        {
+            get => _PickUpSound;
+            set => _PickUpSound.SetTo(value);
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFormLinkNullableGetter<ISoundDescriptorGetter> IArmorGetter.PickUpSound => this.PickUpSound;
+        #endregion
+        #region PutDownSound
+        private readonly IFormLinkNullable<ISoundDescriptorGetter> _PutDownSound = new FormLinkNullable<ISoundDescriptorGetter>();
+        public IFormLinkNullable<ISoundDescriptorGetter> PutDownSound
+        {
+            get => _PutDownSound;
+            set => _PutDownSound.SetTo(value);
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFormLinkNullableGetter<ISoundDescriptorGetter> IArmorGetter.PutDownSound => this.PutDownSound;
+        #endregion
+        #region EquipmentType
+        private readonly IFormLinkNullable<IEquipTypeGetter> _EquipmentType = new FormLinkNullable<IEquipTypeGetter>();
+        public IFormLinkNullable<IEquipTypeGetter> EquipmentType
+        {
+            get => _EquipmentType;
+            set => _EquipmentType.SetTo(value);
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFormLinkNullableGetter<IEquipTypeGetter> IArmorGetter.EquipmentType => this.EquipmentType;
+        #endregion
+        #region BashImpactDataSet
+        private readonly IFormLinkNullable<IImpactDataSetGetter> _BashImpactDataSet = new FormLinkNullable<IImpactDataSetGetter>();
+        public IFormLinkNullable<IImpactDataSetGetter> BashImpactDataSet
+        {
+            get => _BashImpactDataSet;
+            set => _BashImpactDataSet.SetTo(value);
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFormLinkNullableGetter<IImpactDataSetGetter> IArmorGetter.BashImpactDataSet => this.BashImpactDataSet;
+        #endregion
+        #region AlternateBlockMaterial
+        private readonly IFormLinkNullable<IMaterialTypeGetter> _AlternateBlockMaterial = new FormLinkNullable<IMaterialTypeGetter>();
+        public IFormLinkNullable<IMaterialTypeGetter> AlternateBlockMaterial
+        {
+            get => _AlternateBlockMaterial;
+            set => _AlternateBlockMaterial.SetTo(value);
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFormLinkNullableGetter<IMaterialTypeGetter> IArmorGetter.AlternateBlockMaterial => this.AlternateBlockMaterial;
+        #endregion
+        #region Race
+        private readonly IFormLinkNullable<IRaceGetter> _Race = new FormLinkNullable<IRaceGetter>();
+        public IFormLinkNullable<IRaceGetter> Race
+        {
+            get => _Race;
+            set => _Race.SetTo(value);
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFormLinkNullableGetter<IRaceGetter> IArmorGetter.Race => this.Race;
+        #endregion
+        #region Keywords
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ExtendedList<IFormLinkGetter<IKeywordGetter>>? _Keywords;
+        /// <summary>
+        /// Aspects: IKeyworded&lt;IKeywordGetter&gt;
+        /// </summary>
+        public ExtendedList<IFormLinkGetter<IKeywordGetter>>? Keywords
+        {
+            get => this._Keywords;
+            set => this._Keywords = value;
+        }
+        #region Interface Members
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? IArmorGetter.Keywords => _Keywords;
+        #endregion
+
+        #region Aspects
+        IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? IKeywordedGetter<IKeywordGetter>.Keywords => this.Keywords;
+        IReadOnlyList<IFormLinkGetter<IKeywordCommonGetter>>? IKeywordedGetter.Keywords => this.Keywords;
+        #endregion
+        #endregion
+        #region Description
+        public TranslatedString? Description { get; set; }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        ITranslatedStringGetter? IArmorGetter.Description => this.Description;
+        #endregion
+        #region Armatures
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ExtendedList<ArmorAddonModel> _Armatures = new ExtendedList<ArmorAddonModel>();
+        public ExtendedList<ArmorAddonModel> Armatures
+        {
+            get => this._Armatures;
+            init => this._Armatures = value;
+        }
+        #region Interface Members
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IReadOnlyList<IArmorAddonModelGetter> IArmorGetter.Armatures => _Armatures;
+        #endregion
+
+        #endregion
+        #region Value
+        public UInt32 Value { get; set; } = default;
+        #endregion
+        #region Weight
+        public Single Weight { get; set; } = default;
+        #endregion
+        #region Health
+        public UInt32 Health { get; set; } = default;
+        #endregion
+        #region ArmorRating
+        public UInt16 ArmorRating { get; set; } = default;
+        #endregion
+        #region BaseAddonIndex
+        public UInt16 BaseAddonIndex { get; set; } = default;
+        #endregion
+        #region StaggerRating
+        public UInt16 StaggerRating { get; set; } = default;
+        #endregion
+        #region Resistances
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ExtendedList<ResistanceArmor> _Resistances = new ExtendedList<ResistanceArmor>();
+        public ExtendedList<ResistanceArmor> Resistances
+        {
+            get => this._Resistances;
+            init => this._Resistances = value;
+        }
+        #region Interface Members
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IReadOnlyList<IResistanceArmorGetter> IArmorGetter.Resistances => _Resistances;
+        #endregion
+
+        #endregion
+        #region DATADataTypeState
+        public Armor.DATADataType DATADataTypeState { get; set; } = default;
+        #endregion
+        #region FNAMDataTypeState
+        public Armor.FNAMDataType FNAMDataTypeState { get; set; } = default;
+        #endregion
 
         #region To String
 
@@ -75,6 +332,32 @@ namespace Mutagen.Bethesda.Fallout4
             public Mask(TItem initialValue)
             : base(initialValue)
             {
+                this.VirtualMachineAdapter = new MaskItem<TItem, VirtualMachineAdapter.Mask<TItem>?>(initialValue, new VirtualMachineAdapter.Mask<TItem>(initialValue));
+                this.ObjectBounds = new MaskItem<TItem, ObjectBounds.Mask<TItem>?>(initialValue, new ObjectBounds.Mask<TItem>(initialValue));
+                this.PreviewTransform = new MaskItem<TItem, PreviewTransform.Mask<TItem>?>(initialValue, new PreviewTransform.Mask<TItem>(initialValue));
+                this.Name = initialValue;
+                this.ObjectEffect = initialValue;
+                this.WorldModel = new MaskItem<TItem, GenderedItem<MaskItem<TItem, ArmorModel.Mask<TItem>?>?>?>(initialValue, default);
+                this.BodyTemplate = new MaskItem<TItem, BodyTemplate.Mask<TItem>?>(initialValue, new BodyTemplate.Mask<TItem>(initialValue));
+                this.Destructible = new MaskItem<TItem, Destructible.Mask<TItem>?>(initialValue, new Destructible.Mask<TItem>(initialValue));
+                this.PickUpSound = initialValue;
+                this.PutDownSound = initialValue;
+                this.EquipmentType = initialValue;
+                this.BashImpactDataSet = initialValue;
+                this.AlternateBlockMaterial = initialValue;
+                this.Race = initialValue;
+                this.Keywords = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(initialValue, Enumerable.Empty<(int Index, TItem Value)>());
+                this.Description = initialValue;
+                this.Armatures = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ArmorAddonModel.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, ArmorAddonModel.Mask<TItem>?>>());
+                this.Value = initialValue;
+                this.Weight = initialValue;
+                this.Health = initialValue;
+                this.ArmorRating = initialValue;
+                this.BaseAddonIndex = initialValue;
+                this.StaggerRating = initialValue;
+                this.Resistances = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ResistanceArmor.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, ResistanceArmor.Mask<TItem>?>>());
+                this.DATADataTypeState = initialValue;
+                this.FNAMDataTypeState = initialValue;
             }
 
             public Mask(
@@ -83,7 +366,33 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem VersionControl,
                 TItem EditorID,
                 TItem FormVersion,
-                TItem Version2)
+                TItem Version2,
+                TItem VirtualMachineAdapter,
+                TItem ObjectBounds,
+                TItem PreviewTransform,
+                TItem Name,
+                TItem ObjectEffect,
+                TItem WorldModel,
+                TItem BodyTemplate,
+                TItem Destructible,
+                TItem PickUpSound,
+                TItem PutDownSound,
+                TItem EquipmentType,
+                TItem BashImpactDataSet,
+                TItem AlternateBlockMaterial,
+                TItem Race,
+                TItem Keywords,
+                TItem Description,
+                TItem Armatures,
+                TItem Value,
+                TItem Weight,
+                TItem Health,
+                TItem ArmorRating,
+                TItem BaseAddonIndex,
+                TItem StaggerRating,
+                TItem Resistances,
+                TItem DATADataTypeState,
+                TItem FNAMDataTypeState)
             : base(
                 MajorRecordFlagsRaw: MajorRecordFlagsRaw,
                 FormKey: FormKey,
@@ -92,6 +401,32 @@ namespace Mutagen.Bethesda.Fallout4
                 FormVersion: FormVersion,
                 Version2: Version2)
             {
+                this.VirtualMachineAdapter = new MaskItem<TItem, VirtualMachineAdapter.Mask<TItem>?>(VirtualMachineAdapter, new VirtualMachineAdapter.Mask<TItem>(VirtualMachineAdapter));
+                this.ObjectBounds = new MaskItem<TItem, ObjectBounds.Mask<TItem>?>(ObjectBounds, new ObjectBounds.Mask<TItem>(ObjectBounds));
+                this.PreviewTransform = new MaskItem<TItem, PreviewTransform.Mask<TItem>?>(PreviewTransform, new PreviewTransform.Mask<TItem>(PreviewTransform));
+                this.Name = Name;
+                this.ObjectEffect = ObjectEffect;
+                this.WorldModel = new MaskItem<TItem, GenderedItem<MaskItem<TItem, ArmorModel.Mask<TItem>?>?>?>(WorldModel, default);
+                this.BodyTemplate = new MaskItem<TItem, BodyTemplate.Mask<TItem>?>(BodyTemplate, new BodyTemplate.Mask<TItem>(BodyTemplate));
+                this.Destructible = new MaskItem<TItem, Destructible.Mask<TItem>?>(Destructible, new Destructible.Mask<TItem>(Destructible));
+                this.PickUpSound = PickUpSound;
+                this.PutDownSound = PutDownSound;
+                this.EquipmentType = EquipmentType;
+                this.BashImpactDataSet = BashImpactDataSet;
+                this.AlternateBlockMaterial = AlternateBlockMaterial;
+                this.Race = Race;
+                this.Keywords = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(Keywords, Enumerable.Empty<(int Index, TItem Value)>());
+                this.Description = Description;
+                this.Armatures = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ArmorAddonModel.Mask<TItem>?>>?>(Armatures, Enumerable.Empty<MaskItemIndexed<TItem, ArmorAddonModel.Mask<TItem>?>>());
+                this.Value = Value;
+                this.Weight = Weight;
+                this.Health = Health;
+                this.ArmorRating = ArmorRating;
+                this.BaseAddonIndex = BaseAddonIndex;
+                this.StaggerRating = StaggerRating;
+                this.Resistances = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ResistanceArmor.Mask<TItem>?>>?>(Resistances, Enumerable.Empty<MaskItemIndexed<TItem, ResistanceArmor.Mask<TItem>?>>());
+                this.DATADataTypeState = DATADataTypeState;
+                this.FNAMDataTypeState = FNAMDataTypeState;
             }
 
             #pragma warning disable CS8618
@@ -100,6 +435,35 @@ namespace Mutagen.Bethesda.Fallout4
             }
             #pragma warning restore CS8618
 
+            #endregion
+
+            #region Members
+            public MaskItem<TItem, VirtualMachineAdapter.Mask<TItem>?>? VirtualMachineAdapter { get; set; }
+            public MaskItem<TItem, ObjectBounds.Mask<TItem>?>? ObjectBounds { get; set; }
+            public MaskItem<TItem, PreviewTransform.Mask<TItem>?>? PreviewTransform { get; set; }
+            public TItem Name;
+            public TItem ObjectEffect;
+            public MaskItem<TItem, GenderedItem<MaskItem<TItem, ArmorModel.Mask<TItem>?>?>?>? WorldModel;
+            public MaskItem<TItem, BodyTemplate.Mask<TItem>?>? BodyTemplate { get; set; }
+            public MaskItem<TItem, Destructible.Mask<TItem>?>? Destructible { get; set; }
+            public TItem PickUpSound;
+            public TItem PutDownSound;
+            public TItem EquipmentType;
+            public TItem BashImpactDataSet;
+            public TItem AlternateBlockMaterial;
+            public TItem Race;
+            public MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>? Keywords;
+            public TItem Description;
+            public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ArmorAddonModel.Mask<TItem>?>>?>? Armatures;
+            public TItem Value;
+            public TItem Weight;
+            public TItem Health;
+            public TItem ArmorRating;
+            public TItem BaseAddonIndex;
+            public TItem StaggerRating;
+            public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ResistanceArmor.Mask<TItem>?>>?>? Resistances;
+            public TItem DATADataTypeState;
+            public TItem FNAMDataTypeState;
             #endregion
 
             #region Equals
@@ -113,11 +477,63 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 if (rhs == null) return false;
                 if (!base.Equals(rhs)) return false;
+                if (!object.Equals(this.VirtualMachineAdapter, rhs.VirtualMachineAdapter)) return false;
+                if (!object.Equals(this.ObjectBounds, rhs.ObjectBounds)) return false;
+                if (!object.Equals(this.PreviewTransform, rhs.PreviewTransform)) return false;
+                if (!object.Equals(this.Name, rhs.Name)) return false;
+                if (!object.Equals(this.ObjectEffect, rhs.ObjectEffect)) return false;
+                if (!object.Equals(this.WorldModel, rhs.WorldModel)) return false;
+                if (!object.Equals(this.BodyTemplate, rhs.BodyTemplate)) return false;
+                if (!object.Equals(this.Destructible, rhs.Destructible)) return false;
+                if (!object.Equals(this.PickUpSound, rhs.PickUpSound)) return false;
+                if (!object.Equals(this.PutDownSound, rhs.PutDownSound)) return false;
+                if (!object.Equals(this.EquipmentType, rhs.EquipmentType)) return false;
+                if (!object.Equals(this.BashImpactDataSet, rhs.BashImpactDataSet)) return false;
+                if (!object.Equals(this.AlternateBlockMaterial, rhs.AlternateBlockMaterial)) return false;
+                if (!object.Equals(this.Race, rhs.Race)) return false;
+                if (!object.Equals(this.Keywords, rhs.Keywords)) return false;
+                if (!object.Equals(this.Description, rhs.Description)) return false;
+                if (!object.Equals(this.Armatures, rhs.Armatures)) return false;
+                if (!object.Equals(this.Value, rhs.Value)) return false;
+                if (!object.Equals(this.Weight, rhs.Weight)) return false;
+                if (!object.Equals(this.Health, rhs.Health)) return false;
+                if (!object.Equals(this.ArmorRating, rhs.ArmorRating)) return false;
+                if (!object.Equals(this.BaseAddonIndex, rhs.BaseAddonIndex)) return false;
+                if (!object.Equals(this.StaggerRating, rhs.StaggerRating)) return false;
+                if (!object.Equals(this.Resistances, rhs.Resistances)) return false;
+                if (!object.Equals(this.DATADataTypeState, rhs.DATADataTypeState)) return false;
+                if (!object.Equals(this.FNAMDataTypeState, rhs.FNAMDataTypeState)) return false;
                 return true;
             }
             public override int GetHashCode()
             {
                 var hash = new HashCode();
+                hash.Add(this.VirtualMachineAdapter);
+                hash.Add(this.ObjectBounds);
+                hash.Add(this.PreviewTransform);
+                hash.Add(this.Name);
+                hash.Add(this.ObjectEffect);
+                hash.Add(this.WorldModel);
+                hash.Add(this.BodyTemplate);
+                hash.Add(this.Destructible);
+                hash.Add(this.PickUpSound);
+                hash.Add(this.PutDownSound);
+                hash.Add(this.EquipmentType);
+                hash.Add(this.BashImpactDataSet);
+                hash.Add(this.AlternateBlockMaterial);
+                hash.Add(this.Race);
+                hash.Add(this.Keywords);
+                hash.Add(this.Description);
+                hash.Add(this.Armatures);
+                hash.Add(this.Value);
+                hash.Add(this.Weight);
+                hash.Add(this.Health);
+                hash.Add(this.ArmorRating);
+                hash.Add(this.BaseAddonIndex);
+                hash.Add(this.StaggerRating);
+                hash.Add(this.Resistances);
+                hash.Add(this.DATADataTypeState);
+                hash.Add(this.FNAMDataTypeState);
                 hash.Add(base.GetHashCode());
                 return hash.ToHashCode();
             }
@@ -128,6 +544,86 @@ namespace Mutagen.Bethesda.Fallout4
             public override bool All(Func<TItem, bool> eval)
             {
                 if (!base.All(eval)) return false;
+                if (VirtualMachineAdapter != null)
+                {
+                    if (!eval(this.VirtualMachineAdapter.Overall)) return false;
+                    if (this.VirtualMachineAdapter.Specific != null && !this.VirtualMachineAdapter.Specific.All(eval)) return false;
+                }
+                if (ObjectBounds != null)
+                {
+                    if (!eval(this.ObjectBounds.Overall)) return false;
+                    if (this.ObjectBounds.Specific != null && !this.ObjectBounds.Specific.All(eval)) return false;
+                }
+                if (PreviewTransform != null)
+                {
+                    if (!eval(this.PreviewTransform.Overall)) return false;
+                    if (this.PreviewTransform.Specific != null && !this.PreviewTransform.Specific.All(eval)) return false;
+                }
+                if (!eval(this.Name)) return false;
+                if (!eval(this.ObjectEffect)) return false;
+                if (!GenderedItem.AllMask(
+                    this.WorldModel,
+                    eval: eval)) return false;
+                if (BodyTemplate != null)
+                {
+                    if (!eval(this.BodyTemplate.Overall)) return false;
+                    if (this.BodyTemplate.Specific != null && !this.BodyTemplate.Specific.All(eval)) return false;
+                }
+                if (Destructible != null)
+                {
+                    if (!eval(this.Destructible.Overall)) return false;
+                    if (this.Destructible.Specific != null && !this.Destructible.Specific.All(eval)) return false;
+                }
+                if (!eval(this.PickUpSound)) return false;
+                if (!eval(this.PutDownSound)) return false;
+                if (!eval(this.EquipmentType)) return false;
+                if (!eval(this.BashImpactDataSet)) return false;
+                if (!eval(this.AlternateBlockMaterial)) return false;
+                if (!eval(this.Race)) return false;
+                if (this.Keywords != null)
+                {
+                    if (!eval(this.Keywords.Overall)) return false;
+                    if (this.Keywords.Specific != null)
+                    {
+                        foreach (var item in this.Keywords.Specific)
+                        {
+                            if (!eval(item.Value)) return false;
+                        }
+                    }
+                }
+                if (!eval(this.Description)) return false;
+                if (this.Armatures != null)
+                {
+                    if (!eval(this.Armatures.Overall)) return false;
+                    if (this.Armatures.Specific != null)
+                    {
+                        foreach (var item in this.Armatures.Specific)
+                        {
+                            if (!eval(item.Overall)) return false;
+                            if (item.Specific != null && !item.Specific.All(eval)) return false;
+                        }
+                    }
+                }
+                if (!eval(this.Value)) return false;
+                if (!eval(this.Weight)) return false;
+                if (!eval(this.Health)) return false;
+                if (!eval(this.ArmorRating)) return false;
+                if (!eval(this.BaseAddonIndex)) return false;
+                if (!eval(this.StaggerRating)) return false;
+                if (this.Resistances != null)
+                {
+                    if (!eval(this.Resistances.Overall)) return false;
+                    if (this.Resistances.Specific != null)
+                    {
+                        foreach (var item in this.Resistances.Specific)
+                        {
+                            if (!eval(item.Overall)) return false;
+                            if (item.Specific != null && !item.Specific.All(eval)) return false;
+                        }
+                    }
+                }
+                if (!eval(this.DATADataTypeState)) return false;
+                if (!eval(this.FNAMDataTypeState)) return false;
                 return true;
             }
             #endregion
@@ -136,6 +632,86 @@ namespace Mutagen.Bethesda.Fallout4
             public override bool Any(Func<TItem, bool> eval)
             {
                 if (base.Any(eval)) return true;
+                if (VirtualMachineAdapter != null)
+                {
+                    if (eval(this.VirtualMachineAdapter.Overall)) return true;
+                    if (this.VirtualMachineAdapter.Specific != null && this.VirtualMachineAdapter.Specific.Any(eval)) return true;
+                }
+                if (ObjectBounds != null)
+                {
+                    if (eval(this.ObjectBounds.Overall)) return true;
+                    if (this.ObjectBounds.Specific != null && this.ObjectBounds.Specific.Any(eval)) return true;
+                }
+                if (PreviewTransform != null)
+                {
+                    if (eval(this.PreviewTransform.Overall)) return true;
+                    if (this.PreviewTransform.Specific != null && this.PreviewTransform.Specific.Any(eval)) return true;
+                }
+                if (eval(this.Name)) return true;
+                if (eval(this.ObjectEffect)) return true;
+                if (GenderedItem.AnyMask(
+                    this.WorldModel,
+                    eval: eval)) return true;
+                if (BodyTemplate != null)
+                {
+                    if (eval(this.BodyTemplate.Overall)) return true;
+                    if (this.BodyTemplate.Specific != null && this.BodyTemplate.Specific.Any(eval)) return true;
+                }
+                if (Destructible != null)
+                {
+                    if (eval(this.Destructible.Overall)) return true;
+                    if (this.Destructible.Specific != null && this.Destructible.Specific.Any(eval)) return true;
+                }
+                if (eval(this.PickUpSound)) return true;
+                if (eval(this.PutDownSound)) return true;
+                if (eval(this.EquipmentType)) return true;
+                if (eval(this.BashImpactDataSet)) return true;
+                if (eval(this.AlternateBlockMaterial)) return true;
+                if (eval(this.Race)) return true;
+                if (this.Keywords != null)
+                {
+                    if (eval(this.Keywords.Overall)) return true;
+                    if (this.Keywords.Specific != null)
+                    {
+                        foreach (var item in this.Keywords.Specific)
+                        {
+                            if (!eval(item.Value)) return false;
+                        }
+                    }
+                }
+                if (eval(this.Description)) return true;
+                if (this.Armatures != null)
+                {
+                    if (eval(this.Armatures.Overall)) return true;
+                    if (this.Armatures.Specific != null)
+                    {
+                        foreach (var item in this.Armatures.Specific)
+                        {
+                            if (!eval(item.Overall)) return false;
+                            if (item.Specific != null && !item.Specific.All(eval)) return false;
+                        }
+                    }
+                }
+                if (eval(this.Value)) return true;
+                if (eval(this.Weight)) return true;
+                if (eval(this.Health)) return true;
+                if (eval(this.ArmorRating)) return true;
+                if (eval(this.BaseAddonIndex)) return true;
+                if (eval(this.StaggerRating)) return true;
+                if (this.Resistances != null)
+                {
+                    if (eval(this.Resistances.Overall)) return true;
+                    if (this.Resistances.Specific != null)
+                    {
+                        foreach (var item in this.Resistances.Specific)
+                        {
+                            if (!eval(item.Overall)) return false;
+                            if (item.Specific != null && !item.Specific.All(eval)) return false;
+                        }
+                    }
+                }
+                if (eval(this.DATADataTypeState)) return true;
+                if (eval(this.FNAMDataTypeState)) return true;
                 return false;
             }
             #endregion
@@ -151,6 +727,76 @@ namespace Mutagen.Bethesda.Fallout4
             protected void Translate_InternalFill<R>(Mask<R> obj, Func<TItem, R> eval)
             {
                 base.Translate_InternalFill(obj, eval);
+                obj.VirtualMachineAdapter = this.VirtualMachineAdapter == null ? null : new MaskItem<R, VirtualMachineAdapter.Mask<R>?>(eval(this.VirtualMachineAdapter.Overall), this.VirtualMachineAdapter.Specific?.Translate(eval));
+                obj.ObjectBounds = this.ObjectBounds == null ? null : new MaskItem<R, ObjectBounds.Mask<R>?>(eval(this.ObjectBounds.Overall), this.ObjectBounds.Specific?.Translate(eval));
+                obj.PreviewTransform = this.PreviewTransform == null ? null : new MaskItem<R, PreviewTransform.Mask<R>?>(eval(this.PreviewTransform.Overall), this.PreviewTransform.Specific?.Translate(eval));
+                obj.Name = eval(this.Name);
+                obj.ObjectEffect = eval(this.ObjectEffect);
+                obj.WorldModel = GenderedItem.TranslateHelper(
+                    this.WorldModel,
+                    eval,
+                    (m, e) => m?.Translate(e));
+                obj.BodyTemplate = this.BodyTemplate == null ? null : new MaskItem<R, BodyTemplate.Mask<R>?>(eval(this.BodyTemplate.Overall), this.BodyTemplate.Specific?.Translate(eval));
+                obj.Destructible = this.Destructible == null ? null : new MaskItem<R, Destructible.Mask<R>?>(eval(this.Destructible.Overall), this.Destructible.Specific?.Translate(eval));
+                obj.PickUpSound = eval(this.PickUpSound);
+                obj.PutDownSound = eval(this.PutDownSound);
+                obj.EquipmentType = eval(this.EquipmentType);
+                obj.BashImpactDataSet = eval(this.BashImpactDataSet);
+                obj.AlternateBlockMaterial = eval(this.AlternateBlockMaterial);
+                obj.Race = eval(this.Race);
+                if (Keywords != null)
+                {
+                    obj.Keywords = new MaskItem<R, IEnumerable<(int Index, R Value)>?>(eval(this.Keywords.Overall), Enumerable.Empty<(int Index, R Value)>());
+                    if (Keywords.Specific != null)
+                    {
+                        var l = new List<(int Index, R Item)>();
+                        obj.Keywords.Specific = l;
+                        foreach (var item in Keywords.Specific.WithIndex())
+                        {
+                            R mask = eval(item.Item.Value);
+                            l.Add((item.Index, mask));
+                        }
+                    }
+                }
+                obj.Description = eval(this.Description);
+                if (Armatures != null)
+                {
+                    obj.Armatures = new MaskItem<R, IEnumerable<MaskItemIndexed<R, ArmorAddonModel.Mask<R>?>>?>(eval(this.Armatures.Overall), Enumerable.Empty<MaskItemIndexed<R, ArmorAddonModel.Mask<R>?>>());
+                    if (Armatures.Specific != null)
+                    {
+                        var l = new List<MaskItemIndexed<R, ArmorAddonModel.Mask<R>?>>();
+                        obj.Armatures.Specific = l;
+                        foreach (var item in Armatures.Specific.WithIndex())
+                        {
+                            MaskItemIndexed<R, ArmorAddonModel.Mask<R>?>? mask = item.Item == null ? null : new MaskItemIndexed<R, ArmorAddonModel.Mask<R>?>(item.Item.Index, eval(item.Item.Overall), item.Item.Specific?.Translate(eval));
+                            if (mask == null) continue;
+                            l.Add(mask);
+                        }
+                    }
+                }
+                obj.Value = eval(this.Value);
+                obj.Weight = eval(this.Weight);
+                obj.Health = eval(this.Health);
+                obj.ArmorRating = eval(this.ArmorRating);
+                obj.BaseAddonIndex = eval(this.BaseAddonIndex);
+                obj.StaggerRating = eval(this.StaggerRating);
+                if (Resistances != null)
+                {
+                    obj.Resistances = new MaskItem<R, IEnumerable<MaskItemIndexed<R, ResistanceArmor.Mask<R>?>>?>(eval(this.Resistances.Overall), Enumerable.Empty<MaskItemIndexed<R, ResistanceArmor.Mask<R>?>>());
+                    if (Resistances.Specific != null)
+                    {
+                        var l = new List<MaskItemIndexed<R, ResistanceArmor.Mask<R>?>>();
+                        obj.Resistances.Specific = l;
+                        foreach (var item in Resistances.Specific.WithIndex())
+                        {
+                            MaskItemIndexed<R, ResistanceArmor.Mask<R>?>? mask = item.Item == null ? null : new MaskItemIndexed<R, ResistanceArmor.Mask<R>?>(item.Item.Index, eval(item.Item.Overall), item.Item.Specific?.Translate(eval));
+                            if (mask == null) continue;
+                            l.Add(mask);
+                        }
+                    }
+                }
+                obj.DATADataTypeState = eval(this.DATADataTypeState);
+                obj.FNAMDataTypeState = eval(this.FNAMDataTypeState);
             }
             #endregion
 
@@ -173,6 +819,168 @@ namespace Mutagen.Bethesda.Fallout4
                 fg.AppendLine("[");
                 using (new DepthWrapper(fg))
                 {
+                    if (printMask?.VirtualMachineAdapter?.Overall ?? true)
+                    {
+                        VirtualMachineAdapter?.ToString(fg);
+                    }
+                    if (printMask?.ObjectBounds?.Overall ?? true)
+                    {
+                        ObjectBounds?.ToString(fg);
+                    }
+                    if (printMask?.PreviewTransform?.Overall ?? true)
+                    {
+                        PreviewTransform?.ToString(fg);
+                    }
+                    if (printMask?.Name ?? true)
+                    {
+                        fg.AppendItem(Name, "Name");
+                    }
+                    if (printMask?.ObjectEffect ?? true)
+                    {
+                        fg.AppendItem(ObjectEffect, "ObjectEffect");
+                    }
+                    if (WorldModel != null
+                        && (printMask?.WorldModel?.Overall ?? true))
+                    {
+                        fg.AppendLine($"WorldModel => {WorldModel}");
+                    }
+                    if (printMask?.BodyTemplate?.Overall ?? true)
+                    {
+                        BodyTemplate?.ToString(fg);
+                    }
+                    if (printMask?.Destructible?.Overall ?? true)
+                    {
+                        Destructible?.ToString(fg);
+                    }
+                    if (printMask?.PickUpSound ?? true)
+                    {
+                        fg.AppendItem(PickUpSound, "PickUpSound");
+                    }
+                    if (printMask?.PutDownSound ?? true)
+                    {
+                        fg.AppendItem(PutDownSound, "PutDownSound");
+                    }
+                    if (printMask?.EquipmentType ?? true)
+                    {
+                        fg.AppendItem(EquipmentType, "EquipmentType");
+                    }
+                    if (printMask?.BashImpactDataSet ?? true)
+                    {
+                        fg.AppendItem(BashImpactDataSet, "BashImpactDataSet");
+                    }
+                    if (printMask?.AlternateBlockMaterial ?? true)
+                    {
+                        fg.AppendItem(AlternateBlockMaterial, "AlternateBlockMaterial");
+                    }
+                    if (printMask?.Race ?? true)
+                    {
+                        fg.AppendItem(Race, "Race");
+                    }
+                    if ((printMask?.Keywords?.Overall ?? true)
+                        && Keywords is {} KeywordsItem)
+                    {
+                        fg.AppendLine("Keywords =>");
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            fg.AppendItem(KeywordsItem.Overall);
+                            if (KeywordsItem.Specific != null)
+                            {
+                                foreach (var subItem in KeywordsItem.Specific)
+                                {
+                                    fg.AppendLine("[");
+                                    using (new DepthWrapper(fg))
+                                    {
+                                        fg.AppendItem(subItem);
+                                    }
+                                    fg.AppendLine("]");
+                                }
+                            }
+                        }
+                        fg.AppendLine("]");
+                    }
+                    if (printMask?.Description ?? true)
+                    {
+                        fg.AppendItem(Description, "Description");
+                    }
+                    if ((printMask?.Armatures?.Overall ?? true)
+                        && Armatures is {} ArmaturesItem)
+                    {
+                        fg.AppendLine("Armatures =>");
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            fg.AppendItem(ArmaturesItem.Overall);
+                            if (ArmaturesItem.Specific != null)
+                            {
+                                foreach (var subItem in ArmaturesItem.Specific)
+                                {
+                                    fg.AppendLine("[");
+                                    using (new DepthWrapper(fg))
+                                    {
+                                        subItem?.ToString(fg);
+                                    }
+                                    fg.AppendLine("]");
+                                }
+                            }
+                        }
+                        fg.AppendLine("]");
+                    }
+                    if (printMask?.Value ?? true)
+                    {
+                        fg.AppendItem(Value, "Value");
+                    }
+                    if (printMask?.Weight ?? true)
+                    {
+                        fg.AppendItem(Weight, "Weight");
+                    }
+                    if (printMask?.Health ?? true)
+                    {
+                        fg.AppendItem(Health, "Health");
+                    }
+                    if (printMask?.ArmorRating ?? true)
+                    {
+                        fg.AppendItem(ArmorRating, "ArmorRating");
+                    }
+                    if (printMask?.BaseAddonIndex ?? true)
+                    {
+                        fg.AppendItem(BaseAddonIndex, "BaseAddonIndex");
+                    }
+                    if (printMask?.StaggerRating ?? true)
+                    {
+                        fg.AppendItem(StaggerRating, "StaggerRating");
+                    }
+                    if ((printMask?.Resistances?.Overall ?? true)
+                        && Resistances is {} ResistancesItem)
+                    {
+                        fg.AppendLine("Resistances =>");
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            fg.AppendItem(ResistancesItem.Overall);
+                            if (ResistancesItem.Specific != null)
+                            {
+                                foreach (var subItem in ResistancesItem.Specific)
+                                {
+                                    fg.AppendLine("[");
+                                    using (new DepthWrapper(fg))
+                                    {
+                                        subItem?.ToString(fg);
+                                    }
+                                    fg.AppendLine("]");
+                                }
+                            }
+                        }
+                        fg.AppendLine("]");
+                    }
+                    if (printMask?.DATADataTypeState ?? true)
+                    {
+                        fg.AppendItem(DATADataTypeState, "DATADataTypeState");
+                    }
+                    if (printMask?.FNAMDataTypeState ?? true)
+                    {
+                        fg.AppendItem(FNAMDataTypeState, "FNAMDataTypeState");
+                    }
                 }
                 fg.AppendLine("]");
             }
@@ -184,12 +992,93 @@ namespace Mutagen.Bethesda.Fallout4
             Fallout4MajorRecord.ErrorMask,
             IErrorMask<ErrorMask>
         {
+            #region Members
+            public MaskItem<Exception?, VirtualMachineAdapter.ErrorMask?>? VirtualMachineAdapter;
+            public MaskItem<Exception?, ObjectBounds.ErrorMask?>? ObjectBounds;
+            public MaskItem<Exception?, PreviewTransform.ErrorMask?>? PreviewTransform;
+            public Exception? Name;
+            public Exception? ObjectEffect;
+            public MaskItem<Exception?, GenderedItem<Exception?>?>? WorldModel;
+            public MaskItem<Exception?, BodyTemplate.ErrorMask?>? BodyTemplate;
+            public MaskItem<Exception?, Destructible.ErrorMask?>? Destructible;
+            public Exception? PickUpSound;
+            public Exception? PutDownSound;
+            public Exception? EquipmentType;
+            public Exception? BashImpactDataSet;
+            public Exception? AlternateBlockMaterial;
+            public Exception? Race;
+            public MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>? Keywords;
+            public Exception? Description;
+            public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ArmorAddonModel.ErrorMask?>>?>? Armatures;
+            public Exception? Value;
+            public Exception? Weight;
+            public Exception? Health;
+            public Exception? ArmorRating;
+            public Exception? BaseAddonIndex;
+            public Exception? StaggerRating;
+            public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ResistanceArmor.ErrorMask?>>?>? Resistances;
+            public Exception? DATADataTypeState;
+            public Exception? FNAMDataTypeState;
+            #endregion
+
             #region IErrorMask
             public override object? GetNthMask(int index)
             {
                 Armor_FieldIndex enu = (Armor_FieldIndex)index;
                 switch (enu)
                 {
+                    case Armor_FieldIndex.VirtualMachineAdapter:
+                        return VirtualMachineAdapter;
+                    case Armor_FieldIndex.ObjectBounds:
+                        return ObjectBounds;
+                    case Armor_FieldIndex.PreviewTransform:
+                        return PreviewTransform;
+                    case Armor_FieldIndex.Name:
+                        return Name;
+                    case Armor_FieldIndex.ObjectEffect:
+                        return ObjectEffect;
+                    case Armor_FieldIndex.WorldModel:
+                        return WorldModel;
+                    case Armor_FieldIndex.BodyTemplate:
+                        return BodyTemplate;
+                    case Armor_FieldIndex.Destructible:
+                        return Destructible;
+                    case Armor_FieldIndex.PickUpSound:
+                        return PickUpSound;
+                    case Armor_FieldIndex.PutDownSound:
+                        return PutDownSound;
+                    case Armor_FieldIndex.EquipmentType:
+                        return EquipmentType;
+                    case Armor_FieldIndex.BashImpactDataSet:
+                        return BashImpactDataSet;
+                    case Armor_FieldIndex.AlternateBlockMaterial:
+                        return AlternateBlockMaterial;
+                    case Armor_FieldIndex.Race:
+                        return Race;
+                    case Armor_FieldIndex.Keywords:
+                        return Keywords;
+                    case Armor_FieldIndex.Description:
+                        return Description;
+                    case Armor_FieldIndex.Armatures:
+                        return Armatures;
+                    case Armor_FieldIndex.Value:
+                        return Value;
+                    case Armor_FieldIndex.Weight:
+                        return Weight;
+                    case Armor_FieldIndex.Health:
+                        return Health;
+                    case Armor_FieldIndex.ArmorRating:
+                        return ArmorRating;
+                    case Armor_FieldIndex.BaseAddonIndex:
+                        return BaseAddonIndex;
+                    case Armor_FieldIndex.StaggerRating:
+                        return StaggerRating;
+                    case Armor_FieldIndex.Resistances:
+                        return Resistances;
+                    case Armor_FieldIndex.DATADataTypeState:
+                        return DATADataTypeState;
+                    case Armor_FieldIndex.FNAMDataTypeState:
+                        return FNAMDataTypeState;
                     default:
                         return base.GetNthMask(index);
                 }
@@ -200,6 +1089,84 @@ namespace Mutagen.Bethesda.Fallout4
                 Armor_FieldIndex enu = (Armor_FieldIndex)index;
                 switch (enu)
                 {
+                    case Armor_FieldIndex.VirtualMachineAdapter:
+                        this.VirtualMachineAdapter = new MaskItem<Exception?, VirtualMachineAdapter.ErrorMask?>(ex, null);
+                        break;
+                    case Armor_FieldIndex.ObjectBounds:
+                        this.ObjectBounds = new MaskItem<Exception?, ObjectBounds.ErrorMask?>(ex, null);
+                        break;
+                    case Armor_FieldIndex.PreviewTransform:
+                        this.PreviewTransform = new MaskItem<Exception?, PreviewTransform.ErrorMask?>(ex, null);
+                        break;
+                    case Armor_FieldIndex.Name:
+                        this.Name = ex;
+                        break;
+                    case Armor_FieldIndex.ObjectEffect:
+                        this.ObjectEffect = ex;
+                        break;
+                    case Armor_FieldIndex.WorldModel:
+                        this.WorldModel = new MaskItem<Exception?, GenderedItem<Exception?>?>(ex, null);
+                        break;
+                    case Armor_FieldIndex.BodyTemplate:
+                        this.BodyTemplate = new MaskItem<Exception?, BodyTemplate.ErrorMask?>(ex, null);
+                        break;
+                    case Armor_FieldIndex.Destructible:
+                        this.Destructible = new MaskItem<Exception?, Destructible.ErrorMask?>(ex, null);
+                        break;
+                    case Armor_FieldIndex.PickUpSound:
+                        this.PickUpSound = ex;
+                        break;
+                    case Armor_FieldIndex.PutDownSound:
+                        this.PutDownSound = ex;
+                        break;
+                    case Armor_FieldIndex.EquipmentType:
+                        this.EquipmentType = ex;
+                        break;
+                    case Armor_FieldIndex.BashImpactDataSet:
+                        this.BashImpactDataSet = ex;
+                        break;
+                    case Armor_FieldIndex.AlternateBlockMaterial:
+                        this.AlternateBlockMaterial = ex;
+                        break;
+                    case Armor_FieldIndex.Race:
+                        this.Race = ex;
+                        break;
+                    case Armor_FieldIndex.Keywords:
+                        this.Keywords = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ex, null);
+                        break;
+                    case Armor_FieldIndex.Description:
+                        this.Description = ex;
+                        break;
+                    case Armor_FieldIndex.Armatures:
+                        this.Armatures = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ArmorAddonModel.ErrorMask?>>?>(ex, null);
+                        break;
+                    case Armor_FieldIndex.Value:
+                        this.Value = ex;
+                        break;
+                    case Armor_FieldIndex.Weight:
+                        this.Weight = ex;
+                        break;
+                    case Armor_FieldIndex.Health:
+                        this.Health = ex;
+                        break;
+                    case Armor_FieldIndex.ArmorRating:
+                        this.ArmorRating = ex;
+                        break;
+                    case Armor_FieldIndex.BaseAddonIndex:
+                        this.BaseAddonIndex = ex;
+                        break;
+                    case Armor_FieldIndex.StaggerRating:
+                        this.StaggerRating = ex;
+                        break;
+                    case Armor_FieldIndex.Resistances:
+                        this.Resistances = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ResistanceArmor.ErrorMask?>>?>(ex, null);
+                        break;
+                    case Armor_FieldIndex.DATADataTypeState:
+                        this.DATADataTypeState = ex;
+                        break;
+                    case Armor_FieldIndex.FNAMDataTypeState:
+                        this.FNAMDataTypeState = ex;
+                        break;
                     default:
                         base.SetNthException(index, ex);
                         break;
@@ -211,6 +1178,84 @@ namespace Mutagen.Bethesda.Fallout4
                 Armor_FieldIndex enu = (Armor_FieldIndex)index;
                 switch (enu)
                 {
+                    case Armor_FieldIndex.VirtualMachineAdapter:
+                        this.VirtualMachineAdapter = (MaskItem<Exception?, VirtualMachineAdapter.ErrorMask?>?)obj;
+                        break;
+                    case Armor_FieldIndex.ObjectBounds:
+                        this.ObjectBounds = (MaskItem<Exception?, ObjectBounds.ErrorMask?>?)obj;
+                        break;
+                    case Armor_FieldIndex.PreviewTransform:
+                        this.PreviewTransform = (MaskItem<Exception?, PreviewTransform.ErrorMask?>?)obj;
+                        break;
+                    case Armor_FieldIndex.Name:
+                        this.Name = (Exception?)obj;
+                        break;
+                    case Armor_FieldIndex.ObjectEffect:
+                        this.ObjectEffect = (Exception?)obj;
+                        break;
+                    case Armor_FieldIndex.WorldModel:
+                        this.WorldModel = (MaskItem<Exception?, GenderedItem<Exception?>?>?)obj;
+                        break;
+                    case Armor_FieldIndex.BodyTemplate:
+                        this.BodyTemplate = (MaskItem<Exception?, BodyTemplate.ErrorMask?>?)obj;
+                        break;
+                    case Armor_FieldIndex.Destructible:
+                        this.Destructible = (MaskItem<Exception?, Destructible.ErrorMask?>?)obj;
+                        break;
+                    case Armor_FieldIndex.PickUpSound:
+                        this.PickUpSound = (Exception?)obj;
+                        break;
+                    case Armor_FieldIndex.PutDownSound:
+                        this.PutDownSound = (Exception?)obj;
+                        break;
+                    case Armor_FieldIndex.EquipmentType:
+                        this.EquipmentType = (Exception?)obj;
+                        break;
+                    case Armor_FieldIndex.BashImpactDataSet:
+                        this.BashImpactDataSet = (Exception?)obj;
+                        break;
+                    case Armor_FieldIndex.AlternateBlockMaterial:
+                        this.AlternateBlockMaterial = (Exception?)obj;
+                        break;
+                    case Armor_FieldIndex.Race:
+                        this.Race = (Exception?)obj;
+                        break;
+                    case Armor_FieldIndex.Keywords:
+                        this.Keywords = (MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>)obj;
+                        break;
+                    case Armor_FieldIndex.Description:
+                        this.Description = (Exception?)obj;
+                        break;
+                    case Armor_FieldIndex.Armatures:
+                        this.Armatures = (MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ArmorAddonModel.ErrorMask?>>?>)obj;
+                        break;
+                    case Armor_FieldIndex.Value:
+                        this.Value = (Exception?)obj;
+                        break;
+                    case Armor_FieldIndex.Weight:
+                        this.Weight = (Exception?)obj;
+                        break;
+                    case Armor_FieldIndex.Health:
+                        this.Health = (Exception?)obj;
+                        break;
+                    case Armor_FieldIndex.ArmorRating:
+                        this.ArmorRating = (Exception?)obj;
+                        break;
+                    case Armor_FieldIndex.BaseAddonIndex:
+                        this.BaseAddonIndex = (Exception?)obj;
+                        break;
+                    case Armor_FieldIndex.StaggerRating:
+                        this.StaggerRating = (Exception?)obj;
+                        break;
+                    case Armor_FieldIndex.Resistances:
+                        this.Resistances = (MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ResistanceArmor.ErrorMask?>>?>)obj;
+                        break;
+                    case Armor_FieldIndex.DATADataTypeState:
+                        this.DATADataTypeState = (Exception?)obj;
+                        break;
+                    case Armor_FieldIndex.FNAMDataTypeState:
+                        this.FNAMDataTypeState = (Exception?)obj;
+                        break;
                     default:
                         base.SetNthMask(index, obj);
                         break;
@@ -220,6 +1265,32 @@ namespace Mutagen.Bethesda.Fallout4
             public override bool IsInError()
             {
                 if (Overall != null) return true;
+                if (VirtualMachineAdapter != null) return true;
+                if (ObjectBounds != null) return true;
+                if (PreviewTransform != null) return true;
+                if (Name != null) return true;
+                if (ObjectEffect != null) return true;
+                if (WorldModel != null) return true;
+                if (BodyTemplate != null) return true;
+                if (Destructible != null) return true;
+                if (PickUpSound != null) return true;
+                if (PutDownSound != null) return true;
+                if (EquipmentType != null) return true;
+                if (BashImpactDataSet != null) return true;
+                if (AlternateBlockMaterial != null) return true;
+                if (Race != null) return true;
+                if (Keywords != null) return true;
+                if (Description != null) return true;
+                if (Armatures != null) return true;
+                if (Value != null) return true;
+                if (Weight != null) return true;
+                if (Health != null) return true;
+                if (ArmorRating != null) return true;
+                if (BaseAddonIndex != null) return true;
+                if (StaggerRating != null) return true;
+                if (Resistances != null) return true;
+                if (DATADataTypeState != null) return true;
+                if (FNAMDataTypeState != null) return true;
                 return false;
             }
             #endregion
@@ -255,6 +1326,98 @@ namespace Mutagen.Bethesda.Fallout4
             protected override void ToString_FillInternal(FileGeneration fg)
             {
                 base.ToString_FillInternal(fg);
+                VirtualMachineAdapter?.ToString(fg);
+                ObjectBounds?.ToString(fg);
+                PreviewTransform?.ToString(fg);
+                fg.AppendItem(Name, "Name");
+                fg.AppendItem(ObjectEffect, "ObjectEffect");
+                if (WorldModel != null)
+                {
+                    fg.AppendLine($"WorldModel => {WorldModel}");
+                }
+                BodyTemplate?.ToString(fg);
+                Destructible?.ToString(fg);
+                fg.AppendItem(PickUpSound, "PickUpSound");
+                fg.AppendItem(PutDownSound, "PutDownSound");
+                fg.AppendItem(EquipmentType, "EquipmentType");
+                fg.AppendItem(BashImpactDataSet, "BashImpactDataSet");
+                fg.AppendItem(AlternateBlockMaterial, "AlternateBlockMaterial");
+                fg.AppendItem(Race, "Race");
+                if (Keywords is {} KeywordsItem)
+                {
+                    fg.AppendLine("Keywords =>");
+                    fg.AppendLine("[");
+                    using (new DepthWrapper(fg))
+                    {
+                        fg.AppendItem(KeywordsItem.Overall);
+                        if (KeywordsItem.Specific != null)
+                        {
+                            foreach (var subItem in KeywordsItem.Specific)
+                            {
+                                fg.AppendLine("[");
+                                using (new DepthWrapper(fg))
+                                {
+                                    fg.AppendItem(subItem);
+                                }
+                                fg.AppendLine("]");
+                            }
+                        }
+                    }
+                    fg.AppendLine("]");
+                }
+                fg.AppendItem(Description, "Description");
+                if (Armatures is {} ArmaturesItem)
+                {
+                    fg.AppendLine("Armatures =>");
+                    fg.AppendLine("[");
+                    using (new DepthWrapper(fg))
+                    {
+                        fg.AppendItem(ArmaturesItem.Overall);
+                        if (ArmaturesItem.Specific != null)
+                        {
+                            foreach (var subItem in ArmaturesItem.Specific)
+                            {
+                                fg.AppendLine("[");
+                                using (new DepthWrapper(fg))
+                                {
+                                    subItem?.ToString(fg);
+                                }
+                                fg.AppendLine("]");
+                            }
+                        }
+                    }
+                    fg.AppendLine("]");
+                }
+                fg.AppendItem(Value, "Value");
+                fg.AppendItem(Weight, "Weight");
+                fg.AppendItem(Health, "Health");
+                fg.AppendItem(ArmorRating, "ArmorRating");
+                fg.AppendItem(BaseAddonIndex, "BaseAddonIndex");
+                fg.AppendItem(StaggerRating, "StaggerRating");
+                if (Resistances is {} ResistancesItem)
+                {
+                    fg.AppendLine("Resistances =>");
+                    fg.AppendLine("[");
+                    using (new DepthWrapper(fg))
+                    {
+                        fg.AppendItem(ResistancesItem.Overall);
+                        if (ResistancesItem.Specific != null)
+                        {
+                            foreach (var subItem in ResistancesItem.Specific)
+                            {
+                                fg.AppendLine("[");
+                                using (new DepthWrapper(fg))
+                                {
+                                    subItem?.ToString(fg);
+                                }
+                                fg.AppendLine("]");
+                            }
+                        }
+                    }
+                    fg.AppendLine("]");
+                }
+                fg.AppendItem(DATADataTypeState, "DATADataTypeState");
+                fg.AppendItem(FNAMDataTypeState, "FNAMDataTypeState");
             }
             #endregion
 
@@ -263,6 +1426,32 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 if (rhs == null) return this;
                 var ret = new ErrorMask();
+                ret.VirtualMachineAdapter = this.VirtualMachineAdapter.Combine(rhs.VirtualMachineAdapter, (l, r) => l.Combine(r));
+                ret.ObjectBounds = this.ObjectBounds.Combine(rhs.ObjectBounds, (l, r) => l.Combine(r));
+                ret.PreviewTransform = this.PreviewTransform.Combine(rhs.PreviewTransform, (l, r) => l.Combine(r));
+                ret.Name = this.Name.Combine(rhs.Name);
+                ret.ObjectEffect = this.ObjectEffect.Combine(rhs.ObjectEffect);
+                ret.WorldModel = new MaskItem<Exception?, GenderedItem<Exception?>?>(ExceptionExt.Combine(this.WorldModel?.Overall, rhs.WorldModel?.Overall), GenderedItem.Combine(this.WorldModel?.Specific, rhs.WorldModel?.Specific));
+                ret.BodyTemplate = this.BodyTemplate.Combine(rhs.BodyTemplate, (l, r) => l.Combine(r));
+                ret.Destructible = this.Destructible.Combine(rhs.Destructible, (l, r) => l.Combine(r));
+                ret.PickUpSound = this.PickUpSound.Combine(rhs.PickUpSound);
+                ret.PutDownSound = this.PutDownSound.Combine(rhs.PutDownSound);
+                ret.EquipmentType = this.EquipmentType.Combine(rhs.EquipmentType);
+                ret.BashImpactDataSet = this.BashImpactDataSet.Combine(rhs.BashImpactDataSet);
+                ret.AlternateBlockMaterial = this.AlternateBlockMaterial.Combine(rhs.AlternateBlockMaterial);
+                ret.Race = this.Race.Combine(rhs.Race);
+                ret.Keywords = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ExceptionExt.Combine(this.Keywords?.Overall, rhs.Keywords?.Overall), ExceptionExt.Combine(this.Keywords?.Specific, rhs.Keywords?.Specific));
+                ret.Description = this.Description.Combine(rhs.Description);
+                ret.Armatures = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ArmorAddonModel.ErrorMask?>>?>(ExceptionExt.Combine(this.Armatures?.Overall, rhs.Armatures?.Overall), ExceptionExt.Combine(this.Armatures?.Specific, rhs.Armatures?.Specific));
+                ret.Value = this.Value.Combine(rhs.Value);
+                ret.Weight = this.Weight.Combine(rhs.Weight);
+                ret.Health = this.Health.Combine(rhs.Health);
+                ret.ArmorRating = this.ArmorRating.Combine(rhs.ArmorRating);
+                ret.BaseAddonIndex = this.BaseAddonIndex.Combine(rhs.BaseAddonIndex);
+                ret.StaggerRating = this.StaggerRating.Combine(rhs.StaggerRating);
+                ret.Resistances = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ResistanceArmor.ErrorMask?>>?>(ExceptionExt.Combine(this.Resistances?.Overall, rhs.Resistances?.Overall), ExceptionExt.Combine(this.Resistances?.Specific, rhs.Resistances?.Specific));
+                ret.DATADataTypeState = this.DATADataTypeState.Combine(rhs.DATADataTypeState);
+                ret.FNAMDataTypeState = this.FNAMDataTypeState.Combine(rhs.FNAMDataTypeState);
                 return ret;
             }
             public static ErrorMask? Combine(ErrorMask? lhs, ErrorMask? rhs)
@@ -284,15 +1473,93 @@ namespace Mutagen.Bethesda.Fallout4
             Fallout4MajorRecord.TranslationMask,
             ITranslationMask
         {
+            #region Members
+            public VirtualMachineAdapter.TranslationMask? VirtualMachineAdapter;
+            public ObjectBounds.TranslationMask? ObjectBounds;
+            public PreviewTransform.TranslationMask? PreviewTransform;
+            public bool Name;
+            public bool ObjectEffect;
+            public GenderedItem<ArmorModel.TranslationMask>? WorldModel;
+            public BodyTemplate.TranslationMask? BodyTemplate;
+            public Destructible.TranslationMask? Destructible;
+            public bool PickUpSound;
+            public bool PutDownSound;
+            public bool EquipmentType;
+            public bool BashImpactDataSet;
+            public bool AlternateBlockMaterial;
+            public bool Race;
+            public bool Keywords;
+            public bool Description;
+            public ArmorAddonModel.TranslationMask? Armatures;
+            public bool Value;
+            public bool Weight;
+            public bool Health;
+            public bool ArmorRating;
+            public bool BaseAddonIndex;
+            public bool StaggerRating;
+            public ResistanceArmor.TranslationMask? Resistances;
+            public bool DATADataTypeState;
+            public bool FNAMDataTypeState;
+            #endregion
+
             #region Ctors
             public TranslationMask(
                 bool defaultOn,
                 bool onOverall = true)
                 : base(defaultOn, onOverall)
             {
+                this.Name = defaultOn;
+                this.ObjectEffect = defaultOn;
+                this.PickUpSound = defaultOn;
+                this.PutDownSound = defaultOn;
+                this.EquipmentType = defaultOn;
+                this.BashImpactDataSet = defaultOn;
+                this.AlternateBlockMaterial = defaultOn;
+                this.Race = defaultOn;
+                this.Keywords = defaultOn;
+                this.Description = defaultOn;
+                this.Value = defaultOn;
+                this.Weight = defaultOn;
+                this.Health = defaultOn;
+                this.ArmorRating = defaultOn;
+                this.BaseAddonIndex = defaultOn;
+                this.StaggerRating = defaultOn;
+                this.DATADataTypeState = defaultOn;
+                this.FNAMDataTypeState = defaultOn;
             }
 
             #endregion
+
+            protected override void GetCrystal(List<(bool On, TranslationCrystal? SubCrystal)> ret)
+            {
+                base.GetCrystal(ret);
+                ret.Add((VirtualMachineAdapter != null ? VirtualMachineAdapter.OnOverall : DefaultOn, VirtualMachineAdapter?.GetCrystal()));
+                ret.Add((ObjectBounds != null ? ObjectBounds.OnOverall : DefaultOn, ObjectBounds?.GetCrystal()));
+                ret.Add((PreviewTransform != null ? PreviewTransform.OnOverall : DefaultOn, PreviewTransform?.GetCrystal()));
+                ret.Add((Name, null));
+                ret.Add((ObjectEffect, null));
+                ret.Add((WorldModel != null || DefaultOn, null));
+                ret.Add((BodyTemplate != null ? BodyTemplate.OnOverall : DefaultOn, BodyTemplate?.GetCrystal()));
+                ret.Add((Destructible != null ? Destructible.OnOverall : DefaultOn, Destructible?.GetCrystal()));
+                ret.Add((PickUpSound, null));
+                ret.Add((PutDownSound, null));
+                ret.Add((EquipmentType, null));
+                ret.Add((BashImpactDataSet, null));
+                ret.Add((AlternateBlockMaterial, null));
+                ret.Add((Race, null));
+                ret.Add((Keywords, null));
+                ret.Add((Description, null));
+                ret.Add((Armatures == null ? DefaultOn : !Armatures.GetCrystal().CopyNothing, Armatures?.GetCrystal()));
+                ret.Add((Value, null));
+                ret.Add((Weight, null));
+                ret.Add((Health, null));
+                ret.Add((ArmorRating, null));
+                ret.Add((BaseAddonIndex, null));
+                ret.Add((StaggerRating, null));
+                ret.Add((Resistances == null ? DefaultOn : !Resistances.GetCrystal().CopyNothing, Resistances?.GetCrystal()));
+                ret.Add((DATADataTypeState, null));
+                ret.Add((FNAMDataTypeState, null));
+            }
 
             public static implicit operator TranslationMask(bool defaultOn)
             {
@@ -304,6 +1571,8 @@ namespace Mutagen.Bethesda.Fallout4
 
         #region Mutagen
         public static readonly RecordType GrupRecordType = Armor_Registration.TriggeringRecordType;
+        public override IEnumerable<IFormLinkGetter> ContainedFormLinks => ArmorCommon.Instance.GetContainedFormLinks(this);
+        public override void RemapLinks(IReadOnlyDictionary<FormKey, FormKey> mapping) => ArmorSetterCommon.Instance.RemapLinks(this, mapping);
         public Armor(FormKey formKey)
         {
             this.FormKey = formKey;
@@ -346,6 +1615,14 @@ namespace Mutagen.Bethesda.Fallout4
 
         protected override Type LinkType => typeof(IArmor);
 
+        [Flags]
+        public enum DATADataType
+        {
+        }
+        [Flags]
+        public enum FNAMDataType
+        {
+        }
         #region Equals and Hash
         public override bool Equals(object? obj)
         {
@@ -426,9 +1703,62 @@ namespace Mutagen.Bethesda.Fallout4
     #region Interface
     public partial interface IArmor :
         IArmorGetter,
+        IBindableEquipment,
+        IConstructible,
         IFallout4MajorRecordInternal,
-        ILoquiObjectSetter<IArmorInternal>
+        IFormLinkContainer,
+        IItem,
+        IKeyworded<IKeywordGetter>,
+        ILoquiObjectSetter<IArmorInternal>,
+        INamed,
+        INamedRequired,
+        IObjectBounded,
+        IObjectBoundedOptional,
+        IObjectId,
+        IOutfitTarget,
+        IScripted,
+        ITranslatedNamed,
+        ITranslatedNamedRequired,
+        IWeightValue
     {
+        /// <summary>
+        /// Aspects: IScripted
+        /// </summary>
+        new VirtualMachineAdapter? VirtualMachineAdapter { get; set; }
+        /// <summary>
+        /// Aspects: IObjectBounded, IObjectBoundedOptional
+        /// </summary>
+        new ObjectBounds ObjectBounds { get; set; }
+        new PreviewTransform PreviewTransform { get; set; }
+        /// <summary>
+        /// Aspects: INamed, INamedRequired, ITranslatedNamed, ITranslatedNamedRequired
+        /// </summary>
+        new TranslatedString? Name { get; set; }
+        new IFormLinkNullable<IEffectRecordGetter> ObjectEffect { get; set; }
+        new IGenderedItem<ArmorModel?>? WorldModel { get; set; }
+        new BodyTemplate? BodyTemplate { get; set; }
+        new Destructible? Destructible { get; set; }
+        new IFormLinkNullable<ISoundDescriptorGetter> PickUpSound { get; set; }
+        new IFormLinkNullable<ISoundDescriptorGetter> PutDownSound { get; set; }
+        new IFormLinkNullable<IEquipTypeGetter> EquipmentType { get; set; }
+        new IFormLinkNullable<IImpactDataSetGetter> BashImpactDataSet { get; set; }
+        new IFormLinkNullable<IMaterialTypeGetter> AlternateBlockMaterial { get; set; }
+        new IFormLinkNullable<IRaceGetter> Race { get; set; }
+        /// <summary>
+        /// Aspects: IKeyworded&lt;IKeywordGetter&gt;
+        /// </summary>
+        new ExtendedList<IFormLinkGetter<IKeywordGetter>>? Keywords { get; set; }
+        new TranslatedString? Description { get; set; }
+        new ExtendedList<ArmorAddonModel> Armatures { get; }
+        new UInt32 Value { get; set; }
+        new Single Weight { get; set; }
+        new UInt32 Health { get; set; }
+        new UInt16 ArmorRating { get; set; }
+        new UInt16 BaseAddonIndex { get; set; }
+        new UInt16 StaggerRating { get; set; }
+        new ExtendedList<ResistanceArmor> Resistances { get; }
+        new Armor.DATADataType DATADataTypeState { get; set; }
+        new Armor.FNAMDataType FNAMDataTypeState { get; set; }
     }
 
     public partial interface IArmorInternal :
@@ -436,16 +1766,78 @@ namespace Mutagen.Bethesda.Fallout4
         IArmor,
         IArmorGetter
     {
+        new IGenderedItem<ArmorModel?>? WorldModel { get; set; }
     }
 
     [AssociatedRecordTypesAttribute(Mutagen.Bethesda.Fallout4.Internals.RecordTypeInts.ARMO)]
     public partial interface IArmorGetter :
         IFallout4MajorRecordGetter,
         IBinaryItem,
+        IBindableEquipmentGetter,
+        IConstructibleGetter,
+        IFormLinkContainerGetter,
+        IItemGetter,
+        IKeywordedGetter<IKeywordGetter>,
         ILoquiObject<IArmorGetter>,
-        IMapsToGetter<IArmorGetter>
+        IMapsToGetter<IArmorGetter>,
+        INamedGetter,
+        INamedRequiredGetter,
+        IObjectBoundedGetter,
+        IObjectBoundedOptionalGetter,
+        IObjectIdGetter,
+        IOutfitTargetGetter,
+        IScriptedGetter,
+        ITranslatedNamedGetter,
+        ITranslatedNamedRequiredGetter,
+        IWeightValueGetter
     {
         static new ILoquiRegistration StaticRegistration => Armor_Registration.Instance;
+        #region VirtualMachineAdapter
+        /// <summary>
+        /// Aspects: IScriptedGetter
+        /// </summary>
+        IVirtualMachineAdapterGetter? VirtualMachineAdapter { get; }
+        #endregion
+        #region ObjectBounds
+        /// <summary>
+        /// Aspects: IObjectBoundedGetter, IObjectBoundedOptionalGetter
+        /// </summary>
+        IObjectBoundsGetter ObjectBounds { get; }
+        #endregion
+        IPreviewTransformGetter PreviewTransform { get; }
+        #region Name
+        /// <summary>
+        /// Aspects: INamedGetter, INamedRequiredGetter, ITranslatedNamedGetter, ITranslatedNamedRequiredGetter
+        /// </summary>
+        ITranslatedStringGetter? Name { get; }
+        #endregion
+        IFormLinkNullableGetter<IEffectRecordGetter> ObjectEffect { get; }
+        IGenderedItemGetter<IArmorModelGetter?>? WorldModel { get; }
+        IBodyTemplateGetter? BodyTemplate { get; }
+        IDestructibleGetter? Destructible { get; }
+        IFormLinkNullableGetter<ISoundDescriptorGetter> PickUpSound { get; }
+        IFormLinkNullableGetter<ISoundDescriptorGetter> PutDownSound { get; }
+        IFormLinkNullableGetter<IEquipTypeGetter> EquipmentType { get; }
+        IFormLinkNullableGetter<IImpactDataSetGetter> BashImpactDataSet { get; }
+        IFormLinkNullableGetter<IMaterialTypeGetter> AlternateBlockMaterial { get; }
+        IFormLinkNullableGetter<IRaceGetter> Race { get; }
+        #region Keywords
+        /// <summary>
+        /// Aspects: IKeywordedGetter&lt;IKeywordGetter&gt;
+        /// </summary>
+        IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? Keywords { get; }
+        #endregion
+        ITranslatedStringGetter? Description { get; }
+        IReadOnlyList<IArmorAddonModelGetter> Armatures { get; }
+        UInt32 Value { get; }
+        Single Weight { get; }
+        UInt32 Health { get; }
+        UInt16 ArmorRating { get; }
+        UInt16 BaseAddonIndex { get; }
+        UInt16 StaggerRating { get; }
+        IReadOnlyList<IResistanceArmorGetter> Resistances { get; }
+        Armor.DATADataType DATADataTypeState { get; }
+        Armor.FNAMDataType FNAMDataTypeState { get; }
 
     }
 
@@ -610,6 +2002,32 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         EditorID = 3,
         FormVersion = 4,
         Version2 = 5,
+        VirtualMachineAdapter = 6,
+        ObjectBounds = 7,
+        PreviewTransform = 8,
+        Name = 9,
+        ObjectEffect = 10,
+        WorldModel = 11,
+        BodyTemplate = 12,
+        Destructible = 13,
+        PickUpSound = 14,
+        PutDownSound = 15,
+        EquipmentType = 16,
+        BashImpactDataSet = 17,
+        AlternateBlockMaterial = 18,
+        Race = 19,
+        Keywords = 20,
+        Description = 21,
+        Armatures = 22,
+        Value = 23,
+        Weight = 24,
+        Health = 25,
+        ArmorRating = 26,
+        BaseAddonIndex = 27,
+        StaggerRating = 28,
+        Resistances = 29,
+        DATADataTypeState = 30,
+        FNAMDataTypeState = 31,
     }
     #endregion
 
@@ -622,14 +2040,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public static readonly ObjectKey ObjectKey = new ObjectKey(
             protocolKey: ProtocolDefinition_Fallout4.ProtocolKey,
-            msgID: 87,
+            msgID: 136,
             version: 0);
 
-        public const string GUID = "e4416f66-bbff-4fd0-aefd-28c57a08502c";
+        public const string GUID = "c4d097a3-85cc-49c7-8a94-606c9086f0ca";
 
-        public const ushort AdditionalFieldCount = 0;
+        public const ushort AdditionalFieldCount = 26;
 
-        public const ushort FieldCount = 6;
+        public const ushort FieldCount = 32;
 
         public static readonly Type MaskType = typeof(Armor.Mask<>);
 
@@ -657,6 +2075,32 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public static readonly RecordType TriggeringRecordType = RecordTypes.ARMO;
         public static readonly Type BinaryWriteTranslation = typeof(ArmorBinaryWriteTranslation);
+        public static RecordTypeConverter WorldModelFemaleConverter = new RecordTypeConverter(
+            new KeyValuePair<RecordType, RecordType>(
+                new RecordType("MODL"),
+                new RecordType("MOD4")),
+            new KeyValuePair<RecordType, RecordType>(
+                new RecordType("MODT"),
+                new RecordType("MO4T")),
+            new KeyValuePair<RecordType, RecordType>(
+                new RecordType("MODS"),
+                new RecordType("MO4S")),
+            new KeyValuePair<RecordType, RecordType>(
+                new RecordType("ICON"),
+                new RecordType("ICO2")),
+            new KeyValuePair<RecordType, RecordType>(
+                new RecordType("MICO"),
+                new RecordType("MIC2")));
+        public static RecordTypeConverter WorldModelMaleConverter = new RecordTypeConverter(
+            new KeyValuePair<RecordType, RecordType>(
+                new RecordType("MODL"),
+                new RecordType("MOD2")),
+            new KeyValuePair<RecordType, RecordType>(
+                new RecordType("MODT"),
+                new RecordType("MO2T")),
+            new KeyValuePair<RecordType, RecordType>(
+                new RecordType("MODS"),
+                new RecordType("MO2S")));
         #region Interface
         ProtocolKey ILoquiRegistration.ProtocolKey => ProtocolKey;
         ObjectKey ILoquiRegistration.ObjectKey => ObjectKey;
@@ -698,6 +2142,32 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public void Clear(IArmorInternal item)
         {
             ClearPartial();
+            item.VirtualMachineAdapter = null;
+            item.ObjectBounds.Clear();
+            item.PreviewTransform.Clear();
+            item.Name = default;
+            item.ObjectEffect.Clear();
+            item.WorldModel = null;
+            item.BodyTemplate = null;
+            item.Destructible = null;
+            item.PickUpSound.Clear();
+            item.PutDownSound.Clear();
+            item.EquipmentType.Clear();
+            item.BashImpactDataSet.Clear();
+            item.AlternateBlockMaterial.Clear();
+            item.Race.Clear();
+            item.Keywords = null;
+            item.Description = default;
+            item.Armatures.Clear();
+            item.Value = default;
+            item.Weight = default;
+            item.Health = default;
+            item.ArmorRating = default;
+            item.BaseAddonIndex = default;
+            item.StaggerRating = default;
+            item.Resistances.Clear();
+            item.DATADataTypeState = default;
+            item.FNAMDataTypeState = default;
             base.Clear(item);
         }
         
@@ -715,6 +2185,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public void RemapLinks(IArmor obj, IReadOnlyDictionary<FormKey, FormKey> mapping)
         {
             base.RemapLinks(obj, mapping);
+            obj.VirtualMachineAdapter?.RemapLinks(mapping);
+            obj.PreviewTransform.RemapLinks(mapping);
+            obj.ObjectEffect.Relink(mapping);
+            obj.WorldModel?.RemapLinks(mapping);
+            obj.Destructible?.RemapLinks(mapping);
+            obj.PickUpSound.Relink(mapping);
+            obj.PutDownSound.Relink(mapping);
+            obj.EquipmentType.Relink(mapping);
+            obj.BashImpactDataSet.Relink(mapping);
+            obj.AlternateBlockMaterial.Relink(mapping);
+            obj.Race.Relink(mapping);
+            obj.Keywords?.RemapLinks(mapping);
+            obj.Armatures.RemapLinks(mapping);
+            obj.Resistances.RemapLinks(mapping);
         }
         
         #endregion
@@ -783,6 +2267,57 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             EqualsMaskHelper.Include include = EqualsMaskHelper.Include.All)
         {
             if (rhs == null) return;
+            ret.VirtualMachineAdapter = EqualsMaskHelper.EqualsHelper(
+                item.VirtualMachineAdapter,
+                rhs.VirtualMachineAdapter,
+                (loqLhs, loqRhs, incl) => loqLhs.GetEqualsMask(loqRhs, incl),
+                include);
+            ret.ObjectBounds = MaskItemExt.Factory(item.ObjectBounds.GetEqualsMask(rhs.ObjectBounds, include), include);
+            ret.PreviewTransform = MaskItemExt.Factory(item.PreviewTransform.GetEqualsMask(rhs.PreviewTransform, include), include);
+            ret.Name = object.Equals(item.Name, rhs.Name);
+            ret.ObjectEffect = item.ObjectEffect.Equals(rhs.ObjectEffect);
+            ret.WorldModel = GenderedItem.EqualityMaskHelper(
+                lhs: item.WorldModel,
+                rhs: rhs.WorldModel,
+                maskGetter: (l, r, i) => EqualsMaskHelper.EqualsHelper(l, r, (loqLhs, loqRhs, incl) => loqLhs.GetEqualsMask(loqRhs, incl), i),
+                include: include);
+            ret.BodyTemplate = EqualsMaskHelper.EqualsHelper(
+                item.BodyTemplate,
+                rhs.BodyTemplate,
+                (loqLhs, loqRhs, incl) => loqLhs.GetEqualsMask(loqRhs, incl),
+                include);
+            ret.Destructible = EqualsMaskHelper.EqualsHelper(
+                item.Destructible,
+                rhs.Destructible,
+                (loqLhs, loqRhs, incl) => loqLhs.GetEqualsMask(loqRhs, incl),
+                include);
+            ret.PickUpSound = item.PickUpSound.Equals(rhs.PickUpSound);
+            ret.PutDownSound = item.PutDownSound.Equals(rhs.PutDownSound);
+            ret.EquipmentType = item.EquipmentType.Equals(rhs.EquipmentType);
+            ret.BashImpactDataSet = item.BashImpactDataSet.Equals(rhs.BashImpactDataSet);
+            ret.AlternateBlockMaterial = item.AlternateBlockMaterial.Equals(rhs.AlternateBlockMaterial);
+            ret.Race = item.Race.Equals(rhs.Race);
+            ret.Keywords = item.Keywords.CollectionEqualsHelper(
+                rhs.Keywords,
+                (l, r) => object.Equals(l, r),
+                include);
+            ret.Description = object.Equals(item.Description, rhs.Description);
+            ret.Armatures = item.Armatures.CollectionEqualsHelper(
+                rhs.Armatures,
+                (loqLhs, loqRhs) => loqLhs.GetEqualsMask(loqRhs, include),
+                include);
+            ret.Value = item.Value == rhs.Value;
+            ret.Weight = item.Weight.EqualsWithin(rhs.Weight);
+            ret.Health = item.Health == rhs.Health;
+            ret.ArmorRating = item.ArmorRating == rhs.ArmorRating;
+            ret.BaseAddonIndex = item.BaseAddonIndex == rhs.BaseAddonIndex;
+            ret.StaggerRating = item.StaggerRating == rhs.StaggerRating;
+            ret.Resistances = item.Resistances.CollectionEqualsHelper(
+                rhs.Resistances,
+                (loqLhs, loqRhs) => loqLhs.GetEqualsMask(loqRhs, include),
+                include);
+            ret.DATADataTypeState = item.DATADataTypeState == rhs.DATADataTypeState;
+            ret.FNAMDataTypeState = item.FNAMDataTypeState == rhs.FNAMDataTypeState;
             base.FillEqualsMask(item, rhs, ret, include);
         }
         
@@ -834,6 +2369,159 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 item: item,
                 fg: fg,
                 printMask: printMask);
+            if ((printMask?.VirtualMachineAdapter?.Overall ?? true)
+                && item.VirtualMachineAdapter is {} VirtualMachineAdapterItem)
+            {
+                VirtualMachineAdapterItem?.ToString(fg, "VirtualMachineAdapter");
+            }
+            if (printMask?.ObjectBounds?.Overall ?? true)
+            {
+                item.ObjectBounds?.ToString(fg, "ObjectBounds");
+            }
+            if (printMask?.PreviewTransform?.Overall ?? true)
+            {
+                item.PreviewTransform?.ToString(fg, "PreviewTransform");
+            }
+            if ((printMask?.Name ?? true)
+                && item.Name is {} NameItem)
+            {
+                fg.AppendItem(NameItem, "Name");
+            }
+            if (printMask?.ObjectEffect ?? true)
+            {
+                fg.AppendItem(item.ObjectEffect.FormKeyNullable, "ObjectEffect");
+            }
+            if ((printMask?.WorldModel?.Overall ?? true)
+                && item.WorldModel is {} WorldModelItem)
+            {
+                WorldModelItem?.ToString(fg, "WorldModel");
+            }
+            if ((printMask?.BodyTemplate?.Overall ?? true)
+                && item.BodyTemplate is {} BodyTemplateItem)
+            {
+                BodyTemplateItem?.ToString(fg, "BodyTemplate");
+            }
+            if ((printMask?.Destructible?.Overall ?? true)
+                && item.Destructible is {} DestructibleItem)
+            {
+                DestructibleItem?.ToString(fg, "Destructible");
+            }
+            if (printMask?.PickUpSound ?? true)
+            {
+                fg.AppendItem(item.PickUpSound.FormKeyNullable, "PickUpSound");
+            }
+            if (printMask?.PutDownSound ?? true)
+            {
+                fg.AppendItem(item.PutDownSound.FormKeyNullable, "PutDownSound");
+            }
+            if (printMask?.EquipmentType ?? true)
+            {
+                fg.AppendItem(item.EquipmentType.FormKeyNullable, "EquipmentType");
+            }
+            if (printMask?.BashImpactDataSet ?? true)
+            {
+                fg.AppendItem(item.BashImpactDataSet.FormKeyNullable, "BashImpactDataSet");
+            }
+            if (printMask?.AlternateBlockMaterial ?? true)
+            {
+                fg.AppendItem(item.AlternateBlockMaterial.FormKeyNullable, "AlternateBlockMaterial");
+            }
+            if (printMask?.Race ?? true)
+            {
+                fg.AppendItem(item.Race.FormKeyNullable, "Race");
+            }
+            if ((printMask?.Keywords?.Overall ?? true)
+                && item.Keywords is {} KeywordsItem)
+            {
+                fg.AppendLine("Keywords =>");
+                fg.AppendLine("[");
+                using (new DepthWrapper(fg))
+                {
+                    foreach (var subItem in KeywordsItem)
+                    {
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            fg.AppendItem(subItem.FormKey);
+                        }
+                        fg.AppendLine("]");
+                    }
+                }
+                fg.AppendLine("]");
+            }
+            if ((printMask?.Description ?? true)
+                && item.Description is {} DescriptionItem)
+            {
+                fg.AppendItem(DescriptionItem, "Description");
+            }
+            if (printMask?.Armatures?.Overall ?? true)
+            {
+                fg.AppendLine("Armatures =>");
+                fg.AppendLine("[");
+                using (new DepthWrapper(fg))
+                {
+                    foreach (var subItem in item.Armatures)
+                    {
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            subItem?.ToString(fg, "Item");
+                        }
+                        fg.AppendLine("]");
+                    }
+                }
+                fg.AppendLine("]");
+            }
+            if (printMask?.Value ?? true)
+            {
+                fg.AppendItem(item.Value, "Value");
+            }
+            if (printMask?.Weight ?? true)
+            {
+                fg.AppendItem(item.Weight, "Weight");
+            }
+            if (printMask?.Health ?? true)
+            {
+                fg.AppendItem(item.Health, "Health");
+            }
+            if (printMask?.ArmorRating ?? true)
+            {
+                fg.AppendItem(item.ArmorRating, "ArmorRating");
+            }
+            if (printMask?.BaseAddonIndex ?? true)
+            {
+                fg.AppendItem(item.BaseAddonIndex, "BaseAddonIndex");
+            }
+            if (printMask?.StaggerRating ?? true)
+            {
+                fg.AppendItem(item.StaggerRating, "StaggerRating");
+            }
+            if (printMask?.Resistances?.Overall ?? true)
+            {
+                fg.AppendLine("Resistances =>");
+                fg.AppendLine("[");
+                using (new DepthWrapper(fg))
+                {
+                    foreach (var subItem in item.Resistances)
+                    {
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            subItem?.ToString(fg, "Item");
+                        }
+                        fg.AppendLine("]");
+                    }
+                }
+                fg.AppendLine("]");
+            }
+            if (printMask?.DATADataTypeState ?? true)
+            {
+                fg.AppendItem(item.DATADataTypeState, "DATADataTypeState");
+            }
+            if (printMask?.FNAMDataTypeState ?? true)
+            {
+                fg.AppendItem(item.FNAMDataTypeState, "FNAMDataTypeState");
+            }
         }
         
         public static Armor_FieldIndex ConvertFieldIndex(Fallout4MajorRecord_FieldIndex index)
@@ -882,6 +2570,130 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         {
             if (!EqualsMaskHelper.RefEquality(lhs, rhs, out var isEqual)) return isEqual;
             if (!base.Equals((IFallout4MajorRecordGetter)lhs, (IFallout4MajorRecordGetter)rhs, crystal)) return false;
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.VirtualMachineAdapter) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.VirtualMachineAdapter, rhs.VirtualMachineAdapter, out var lhsVirtualMachineAdapter, out var rhsVirtualMachineAdapter, out var isVirtualMachineAdapterEqual))
+                {
+                    if (!((VirtualMachineAdapterCommon)((IVirtualMachineAdapterGetter)lhsVirtualMachineAdapter).CommonInstance()!).Equals(lhsVirtualMachineAdapter, rhsVirtualMachineAdapter, crystal?.GetSubCrystal((int)Armor_FieldIndex.VirtualMachineAdapter))) return false;
+                }
+                else if (!isVirtualMachineAdapterEqual) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.ObjectBounds) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.ObjectBounds, rhs.ObjectBounds, out var lhsObjectBounds, out var rhsObjectBounds, out var isObjectBoundsEqual))
+                {
+                    if (!((ObjectBoundsCommon)((IObjectBoundsGetter)lhsObjectBounds).CommonInstance()!).Equals(lhsObjectBounds, rhsObjectBounds, crystal?.GetSubCrystal((int)Armor_FieldIndex.ObjectBounds))) return false;
+                }
+                else if (!isObjectBoundsEqual) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.PreviewTransform) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.PreviewTransform, rhs.PreviewTransform, out var lhsPreviewTransform, out var rhsPreviewTransform, out var isPreviewTransformEqual))
+                {
+                    if (!((PreviewTransformCommon)((IPreviewTransformGetter)lhsPreviewTransform).CommonInstance()!).Equals(lhsPreviewTransform, rhsPreviewTransform, crystal?.GetSubCrystal((int)Armor_FieldIndex.PreviewTransform))) return false;
+                }
+                else if (!isPreviewTransformEqual) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.Name) ?? true))
+            {
+                if (!object.Equals(lhs.Name, rhs.Name)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.ObjectEffect) ?? true))
+            {
+                if (!lhs.ObjectEffect.Equals(rhs.ObjectEffect)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.WorldModel) ?? true))
+            {
+                if (!Equals(lhs.WorldModel, rhs.WorldModel)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.BodyTemplate) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.BodyTemplate, rhs.BodyTemplate, out var lhsBodyTemplate, out var rhsBodyTemplate, out var isBodyTemplateEqual))
+                {
+                    if (!((BodyTemplateCommon)((IBodyTemplateGetter)lhsBodyTemplate).CommonInstance()!).Equals(lhsBodyTemplate, rhsBodyTemplate, crystal?.GetSubCrystal((int)Armor_FieldIndex.BodyTemplate))) return false;
+                }
+                else if (!isBodyTemplateEqual) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.Destructible) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.Destructible, rhs.Destructible, out var lhsDestructible, out var rhsDestructible, out var isDestructibleEqual))
+                {
+                    if (!((DestructibleCommon)((IDestructibleGetter)lhsDestructible).CommonInstance()!).Equals(lhsDestructible, rhsDestructible, crystal?.GetSubCrystal((int)Armor_FieldIndex.Destructible))) return false;
+                }
+                else if (!isDestructibleEqual) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.PickUpSound) ?? true))
+            {
+                if (!lhs.PickUpSound.Equals(rhs.PickUpSound)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.PutDownSound) ?? true))
+            {
+                if (!lhs.PutDownSound.Equals(rhs.PutDownSound)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.EquipmentType) ?? true))
+            {
+                if (!lhs.EquipmentType.Equals(rhs.EquipmentType)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.BashImpactDataSet) ?? true))
+            {
+                if (!lhs.BashImpactDataSet.Equals(rhs.BashImpactDataSet)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.AlternateBlockMaterial) ?? true))
+            {
+                if (!lhs.AlternateBlockMaterial.Equals(rhs.AlternateBlockMaterial)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.Race) ?? true))
+            {
+                if (!lhs.Race.Equals(rhs.Race)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.Keywords) ?? true))
+            {
+                if (!lhs.Keywords.SequenceEqualNullable(rhs.Keywords)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.Description) ?? true))
+            {
+                if (!object.Equals(lhs.Description, rhs.Description)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.Armatures) ?? true))
+            {
+                if (!lhs.Armatures.SequenceEqualNullable(rhs.Armatures)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.Value) ?? true))
+            {
+                if (lhs.Value != rhs.Value) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.Weight) ?? true))
+            {
+                if (!lhs.Weight.EqualsWithin(rhs.Weight)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.Health) ?? true))
+            {
+                if (lhs.Health != rhs.Health) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.ArmorRating) ?? true))
+            {
+                if (lhs.ArmorRating != rhs.ArmorRating) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.BaseAddonIndex) ?? true))
+            {
+                if (lhs.BaseAddonIndex != rhs.BaseAddonIndex) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.StaggerRating) ?? true))
+            {
+                if (lhs.StaggerRating != rhs.StaggerRating) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.Resistances) ?? true))
+            {
+                if (!lhs.Resistances.SequenceEqualNullable(rhs.Resistances)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.DATADataTypeState) ?? true))
+            {
+                if (lhs.DATADataTypeState != rhs.DATADataTypeState) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.FNAMDataTypeState) ?? true))
+            {
+                if (lhs.FNAMDataTypeState != rhs.FNAMDataTypeState) return false;
+            }
             return true;
         }
         
@@ -910,6 +2722,50 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public virtual int GetHashCode(IArmorGetter item)
         {
             var hash = new HashCode();
+            if (item.VirtualMachineAdapter is {} VirtualMachineAdapteritem)
+            {
+                hash.Add(VirtualMachineAdapteritem);
+            }
+            hash.Add(item.ObjectBounds);
+            hash.Add(item.PreviewTransform);
+            if (item.Name is {} Nameitem)
+            {
+                hash.Add(Nameitem);
+            }
+            hash.Add(item.ObjectEffect);
+            if (item.WorldModel is {} WorldModelitem)
+            {
+                hash.Add(HashCode.Combine(WorldModelitem.Male, WorldModelitem.Female));
+            }
+            if (item.BodyTemplate is {} BodyTemplateitem)
+            {
+                hash.Add(BodyTemplateitem);
+            }
+            if (item.Destructible is {} Destructibleitem)
+            {
+                hash.Add(Destructibleitem);
+            }
+            hash.Add(item.PickUpSound);
+            hash.Add(item.PutDownSound);
+            hash.Add(item.EquipmentType);
+            hash.Add(item.BashImpactDataSet);
+            hash.Add(item.AlternateBlockMaterial);
+            hash.Add(item.Race);
+            hash.Add(item.Keywords);
+            if (item.Description is {} Descriptionitem)
+            {
+                hash.Add(Descriptionitem);
+            }
+            hash.Add(item.Armatures);
+            hash.Add(item.Value);
+            hash.Add(item.Weight);
+            hash.Add(item.Health);
+            hash.Add(item.ArmorRating);
+            hash.Add(item.BaseAddonIndex);
+            hash.Add(item.StaggerRating);
+            hash.Add(item.Resistances);
+            hash.Add(item.DATADataTypeState);
+            hash.Add(item.FNAMDataTypeState);
             hash.Add(base.GetHashCode());
             return hash.ToHashCode();
         }
@@ -938,6 +2794,74 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             foreach (var item in base.GetContainedFormLinks(obj))
             {
                 yield return item;
+            }
+            if (obj.VirtualMachineAdapter is IFormLinkContainerGetter VirtualMachineAdapterlinkCont)
+            {
+                foreach (var item in VirtualMachineAdapterlinkCont.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
+            foreach (var item in obj.PreviewTransform.ContainedFormLinks)
+            {
+                yield return item;
+            }
+            if (obj.ObjectEffect.FormKeyNullable.HasValue)
+            {
+                yield return FormLinkInformation.Factory(obj.ObjectEffect);
+            }
+            if (obj.WorldModel is {} WorldModelItem)
+            {
+                foreach (var item in WorldModelItem.NotNull().SelectMany(f => f.ContainedFormLinks))
+                {
+                    yield return FormLinkInformation.Factory(item);
+                }
+            }
+            if (obj.Destructible is {} DestructibleItems)
+            {
+                foreach (var item in DestructibleItems.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
+            if (obj.PickUpSound.FormKeyNullable.HasValue)
+            {
+                yield return FormLinkInformation.Factory(obj.PickUpSound);
+            }
+            if (obj.PutDownSound.FormKeyNullable.HasValue)
+            {
+                yield return FormLinkInformation.Factory(obj.PutDownSound);
+            }
+            if (obj.EquipmentType.FormKeyNullable.HasValue)
+            {
+                yield return FormLinkInformation.Factory(obj.EquipmentType);
+            }
+            if (obj.BashImpactDataSet.FormKeyNullable.HasValue)
+            {
+                yield return FormLinkInformation.Factory(obj.BashImpactDataSet);
+            }
+            if (obj.AlternateBlockMaterial.FormKeyNullable.HasValue)
+            {
+                yield return FormLinkInformation.Factory(obj.AlternateBlockMaterial);
+            }
+            if (obj.Race.FormKeyNullable.HasValue)
+            {
+                yield return FormLinkInformation.Factory(obj.Race);
+            }
+            if (obj.Keywords is {} KeywordsItem)
+            {
+                foreach (var item in KeywordsItem)
+                {
+                    yield return FormLinkInformation.Factory(item);
+                }
+            }
+            foreach (var item in obj.Armatures.SelectMany(f => f.ContainedFormLinks))
+            {
+                yield return FormLinkInformation.Factory(item);
+            }
+            foreach (var item in obj.Resistances.SelectMany(f => f.ContainedFormLinks))
+            {
+                yield return FormLinkInformation.Factory(item);
             }
             yield break;
         }
@@ -1013,6 +2937,285 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 errorMask,
                 copyMask,
                 deepCopy: deepCopy);
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.VirtualMachineAdapter) ?? true))
+            {
+                errorMask?.PushIndex((int)Armor_FieldIndex.VirtualMachineAdapter);
+                try
+                {
+                    if(rhs.VirtualMachineAdapter is {} rhsVirtualMachineAdapter)
+                    {
+                        item.VirtualMachineAdapter = rhsVirtualMachineAdapter.DeepCopy(
+                            errorMask: errorMask,
+                            copyMask?.GetSubCrystal((int)Armor_FieldIndex.VirtualMachineAdapter));
+                    }
+                    else
+                    {
+                        item.VirtualMachineAdapter = default;
+                    }
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.ObjectBounds) ?? true))
+            {
+                errorMask?.PushIndex((int)Armor_FieldIndex.ObjectBounds);
+                try
+                {
+                    if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.ObjectBounds) ?? true))
+                    {
+                        item.ObjectBounds = rhs.ObjectBounds.DeepCopy(
+                            copyMask: copyMask?.GetSubCrystal((int)Armor_FieldIndex.ObjectBounds),
+                            errorMask: errorMask);
+                    }
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.PreviewTransform) ?? true))
+            {
+                errorMask?.PushIndex((int)Armor_FieldIndex.PreviewTransform);
+                try
+                {
+                    if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.PreviewTransform) ?? true))
+                    {
+                        item.PreviewTransform = rhs.PreviewTransform.DeepCopy(
+                            copyMask: copyMask?.GetSubCrystal((int)Armor_FieldIndex.PreviewTransform),
+                            errorMask: errorMask);
+                    }
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.Name) ?? true))
+            {
+                item.Name = rhs.Name?.DeepCopy();
+            }
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.ObjectEffect) ?? true))
+            {
+                item.ObjectEffect.SetTo(rhs.ObjectEffect.FormKeyNullable);
+            }
+            if (rhs.WorldModel is not {} rhsWorldModelitem)
+            {
+                item.WorldModel = null;
+            }
+            else
+            {
+                item.WorldModel = new GenderedItem<ArmorModel?>(
+                    male: rhsWorldModelitem.Male?.DeepCopy(
+                        errorMask: errorMask,
+                        default(TranslationCrystal)),
+                    female: rhsWorldModelitem.Female?.DeepCopy(
+                        errorMask: errorMask,
+                        default(TranslationCrystal)));
+            }
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.BodyTemplate) ?? true))
+            {
+                errorMask?.PushIndex((int)Armor_FieldIndex.BodyTemplate);
+                try
+                {
+                    if(rhs.BodyTemplate is {} rhsBodyTemplate)
+                    {
+                        item.BodyTemplate = rhsBodyTemplate.DeepCopy(
+                            errorMask: errorMask,
+                            copyMask?.GetSubCrystal((int)Armor_FieldIndex.BodyTemplate));
+                    }
+                    else
+                    {
+                        item.BodyTemplate = default;
+                    }
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.Destructible) ?? true))
+            {
+                errorMask?.PushIndex((int)Armor_FieldIndex.Destructible);
+                try
+                {
+                    if(rhs.Destructible is {} rhsDestructible)
+                    {
+                        item.Destructible = rhsDestructible.DeepCopy(
+                            errorMask: errorMask,
+                            copyMask?.GetSubCrystal((int)Armor_FieldIndex.Destructible));
+                    }
+                    else
+                    {
+                        item.Destructible = default;
+                    }
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.PickUpSound) ?? true))
+            {
+                item.PickUpSound.SetTo(rhs.PickUpSound.FormKeyNullable);
+            }
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.PutDownSound) ?? true))
+            {
+                item.PutDownSound.SetTo(rhs.PutDownSound.FormKeyNullable);
+            }
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.EquipmentType) ?? true))
+            {
+                item.EquipmentType.SetTo(rhs.EquipmentType.FormKeyNullable);
+            }
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.BashImpactDataSet) ?? true))
+            {
+                item.BashImpactDataSet.SetTo(rhs.BashImpactDataSet.FormKeyNullable);
+            }
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.AlternateBlockMaterial) ?? true))
+            {
+                item.AlternateBlockMaterial.SetTo(rhs.AlternateBlockMaterial.FormKeyNullable);
+            }
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.Race) ?? true))
+            {
+                item.Race.SetTo(rhs.Race.FormKeyNullable);
+            }
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.Keywords) ?? true))
+            {
+                errorMask?.PushIndex((int)Armor_FieldIndex.Keywords);
+                try
+                {
+                    if ((rhs.Keywords != null))
+                    {
+                        item.Keywords = 
+                            rhs.Keywords
+                            .Select(r => (IFormLinkGetter<IKeywordGetter>)new FormLink<IKeywordGetter>(r.FormKey))
+                            .ToExtendedList<IFormLinkGetter<IKeywordGetter>>();
+                    }
+                    else
+                    {
+                        item.Keywords = null;
+                    }
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.Description) ?? true))
+            {
+                item.Description = rhs.Description?.DeepCopy();
+            }
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.Armatures) ?? true))
+            {
+                errorMask?.PushIndex((int)Armor_FieldIndex.Armatures);
+                try
+                {
+                    item.Armatures.SetTo(
+                        rhs.Armatures
+                        .Select(r =>
+                        {
+                            return r.DeepCopy(
+                                errorMask: errorMask,
+                                default(TranslationCrystal));
+                        }));
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.Value) ?? true))
+            {
+                item.Value = rhs.Value;
+            }
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.Weight) ?? true))
+            {
+                item.Weight = rhs.Weight;
+            }
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.Health) ?? true))
+            {
+                item.Health = rhs.Health;
+            }
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.ArmorRating) ?? true))
+            {
+                item.ArmorRating = rhs.ArmorRating;
+            }
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.BaseAddonIndex) ?? true))
+            {
+                item.BaseAddonIndex = rhs.BaseAddonIndex;
+            }
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.StaggerRating) ?? true))
+            {
+                item.StaggerRating = rhs.StaggerRating;
+            }
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.Resistances) ?? true))
+            {
+                errorMask?.PushIndex((int)Armor_FieldIndex.Resistances);
+                try
+                {
+                    item.Resistances.SetTo(
+                        rhs.Resistances
+                        .Select(r =>
+                        {
+                            return r.DeepCopy(
+                                errorMask: errorMask,
+                                default(TranslationCrystal));
+                        }));
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.DATADataTypeState) ?? true))
+            {
+                item.DATADataTypeState = rhs.DATADataTypeState;
+            }
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.FNAMDataTypeState) ?? true))
+            {
+                item.FNAMDataTypeState = rhs.FNAMDataTypeState;
+            }
         }
         
         public override void DeepCopyIn(
@@ -1161,6 +3364,169 @@ namespace Mutagen.Bethesda.Fallout4.Internals
     {
         public new readonly static ArmorBinaryWriteTranslation Instance = new ArmorBinaryWriteTranslation();
 
+        public static void WriteEmbedded(
+            IArmorGetter item,
+            MutagenWriter writer)
+        {
+            Fallout4MajorRecordBinaryWriteTranslation.WriteEmbedded(
+                item: item,
+                writer: writer);
+        }
+
+        public static void WriteRecordTypes(
+            IArmorGetter item,
+            MutagenWriter writer,
+            TypedWriteParams? translationParams)
+        {
+            MajorRecordBinaryWriteTranslation.WriteRecordTypes(
+                item: item,
+                writer: writer,
+                translationParams: translationParams);
+            if (item.VirtualMachineAdapter is {} VirtualMachineAdapterItem)
+            {
+                ((VirtualMachineAdapterBinaryWriteTranslation)((IBinaryItem)VirtualMachineAdapterItem).BinaryWriteTranslator).Write(
+                    item: VirtualMachineAdapterItem,
+                    writer: writer,
+                    translationParams: translationParams);
+            }
+            var ObjectBoundsItem = item.ObjectBounds;
+            ((ObjectBoundsBinaryWriteTranslation)((IBinaryItem)ObjectBoundsItem).BinaryWriteTranslator).Write(
+                item: ObjectBoundsItem,
+                writer: writer,
+                translationParams: translationParams);
+            var PreviewTransformItem = item.PreviewTransform;
+            ((PreviewTransformBinaryWriteTranslation)((IBinaryItem)PreviewTransformItem).BinaryWriteTranslator).Write(
+                item: PreviewTransformItem,
+                writer: writer,
+                translationParams: translationParams);
+            StringBinaryTranslation.Instance.WriteNullable(
+                writer: writer,
+                item: item.Name,
+                header: translationParams.ConvertToCustom(RecordTypes.FULL),
+                binaryType: StringBinaryType.NullTerminate,
+                source: StringsSource.Normal);
+            FormLinkBinaryTranslation.Instance.WriteNullable(
+                writer: writer,
+                item: item.ObjectEffect,
+                header: translationParams.ConvertToCustom(RecordTypes.EITM));
+            GenderedItemBinaryTranslation.Write(
+                writer: writer,
+                item: item.WorldModel,
+                femaleRecordConverter: Armor_Registration.WorldModelFemaleConverter,
+                maleRecordConverter: Armor_Registration.WorldModelMaleConverter,
+                transl: (MutagenWriter subWriter, IArmorModelGetter? subItem, TypedWriteParams? conv) =>
+                {
+                    if (subItem is {} Item)
+                    {
+                        ((ArmorModelBinaryWriteTranslation)((IBinaryItem)Item).BinaryWriteTranslator).Write(
+                            item: Item,
+                            writer: subWriter,
+                            translationParams: conv);
+                    }
+                });
+            ArmorBinaryWriteTranslation.WriteBinaryBodyTemplate(
+                writer: writer,
+                item: item);
+            if (item.Destructible is {} DestructibleItem)
+            {
+                ((DestructibleBinaryWriteTranslation)((IBinaryItem)DestructibleItem).BinaryWriteTranslator).Write(
+                    item: DestructibleItem,
+                    writer: writer,
+                    translationParams: translationParams);
+            }
+            FormLinkBinaryTranslation.Instance.WriteNullable(
+                writer: writer,
+                item: item.PickUpSound,
+                header: translationParams.ConvertToCustom(RecordTypes.YNAM));
+            FormLinkBinaryTranslation.Instance.WriteNullable(
+                writer: writer,
+                item: item.PutDownSound,
+                header: translationParams.ConvertToCustom(RecordTypes.ZNAM));
+            FormLinkBinaryTranslation.Instance.WriteNullable(
+                writer: writer,
+                item: item.EquipmentType,
+                header: translationParams.ConvertToCustom(RecordTypes.ETYP));
+            FormLinkBinaryTranslation.Instance.WriteNullable(
+                writer: writer,
+                item: item.BashImpactDataSet,
+                header: translationParams.ConvertToCustom(RecordTypes.BIDS));
+            FormLinkBinaryTranslation.Instance.WriteNullable(
+                writer: writer,
+                item: item.AlternateBlockMaterial,
+                header: translationParams.ConvertToCustom(RecordTypes.BAMT));
+            FormLinkBinaryTranslation.Instance.WriteNullable(
+                writer: writer,
+                item: item.Race,
+                header: translationParams.ConvertToCustom(RecordTypes.RNAM));
+            Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IFormLinkGetter<IKeywordGetter>>.Instance.WriteWithCounter(
+                writer: writer,
+                items: item.Keywords,
+                counterType: RecordTypes.KSIZ,
+                counterLength: 4,
+                recordType: translationParams.ConvertToCustom(RecordTypes.KWDA),
+                transl: (MutagenWriter subWriter, IFormLinkGetter<IKeywordGetter> subItem, TypedWriteParams? conv) =>
+                {
+                    FormLinkBinaryTranslation.Instance.Write(
+                        writer: subWriter,
+                        item: subItem);
+                });
+            StringBinaryTranslation.Instance.WriteNullable(
+                writer: writer,
+                item: item.Description,
+                header: translationParams.ConvertToCustom(RecordTypes.DESC),
+                binaryType: StringBinaryType.NullTerminate,
+                source: StringsSource.DL);
+            Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IArmorAddonModelGetter>.Instance.Write(
+                writer: writer,
+                items: item.Armatures,
+                transl: (MutagenWriter subWriter, IArmorAddonModelGetter subItem, TypedWriteParams? conv) =>
+                {
+                    var Item = subItem;
+                    ((ArmorAddonModelBinaryWriteTranslation)((IBinaryItem)Item).BinaryWriteTranslator).Write(
+                        item: Item,
+                        writer: subWriter,
+                        translationParams: conv);
+                });
+            using (HeaderExport.Subrecord(writer, translationParams.ConvertToCustom(RecordTypes.DATA)))
+            {
+                writer.Write(item.Value);
+                FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
+                    writer: writer,
+                    item: item.Weight);
+                writer.Write(item.Health);
+            }
+            using (HeaderExport.Subrecord(writer, translationParams.ConvertToCustom(RecordTypes.FNAM)))
+            {
+                writer.Write(item.ArmorRating);
+                writer.Write(item.BaseAddonIndex);
+                writer.Write(item.StaggerRating);
+            }
+            Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IResistanceArmorGetter>.Instance.Write(
+                writer: writer,
+                items: item.Resistances,
+                transl: (MutagenWriter subWriter, IResistanceArmorGetter subItem, TypedWriteParams? conv) =>
+                {
+                    var Item = subItem;
+                    ((ResistanceArmorBinaryWriteTranslation)((IBinaryItem)Item).BinaryWriteTranslator).Write(
+                        item: Item,
+                        writer: subWriter,
+                        translationParams: conv);
+                });
+        }
+
+        public static partial void WriteBinaryBodyTemplateCustom(
+            MutagenWriter writer,
+            IArmorGetter item);
+
+        public static void WriteBinaryBodyTemplate(
+            MutagenWriter writer,
+            IArmorGetter item)
+        {
+            WriteBinaryBodyTemplateCustom(
+                writer: writer,
+                item: item);
+        }
+
         public void Write(
             MutagenWriter writer,
             IArmorGetter item,
@@ -1172,13 +3538,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 try
                 {
-                    Fallout4MajorRecordBinaryWriteTranslation.WriteEmbedded(
+                    WriteEmbedded(
                         item: item,
                         writer: writer);
-                    MajorRecordBinaryWriteTranslation.WriteRecordTypes(
+                    writer.MetaData.FormVersion = item.FormVersion;
+                    WriteRecordTypes(
                         item: item,
                         writer: writer,
                         translationParams: translationParams);
+                    writer.MetaData.FormVersion = null;
                 }
                 catch (Exception ex)
                 {
@@ -1236,6 +3604,191 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 frame: frame);
         }
 
+        public static ParseResult FillBinaryRecordTypes(
+            IArmorInternal item,
+            MutagenFrame frame,
+            PreviousParse lastParsed,
+            Dictionary<RecordType, int>? recordParseCount,
+            RecordType nextRecordType,
+            int contentLength,
+            TypedParseParams? translationParams = null)
+        {
+            nextRecordType = translationParams.ConvertToStandard(nextRecordType);
+            switch (nextRecordType.TypeInt)
+            {
+                case RecordTypeInts.VMAD:
+                {
+                    item.VirtualMachineAdapter = Mutagen.Bethesda.Fallout4.VirtualMachineAdapter.CreateFromBinary(frame: frame);
+                    return (int)Armor_FieldIndex.VirtualMachineAdapter;
+                }
+                case RecordTypeInts.OBND:
+                {
+                    item.ObjectBounds = Mutagen.Bethesda.Fallout4.ObjectBounds.CreateFromBinary(frame: frame);
+                    return (int)Armor_FieldIndex.ObjectBounds;
+                }
+                case RecordTypeInts.PTRN:
+                {
+                    item.PreviewTransform = Mutagen.Bethesda.Fallout4.PreviewTransform.CreateFromBinary(frame: frame);
+                    return (int)Armor_FieldIndex.PreviewTransform;
+                }
+                case RecordTypeInts.FULL:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.Name = StringBinaryTranslation.Instance.Parse(
+                        reader: frame.SpawnWithLength(contentLength),
+                        source: StringsSource.Normal,
+                        stringBinaryType: StringBinaryType.NullTerminate);
+                    return (int)Armor_FieldIndex.Name;
+                }
+                case RecordTypeInts.EITM:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.ObjectEffect.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    return (int)Armor_FieldIndex.ObjectEffect;
+                }
+                case RecordTypeInts.MOD2:
+                case RecordTypeInts.MOD4:
+                case RecordTypeInts.ICO2:
+                case RecordTypeInts.ICON:
+                {
+                    item.WorldModel = Mutagen.Bethesda.Plugins.Binary.Translations.GenderedItemBinaryTranslation.Parse<ArmorModel>(
+                        frame: frame,
+                        femaleRecordConverter: Armor_Registration.WorldModelFemaleConverter,
+                        maleRecordConverter: Armor_Registration.WorldModelMaleConverter,
+                        transl: ArmorModel.TryCreateFromBinary);
+                    return (int)Armor_FieldIndex.WorldModel;
+                }
+                case RecordTypeInts.BODT:
+                case RecordTypeInts.BOD2:
+                {
+                    ArmorBinaryCreateTranslation.FillBinaryBodyTemplateCustom(
+                        frame: frame.SpawnWithLength(frame.MetaData.Constants.SubConstants.HeaderLength + contentLength),
+                        item: item);
+                    return (int)Armor_FieldIndex.BodyTemplate;
+                }
+                case RecordTypeInts.DEST:
+                case RecordTypeInts.DAMC:
+                case RecordTypeInts.DSTD:
+                case RecordTypeInts.DSTA:
+                case RecordTypeInts.DMDL:
+                {
+                    item.Destructible = Mutagen.Bethesda.Fallout4.Destructible.CreateFromBinary(
+                        frame: frame,
+                        translationParams: translationParams);
+                    return (int)Armor_FieldIndex.Destructible;
+                }
+                case RecordTypeInts.YNAM:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.PickUpSound.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    return (int)Armor_FieldIndex.PickUpSound;
+                }
+                case RecordTypeInts.ZNAM:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.PutDownSound.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    return (int)Armor_FieldIndex.PutDownSound;
+                }
+                case RecordTypeInts.ETYP:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.EquipmentType.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    return (int)Armor_FieldIndex.EquipmentType;
+                }
+                case RecordTypeInts.BIDS:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.BashImpactDataSet.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    return (int)Armor_FieldIndex.BashImpactDataSet;
+                }
+                case RecordTypeInts.BAMT:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.AlternateBlockMaterial.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    return (int)Armor_FieldIndex.AlternateBlockMaterial;
+                }
+                case RecordTypeInts.RNAM:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.Race.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    return (int)Armor_FieldIndex.Race;
+                }
+                case RecordTypeInts.KWDA:
+                case RecordTypeInts.KSIZ:
+                {
+                    item.Keywords = 
+                        Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IFormLinkGetter<IKeywordGetter>>.Instance.Parse(
+                            reader: frame,
+                            countLengthLength: 4,
+                            countRecord: translationParams.ConvertToCustom(RecordTypes.KSIZ),
+                            triggeringRecord: translationParams.ConvertToCustom(RecordTypes.KWDA),
+                            transl: FormLinkBinaryTranslation.Instance.Parse)
+                        .CastExtendedList<IFormLinkGetter<IKeywordGetter>>();
+                    return (int)Armor_FieldIndex.Keywords;
+                }
+                case RecordTypeInts.DESC:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.Description = StringBinaryTranslation.Instance.Parse(
+                        reader: frame.SpawnWithLength(contentLength),
+                        source: StringsSource.DL,
+                        stringBinaryType: StringBinaryType.NullTerminate);
+                    return (int)Armor_FieldIndex.Description;
+                }
+                case RecordTypeInts.INDX:
+                case RecordTypeInts.MODL:
+                {
+                    item.Armatures.SetTo(
+                        Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<ArmorAddonModel>.Instance.Parse(
+                            reader: frame,
+                            triggeringRecord: ArmorAddonModel_Registration.TriggeringRecordTypes,
+                            translationParams: translationParams,
+                            transl: ArmorAddonModel.TryCreateFromBinary));
+                    return (int)Armor_FieldIndex.Armatures;
+                }
+                case RecordTypeInts.DATA:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    var dataFrame = frame.SpawnWithLength(contentLength);
+                    item.Value = dataFrame.ReadUInt32();
+                    item.Weight = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
+                    item.Health = dataFrame.ReadUInt32();
+                    return (int)Armor_FieldIndex.Health;
+                }
+                case RecordTypeInts.FNAM:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    var dataFrame = frame.SpawnWithLength(contentLength);
+                    item.ArmorRating = dataFrame.ReadUInt16();
+                    item.BaseAddonIndex = dataFrame.ReadUInt16();
+                    item.StaggerRating = dataFrame.ReadUInt16();
+                    return (int)Armor_FieldIndex.StaggerRating;
+                }
+                case RecordTypeInts.DAMA:
+                {
+                    item.Resistances.SetTo(
+                        Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<ResistanceArmor>.Instance.Parse(
+                            reader: frame,
+                            triggeringRecord: RecordTypes.DAMA,
+                            translationParams: translationParams,
+                            transl: ResistanceArmor.TryCreateFromBinary));
+                    return (int)Armor_FieldIndex.Resistances;
+                }
+                default:
+                    return Fallout4MajorRecordBinaryCreateTranslation.FillBinaryRecordTypes(
+                        item: item,
+                        frame: frame,
+                        lastParsed: lastParsed,
+                        recordParseCount: recordParseCount,
+                        nextRecordType: nextRecordType,
+                        contentLength: contentLength);
+            }
+        }
+
+        public static partial void FillBinaryBodyTemplateCustom(
+            MutagenFrame frame,
+            IArmorInternal item);
+
     }
 
 }
@@ -1268,6 +3821,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         void IPrintable.ToString(FileGeneration fg, string? name) => this.ToString(fg, name);
 
+        public override IEnumerable<IFormLinkGetter> ContainedFormLinks => ArmorCommon.Instance.GetContainedFormLinks(this);
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override object BinaryWriteTranslator => ArmorBinaryWriteTranslation.Instance;
         void IBinaryItem.WriteToBinary(
@@ -1282,6 +3836,116 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         protected override Type LinkType => typeof(IArmor);
 
 
+        #region VirtualMachineAdapter
+        private RangeInt32? _VirtualMachineAdapterLocation;
+        public IVirtualMachineAdapterGetter? VirtualMachineAdapter => _VirtualMachineAdapterLocation.HasValue ? VirtualMachineAdapterBinaryOverlay.VirtualMachineAdapterFactory(new OverlayStream(_data.Slice(_VirtualMachineAdapterLocation!.Value.Min), _package), _package) : default;
+        #endregion
+        #region ObjectBounds
+        private RangeInt32? _ObjectBoundsLocation;
+        private IObjectBoundsGetter? _ObjectBounds => _ObjectBoundsLocation.HasValue ? ObjectBoundsBinaryOverlay.ObjectBoundsFactory(new OverlayStream(_data.Slice(_ObjectBoundsLocation!.Value.Min), _package), _package) : default;
+        public IObjectBoundsGetter ObjectBounds => _ObjectBounds ?? new ObjectBounds();
+        #endregion
+        #region PreviewTransform
+        private RangeInt32? _PreviewTransformLocation;
+        private IPreviewTransformGetter? _PreviewTransform => _PreviewTransformLocation.HasValue ? PreviewTransformBinaryOverlay.PreviewTransformFactory(new OverlayStream(_data.Slice(_PreviewTransformLocation!.Value.Min), _package), _package) : default;
+        public IPreviewTransformGetter PreviewTransform => _PreviewTransform ?? new PreviewTransform();
+        #endregion
+        #region Name
+        private int? _NameLocation;
+        public ITranslatedStringGetter? Name => _NameLocation.HasValue ? StringBinaryTranslation.Instance.Parse(HeaderTranslation.ExtractSubrecordMemory(_data, _NameLocation.Value, _package.MetaData.Constants), StringsSource.Normal, _package.MetaData.StringsLookup) : default(TranslatedString?);
+        #region Aspects
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        string INamedRequiredGetter.Name => this.Name?.String ?? string.Empty;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        string? INamedGetter.Name => this.Name?.String;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        ITranslatedStringGetter ITranslatedNamedRequiredGetter.Name => this.Name ?? TranslatedString.Empty;
+        #endregion
+        #endregion
+        #region ObjectEffect
+        private int? _ObjectEffectLocation;
+        public IFormLinkNullableGetter<IEffectRecordGetter> ObjectEffect => _ObjectEffectLocation.HasValue ? new FormLinkNullable<IEffectRecordGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _ObjectEffectLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<IEffectRecordGetter>.Null;
+        #endregion
+        #region WorldModel
+        private IGenderedItemGetter<IArmorModelGetter?>? _WorldModelOverlay;
+        public IGenderedItemGetter<IArmorModelGetter?>? WorldModel => _WorldModelOverlay;
+        #endregion
+        #region BodyTemplate
+        partial void BodyTemplateCustomParse(
+            OverlayStream stream,
+            long finalPos,
+            int offset);
+        public IBodyTemplateGetter? BodyTemplate => GetBodyTemplateCustom();
+        #endregion
+        public IDestructibleGetter? Destructible { get; private set; }
+        #region PickUpSound
+        private int? _PickUpSoundLocation;
+        public IFormLinkNullableGetter<ISoundDescriptorGetter> PickUpSound => _PickUpSoundLocation.HasValue ? new FormLinkNullable<ISoundDescriptorGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _PickUpSoundLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<ISoundDescriptorGetter>.Null;
+        #endregion
+        #region PutDownSound
+        private int? _PutDownSoundLocation;
+        public IFormLinkNullableGetter<ISoundDescriptorGetter> PutDownSound => _PutDownSoundLocation.HasValue ? new FormLinkNullable<ISoundDescriptorGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _PutDownSoundLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<ISoundDescriptorGetter>.Null;
+        #endregion
+        #region EquipmentType
+        private int? _EquipmentTypeLocation;
+        public IFormLinkNullableGetter<IEquipTypeGetter> EquipmentType => _EquipmentTypeLocation.HasValue ? new FormLinkNullable<IEquipTypeGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _EquipmentTypeLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<IEquipTypeGetter>.Null;
+        #endregion
+        #region BashImpactDataSet
+        private int? _BashImpactDataSetLocation;
+        public IFormLinkNullableGetter<IImpactDataSetGetter> BashImpactDataSet => _BashImpactDataSetLocation.HasValue ? new FormLinkNullable<IImpactDataSetGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _BashImpactDataSetLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<IImpactDataSetGetter>.Null;
+        #endregion
+        #region AlternateBlockMaterial
+        private int? _AlternateBlockMaterialLocation;
+        public IFormLinkNullableGetter<IMaterialTypeGetter> AlternateBlockMaterial => _AlternateBlockMaterialLocation.HasValue ? new FormLinkNullable<IMaterialTypeGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _AlternateBlockMaterialLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<IMaterialTypeGetter>.Null;
+        #endregion
+        #region Race
+        private int? _RaceLocation;
+        public IFormLinkNullableGetter<IRaceGetter> Race => _RaceLocation.HasValue ? new FormLinkNullable<IRaceGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _RaceLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<IRaceGetter>.Null;
+        #endregion
+        #region Keywords
+        public IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? Keywords { get; private set; }
+        IReadOnlyList<IFormLinkGetter<IKeywordCommonGetter>>? IKeywordedGetter.Keywords => this.Keywords;
+        #endregion
+        #region Description
+        private int? _DescriptionLocation;
+        public ITranslatedStringGetter? Description => _DescriptionLocation.HasValue ? StringBinaryTranslation.Instance.Parse(HeaderTranslation.ExtractSubrecordMemory(_data, _DescriptionLocation.Value, _package.MetaData.Constants), StringsSource.DL, _package.MetaData.StringsLookup) : default(TranslatedString?);
+        #endregion
+        public IReadOnlyList<IArmorAddonModelGetter> Armatures { get; private set; } = ListExt.Empty<ArmorAddonModelBinaryOverlay>();
+        private int? _DATALocation;
+        public Armor.DATADataType DATADataTypeState { get; private set; }
+        #region Value
+        private int _ValueLocation => _DATALocation!.Value;
+        private bool _Value_IsSet => _DATALocation.HasValue;
+        public UInt32 Value => _Value_IsSet ? BinaryPrimitives.ReadUInt32LittleEndian(_data.Slice(_ValueLocation, 4)) : default;
+        #endregion
+        #region Weight
+        private int _WeightLocation => _DATALocation!.Value + 0x4;
+        private bool _Weight_IsSet => _DATALocation.HasValue;
+        public Single Weight => _Weight_IsSet ? _data.Slice(_WeightLocation, 4).Float() : default;
+        #endregion
+        #region Health
+        private int _HealthLocation => _DATALocation!.Value + 0x8;
+        private bool _Health_IsSet => _DATALocation.HasValue;
+        public UInt32 Health => _Health_IsSet ? BinaryPrimitives.ReadUInt32LittleEndian(_data.Slice(_HealthLocation, 4)) : default;
+        #endregion
+        private int? _FNAMLocation;
+        public Armor.FNAMDataType FNAMDataTypeState { get; private set; }
+        #region ArmorRating
+        private int _ArmorRatingLocation => _FNAMLocation!.Value;
+        private bool _ArmorRating_IsSet => _FNAMLocation.HasValue;
+        public UInt16 ArmorRating => _ArmorRating_IsSet ? BinaryPrimitives.ReadUInt16LittleEndian(_data.Slice(_ArmorRatingLocation, 2)) : default;
+        #endregion
+        #region BaseAddonIndex
+        private int _BaseAddonIndexLocation => _FNAMLocation!.Value + 0x2;
+        private bool _BaseAddonIndex_IsSet => _FNAMLocation.HasValue;
+        public UInt16 BaseAddonIndex => _BaseAddonIndex_IsSet ? BinaryPrimitives.ReadUInt16LittleEndian(_data.Slice(_BaseAddonIndexLocation, 2)) : default;
+        #endregion
+        #region StaggerRating
+        private int _StaggerRatingLocation => _FNAMLocation!.Value + 0x4;
+        private bool _StaggerRating_IsSet => _FNAMLocation.HasValue;
+        public UInt16 StaggerRating => _StaggerRating_IsSet ? BinaryPrimitives.ReadUInt16LittleEndian(_data.Slice(_StaggerRatingLocation, 2)) : default;
+        #endregion
+        public IReadOnlyList<IResistanceArmorGetter> Resistances { get; private set; } = ListExt.Empty<ResistanceArmorBinaryOverlay>();
         partial void CustomFactoryEnd(
             OverlayStream stream,
             int finalPos,
@@ -1336,6 +4000,169 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 parseParams: parseParams);
         }
 
+        public override ParseResult FillRecordType(
+            OverlayStream stream,
+            int finalPos,
+            int offset,
+            RecordType type,
+            PreviousParse lastParsed,
+            Dictionary<RecordType, int>? recordParseCount,
+            TypedParseParams? parseParams = null)
+        {
+            type = parseParams.ConvertToStandard(type);
+            switch (type.TypeInt)
+            {
+                case RecordTypeInts.VMAD:
+                {
+                    _VirtualMachineAdapterLocation = new RangeInt32((stream.Position - offset), finalPos - offset);
+                    return (int)Armor_FieldIndex.VirtualMachineAdapter;
+                }
+                case RecordTypeInts.OBND:
+                {
+                    _ObjectBoundsLocation = new RangeInt32((stream.Position - offset), finalPos - offset);
+                    return (int)Armor_FieldIndex.ObjectBounds;
+                }
+                case RecordTypeInts.PTRN:
+                {
+                    _PreviewTransformLocation = new RangeInt32((stream.Position - offset), finalPos - offset);
+                    return (int)Armor_FieldIndex.PreviewTransform;
+                }
+                case RecordTypeInts.FULL:
+                {
+                    _NameLocation = (stream.Position - offset);
+                    return (int)Armor_FieldIndex.Name;
+                }
+                case RecordTypeInts.EITM:
+                {
+                    _ObjectEffectLocation = (stream.Position - offset);
+                    return (int)Armor_FieldIndex.ObjectEffect;
+                }
+                case RecordTypeInts.MOD2:
+                case RecordTypeInts.MOD4:
+                case RecordTypeInts.ICO2:
+                case RecordTypeInts.ICON:
+                {
+                    _WorldModelOverlay = GenderedItemBinaryOverlay.Factory<IArmorModelGetter>(
+                        package: _package,
+                        stream: stream,
+                        creator: (s, p, r) => ArmorModelBinaryOverlay.ArmorModelFactory(s, p, r),
+                        femaleRecordConverter: Armor_Registration.WorldModelFemaleConverter,
+                        maleRecordConverter: Armor_Registration.WorldModelMaleConverter);
+                    return (int)Armor_FieldIndex.WorldModel;
+                }
+                case RecordTypeInts.BODT:
+                case RecordTypeInts.BOD2:
+                {
+                    BodyTemplateCustomParse(
+                        stream,
+                        finalPos,
+                        offset);
+                    return (int)Armor_FieldIndex.BodyTemplate;
+                }
+                case RecordTypeInts.DEST:
+                case RecordTypeInts.DAMC:
+                case RecordTypeInts.DSTD:
+                case RecordTypeInts.DSTA:
+                case RecordTypeInts.DMDL:
+                {
+                    this.Destructible = DestructibleBinaryOverlay.DestructibleFactory(
+                        stream: stream,
+                        package: _package,
+                        parseParams: parseParams);
+                    return (int)Armor_FieldIndex.Destructible;
+                }
+                case RecordTypeInts.YNAM:
+                {
+                    _PickUpSoundLocation = (stream.Position - offset);
+                    return (int)Armor_FieldIndex.PickUpSound;
+                }
+                case RecordTypeInts.ZNAM:
+                {
+                    _PutDownSoundLocation = (stream.Position - offset);
+                    return (int)Armor_FieldIndex.PutDownSound;
+                }
+                case RecordTypeInts.ETYP:
+                {
+                    _EquipmentTypeLocation = (stream.Position - offset);
+                    return (int)Armor_FieldIndex.EquipmentType;
+                }
+                case RecordTypeInts.BIDS:
+                {
+                    _BashImpactDataSetLocation = (stream.Position - offset);
+                    return (int)Armor_FieldIndex.BashImpactDataSet;
+                }
+                case RecordTypeInts.BAMT:
+                {
+                    _AlternateBlockMaterialLocation = (stream.Position - offset);
+                    return (int)Armor_FieldIndex.AlternateBlockMaterial;
+                }
+                case RecordTypeInts.RNAM:
+                {
+                    _RaceLocation = (stream.Position - offset);
+                    return (int)Armor_FieldIndex.Race;
+                }
+                case RecordTypeInts.KWDA:
+                case RecordTypeInts.KSIZ:
+                {
+                    this.Keywords = BinaryOverlayList.FactoryByCount<IFormLinkGetter<IKeywordGetter>>(
+                        stream: stream,
+                        package: _package,
+                        itemLength: 0x4,
+                        countLength: 4,
+                        countType: RecordTypes.KSIZ,
+                        subrecordType: RecordTypes.KWDA,
+                        getter: (s, p) => new FormLink<IKeywordGetter>(FormKey.Factory(p.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(s))));
+                    return (int)Armor_FieldIndex.Keywords;
+                }
+                case RecordTypeInts.DESC:
+                {
+                    _DescriptionLocation = (stream.Position - offset);
+                    return (int)Armor_FieldIndex.Description;
+                }
+                case RecordTypeInts.INDX:
+                case RecordTypeInts.MODL:
+                {
+                    this.Armatures = this.ParseRepeatedTypelessSubrecord<ArmorAddonModelBinaryOverlay>(
+                        stream: stream,
+                        parseParams: parseParams,
+                        trigger: ArmorAddonModel_Registration.TriggeringRecordTypes,
+                        factory: ArmorAddonModelBinaryOverlay.ArmorAddonModelFactory);
+                    return (int)Armor_FieldIndex.Armatures;
+                }
+                case RecordTypeInts.DATA:
+                {
+                    _DATALocation = (stream.Position - offset) + _package.MetaData.Constants.SubConstants.TypeAndLengthLength;
+                    return (int)Armor_FieldIndex.Health;
+                }
+                case RecordTypeInts.FNAM:
+                {
+                    _FNAMLocation = (stream.Position - offset) + _package.MetaData.Constants.SubConstants.TypeAndLengthLength;
+                    return (int)Armor_FieldIndex.StaggerRating;
+                }
+                case RecordTypeInts.DAMA:
+                {
+                    this.Resistances = BinaryOverlayList.FactoryByArray<ResistanceArmorBinaryOverlay>(
+                        mem: stream.RemainingMemory,
+                        package: _package,
+                        parseParams: parseParams,
+                        getter: (s, p, recConv) => ResistanceArmorBinaryOverlay.ResistanceArmorFactory(new OverlayStream(s, p), p, recConv),
+                        locs: ParseRecordLocations(
+                            stream: stream,
+                            trigger: type,
+                            constants: _package.MetaData.Constants.SubConstants,
+                            skipHeader: false));
+                    return (int)Armor_FieldIndex.Resistances;
+                }
+                default:
+                    return base.FillRecordType(
+                        stream: stream,
+                        finalPos: finalPos,
+                        offset: offset,
+                        type: type,
+                        lastParsed: lastParsed,
+                        recordParseCount: recordParseCount);
+            }
+        }
         #region To String
 
         public override void ToString(
