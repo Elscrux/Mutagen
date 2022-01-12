@@ -94,6 +94,21 @@ namespace Mutagen.Bethesda.Fallout4
         IObjectBoundsGetter? IObjectBoundedOptionalGetter.ObjectBounds => this.ObjectBounds;
         #endregion
         #endregion
+        #region PreviewTransform
+        public PreviewTransform PreviewTransform { get; set; } = new PreviewTransform();
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IPreviewTransformGetter IActivatorGetter.PreviewTransform => PreviewTransform;
+        #endregion
+        #region AnimationSound
+        private readonly IFormLinkNullable<IAnimationSoundTagSetGetter> _AnimationSound = new FormLinkNullable<IAnimationSoundTagSetGetter>();
+        public IFormLinkNullable<IAnimationSoundTagSetGetter> AnimationSound
+        {
+            get => _AnimationSound;
+            set => _AnimationSound.SetTo(value);
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFormLinkNullableGetter<IAnimationSoundTagSetGetter> IActivatorGetter.AnimationSound => this.AnimationSound;
+        #endregion
         #region Name
         /// <summary>
         /// Aspects: INamed, INamedRequired, ITranslatedNamed, ITranslatedNamedRequired
@@ -180,6 +195,37 @@ namespace Mutagen.Bethesda.Fallout4
         IReadOnlyList<IFormLinkGetter<IKeywordCommonGetter>>? IKeywordedGetter.Keywords => this.Keywords;
         #endregion
         #endregion
+        #region Properties
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Properties? _Properties;
+        public Properties? Properties
+        {
+            get => _Properties;
+            set => _Properties = value;
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IPropertiesGetter? IActivatorGetter.Properties => this.Properties;
+        #endregion
+        #region NativeTerminal
+        private readonly IFormLinkNullable<ITerminalGetter> _NativeTerminal = new FormLinkNullable<ITerminalGetter>();
+        public IFormLinkNullable<ITerminalGetter> NativeTerminal
+        {
+            get => _NativeTerminal;
+            set => _NativeTerminal.SetTo(value);
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFormLinkNullableGetter<ITerminalGetter> IActivatorGetter.NativeTerminal => this.NativeTerminal;
+        #endregion
+        #region ForcedLocRefType
+        private readonly IFormLinkNullable<ILocationReferenceTypeGetter> _ForcedLocRefType = new FormLinkNullable<ILocationReferenceTypeGetter>();
+        public IFormLinkNullable<ILocationReferenceTypeGetter> ForcedLocRefType
+        {
+            get => _ForcedLocRefType;
+            set => _ForcedLocRefType.SetTo(value);
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFormLinkNullableGetter<ILocationReferenceTypeGetter> IActivatorGetter.ForcedLocRefType => this.ForcedLocRefType;
+        #endregion
         #region MarkerColor
         public Color? MarkerColor { get; set; }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -235,6 +281,45 @@ namespace Mutagen.Bethesda.Fallout4
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IFormLinkNullableGetter<IKeywordGetter> IActivatorGetter.InteractionKeyword => this.InteractionKeyword;
         #endregion
+        #region SoundModel
+        private readonly IFormLink<ISoundOutputModelGetter> _SoundModel = new FormLink<ISoundOutputModelGetter>();
+        public IFormLink<ISoundOutputModelGetter> SoundModel
+        {
+            get => _SoundModel;
+            set => _SoundModel.SetTo(value);
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFormLinkGetter<ISoundOutputModelGetter> IActivatorGetter.SoundModel => this.SoundModel;
+        #endregion
+        #region Frequency
+        public Single Frequency { get; set; } = default;
+        #endregion
+        #region Volume
+        public Single Volume { get; set; } = default;
+        #endregion
+        #region StartsActive
+        public Boolean StartsActive { get; set; } = default;
+        #endregion
+        #region NoSignalStatic
+        public Boolean NoSignalStatic { get; set; } = default;
+        #endregion
+        #region Conditions
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ExtendedList<Condition>? _Conditions;
+        public ExtendedList<Condition>? Conditions
+        {
+            get => this._Conditions;
+            set => this._Conditions = value;
+        }
+        #region Interface Members
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IReadOnlyList<IConditionGetter>? IActivatorGetter.Conditions => _Conditions;
+        #endregion
+
+        #endregion
+        #region RADRDataTypeState
+        public Activator.RADRDataType RADRDataTypeState { get; set; } = default;
+        #endregion
 
         #region To String
 
@@ -261,10 +346,15 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 this.VirtualMachineAdapter = new MaskItem<TItem, VirtualMachineAdapter.Mask<TItem>?>(initialValue, new VirtualMachineAdapter.Mask<TItem>(initialValue));
                 this.ObjectBounds = new MaskItem<TItem, ObjectBounds.Mask<TItem>?>(initialValue, new ObjectBounds.Mask<TItem>(initialValue));
+                this.PreviewTransform = new MaskItem<TItem, PreviewTransform.Mask<TItem>?>(initialValue, new PreviewTransform.Mask<TItem>(initialValue));
+                this.AnimationSound = initialValue;
                 this.Name = initialValue;
                 this.Model = new MaskItem<TItem, Model.Mask<TItem>?>(initialValue, new Model.Mask<TItem>(initialValue));
                 this.Destructible = new MaskItem<TItem, Destructible.Mask<TItem>?>(initialValue, new Destructible.Mask<TItem>(initialValue));
                 this.Keywords = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(initialValue, Enumerable.Empty<(int Index, TItem Value)>());
+                this.Properties = new MaskItem<TItem, Properties.Mask<TItem>?>(initialValue, new Properties.Mask<TItem>(initialValue));
+                this.NativeTerminal = initialValue;
+                this.ForcedLocRefType = initialValue;
                 this.MarkerColor = initialValue;
                 this.LoopingSound = initialValue;
                 this.ActivationSound = initialValue;
@@ -272,6 +362,13 @@ namespace Mutagen.Bethesda.Fallout4
                 this.ActivateTextOverride = initialValue;
                 this.Flags = initialValue;
                 this.InteractionKeyword = initialValue;
+                this.SoundModel = initialValue;
+                this.Frequency = initialValue;
+                this.Volume = initialValue;
+                this.StartsActive = initialValue;
+                this.NoSignalStatic = initialValue;
+                this.Conditions = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, Condition.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, Condition.Mask<TItem>?>>());
+                this.RADRDataTypeState = initialValue;
             }
 
             public Mask(
@@ -283,17 +380,29 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem Version2,
                 TItem VirtualMachineAdapter,
                 TItem ObjectBounds,
+                TItem PreviewTransform,
+                TItem AnimationSound,
                 TItem Name,
                 TItem Model,
                 TItem Destructible,
                 TItem Keywords,
+                TItem Properties,
+                TItem NativeTerminal,
+                TItem ForcedLocRefType,
                 TItem MarkerColor,
                 TItem LoopingSound,
                 TItem ActivationSound,
                 TItem WaterType,
                 TItem ActivateTextOverride,
                 TItem Flags,
-                TItem InteractionKeyword)
+                TItem InteractionKeyword,
+                TItem SoundModel,
+                TItem Frequency,
+                TItem Volume,
+                TItem StartsActive,
+                TItem NoSignalStatic,
+                TItem Conditions,
+                TItem RADRDataTypeState)
             : base(
                 MajorRecordFlagsRaw: MajorRecordFlagsRaw,
                 FormKey: FormKey,
@@ -304,10 +413,15 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 this.VirtualMachineAdapter = new MaskItem<TItem, VirtualMachineAdapter.Mask<TItem>?>(VirtualMachineAdapter, new VirtualMachineAdapter.Mask<TItem>(VirtualMachineAdapter));
                 this.ObjectBounds = new MaskItem<TItem, ObjectBounds.Mask<TItem>?>(ObjectBounds, new ObjectBounds.Mask<TItem>(ObjectBounds));
+                this.PreviewTransform = new MaskItem<TItem, PreviewTransform.Mask<TItem>?>(PreviewTransform, new PreviewTransform.Mask<TItem>(PreviewTransform));
+                this.AnimationSound = AnimationSound;
                 this.Name = Name;
                 this.Model = new MaskItem<TItem, Model.Mask<TItem>?>(Model, new Model.Mask<TItem>(Model));
                 this.Destructible = new MaskItem<TItem, Destructible.Mask<TItem>?>(Destructible, new Destructible.Mask<TItem>(Destructible));
                 this.Keywords = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(Keywords, Enumerable.Empty<(int Index, TItem Value)>());
+                this.Properties = new MaskItem<TItem, Properties.Mask<TItem>?>(Properties, new Properties.Mask<TItem>(Properties));
+                this.NativeTerminal = NativeTerminal;
+                this.ForcedLocRefType = ForcedLocRefType;
                 this.MarkerColor = MarkerColor;
                 this.LoopingSound = LoopingSound;
                 this.ActivationSound = ActivationSound;
@@ -315,6 +429,13 @@ namespace Mutagen.Bethesda.Fallout4
                 this.ActivateTextOverride = ActivateTextOverride;
                 this.Flags = Flags;
                 this.InteractionKeyword = InteractionKeyword;
+                this.SoundModel = SoundModel;
+                this.Frequency = Frequency;
+                this.Volume = Volume;
+                this.StartsActive = StartsActive;
+                this.NoSignalStatic = NoSignalStatic;
+                this.Conditions = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, Condition.Mask<TItem>?>>?>(Conditions, Enumerable.Empty<MaskItemIndexed<TItem, Condition.Mask<TItem>?>>());
+                this.RADRDataTypeState = RADRDataTypeState;
             }
 
             #pragma warning disable CS8618
@@ -328,10 +449,15 @@ namespace Mutagen.Bethesda.Fallout4
             #region Members
             public MaskItem<TItem, VirtualMachineAdapter.Mask<TItem>?>? VirtualMachineAdapter { get; set; }
             public MaskItem<TItem, ObjectBounds.Mask<TItem>?>? ObjectBounds { get; set; }
+            public MaskItem<TItem, PreviewTransform.Mask<TItem>?>? PreviewTransform { get; set; }
+            public TItem AnimationSound;
             public TItem Name;
             public MaskItem<TItem, Model.Mask<TItem>?>? Model { get; set; }
             public MaskItem<TItem, Destructible.Mask<TItem>?>? Destructible { get; set; }
             public MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>? Keywords;
+            public MaskItem<TItem, Properties.Mask<TItem>?>? Properties { get; set; }
+            public TItem NativeTerminal;
+            public TItem ForcedLocRefType;
             public TItem MarkerColor;
             public TItem LoopingSound;
             public TItem ActivationSound;
@@ -339,6 +465,13 @@ namespace Mutagen.Bethesda.Fallout4
             public TItem ActivateTextOverride;
             public TItem Flags;
             public TItem InteractionKeyword;
+            public TItem SoundModel;
+            public TItem Frequency;
+            public TItem Volume;
+            public TItem StartsActive;
+            public TItem NoSignalStatic;
+            public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, Condition.Mask<TItem>?>>?>? Conditions;
+            public TItem RADRDataTypeState;
             #endregion
 
             #region Equals
@@ -354,10 +487,15 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!base.Equals(rhs)) return false;
                 if (!object.Equals(this.VirtualMachineAdapter, rhs.VirtualMachineAdapter)) return false;
                 if (!object.Equals(this.ObjectBounds, rhs.ObjectBounds)) return false;
+                if (!object.Equals(this.PreviewTransform, rhs.PreviewTransform)) return false;
+                if (!object.Equals(this.AnimationSound, rhs.AnimationSound)) return false;
                 if (!object.Equals(this.Name, rhs.Name)) return false;
                 if (!object.Equals(this.Model, rhs.Model)) return false;
                 if (!object.Equals(this.Destructible, rhs.Destructible)) return false;
                 if (!object.Equals(this.Keywords, rhs.Keywords)) return false;
+                if (!object.Equals(this.Properties, rhs.Properties)) return false;
+                if (!object.Equals(this.NativeTerminal, rhs.NativeTerminal)) return false;
+                if (!object.Equals(this.ForcedLocRefType, rhs.ForcedLocRefType)) return false;
                 if (!object.Equals(this.MarkerColor, rhs.MarkerColor)) return false;
                 if (!object.Equals(this.LoopingSound, rhs.LoopingSound)) return false;
                 if (!object.Equals(this.ActivationSound, rhs.ActivationSound)) return false;
@@ -365,6 +503,13 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!object.Equals(this.ActivateTextOverride, rhs.ActivateTextOverride)) return false;
                 if (!object.Equals(this.Flags, rhs.Flags)) return false;
                 if (!object.Equals(this.InteractionKeyword, rhs.InteractionKeyword)) return false;
+                if (!object.Equals(this.SoundModel, rhs.SoundModel)) return false;
+                if (!object.Equals(this.Frequency, rhs.Frequency)) return false;
+                if (!object.Equals(this.Volume, rhs.Volume)) return false;
+                if (!object.Equals(this.StartsActive, rhs.StartsActive)) return false;
+                if (!object.Equals(this.NoSignalStatic, rhs.NoSignalStatic)) return false;
+                if (!object.Equals(this.Conditions, rhs.Conditions)) return false;
+                if (!object.Equals(this.RADRDataTypeState, rhs.RADRDataTypeState)) return false;
                 return true;
             }
             public override int GetHashCode()
@@ -372,10 +517,15 @@ namespace Mutagen.Bethesda.Fallout4
                 var hash = new HashCode();
                 hash.Add(this.VirtualMachineAdapter);
                 hash.Add(this.ObjectBounds);
+                hash.Add(this.PreviewTransform);
+                hash.Add(this.AnimationSound);
                 hash.Add(this.Name);
                 hash.Add(this.Model);
                 hash.Add(this.Destructible);
                 hash.Add(this.Keywords);
+                hash.Add(this.Properties);
+                hash.Add(this.NativeTerminal);
+                hash.Add(this.ForcedLocRefType);
                 hash.Add(this.MarkerColor);
                 hash.Add(this.LoopingSound);
                 hash.Add(this.ActivationSound);
@@ -383,6 +533,13 @@ namespace Mutagen.Bethesda.Fallout4
                 hash.Add(this.ActivateTextOverride);
                 hash.Add(this.Flags);
                 hash.Add(this.InteractionKeyword);
+                hash.Add(this.SoundModel);
+                hash.Add(this.Frequency);
+                hash.Add(this.Volume);
+                hash.Add(this.StartsActive);
+                hash.Add(this.NoSignalStatic);
+                hash.Add(this.Conditions);
+                hash.Add(this.RADRDataTypeState);
                 hash.Add(base.GetHashCode());
                 return hash.ToHashCode();
             }
@@ -403,6 +560,12 @@ namespace Mutagen.Bethesda.Fallout4
                     if (!eval(this.ObjectBounds.Overall)) return false;
                     if (this.ObjectBounds.Specific != null && !this.ObjectBounds.Specific.All(eval)) return false;
                 }
+                if (PreviewTransform != null)
+                {
+                    if (!eval(this.PreviewTransform.Overall)) return false;
+                    if (this.PreviewTransform.Specific != null && !this.PreviewTransform.Specific.All(eval)) return false;
+                }
+                if (!eval(this.AnimationSound)) return false;
                 if (!eval(this.Name)) return false;
                 if (Model != null)
                 {
@@ -425,6 +588,13 @@ namespace Mutagen.Bethesda.Fallout4
                         }
                     }
                 }
+                if (Properties != null)
+                {
+                    if (!eval(this.Properties.Overall)) return false;
+                    if (this.Properties.Specific != null && !this.Properties.Specific.All(eval)) return false;
+                }
+                if (!eval(this.NativeTerminal)) return false;
+                if (!eval(this.ForcedLocRefType)) return false;
                 if (!eval(this.MarkerColor)) return false;
                 if (!eval(this.LoopingSound)) return false;
                 if (!eval(this.ActivationSound)) return false;
@@ -432,6 +602,24 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!eval(this.ActivateTextOverride)) return false;
                 if (!eval(this.Flags)) return false;
                 if (!eval(this.InteractionKeyword)) return false;
+                if (!eval(this.SoundModel)) return false;
+                if (!eval(this.Frequency)) return false;
+                if (!eval(this.Volume)) return false;
+                if (!eval(this.StartsActive)) return false;
+                if (!eval(this.NoSignalStatic)) return false;
+                if (this.Conditions != null)
+                {
+                    if (!eval(this.Conditions.Overall)) return false;
+                    if (this.Conditions.Specific != null)
+                    {
+                        foreach (var item in this.Conditions.Specific)
+                        {
+                            if (!eval(item.Overall)) return false;
+                            if (item.Specific != null && !item.Specific.All(eval)) return false;
+                        }
+                    }
+                }
+                if (!eval(this.RADRDataTypeState)) return false;
                 return true;
             }
             #endregion
@@ -450,6 +638,12 @@ namespace Mutagen.Bethesda.Fallout4
                     if (eval(this.ObjectBounds.Overall)) return true;
                     if (this.ObjectBounds.Specific != null && this.ObjectBounds.Specific.Any(eval)) return true;
                 }
+                if (PreviewTransform != null)
+                {
+                    if (eval(this.PreviewTransform.Overall)) return true;
+                    if (this.PreviewTransform.Specific != null && this.PreviewTransform.Specific.Any(eval)) return true;
+                }
+                if (eval(this.AnimationSound)) return true;
                 if (eval(this.Name)) return true;
                 if (Model != null)
                 {
@@ -472,6 +666,13 @@ namespace Mutagen.Bethesda.Fallout4
                         }
                     }
                 }
+                if (Properties != null)
+                {
+                    if (eval(this.Properties.Overall)) return true;
+                    if (this.Properties.Specific != null && this.Properties.Specific.Any(eval)) return true;
+                }
+                if (eval(this.NativeTerminal)) return true;
+                if (eval(this.ForcedLocRefType)) return true;
                 if (eval(this.MarkerColor)) return true;
                 if (eval(this.LoopingSound)) return true;
                 if (eval(this.ActivationSound)) return true;
@@ -479,6 +680,24 @@ namespace Mutagen.Bethesda.Fallout4
                 if (eval(this.ActivateTextOverride)) return true;
                 if (eval(this.Flags)) return true;
                 if (eval(this.InteractionKeyword)) return true;
+                if (eval(this.SoundModel)) return true;
+                if (eval(this.Frequency)) return true;
+                if (eval(this.Volume)) return true;
+                if (eval(this.StartsActive)) return true;
+                if (eval(this.NoSignalStatic)) return true;
+                if (this.Conditions != null)
+                {
+                    if (eval(this.Conditions.Overall)) return true;
+                    if (this.Conditions.Specific != null)
+                    {
+                        foreach (var item in this.Conditions.Specific)
+                        {
+                            if (!eval(item.Overall)) return false;
+                            if (item.Specific != null && !item.Specific.All(eval)) return false;
+                        }
+                    }
+                }
+                if (eval(this.RADRDataTypeState)) return true;
                 return false;
             }
             #endregion
@@ -496,6 +715,8 @@ namespace Mutagen.Bethesda.Fallout4
                 base.Translate_InternalFill(obj, eval);
                 obj.VirtualMachineAdapter = this.VirtualMachineAdapter == null ? null : new MaskItem<R, VirtualMachineAdapter.Mask<R>?>(eval(this.VirtualMachineAdapter.Overall), this.VirtualMachineAdapter.Specific?.Translate(eval));
                 obj.ObjectBounds = this.ObjectBounds == null ? null : new MaskItem<R, ObjectBounds.Mask<R>?>(eval(this.ObjectBounds.Overall), this.ObjectBounds.Specific?.Translate(eval));
+                obj.PreviewTransform = this.PreviewTransform == null ? null : new MaskItem<R, PreviewTransform.Mask<R>?>(eval(this.PreviewTransform.Overall), this.PreviewTransform.Specific?.Translate(eval));
+                obj.AnimationSound = eval(this.AnimationSound);
                 obj.Name = eval(this.Name);
                 obj.Model = this.Model == null ? null : new MaskItem<R, Model.Mask<R>?>(eval(this.Model.Overall), this.Model.Specific?.Translate(eval));
                 obj.Destructible = this.Destructible == null ? null : new MaskItem<R, Destructible.Mask<R>?>(eval(this.Destructible.Overall), this.Destructible.Specific?.Translate(eval));
@@ -513,6 +734,9 @@ namespace Mutagen.Bethesda.Fallout4
                         }
                     }
                 }
+                obj.Properties = this.Properties == null ? null : new MaskItem<R, Properties.Mask<R>?>(eval(this.Properties.Overall), this.Properties.Specific?.Translate(eval));
+                obj.NativeTerminal = eval(this.NativeTerminal);
+                obj.ForcedLocRefType = eval(this.ForcedLocRefType);
                 obj.MarkerColor = eval(this.MarkerColor);
                 obj.LoopingSound = eval(this.LoopingSound);
                 obj.ActivationSound = eval(this.ActivationSound);
@@ -520,6 +744,27 @@ namespace Mutagen.Bethesda.Fallout4
                 obj.ActivateTextOverride = eval(this.ActivateTextOverride);
                 obj.Flags = eval(this.Flags);
                 obj.InteractionKeyword = eval(this.InteractionKeyword);
+                obj.SoundModel = eval(this.SoundModel);
+                obj.Frequency = eval(this.Frequency);
+                obj.Volume = eval(this.Volume);
+                obj.StartsActive = eval(this.StartsActive);
+                obj.NoSignalStatic = eval(this.NoSignalStatic);
+                if (Conditions != null)
+                {
+                    obj.Conditions = new MaskItem<R, IEnumerable<MaskItemIndexed<R, Condition.Mask<R>?>>?>(eval(this.Conditions.Overall), Enumerable.Empty<MaskItemIndexed<R, Condition.Mask<R>?>>());
+                    if (Conditions.Specific != null)
+                    {
+                        var l = new List<MaskItemIndexed<R, Condition.Mask<R>?>>();
+                        obj.Conditions.Specific = l;
+                        foreach (var item in Conditions.Specific.WithIndex())
+                        {
+                            MaskItemIndexed<R, Condition.Mask<R>?>? mask = item.Item == null ? null : new MaskItemIndexed<R, Condition.Mask<R>?>(item.Item.Index, eval(item.Item.Overall), item.Item.Specific?.Translate(eval));
+                            if (mask == null) continue;
+                            l.Add(mask);
+                        }
+                    }
+                }
+                obj.RADRDataTypeState = eval(this.RADRDataTypeState);
             }
             #endregion
 
@@ -549,6 +794,14 @@ namespace Mutagen.Bethesda.Fallout4
                     if (printMask?.ObjectBounds?.Overall ?? true)
                     {
                         ObjectBounds?.ToString(fg);
+                    }
+                    if (printMask?.PreviewTransform?.Overall ?? true)
+                    {
+                        PreviewTransform?.ToString(fg);
+                    }
+                    if (printMask?.AnimationSound ?? true)
+                    {
+                        fg.AppendItem(AnimationSound, "AnimationSound");
                     }
                     if (printMask?.Name ?? true)
                     {
@@ -585,6 +838,18 @@ namespace Mutagen.Bethesda.Fallout4
                         }
                         fg.AppendLine("]");
                     }
+                    if (printMask?.Properties?.Overall ?? true)
+                    {
+                        Properties?.ToString(fg);
+                    }
+                    if (printMask?.NativeTerminal ?? true)
+                    {
+                        fg.AppendItem(NativeTerminal, "NativeTerminal");
+                    }
+                    if (printMask?.ForcedLocRefType ?? true)
+                    {
+                        fg.AppendItem(ForcedLocRefType, "ForcedLocRefType");
+                    }
                     if (printMask?.MarkerColor ?? true)
                     {
                         fg.AppendItem(MarkerColor, "MarkerColor");
@@ -613,6 +878,53 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         fg.AppendItem(InteractionKeyword, "InteractionKeyword");
                     }
+                    if (printMask?.SoundModel ?? true)
+                    {
+                        fg.AppendItem(SoundModel, "SoundModel");
+                    }
+                    if (printMask?.Frequency ?? true)
+                    {
+                        fg.AppendItem(Frequency, "Frequency");
+                    }
+                    if (printMask?.Volume ?? true)
+                    {
+                        fg.AppendItem(Volume, "Volume");
+                    }
+                    if (printMask?.StartsActive ?? true)
+                    {
+                        fg.AppendItem(StartsActive, "StartsActive");
+                    }
+                    if (printMask?.NoSignalStatic ?? true)
+                    {
+                        fg.AppendItem(NoSignalStatic, "NoSignalStatic");
+                    }
+                    if ((printMask?.Conditions?.Overall ?? true)
+                        && Conditions is {} ConditionsItem)
+                    {
+                        fg.AppendLine("Conditions =>");
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            fg.AppendItem(ConditionsItem.Overall);
+                            if (ConditionsItem.Specific != null)
+                            {
+                                foreach (var subItem in ConditionsItem.Specific)
+                                {
+                                    fg.AppendLine("[");
+                                    using (new DepthWrapper(fg))
+                                    {
+                                        subItem?.ToString(fg);
+                                    }
+                                    fg.AppendLine("]");
+                                }
+                            }
+                        }
+                        fg.AppendLine("]");
+                    }
+                    if (printMask?.RADRDataTypeState ?? true)
+                    {
+                        fg.AppendItem(RADRDataTypeState, "RADRDataTypeState");
+                    }
                 }
                 fg.AppendLine("]");
             }
@@ -627,10 +939,15 @@ namespace Mutagen.Bethesda.Fallout4
             #region Members
             public MaskItem<Exception?, VirtualMachineAdapter.ErrorMask?>? VirtualMachineAdapter;
             public MaskItem<Exception?, ObjectBounds.ErrorMask?>? ObjectBounds;
+            public MaskItem<Exception?, PreviewTransform.ErrorMask?>? PreviewTransform;
+            public Exception? AnimationSound;
             public Exception? Name;
             public MaskItem<Exception?, Model.ErrorMask?>? Model;
             public MaskItem<Exception?, Destructible.ErrorMask?>? Destructible;
             public MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>? Keywords;
+            public MaskItem<Exception?, Properties.ErrorMask?>? Properties;
+            public Exception? NativeTerminal;
+            public Exception? ForcedLocRefType;
             public Exception? MarkerColor;
             public Exception? LoopingSound;
             public Exception? ActivationSound;
@@ -638,6 +955,13 @@ namespace Mutagen.Bethesda.Fallout4
             public Exception? ActivateTextOverride;
             public Exception? Flags;
             public Exception? InteractionKeyword;
+            public Exception? SoundModel;
+            public Exception? Frequency;
+            public Exception? Volume;
+            public Exception? StartsActive;
+            public Exception? NoSignalStatic;
+            public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, Condition.ErrorMask?>>?>? Conditions;
+            public Exception? RADRDataTypeState;
             #endregion
 
             #region IErrorMask
@@ -650,6 +974,10 @@ namespace Mutagen.Bethesda.Fallout4
                         return VirtualMachineAdapter;
                     case Activator_FieldIndex.ObjectBounds:
                         return ObjectBounds;
+                    case Activator_FieldIndex.PreviewTransform:
+                        return PreviewTransform;
+                    case Activator_FieldIndex.AnimationSound:
+                        return AnimationSound;
                     case Activator_FieldIndex.Name:
                         return Name;
                     case Activator_FieldIndex.Model:
@@ -658,6 +986,12 @@ namespace Mutagen.Bethesda.Fallout4
                         return Destructible;
                     case Activator_FieldIndex.Keywords:
                         return Keywords;
+                    case Activator_FieldIndex.Properties:
+                        return Properties;
+                    case Activator_FieldIndex.NativeTerminal:
+                        return NativeTerminal;
+                    case Activator_FieldIndex.ForcedLocRefType:
+                        return ForcedLocRefType;
                     case Activator_FieldIndex.MarkerColor:
                         return MarkerColor;
                     case Activator_FieldIndex.LoopingSound:
@@ -672,6 +1006,20 @@ namespace Mutagen.Bethesda.Fallout4
                         return Flags;
                     case Activator_FieldIndex.InteractionKeyword:
                         return InteractionKeyword;
+                    case Activator_FieldIndex.SoundModel:
+                        return SoundModel;
+                    case Activator_FieldIndex.Frequency:
+                        return Frequency;
+                    case Activator_FieldIndex.Volume:
+                        return Volume;
+                    case Activator_FieldIndex.StartsActive:
+                        return StartsActive;
+                    case Activator_FieldIndex.NoSignalStatic:
+                        return NoSignalStatic;
+                    case Activator_FieldIndex.Conditions:
+                        return Conditions;
+                    case Activator_FieldIndex.RADRDataTypeState:
+                        return RADRDataTypeState;
                     default:
                         return base.GetNthMask(index);
                 }
@@ -688,6 +1036,12 @@ namespace Mutagen.Bethesda.Fallout4
                     case Activator_FieldIndex.ObjectBounds:
                         this.ObjectBounds = new MaskItem<Exception?, ObjectBounds.ErrorMask?>(ex, null);
                         break;
+                    case Activator_FieldIndex.PreviewTransform:
+                        this.PreviewTransform = new MaskItem<Exception?, PreviewTransform.ErrorMask?>(ex, null);
+                        break;
+                    case Activator_FieldIndex.AnimationSound:
+                        this.AnimationSound = ex;
+                        break;
                     case Activator_FieldIndex.Name:
                         this.Name = ex;
                         break;
@@ -699,6 +1053,15 @@ namespace Mutagen.Bethesda.Fallout4
                         break;
                     case Activator_FieldIndex.Keywords:
                         this.Keywords = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ex, null);
+                        break;
+                    case Activator_FieldIndex.Properties:
+                        this.Properties = new MaskItem<Exception?, Properties.ErrorMask?>(ex, null);
+                        break;
+                    case Activator_FieldIndex.NativeTerminal:
+                        this.NativeTerminal = ex;
+                        break;
+                    case Activator_FieldIndex.ForcedLocRefType:
+                        this.ForcedLocRefType = ex;
                         break;
                     case Activator_FieldIndex.MarkerColor:
                         this.MarkerColor = ex;
@@ -721,6 +1084,27 @@ namespace Mutagen.Bethesda.Fallout4
                     case Activator_FieldIndex.InteractionKeyword:
                         this.InteractionKeyword = ex;
                         break;
+                    case Activator_FieldIndex.SoundModel:
+                        this.SoundModel = ex;
+                        break;
+                    case Activator_FieldIndex.Frequency:
+                        this.Frequency = ex;
+                        break;
+                    case Activator_FieldIndex.Volume:
+                        this.Volume = ex;
+                        break;
+                    case Activator_FieldIndex.StartsActive:
+                        this.StartsActive = ex;
+                        break;
+                    case Activator_FieldIndex.NoSignalStatic:
+                        this.NoSignalStatic = ex;
+                        break;
+                    case Activator_FieldIndex.Conditions:
+                        this.Conditions = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, Condition.ErrorMask?>>?>(ex, null);
+                        break;
+                    case Activator_FieldIndex.RADRDataTypeState:
+                        this.RADRDataTypeState = ex;
+                        break;
                     default:
                         base.SetNthException(index, ex);
                         break;
@@ -738,6 +1122,12 @@ namespace Mutagen.Bethesda.Fallout4
                     case Activator_FieldIndex.ObjectBounds:
                         this.ObjectBounds = (MaskItem<Exception?, ObjectBounds.ErrorMask?>?)obj;
                         break;
+                    case Activator_FieldIndex.PreviewTransform:
+                        this.PreviewTransform = (MaskItem<Exception?, PreviewTransform.ErrorMask?>?)obj;
+                        break;
+                    case Activator_FieldIndex.AnimationSound:
+                        this.AnimationSound = (Exception?)obj;
+                        break;
                     case Activator_FieldIndex.Name:
                         this.Name = (Exception?)obj;
                         break;
@@ -749,6 +1139,15 @@ namespace Mutagen.Bethesda.Fallout4
                         break;
                     case Activator_FieldIndex.Keywords:
                         this.Keywords = (MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>)obj;
+                        break;
+                    case Activator_FieldIndex.Properties:
+                        this.Properties = (MaskItem<Exception?, Properties.ErrorMask?>?)obj;
+                        break;
+                    case Activator_FieldIndex.NativeTerminal:
+                        this.NativeTerminal = (Exception?)obj;
+                        break;
+                    case Activator_FieldIndex.ForcedLocRefType:
+                        this.ForcedLocRefType = (Exception?)obj;
                         break;
                     case Activator_FieldIndex.MarkerColor:
                         this.MarkerColor = (Exception?)obj;
@@ -771,6 +1170,27 @@ namespace Mutagen.Bethesda.Fallout4
                     case Activator_FieldIndex.InteractionKeyword:
                         this.InteractionKeyword = (Exception?)obj;
                         break;
+                    case Activator_FieldIndex.SoundModel:
+                        this.SoundModel = (Exception?)obj;
+                        break;
+                    case Activator_FieldIndex.Frequency:
+                        this.Frequency = (Exception?)obj;
+                        break;
+                    case Activator_FieldIndex.Volume:
+                        this.Volume = (Exception?)obj;
+                        break;
+                    case Activator_FieldIndex.StartsActive:
+                        this.StartsActive = (Exception?)obj;
+                        break;
+                    case Activator_FieldIndex.NoSignalStatic:
+                        this.NoSignalStatic = (Exception?)obj;
+                        break;
+                    case Activator_FieldIndex.Conditions:
+                        this.Conditions = (MaskItem<Exception?, IEnumerable<MaskItem<Exception?, Condition.ErrorMask?>>?>)obj;
+                        break;
+                    case Activator_FieldIndex.RADRDataTypeState:
+                        this.RADRDataTypeState = (Exception?)obj;
+                        break;
                     default:
                         base.SetNthMask(index, obj);
                         break;
@@ -782,10 +1202,15 @@ namespace Mutagen.Bethesda.Fallout4
                 if (Overall != null) return true;
                 if (VirtualMachineAdapter != null) return true;
                 if (ObjectBounds != null) return true;
+                if (PreviewTransform != null) return true;
+                if (AnimationSound != null) return true;
                 if (Name != null) return true;
                 if (Model != null) return true;
                 if (Destructible != null) return true;
                 if (Keywords != null) return true;
+                if (Properties != null) return true;
+                if (NativeTerminal != null) return true;
+                if (ForcedLocRefType != null) return true;
                 if (MarkerColor != null) return true;
                 if (LoopingSound != null) return true;
                 if (ActivationSound != null) return true;
@@ -793,6 +1218,13 @@ namespace Mutagen.Bethesda.Fallout4
                 if (ActivateTextOverride != null) return true;
                 if (Flags != null) return true;
                 if (InteractionKeyword != null) return true;
+                if (SoundModel != null) return true;
+                if (Frequency != null) return true;
+                if (Volume != null) return true;
+                if (StartsActive != null) return true;
+                if (NoSignalStatic != null) return true;
+                if (Conditions != null) return true;
+                if (RADRDataTypeState != null) return true;
                 return false;
             }
             #endregion
@@ -830,6 +1262,8 @@ namespace Mutagen.Bethesda.Fallout4
                 base.ToString_FillInternal(fg);
                 VirtualMachineAdapter?.ToString(fg);
                 ObjectBounds?.ToString(fg);
+                PreviewTransform?.ToString(fg);
+                fg.AppendItem(AnimationSound, "AnimationSound");
                 fg.AppendItem(Name, "Name");
                 Model?.ToString(fg);
                 Destructible?.ToString(fg);
@@ -855,6 +1289,9 @@ namespace Mutagen.Bethesda.Fallout4
                     }
                     fg.AppendLine("]");
                 }
+                Properties?.ToString(fg);
+                fg.AppendItem(NativeTerminal, "NativeTerminal");
+                fg.AppendItem(ForcedLocRefType, "ForcedLocRefType");
                 fg.AppendItem(MarkerColor, "MarkerColor");
                 fg.AppendItem(LoopingSound, "LoopingSound");
                 fg.AppendItem(ActivationSound, "ActivationSound");
@@ -862,6 +1299,34 @@ namespace Mutagen.Bethesda.Fallout4
                 fg.AppendItem(ActivateTextOverride, "ActivateTextOverride");
                 fg.AppendItem(Flags, "Flags");
                 fg.AppendItem(InteractionKeyword, "InteractionKeyword");
+                fg.AppendItem(SoundModel, "SoundModel");
+                fg.AppendItem(Frequency, "Frequency");
+                fg.AppendItem(Volume, "Volume");
+                fg.AppendItem(StartsActive, "StartsActive");
+                fg.AppendItem(NoSignalStatic, "NoSignalStatic");
+                if (Conditions is {} ConditionsItem)
+                {
+                    fg.AppendLine("Conditions =>");
+                    fg.AppendLine("[");
+                    using (new DepthWrapper(fg))
+                    {
+                        fg.AppendItem(ConditionsItem.Overall);
+                        if (ConditionsItem.Specific != null)
+                        {
+                            foreach (var subItem in ConditionsItem.Specific)
+                            {
+                                fg.AppendLine("[");
+                                using (new DepthWrapper(fg))
+                                {
+                                    subItem?.ToString(fg);
+                                }
+                                fg.AppendLine("]");
+                            }
+                        }
+                    }
+                    fg.AppendLine("]");
+                }
+                fg.AppendItem(RADRDataTypeState, "RADRDataTypeState");
             }
             #endregion
 
@@ -872,10 +1337,15 @@ namespace Mutagen.Bethesda.Fallout4
                 var ret = new ErrorMask();
                 ret.VirtualMachineAdapter = this.VirtualMachineAdapter.Combine(rhs.VirtualMachineAdapter, (l, r) => l.Combine(r));
                 ret.ObjectBounds = this.ObjectBounds.Combine(rhs.ObjectBounds, (l, r) => l.Combine(r));
+                ret.PreviewTransform = this.PreviewTransform.Combine(rhs.PreviewTransform, (l, r) => l.Combine(r));
+                ret.AnimationSound = this.AnimationSound.Combine(rhs.AnimationSound);
                 ret.Name = this.Name.Combine(rhs.Name);
                 ret.Model = this.Model.Combine(rhs.Model, (l, r) => l.Combine(r));
                 ret.Destructible = this.Destructible.Combine(rhs.Destructible, (l, r) => l.Combine(r));
                 ret.Keywords = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ExceptionExt.Combine(this.Keywords?.Overall, rhs.Keywords?.Overall), ExceptionExt.Combine(this.Keywords?.Specific, rhs.Keywords?.Specific));
+                ret.Properties = this.Properties.Combine(rhs.Properties, (l, r) => l.Combine(r));
+                ret.NativeTerminal = this.NativeTerminal.Combine(rhs.NativeTerminal);
+                ret.ForcedLocRefType = this.ForcedLocRefType.Combine(rhs.ForcedLocRefType);
                 ret.MarkerColor = this.MarkerColor.Combine(rhs.MarkerColor);
                 ret.LoopingSound = this.LoopingSound.Combine(rhs.LoopingSound);
                 ret.ActivationSound = this.ActivationSound.Combine(rhs.ActivationSound);
@@ -883,6 +1353,13 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.ActivateTextOverride = this.ActivateTextOverride.Combine(rhs.ActivateTextOverride);
                 ret.Flags = this.Flags.Combine(rhs.Flags);
                 ret.InteractionKeyword = this.InteractionKeyword.Combine(rhs.InteractionKeyword);
+                ret.SoundModel = this.SoundModel.Combine(rhs.SoundModel);
+                ret.Frequency = this.Frequency.Combine(rhs.Frequency);
+                ret.Volume = this.Volume.Combine(rhs.Volume);
+                ret.StartsActive = this.StartsActive.Combine(rhs.StartsActive);
+                ret.NoSignalStatic = this.NoSignalStatic.Combine(rhs.NoSignalStatic);
+                ret.Conditions = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, Condition.ErrorMask?>>?>(ExceptionExt.Combine(this.Conditions?.Overall, rhs.Conditions?.Overall), ExceptionExt.Combine(this.Conditions?.Specific, rhs.Conditions?.Specific));
+                ret.RADRDataTypeState = this.RADRDataTypeState.Combine(rhs.RADRDataTypeState);
                 return ret;
             }
             public static ErrorMask? Combine(ErrorMask? lhs, ErrorMask? rhs)
@@ -907,10 +1384,15 @@ namespace Mutagen.Bethesda.Fallout4
             #region Members
             public VirtualMachineAdapter.TranslationMask? VirtualMachineAdapter;
             public ObjectBounds.TranslationMask? ObjectBounds;
+            public PreviewTransform.TranslationMask? PreviewTransform;
+            public bool AnimationSound;
             public bool Name;
             public Model.TranslationMask? Model;
             public Destructible.TranslationMask? Destructible;
             public bool Keywords;
+            public Properties.TranslationMask? Properties;
+            public bool NativeTerminal;
+            public bool ForcedLocRefType;
             public bool MarkerColor;
             public bool LoopingSound;
             public bool ActivationSound;
@@ -918,6 +1400,13 @@ namespace Mutagen.Bethesda.Fallout4
             public bool ActivateTextOverride;
             public bool Flags;
             public bool InteractionKeyword;
+            public bool SoundModel;
+            public bool Frequency;
+            public bool Volume;
+            public bool StartsActive;
+            public bool NoSignalStatic;
+            public Condition.TranslationMask? Conditions;
+            public bool RADRDataTypeState;
             #endregion
 
             #region Ctors
@@ -926,8 +1415,11 @@ namespace Mutagen.Bethesda.Fallout4
                 bool onOverall = true)
                 : base(defaultOn, onOverall)
             {
+                this.AnimationSound = defaultOn;
                 this.Name = defaultOn;
                 this.Keywords = defaultOn;
+                this.NativeTerminal = defaultOn;
+                this.ForcedLocRefType = defaultOn;
                 this.MarkerColor = defaultOn;
                 this.LoopingSound = defaultOn;
                 this.ActivationSound = defaultOn;
@@ -935,6 +1427,12 @@ namespace Mutagen.Bethesda.Fallout4
                 this.ActivateTextOverride = defaultOn;
                 this.Flags = defaultOn;
                 this.InteractionKeyword = defaultOn;
+                this.SoundModel = defaultOn;
+                this.Frequency = defaultOn;
+                this.Volume = defaultOn;
+                this.StartsActive = defaultOn;
+                this.NoSignalStatic = defaultOn;
+                this.RADRDataTypeState = defaultOn;
             }
 
             #endregion
@@ -944,10 +1442,15 @@ namespace Mutagen.Bethesda.Fallout4
                 base.GetCrystal(ret);
                 ret.Add((VirtualMachineAdapter != null ? VirtualMachineAdapter.OnOverall : DefaultOn, VirtualMachineAdapter?.GetCrystal()));
                 ret.Add((ObjectBounds != null ? ObjectBounds.OnOverall : DefaultOn, ObjectBounds?.GetCrystal()));
+                ret.Add((PreviewTransform != null ? PreviewTransform.OnOverall : DefaultOn, PreviewTransform?.GetCrystal()));
+                ret.Add((AnimationSound, null));
                 ret.Add((Name, null));
                 ret.Add((Model != null ? Model.OnOverall : DefaultOn, Model?.GetCrystal()));
                 ret.Add((Destructible != null ? Destructible.OnOverall : DefaultOn, Destructible?.GetCrystal()));
                 ret.Add((Keywords, null));
+                ret.Add((Properties != null ? Properties.OnOverall : DefaultOn, Properties?.GetCrystal()));
+                ret.Add((NativeTerminal, null));
+                ret.Add((ForcedLocRefType, null));
                 ret.Add((MarkerColor, null));
                 ret.Add((LoopingSound, null));
                 ret.Add((ActivationSound, null));
@@ -955,6 +1458,13 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((ActivateTextOverride, null));
                 ret.Add((Flags, null));
                 ret.Add((InteractionKeyword, null));
+                ret.Add((SoundModel, null));
+                ret.Add((Frequency, null));
+                ret.Add((Volume, null));
+                ret.Add((StartsActive, null));
+                ret.Add((NoSignalStatic, null));
+                ret.Add((Conditions == null ? DefaultOn : !Conditions.GetCrystal().CopyNothing, Conditions?.GetCrystal()));
+                ret.Add((RADRDataTypeState, null));
             }
 
             public static implicit operator TranslationMask(bool defaultOn)
@@ -1015,6 +1525,10 @@ namespace Mutagen.Bethesda.Fallout4
         {
             get => (MajorFlag)this.MajorRecordFlagsRaw;
             set => this.MajorRecordFlagsRaw = (int)value;
+        }
+        [Flags]
+        public enum RADRDataType
+        {
         }
         #region Equals and Hash
         public override bool Equals(object? obj)
@@ -1118,6 +1632,8 @@ namespace Mutagen.Bethesda.Fallout4
         /// Aspects: IObjectBounded, IObjectBoundedOptional
         /// </summary>
         new ObjectBounds ObjectBounds { get; set; }
+        new PreviewTransform PreviewTransform { get; set; }
+        new IFormLinkNullable<IAnimationSoundTagSetGetter> AnimationSound { get; set; }
         /// <summary>
         /// Aspects: INamed, INamedRequired, ITranslatedNamed, ITranslatedNamedRequired
         /// </summary>
@@ -1131,6 +1647,9 @@ namespace Mutagen.Bethesda.Fallout4
         /// Aspects: IKeyworded&lt;IKeywordGetter&gt;
         /// </summary>
         new ExtendedList<IFormLinkGetter<IKeywordGetter>>? Keywords { get; set; }
+        new Properties? Properties { get; set; }
+        new IFormLinkNullable<ITerminalGetter> NativeTerminal { get; set; }
+        new IFormLinkNullable<ILocationReferenceTypeGetter> ForcedLocRefType { get; set; }
         new Color? MarkerColor { get; set; }
         new IFormLinkNullable<ISoundDescriptorGetter> LoopingSound { get; set; }
         new IFormLinkNullable<ISoundDescriptorGetter> ActivationSound { get; set; }
@@ -1138,6 +1657,13 @@ namespace Mutagen.Bethesda.Fallout4
         new TranslatedString? ActivateTextOverride { get; set; }
         new Activator.Flag? Flags { get; set; }
         new IFormLinkNullable<IKeywordGetter> InteractionKeyword { get; set; }
+        new IFormLink<ISoundOutputModelGetter> SoundModel { get; set; }
+        new Single Frequency { get; set; }
+        new Single Volume { get; set; }
+        new Boolean StartsActive { get; set; }
+        new Boolean NoSignalStatic { get; set; }
+        new ExtendedList<Condition>? Conditions { get; set; }
+        new Activator.RADRDataType RADRDataTypeState { get; set; }
         #region Mutagen
         new Activator.MajorFlag MajorFlags { get; set; }
         #endregion
@@ -1182,6 +1708,8 @@ namespace Mutagen.Bethesda.Fallout4
         /// </summary>
         IObjectBoundsGetter ObjectBounds { get; }
         #endregion
+        IPreviewTransformGetter PreviewTransform { get; }
+        IFormLinkNullableGetter<IAnimationSoundTagSetGetter> AnimationSound { get; }
         #region Name
         /// <summary>
         /// Aspects: INamedGetter, INamedRequiredGetter, ITranslatedNamedGetter, ITranslatedNamedRequiredGetter
@@ -1201,6 +1729,9 @@ namespace Mutagen.Bethesda.Fallout4
         /// </summary>
         IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? Keywords { get; }
         #endregion
+        IPropertiesGetter? Properties { get; }
+        IFormLinkNullableGetter<ITerminalGetter> NativeTerminal { get; }
+        IFormLinkNullableGetter<ILocationReferenceTypeGetter> ForcedLocRefType { get; }
         Color? MarkerColor { get; }
         IFormLinkNullableGetter<ISoundDescriptorGetter> LoopingSound { get; }
         IFormLinkNullableGetter<ISoundDescriptorGetter> ActivationSound { get; }
@@ -1208,6 +1739,13 @@ namespace Mutagen.Bethesda.Fallout4
         ITranslatedStringGetter? ActivateTextOverride { get; }
         Activator.Flag? Flags { get; }
         IFormLinkNullableGetter<IKeywordGetter> InteractionKeyword { get; }
+        IFormLinkGetter<ISoundOutputModelGetter> SoundModel { get; }
+        Single Frequency { get; }
+        Single Volume { get; }
+        Boolean StartsActive { get; }
+        Boolean NoSignalStatic { get; }
+        IReadOnlyList<IConditionGetter>? Conditions { get; }
+        Activator.RADRDataType RADRDataTypeState { get; }
 
         #region Mutagen
         Activator.MajorFlag MajorFlags { get; }
@@ -1378,17 +1916,29 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         Version2 = 5,
         VirtualMachineAdapter = 6,
         ObjectBounds = 7,
-        Name = 8,
-        Model = 9,
-        Destructible = 10,
-        Keywords = 11,
-        MarkerColor = 12,
-        LoopingSound = 13,
-        ActivationSound = 14,
-        WaterType = 15,
-        ActivateTextOverride = 16,
-        Flags = 17,
-        InteractionKeyword = 18,
+        PreviewTransform = 8,
+        AnimationSound = 9,
+        Name = 10,
+        Model = 11,
+        Destructible = 12,
+        Keywords = 13,
+        Properties = 14,
+        NativeTerminal = 15,
+        ForcedLocRefType = 16,
+        MarkerColor = 17,
+        LoopingSound = 18,
+        ActivationSound = 19,
+        WaterType = 20,
+        ActivateTextOverride = 21,
+        Flags = 22,
+        InteractionKeyword = 23,
+        SoundModel = 24,
+        Frequency = 25,
+        Volume = 26,
+        StartsActive = 27,
+        NoSignalStatic = 28,
+        Conditions = 29,
+        RADRDataTypeState = 30,
     }
     #endregion
 
@@ -1406,9 +1956,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public const string GUID = "e5dd8417-9b46-4754-bfe1-1db51332bfa4";
 
-        public const ushort AdditionalFieldCount = 13;
+        public const ushort AdditionalFieldCount = 25;
 
-        public const ushort FieldCount = 19;
+        public const ushort FieldCount = 31;
 
         public static readonly Type MaskType = typeof(Activator.Mask<>);
 
@@ -1479,10 +2029,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ClearPartial();
             item.VirtualMachineAdapter = null;
             item.ObjectBounds.Clear();
+            item.PreviewTransform.Clear();
+            item.AnimationSound.Clear();
             item.Name = default;
             item.Model = null;
             item.Destructible = null;
             item.Keywords = null;
+            item.Properties = null;
+            item.NativeTerminal.Clear();
+            item.ForcedLocRefType.Clear();
             item.MarkerColor = default;
             item.LoopingSound.Clear();
             item.ActivationSound.Clear();
@@ -1490,6 +2045,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.ActivateTextOverride = default;
             item.Flags = default;
             item.InteractionKeyword.Clear();
+            item.SoundModel.Clear();
+            item.Frequency = default;
+            item.Volume = default;
+            item.StartsActive = default;
+            item.NoSignalStatic = default;
+            item.Conditions = null;
+            item.RADRDataTypeState = default;
             base.Clear(item);
         }
         
@@ -1508,13 +2070,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         {
             base.RemapLinks(obj, mapping);
             obj.VirtualMachineAdapter?.RemapLinks(mapping);
+            obj.PreviewTransform.RemapLinks(mapping);
+            obj.AnimationSound.Relink(mapping);
             obj.Model?.RemapLinks(mapping);
             obj.Destructible?.RemapLinks(mapping);
             obj.Keywords?.RemapLinks(mapping);
+            obj.NativeTerminal.Relink(mapping);
+            obj.ForcedLocRefType.Relink(mapping);
             obj.LoopingSound.Relink(mapping);
             obj.ActivationSound.Relink(mapping);
             obj.WaterType.Relink(mapping);
             obj.InteractionKeyword.Relink(mapping);
+            obj.SoundModel.Relink(mapping);
+            obj.Conditions?.RemapLinks(mapping);
         }
         
         #endregion
@@ -1589,6 +2157,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 (loqLhs, loqRhs, incl) => loqLhs.GetEqualsMask(loqRhs, incl),
                 include);
             ret.ObjectBounds = MaskItemExt.Factory(item.ObjectBounds.GetEqualsMask(rhs.ObjectBounds, include), include);
+            ret.PreviewTransform = MaskItemExt.Factory(item.PreviewTransform.GetEqualsMask(rhs.PreviewTransform, include), include);
+            ret.AnimationSound = item.AnimationSound.Equals(rhs.AnimationSound);
             ret.Name = object.Equals(item.Name, rhs.Name);
             ret.Model = EqualsMaskHelper.EqualsHelper(
                 item.Model,
@@ -1604,6 +2174,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 rhs.Keywords,
                 (l, r) => object.Equals(l, r),
                 include);
+            ret.Properties = EqualsMaskHelper.EqualsHelper(
+                item.Properties,
+                rhs.Properties,
+                (loqLhs, loqRhs, incl) => loqLhs.GetEqualsMask(loqRhs, incl),
+                include);
+            ret.NativeTerminal = item.NativeTerminal.Equals(rhs.NativeTerminal);
+            ret.ForcedLocRefType = item.ForcedLocRefType.Equals(rhs.ForcedLocRefType);
             ret.MarkerColor = item.MarkerColor.ColorOnlyEquals(rhs.MarkerColor);
             ret.LoopingSound = item.LoopingSound.Equals(rhs.LoopingSound);
             ret.ActivationSound = item.ActivationSound.Equals(rhs.ActivationSound);
@@ -1611,6 +2188,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ret.ActivateTextOverride = object.Equals(item.ActivateTextOverride, rhs.ActivateTextOverride);
             ret.Flags = item.Flags == rhs.Flags;
             ret.InteractionKeyword = item.InteractionKeyword.Equals(rhs.InteractionKeyword);
+            ret.SoundModel = item.SoundModel.Equals(rhs.SoundModel);
+            ret.Frequency = item.Frequency.EqualsWithin(rhs.Frequency);
+            ret.Volume = item.Volume.EqualsWithin(rhs.Volume);
+            ret.StartsActive = item.StartsActive == rhs.StartsActive;
+            ret.NoSignalStatic = item.NoSignalStatic == rhs.NoSignalStatic;
+            ret.Conditions = item.Conditions.CollectionEqualsHelper(
+                rhs.Conditions,
+                (loqLhs, loqRhs) => loqLhs.GetEqualsMask(loqRhs, include),
+                include);
+            ret.RADRDataTypeState = item.RADRDataTypeState == rhs.RADRDataTypeState;
             base.FillEqualsMask(item, rhs, ret, include);
         }
         
@@ -1671,6 +2258,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 item.ObjectBounds?.ToString(fg, "ObjectBounds");
             }
+            if (printMask?.PreviewTransform?.Overall ?? true)
+            {
+                item.PreviewTransform?.ToString(fg, "PreviewTransform");
+            }
+            if (printMask?.AnimationSound ?? true)
+            {
+                fg.AppendItem(item.AnimationSound.FormKeyNullable, "AnimationSound");
+            }
             if ((printMask?.Name ?? true)
                 && item.Name is {} NameItem)
             {
@@ -1705,6 +2300,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 fg.AppendLine("]");
             }
+            if ((printMask?.Properties?.Overall ?? true)
+                && item.Properties is {} PropertiesItem)
+            {
+                PropertiesItem?.ToString(fg, "Properties");
+            }
+            if (printMask?.NativeTerminal ?? true)
+            {
+                fg.AppendItem(item.NativeTerminal.FormKeyNullable, "NativeTerminal");
+            }
+            if (printMask?.ForcedLocRefType ?? true)
+            {
+                fg.AppendItem(item.ForcedLocRefType.FormKeyNullable, "ForcedLocRefType");
+            }
             if ((printMask?.MarkerColor ?? true)
                 && item.MarkerColor is {} MarkerColorItem)
             {
@@ -1735,6 +2343,49 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             if (printMask?.InteractionKeyword ?? true)
             {
                 fg.AppendItem(item.InteractionKeyword.FormKeyNullable, "InteractionKeyword");
+            }
+            if (printMask?.SoundModel ?? true)
+            {
+                fg.AppendItem(item.SoundModel.FormKey, "SoundModel");
+            }
+            if (printMask?.Frequency ?? true)
+            {
+                fg.AppendItem(item.Frequency, "Frequency");
+            }
+            if (printMask?.Volume ?? true)
+            {
+                fg.AppendItem(item.Volume, "Volume");
+            }
+            if (printMask?.StartsActive ?? true)
+            {
+                fg.AppendItem(item.StartsActive, "StartsActive");
+            }
+            if (printMask?.NoSignalStatic ?? true)
+            {
+                fg.AppendItem(item.NoSignalStatic, "NoSignalStatic");
+            }
+            if ((printMask?.Conditions?.Overall ?? true)
+                && item.Conditions is {} ConditionsItem)
+            {
+                fg.AppendLine("Conditions =>");
+                fg.AppendLine("[");
+                using (new DepthWrapper(fg))
+                {
+                    foreach (var subItem in ConditionsItem)
+                    {
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            subItem?.ToString(fg, "Item");
+                        }
+                        fg.AppendLine("]");
+                    }
+                }
+                fg.AppendLine("]");
+            }
+            if (printMask?.RADRDataTypeState ?? true)
+            {
+                fg.AppendItem(item.RADRDataTypeState, "RADRDataTypeState");
             }
         }
         
@@ -1800,6 +2451,18 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 else if (!isObjectBoundsEqual) return false;
             }
+            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.PreviewTransform) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.PreviewTransform, rhs.PreviewTransform, out var lhsPreviewTransform, out var rhsPreviewTransform, out var isPreviewTransformEqual))
+                {
+                    if (!((PreviewTransformCommon)((IPreviewTransformGetter)lhsPreviewTransform).CommonInstance()!).Equals(lhsPreviewTransform, rhsPreviewTransform, crystal?.GetSubCrystal((int)Activator_FieldIndex.PreviewTransform))) return false;
+                }
+                else if (!isPreviewTransformEqual) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.AnimationSound) ?? true))
+            {
+                if (!lhs.AnimationSound.Equals(rhs.AnimationSound)) return false;
+            }
             if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.Name) ?? true))
             {
                 if (!object.Equals(lhs.Name, rhs.Name)) return false;
@@ -1823,6 +2486,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.Keywords) ?? true))
             {
                 if (!lhs.Keywords.SequenceEqualNullable(rhs.Keywords)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.Properties) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.Properties, rhs.Properties, out var lhsProperties, out var rhsProperties, out var isPropertiesEqual))
+                {
+                    if (!((PropertiesCommon)((IPropertiesGetter)lhsProperties).CommonInstance()!).Equals(lhsProperties, rhsProperties, crystal?.GetSubCrystal((int)Activator_FieldIndex.Properties))) return false;
+                }
+                else if (!isPropertiesEqual) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.NativeTerminal) ?? true))
+            {
+                if (!lhs.NativeTerminal.Equals(rhs.NativeTerminal)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.ForcedLocRefType) ?? true))
+            {
+                if (!lhs.ForcedLocRefType.Equals(rhs.ForcedLocRefType)) return false;
             }
             if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.MarkerColor) ?? true))
             {
@@ -1851,6 +2530,34 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.InteractionKeyword) ?? true))
             {
                 if (!lhs.InteractionKeyword.Equals(rhs.InteractionKeyword)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.SoundModel) ?? true))
+            {
+                if (!lhs.SoundModel.Equals(rhs.SoundModel)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.Frequency) ?? true))
+            {
+                if (!lhs.Frequency.EqualsWithin(rhs.Frequency)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.Volume) ?? true))
+            {
+                if (!lhs.Volume.EqualsWithin(rhs.Volume)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.StartsActive) ?? true))
+            {
+                if (lhs.StartsActive != rhs.StartsActive) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.NoSignalStatic) ?? true))
+            {
+                if (lhs.NoSignalStatic != rhs.NoSignalStatic) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.Conditions) ?? true))
+            {
+                if (!lhs.Conditions.SequenceEqualNullable(rhs.Conditions)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.RADRDataTypeState) ?? true))
+            {
+                if (lhs.RADRDataTypeState != rhs.RADRDataTypeState) return false;
             }
             return true;
         }
@@ -1885,6 +2592,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 hash.Add(VirtualMachineAdapteritem);
             }
             hash.Add(item.ObjectBounds);
+            hash.Add(item.PreviewTransform);
+            hash.Add(item.AnimationSound);
             if (item.Name is {} Nameitem)
             {
                 hash.Add(Nameitem);
@@ -1898,6 +2607,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 hash.Add(Destructibleitem);
             }
             hash.Add(item.Keywords);
+            if (item.Properties is {} Propertiesitem)
+            {
+                hash.Add(Propertiesitem);
+            }
+            hash.Add(item.NativeTerminal);
+            hash.Add(item.ForcedLocRefType);
             if (item.MarkerColor is {} MarkerColoritem)
             {
                 hash.Add(MarkerColoritem);
@@ -1914,6 +2629,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 hash.Add(Flagsitem);
             }
             hash.Add(item.InteractionKeyword);
+            hash.Add(item.SoundModel);
+            hash.Add(item.Frequency);
+            hash.Add(item.Volume);
+            hash.Add(item.StartsActive);
+            hash.Add(item.NoSignalStatic);
+            hash.Add(item.Conditions);
+            hash.Add(item.RADRDataTypeState);
             hash.Add(base.GetHashCode());
             return hash.ToHashCode();
         }
@@ -1950,6 +2672,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     yield return item;
                 }
             }
+            foreach (var item in obj.PreviewTransform.ContainedFormLinks)
+            {
+                yield return item;
+            }
+            if (obj.AnimationSound.FormKeyNullable.HasValue)
+            {
+                yield return FormLinkInformation.Factory(obj.AnimationSound);
+            }
             if (obj.Model is {} ModelItems)
             {
                 foreach (var item in ModelItems.ContainedFormLinks)
@@ -1971,6 +2701,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     yield return FormLinkInformation.Factory(item);
                 }
             }
+            if (obj.NativeTerminal.FormKeyNullable.HasValue)
+            {
+                yield return FormLinkInformation.Factory(obj.NativeTerminal);
+            }
+            if (obj.ForcedLocRefType.FormKeyNullable.HasValue)
+            {
+                yield return FormLinkInformation.Factory(obj.ForcedLocRefType);
+            }
             if (obj.LoopingSound.FormKeyNullable.HasValue)
             {
                 yield return FormLinkInformation.Factory(obj.LoopingSound);
@@ -1986,6 +2724,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             if (obj.InteractionKeyword.FormKeyNullable.HasValue)
             {
                 yield return FormLinkInformation.Factory(obj.InteractionKeyword);
+            }
+            yield return FormLinkInformation.Factory(obj.SoundModel);
+            if (obj.Conditions is {} ConditionsItem)
+            {
+                foreach (var item in ConditionsItem.WhereCastable<IConditionGetter, IFormLinkContainerGetter>()
+                    .SelectMany((f) => f.ContainedFormLinks))
+                {
+                    yield return FormLinkInformation.Factory(item);
+                }
             }
             yield break;
         }
@@ -2109,6 +2856,32 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     errorMask?.PopIndex();
                 }
             }
+            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.PreviewTransform) ?? true))
+            {
+                errorMask?.PushIndex((int)Activator_FieldIndex.PreviewTransform);
+                try
+                {
+                    if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.PreviewTransform) ?? true))
+                    {
+                        item.PreviewTransform = rhs.PreviewTransform.DeepCopy(
+                            copyMask: copyMask?.GetSubCrystal((int)Activator_FieldIndex.PreviewTransform),
+                            errorMask: errorMask);
+                    }
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.AnimationSound) ?? true))
+            {
+                item.AnimationSound.SetTo(rhs.AnimationSound.FormKeyNullable);
+            }
             if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.Name) ?? true))
             {
                 item.Name = rhs.Name?.DeepCopy();
@@ -2192,6 +2965,40 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     errorMask?.PopIndex();
                 }
             }
+            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.Properties) ?? true))
+            {
+                errorMask?.PushIndex((int)Activator_FieldIndex.Properties);
+                try
+                {
+                    if(rhs.Properties is {} rhsProperties)
+                    {
+                        item.Properties = rhsProperties.DeepCopy(
+                            errorMask: errorMask,
+                            copyMask?.GetSubCrystal((int)Activator_FieldIndex.Properties));
+                    }
+                    else
+                    {
+                        item.Properties = default;
+                    }
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.NativeTerminal) ?? true))
+            {
+                item.NativeTerminal.SetTo(rhs.NativeTerminal.FormKeyNullable);
+            }
+            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.ForcedLocRefType) ?? true))
+            {
+                item.ForcedLocRefType.SetTo(rhs.ForcedLocRefType.FormKeyNullable);
+            }
             if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.MarkerColor) ?? true))
             {
                 item.MarkerColor = rhs.MarkerColor;
@@ -2219,6 +3026,62 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.InteractionKeyword) ?? true))
             {
                 item.InteractionKeyword.SetTo(rhs.InteractionKeyword.FormKeyNullable);
+            }
+            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.SoundModel) ?? true))
+            {
+                item.SoundModel.SetTo(rhs.SoundModel.FormKey);
+            }
+            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.Frequency) ?? true))
+            {
+                item.Frequency = rhs.Frequency;
+            }
+            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.Volume) ?? true))
+            {
+                item.Volume = rhs.Volume;
+            }
+            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.StartsActive) ?? true))
+            {
+                item.StartsActive = rhs.StartsActive;
+            }
+            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.NoSignalStatic) ?? true))
+            {
+                item.NoSignalStatic = rhs.NoSignalStatic;
+            }
+            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.Conditions) ?? true))
+            {
+                errorMask?.PushIndex((int)Activator_FieldIndex.Conditions);
+                try
+                {
+                    if ((rhs.Conditions != null))
+                    {
+                        item.Conditions = 
+                            rhs.Conditions
+                            .Select(r =>
+                            {
+                                return r.DeepCopy(
+                                    errorMask: errorMask,
+                                    default(TranslationCrystal));
+                            })
+                            .ToExtendedList<Condition>();
+                    }
+                    else
+                    {
+                        item.Conditions = null;
+                    }
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.RADRDataTypeState) ?? true))
+            {
+                item.RADRDataTypeState = rhs.RADRDataTypeState;
             }
         }
         
@@ -2368,6 +3231,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
     {
         public new readonly static ActivatorBinaryWriteTranslation Instance = new ActivatorBinaryWriteTranslation();
 
+        public static void WriteEmbedded(
+            IActivatorGetter item,
+            MutagenWriter writer)
+        {
+            Fallout4MajorRecordBinaryWriteTranslation.WriteEmbedded(
+                item: item,
+                writer: writer);
+        }
+
         public static void WriteRecordTypes(
             IActivatorGetter item,
             MutagenWriter writer,
@@ -2389,6 +3261,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 item: ObjectBoundsItem,
                 writer: writer,
                 translationParams: translationParams);
+            var PreviewTransformItem = item.PreviewTransform;
+            ((PreviewTransformBinaryWriteTranslation)((IBinaryItem)PreviewTransformItem).BinaryWriteTranslator).Write(
+                item: PreviewTransformItem,
+                writer: writer,
+                translationParams: translationParams);
+            FormLinkBinaryTranslation.Instance.WriteNullable(
+                writer: writer,
+                item: item.AnimationSound,
+                header: translationParams.ConvertToCustom(RecordTypes.STCP));
             StringBinaryTranslation.Instance.WriteNullable(
                 writer: writer,
                 item: item.Name,
@@ -2421,6 +3302,21 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         writer: subWriter,
                         item: subItem);
                 });
+            if (item.Properties is {} PropertiesItem)
+            {
+                ((PropertiesBinaryWriteTranslation)((IBinaryItem)PropertiesItem).BinaryWriteTranslator).Write(
+                    item: PropertiesItem,
+                    writer: writer,
+                    translationParams: translationParams);
+            }
+            FormLinkBinaryTranslation.Instance.WriteNullable(
+                writer: writer,
+                item: item.NativeTerminal,
+                header: translationParams.ConvertToCustom(RecordTypes.NTRM));
+            FormLinkBinaryTranslation.Instance.WriteNullable(
+                writer: writer,
+                item: item.ForcedLocRefType,
+                header: translationParams.ConvertToCustom(RecordTypes.FTYP));
             ColorBinaryTranslation.Instance.WriteNullable(
                 writer: writer,
                 item: item.MarkerColor,
@@ -2452,6 +3348,33 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 writer: writer,
                 item: item.InteractionKeyword,
                 header: translationParams.ConvertToCustom(RecordTypes.KNAM));
+            using (HeaderExport.Subrecord(writer, translationParams.ConvertToCustom(RecordTypes.RADR)))
+            {
+                FormLinkBinaryTranslation.Instance.Write(
+                    writer: writer,
+                    item: item.SoundModel);
+                FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
+                    writer: writer,
+                    item: item.Frequency);
+                FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
+                    writer: writer,
+                    item: item.Volume);
+                writer.Write(item.StartsActive);
+                writer.Write(item.NoSignalStatic);
+            }
+            Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IConditionGetter>.Instance.WriteWithCounter(
+                writer: writer,
+                items: item.Conditions,
+                counterType: RecordTypes.CITC,
+                counterLength: 4,
+                transl: (MutagenWriter subWriter, IConditionGetter subItem, TypedWriteParams? conv) =>
+                {
+                    var Item = subItem;
+                    ((ConditionBinaryWriteTranslation)((IBinaryItem)Item).BinaryWriteTranslator).Write(
+                        item: Item,
+                        writer: subWriter,
+                        translationParams: conv);
+                });
         }
 
         public void Write(
@@ -2465,7 +3388,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 try
                 {
-                    Fallout4MajorRecordBinaryWriteTranslation.WriteEmbedded(
+                    WriteEmbedded(
                         item: item,
                         writer: writer);
                     writer.MetaData.FormVersion = item.FormVersion;
@@ -2553,6 +3476,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     item.ObjectBounds = Mutagen.Bethesda.Fallout4.ObjectBounds.CreateFromBinary(frame: frame);
                     return (int)Activator_FieldIndex.ObjectBounds;
                 }
+                case RecordTypeInts.PTRN:
+                {
+                    item.PreviewTransform = Mutagen.Bethesda.Fallout4.PreviewTransform.CreateFromBinary(frame: frame);
+                    return (int)Activator_FieldIndex.PreviewTransform;
+                }
+                case RecordTypeInts.STCP:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.AnimationSound.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    return (int)Activator_FieldIndex.AnimationSound;
+                }
                 case RecordTypeInts.FULL:
                 {
                     frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
@@ -2592,6 +3526,23 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                             transl: FormLinkBinaryTranslation.Instance.Parse)
                         .CastExtendedList<IFormLinkGetter<IKeywordGetter>>();
                     return (int)Activator_FieldIndex.Keywords;
+                }
+                case RecordTypeInts.PRPS:
+                {
+                    item.Properties = Mutagen.Bethesda.Fallout4.Properties.CreateFromBinary(frame: frame);
+                    return (int)Activator_FieldIndex.Properties;
+                }
+                case RecordTypeInts.NTRM:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.NativeTerminal.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    return (int)Activator_FieldIndex.NativeTerminal;
+                }
+                case RecordTypeInts.FTYP:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.ForcedLocRefType.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    return (int)Activator_FieldIndex.ForcedLocRefType;
                 }
                 case RecordTypeInts.PNAM:
                 {
@@ -2639,6 +3590,31 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
                     item.InteractionKeyword.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
                     return (int)Activator_FieldIndex.InteractionKeyword;
+                }
+                case RecordTypeInts.RADR:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    var dataFrame = frame.SpawnWithLength(contentLength);
+                    item.SoundModel.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    item.Frequency = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
+                    item.Volume = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
+                    item.StartsActive = dataFrame.ReadBoolean();
+                    item.NoSignalStatic = dataFrame.ReadBoolean();
+                    return (int)Activator_FieldIndex.NoSignalStatic;
+                }
+                case RecordTypeInts.CTDA:
+                case RecordTypeInts.CITC:
+                {
+                    item.Conditions = 
+                        Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<Condition>.Instance.ParsePerItem(
+                            reader: frame,
+                            countLengthLength: 4,
+                            countRecord: RecordTypes.CITC,
+                            triggeringRecord: Condition_Registration.TriggeringRecordTypes,
+                            translationParams: translationParams,
+                            transl: Condition.TryCreateFromBinary)
+                        .CastExtendedList<Condition>();
+                    return (int)Activator_FieldIndex.Conditions;
                 }
                 default:
                     return Fallout4MajorRecordBinaryCreateTranslation.FillBinaryRecordTypes(
@@ -2708,6 +3684,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private IObjectBoundsGetter? _ObjectBounds => _ObjectBoundsLocation.HasValue ? ObjectBoundsBinaryOverlay.ObjectBoundsFactory(new OverlayStream(_data.Slice(_ObjectBoundsLocation!.Value.Min), _package), _package) : default;
         public IObjectBoundsGetter ObjectBounds => _ObjectBounds ?? new ObjectBounds();
         #endregion
+        #region PreviewTransform
+        private RangeInt32? _PreviewTransformLocation;
+        private IPreviewTransformGetter? _PreviewTransform => _PreviewTransformLocation.HasValue ? PreviewTransformBinaryOverlay.PreviewTransformFactory(new OverlayStream(_data.Slice(_PreviewTransformLocation!.Value.Min), _package), _package) : default;
+        public IPreviewTransformGetter PreviewTransform => _PreviewTransform ?? new PreviewTransform();
+        #endregion
+        #region AnimationSound
+        private int? _AnimationSoundLocation;
+        public IFormLinkNullableGetter<IAnimationSoundTagSetGetter> AnimationSound => _AnimationSoundLocation.HasValue ? new FormLinkNullable<IAnimationSoundTagSetGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _AnimationSoundLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<IAnimationSoundTagSetGetter>.Null;
+        #endregion
         #region Name
         private int? _NameLocation;
         public ITranslatedStringGetter? Name => _NameLocation.HasValue ? StringBinaryTranslation.Instance.Parse(HeaderTranslation.ExtractSubrecordMemory(_data, _NameLocation.Value, _package.MetaData.Constants), StringsSource.Normal, _package.MetaData.StringsLookup) : default(TranslatedString?);
@@ -2725,6 +3710,18 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         #region Keywords
         public IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? Keywords { get; private set; }
         IReadOnlyList<IFormLinkGetter<IKeywordCommonGetter>>? IKeywordedGetter.Keywords => this.Keywords;
+        #endregion
+        #region Properties
+        private RangeInt32? _PropertiesLocation;
+        public IPropertiesGetter? Properties => _PropertiesLocation.HasValue ? PropertiesBinaryOverlay.PropertiesFactory(new OverlayStream(_data.Slice(_PropertiesLocation!.Value.Min), _package), _package) : default;
+        #endregion
+        #region NativeTerminal
+        private int? _NativeTerminalLocation;
+        public IFormLinkNullableGetter<ITerminalGetter> NativeTerminal => _NativeTerminalLocation.HasValue ? new FormLinkNullable<ITerminalGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _NativeTerminalLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<ITerminalGetter>.Null;
+        #endregion
+        #region ForcedLocRefType
+        private int? _ForcedLocRefTypeLocation;
+        public IFormLinkNullableGetter<ILocationReferenceTypeGetter> ForcedLocRefType => _ForcedLocRefTypeLocation.HasValue ? new FormLinkNullable<ILocationReferenceTypeGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _ForcedLocRefTypeLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<ILocationReferenceTypeGetter>.Null;
         #endregion
         #region MarkerColor
         private int? _MarkerColorLocation;
@@ -2753,6 +3750,41 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         #region InteractionKeyword
         private int? _InteractionKeywordLocation;
         public IFormLinkNullableGetter<IKeywordGetter> InteractionKeyword => _InteractionKeywordLocation.HasValue ? new FormLinkNullable<IKeywordGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _InteractionKeywordLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<IKeywordGetter>.Null;
+        #endregion
+        private int? _RADRLocation;
+        public Activator.RADRDataType RADRDataTypeState { get; private set; }
+        #region SoundModel
+        private int _SoundModelLocation => _RADRLocation!.Value;
+        private bool _SoundModel_IsSet => _RADRLocation.HasValue;
+        public IFormLinkGetter<ISoundOutputModelGetter> SoundModel => _SoundModel_IsSet ? new FormLink<ISoundOutputModelGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(_data.Span.Slice(_SoundModelLocation, 0x4)))) : FormLink<ISoundOutputModelGetter>.Null;
+        #endregion
+        #region Frequency
+        private int _FrequencyLocation => _RADRLocation!.Value + 0x4;
+        private bool _Frequency_IsSet => _RADRLocation.HasValue;
+        public Single Frequency => _Frequency_IsSet ? _data.Slice(_FrequencyLocation, 4).Float() : default;
+        #endregion
+        #region Volume
+        private int _VolumeLocation => _RADRLocation!.Value + 0x8;
+        private bool _Volume_IsSet => _RADRLocation.HasValue;
+        public Single Volume => _Volume_IsSet ? _data.Slice(_VolumeLocation, 4).Float() : default;
+        #endregion
+        #region StartsActive
+        private int _StartsActiveLocation => _RADRLocation!.Value + 0xC;
+        private bool _StartsActive_IsSet => _RADRLocation.HasValue;
+        public Boolean StartsActive => _StartsActive_IsSet ? _data.Slice(_StartsActiveLocation, 1)[0] == 1 : default;
+        #endregion
+        #region NoSignalStatic
+        private int _NoSignalStaticLocation => _RADRLocation!.Value + 0xD;
+        private bool _NoSignalStatic_IsSet => _RADRLocation.HasValue;
+        public Boolean NoSignalStatic => _NoSignalStatic_IsSet ? _data.Slice(_NoSignalStaticLocation, 1)[0] == 1 : default;
+        #endregion
+        #region Conditions
+        partial void ConditionsCustomParse(
+            OverlayStream stream,
+            long finalPos,
+            int offset,
+            RecordType type,
+            PreviousParse lastParsed);
         #endregion
         partial void CustomFactoryEnd(
             OverlayStream stream,
@@ -2830,6 +3862,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     _ObjectBoundsLocation = new RangeInt32((stream.Position - offset), finalPos - offset);
                     return (int)Activator_FieldIndex.ObjectBounds;
                 }
+                case RecordTypeInts.PTRN:
+                {
+                    _PreviewTransformLocation = new RangeInt32((stream.Position - offset), finalPos - offset);
+                    return (int)Activator_FieldIndex.PreviewTransform;
+                }
+                case RecordTypeInts.STCP:
+                {
+                    _AnimationSoundLocation = (stream.Position - offset);
+                    return (int)Activator_FieldIndex.AnimationSound;
+                }
                 case RecordTypeInts.FULL:
                 {
                     _NameLocation = (stream.Position - offset);
@@ -2868,6 +3910,21 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         getter: (s, p) => new FormLink<IKeywordGetter>(FormKey.Factory(p.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(s))));
                     return (int)Activator_FieldIndex.Keywords;
                 }
+                case RecordTypeInts.PRPS:
+                {
+                    _PropertiesLocation = new RangeInt32((stream.Position - offset), finalPos - offset);
+                    return (int)Activator_FieldIndex.Properties;
+                }
+                case RecordTypeInts.NTRM:
+                {
+                    _NativeTerminalLocation = (stream.Position - offset);
+                    return (int)Activator_FieldIndex.NativeTerminal;
+                }
+                case RecordTypeInts.FTYP:
+                {
+                    _ForcedLocRefTypeLocation = (stream.Position - offset);
+                    return (int)Activator_FieldIndex.ForcedLocRefType;
+                }
                 case RecordTypeInts.PNAM:
                 {
                     _MarkerColorLocation = (stream.Position - offset);
@@ -2902,6 +3959,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 {
                     _InteractionKeywordLocation = (stream.Position - offset);
                     return (int)Activator_FieldIndex.InteractionKeyword;
+                }
+                case RecordTypeInts.RADR:
+                {
+                    _RADRLocation = (stream.Position - offset) + _package.MetaData.Constants.SubConstants.TypeAndLengthLength;
+                    return (int)Activator_FieldIndex.NoSignalStatic;
+                }
+                case RecordTypeInts.CTDA:
+                case RecordTypeInts.CITC:
+                {
+                    ConditionsCustomParse(
+                        stream: stream,
+                        finalPos: finalPos,
+                        offset: offset,
+                        type: type,
+                        lastParsed: lastParsed);
+                    return (int)Activator_FieldIndex.Conditions;
                 }
                 default:
                     return base.FillRecordType(

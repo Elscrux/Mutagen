@@ -31,6 +31,9 @@ namespace Mutagen.Bethesda.Fallout4
         {
             NoDisplacement = 0x01,
             IgnoredBySandbox = 0x02,
+            /*'Unknown 2',
+              'Unknown 3',*/
+            IsARadio = 0x04,//?
         }
     }
 }

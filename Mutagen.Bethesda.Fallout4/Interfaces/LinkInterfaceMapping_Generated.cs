@@ -28,8 +28,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Activator),
                 typeof(Armor),
                 typeof(Book),
+                typeof(Container),
                 typeof(Door),
                 typeof(Faction),
+                typeof(Light),
+                typeof(MiscItem),
+                typeof(MoveableStatic),
                 typeof(Spell),
                 typeof(TextureSet),
             };
@@ -43,6 +47,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 typeof(Armor),
                 typeof(Book),
+                typeof(Ingredient),
+                typeof(Light),
+                typeof(MiscItem),
             };
             dict[typeof(IItemGetter)] = dict[typeof(IItem)];
             dict[typeof(IOutfitTarget)] = new Type[]
@@ -54,6 +61,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 typeof(Armor),
                 typeof(Book),
+                typeof(Ingredient),
+                typeof(Light),
+                typeof(MiscItem),
             };
             dict[typeof(IConstructibleGetter)] = dict[typeof(IConstructible)];
             dict[typeof(IBindableEquipment)] = new Type[]
@@ -77,22 +87,37 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Race),
             };
             dict[typeof(IRelatableGetter)] = dict[typeof(IRelatable)];
+            dict[typeof(IRegionTarget)] = new Type[]
+            {
+                typeof(Flora),
+                typeof(LandscapeTexture),
+                typeof(MoveableStatic),
+                typeof(Tree),
+            };
+            dict[typeof(IRegionTargetGetter)] = dict[typeof(IRegionTarget)];
+            dict[typeof(IHarvestTarget)] = new Type[]
+            {
+                typeof(Ingredient),
+                typeof(MiscItem),
+            };
+            dict[typeof(IHarvestTargetGetter)] = dict[typeof(IHarvestTarget)];
             dict[typeof(IKeywordLinkedReference)] = new Type[]
             {
                 typeof(Keyword),
             };
             dict[typeof(IKeywordLinkedReferenceGetter)] = dict[typeof(IKeywordLinkedReference)];
-            dict[typeof(IRegionTarget)] = new Type[]
-            {
-                typeof(LandscapeTexture),
-            };
-            dict[typeof(IRegionTargetGetter)] = dict[typeof(IRegionTarget)];
             dict[typeof(ISpellRecord)] = new Type[]
             {
                 typeof(LeveledSpell),
                 typeof(Spell),
             };
             dict[typeof(ISpellRecordGetter)] = dict[typeof(ISpellRecord)];
+            dict[typeof(IEmittance)] = new Type[]
+            {
+                typeof(Light),
+                typeof(Region),
+            };
+            dict[typeof(IEmittanceGetter)] = dict[typeof(IEmittance)];
             dict[typeof(ILocationRecord)] = new Type[]
             {
                 typeof(LocationReferenceType),

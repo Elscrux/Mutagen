@@ -61,6 +61,7 @@ namespace Mutagen.Bethesda.Plugins.Records.Internals
         public static readonly RecordType FSTS = new(0x53545346);
         public static readonly RecordType FULL = new(0x4C4C5546);
         public static readonly RecordType FURN = new(0x4E525546);
+        public static readonly RecordType GDRY = new(0x59524447);
         public static readonly RecordType GLOB = new(0x424F4C47);
         public static readonly RecordType GMST = new(0x54534D47);
         public static readonly RecordType GRAS = new(0x53415247);
@@ -128,6 +129,7 @@ namespace Mutagen.Bethesda.Plugins.Records.Internals
         public static readonly RecordType ROAD = new(0x44414F52);
         public static readonly RecordType SBSP = new(0x50534253);
         public static readonly RecordType SCEN = new(0x4E454353);
+        public static readonly RecordType SCOL = new(0x4C4F4353);
         public static readonly RecordType SCPT = new(0x54504353);
         public static readonly RecordType SCRL = new(0x4C524353);
         public static readonly RecordType SGST = new(0x54534753);
@@ -147,6 +149,7 @@ namespace Mutagen.Bethesda.Plugins.Records.Internals
         public static readonly RecordType STAG = new(0x47415453);
         public static readonly RecordType STAT = new(0x54415453);
         public static readonly RecordType TACT = new(0x54434154);
+        public static readonly RecordType TERM = new(0x4D524554);
         public static readonly RecordType TREE = new(0x45455254);
         public static readonly RecordType TRNS = new(0x534E5254);
         public static readonly RecordType TXST = new(0x54535854);

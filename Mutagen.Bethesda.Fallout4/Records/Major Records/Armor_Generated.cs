@@ -271,7 +271,7 @@ namespace Mutagen.Bethesda.Fallout4
 
         #endregion
         #region Value
-        public UInt32 Value { get; set; } = default;
+        public Int32 Value { get; set; } = default;
         #endregion
         #region Weight
         public Single Weight { get; set; } = default;
@@ -1615,6 +1615,11 @@ namespace Mutagen.Bethesda.Fallout4
 
         protected override Type LinkType => typeof(IArmor);
 
+        public MajorFlag MajorFlags
+        {
+            get => (MajorFlag)this.MajorRecordFlagsRaw;
+            set => this.MajorRecordFlagsRaw = (int)value;
+        }
         [Flags]
         public enum DATADataType
         {
@@ -1718,8 +1723,7 @@ namespace Mutagen.Bethesda.Fallout4
         IOutfitTarget,
         IScripted,
         ITranslatedNamed,
-        ITranslatedNamedRequired,
-        IWeightValue
+        ITranslatedNamedRequired
     {
         /// <summary>
         /// Aspects: IScripted
@@ -1750,7 +1754,7 @@ namespace Mutagen.Bethesda.Fallout4
         new ExtendedList<IFormLinkGetter<IKeywordGetter>>? Keywords { get; set; }
         new TranslatedString? Description { get; set; }
         new ExtendedList<ArmorAddonModel> Armatures { get; }
-        new UInt32 Value { get; set; }
+        new Int32 Value { get; set; }
         new Single Weight { get; set; }
         new UInt32 Health { get; set; }
         new UInt16 ArmorRating { get; set; }
@@ -1759,6 +1763,10 @@ namespace Mutagen.Bethesda.Fallout4
         new ExtendedList<ResistanceArmor> Resistances { get; }
         new Armor.DATADataType DATADataTypeState { get; set; }
         new Armor.FNAMDataType FNAMDataTypeState { get; set; }
+        #region Mutagen
+        new Armor.MajorFlag MajorFlags { get; set; }
+        #endregion
+
     }
 
     public partial interface IArmorInternal :
@@ -1788,8 +1796,7 @@ namespace Mutagen.Bethesda.Fallout4
         IOutfitTargetGetter,
         IScriptedGetter,
         ITranslatedNamedGetter,
-        ITranslatedNamedRequiredGetter,
-        IWeightValueGetter
+        ITranslatedNamedRequiredGetter
     {
         static new ILoquiRegistration StaticRegistration => Armor_Registration.Instance;
         #region VirtualMachineAdapter
@@ -1829,7 +1836,7 @@ namespace Mutagen.Bethesda.Fallout4
         #endregion
         ITranslatedStringGetter? Description { get; }
         IReadOnlyList<IArmorAddonModelGetter> Armatures { get; }
-        UInt32 Value { get; }
+        Int32 Value { get; }
         Single Weight { get; }
         UInt32 Health { get; }
         UInt16 ArmorRating { get; }
@@ -1838,6 +1845,10 @@ namespace Mutagen.Bethesda.Fallout4
         IReadOnlyList<IResistanceArmorGetter> Resistances { get; }
         Armor.DATADataType DATADataTypeState { get; }
         Armor.FNAMDataType FNAMDataTypeState { get; }
+
+        #region Mutagen
+        Armor.MajorFlag MajorFlags { get; }
+        #endregion
 
     }
 
@@ -3750,7 +3761,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 {
                     frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
                     var dataFrame = frame.SpawnWithLength(contentLength);
-                    item.Value = dataFrame.ReadUInt32();
+                    item.Value = dataFrame.ReadInt32();
                     item.Weight = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
                     item.Health = dataFrame.ReadUInt32();
                     return (int)Armor_FieldIndex.Health;
@@ -3835,6 +3846,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         protected override Type LinkType => typeof(IArmor);
 
+        public Armor.MajorFlag MajorFlags => (Armor.MajorFlag)this.MajorRecordFlagsRaw;
 
         #region VirtualMachineAdapter
         private RangeInt32? _VirtualMachineAdapterLocation;
@@ -3916,7 +3928,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         #region Value
         private int _ValueLocation => _DATALocation!.Value;
         private bool _Value_IsSet => _DATALocation.HasValue;
-        public UInt32 Value => _Value_IsSet ? BinaryPrimitives.ReadUInt32LittleEndian(_data.Slice(_ValueLocation, 4)) : default;
+        public Int32 Value => _Value_IsSet ? BinaryPrimitives.ReadInt32LittleEndian(_data.Slice(_ValueLocation, 4)) : default;
         #endregion
         #region Weight
         private int _WeightLocation => _DATALocation!.Value + 0x4;

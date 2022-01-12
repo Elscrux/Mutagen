@@ -1022,6 +1022,11 @@ namespace Mutagen.Bethesda.Fallout4
 
         protected override Type LinkType => typeof(IArmorAddon);
 
+        public MajorFlag MajorFlags
+        {
+            get => (MajorFlag)this.MajorRecordFlagsRaw;
+            set => this.MajorRecordFlagsRaw = (int)value;
+        }
         [Flags]
         public enum DNAMDataType
         {
@@ -1126,6 +1131,10 @@ namespace Mutagen.Bethesda.Fallout4
         new IFormLinkNullable<IFootstepSetGetter> FootstepSound { get; set; }
         new IFormLinkNullable<IArtObjectGetter> ArtObject { get; set; }
         new ArmorAddon.DNAMDataType DNAMDataTypeState { get; set; }
+        #region Mutagen
+        new ArmorAddon.MajorFlag MajorFlags { get; set; }
+        #endregion
+
     }
 
     public partial interface IArmorAddonInternal :
@@ -1166,6 +1175,10 @@ namespace Mutagen.Bethesda.Fallout4
         IFormLinkNullableGetter<IFootstepSetGetter> FootstepSound { get; }
         IFormLinkNullableGetter<IArtObjectGetter> ArtObject { get; }
         ArmorAddon.DNAMDataType DNAMDataTypeState { get; }
+
+        #region Mutagen
+        ArmorAddon.MajorFlag MajorFlags { get; }
+        #endregion
 
     }
 
@@ -2751,6 +2764,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         protected override Type LinkType => typeof(IArmorAddon);
 
+        public ArmorAddon.MajorFlag MajorFlags => (ArmorAddon.MajorFlag)this.MajorRecordFlagsRaw;
 
         #region BodyTemplate
         partial void BodyTemplateCustomParse(

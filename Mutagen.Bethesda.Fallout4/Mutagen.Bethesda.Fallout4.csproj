@@ -36,6 +36,7 @@
     <Compile Include="Enums\SpellType.cs" />
     <Compile Include="Enums\TargetObjectType.cs" />
     <Compile Include="Enums\TargetType.cs" />
+    <Compile Include="Interfaces\IHarvestable.cs" />
     <Compile Include="Interfaces\IHasIcons.cs" />
     <Compile Include="Interfaces\IModeled.cs" />
     <Compile Include="Interfaces\IObjectBounded.cs" />
@@ -64,6 +65,9 @@
     </Compile>
     <Compile Include="Records\Common Subrecords\Effect.cs">
       <DependentUpon>Effect.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ExtraData.cs">
+      <DependentUpon>ExtraData.xml</DependentUpon>
     </Compile>
     <Compile Include="Records\Common Subrecords\LocationTargetRadius.cs">
       <DependentUpon>LocationTargetRadius.xml</DependentUpon>
@@ -103,6 +107,12 @@
     </Compile>
     <Compile Include="Records\Major Records\Book.cs">
       <DependentUpon>Book.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Container.cs">
+      <DependentUpon>Container.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Door.cs">
+      <DependentUpon>Door.xml</DependentUpon>
     </Compile>
     <Compile Include="Records\Major Records\Faction.cs">
       <DependentUpon>Faction.xml</DependentUpon>
@@ -152,8 +162,14 @@
     <Compile Include="Records\Major Records\HeadPart.cs">
       <DependentUpon>HeadPart.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Major Records\Ingredient.cs">
+      <DependentUpon>Ingredient.xml</DependentUpon>
+    </Compile>
     <Compile Include="Records\Major Records\Keyword.cs">
       <DependentUpon>Keyword.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Light.cs">
+      <DependentUpon>Light.xml</DependentUpon>
     </Compile>
     <Compile Include="Records\Major Records\MaterialType.cs">
       <DependentUpon>MaterialType.xml</DependentUpon>
@@ -164,6 +180,18 @@
     <Compile Include="Records\Major Records\MessageButton.cs">
       <DependentUpon>Message.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Major Records\MiscItem.cs">
+      <DependentUpon>MiscItem.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\MoveableStatic.cs">
+      <DependentUpon>MovableStatic.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\MusicTrack.cs">
+      <DependentUpon>MusicTrack.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\MusicType.cs">
+      <DependentUpon>MusicType.xml</DependentUpon>
+    </Compile>
     <Compile Include="Records\Major Records\ObjectEffect.cs">
       <DependentUpon>ObjectEffect.xml</DependentUpon>
     </Compile>
@@ -173,6 +201,24 @@
     <Compile Include="Records\Major Records\Race.cs">
       <DependentUpon>Race.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Major Records\Region.cs">
+      <DependentUpon>Region.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\RegionData.cs">
+      <DependentUpon>Region.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\RegionDataObject.cs">
+      <DependentUpon>Region.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\RegionObject.cs">
+      <DependentUpon>Region.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\RegionSound.cs">
+      <DependentUpon>Region.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\StaticCollection.cs">
+      <DependentUpon>StaticCollection.xml</DependentUpon>
+    </Compile>
     <Compile Include="Records\Major Records\TalkingActivator.cs">
       <DependentUpon>TalkingActivator.xml</DependentUpon>
     </Compile>
@@ -181,6 +227,9 @@
     </Compile>
     <Compile Include="Records\Major Records\Transform.cs">
       <DependentUpon>Transform.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Tree.cs">
+      <DependentUpon>Tree.xml</DependentUpon>
     </Compile>
     <Compile Include="Records\Major Records\VoiceType.cs">
       <DependentUpon>VoiceType.xml</DependentUpon>
@@ -609,6 +658,140 @@
     </Compile>
     <Compile Include="Records\Major Records\Static_Generated.cs">
       <DependentUpon>Static.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ContainerEntry_Generated.cs">
+      <DependentUpon>ContainerEntry.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ContainerItem_Generated.cs">
+      <DependentUpon>ContainerEntry.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ExtraData_Generated.cs">
+      <DependentUpon>ExtraData.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\OwnerTarget_Generated.cs">
+      <DependentUpon>ExtraData.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\NpcOwner_Generated.cs">
+      <DependentUpon>ExtraData.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\FactionOwner_Generated.cs">
+      <DependentUpon>ExtraData.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\NoOwner_Generated.cs">
+      <DependentUpon>ExtraData.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Container_Generated.cs">
+      <DependentUpon>Container.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Npc_Generated.cs">
+      <DependentUpon>Npc.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\NavigationMesh_Generated.cs">
+      <DependentUpon>NavigationMesh.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\SoundOutputModel_Generated.cs">
+      <DependentUpon>SoundOutputModel.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\MiscItemComponent_Generated.cs">
+      <DependentUpon>MiscItem.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\ComponentDisplayIndex_Generated.cs">
+      <DependentUpon>MiscItem.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Interfaces\IHarvestTarget_Generated.cs" />
+    <Compile Include="Records\Common Subrecords\WeatherType_Generated.cs">
+      <DependentUpon>WeatherType.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\MusicTrack_Generated.cs">
+      <DependentUpon>MusicTrack.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\MusicTrackLoopData_Generated.cs">
+      <DependentUpon>MusicTrack.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\MusicType_Generated.cs">
+      <DependentUpon>MusicType.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\MusicTypeData_Generated.cs">
+      <DependentUpon>MusicType.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\RegionArea_Generated.cs">
+      <DependentUpon>Region.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\RegionData_Generated.cs">
+      <DependentUpon>Region.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\RegionDataHeader_Generated.cs">
+      <DependentUpon>Region.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\RegionSounds_Generated.cs">
+      <DependentUpon>Region.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\RegionSound_Generated.cs">
+      <DependentUpon>Region.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\RegionMap_Generated.cs">
+      <DependentUpon>Region.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\RegionObjects_Generated.cs">
+      <DependentUpon>Region.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\RegionObject_Generated.cs">
+      <DependentUpon>Region.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\RegionWeather_Generated.cs">
+      <DependentUpon>Region.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\RegionGrasses_Generated.cs">
+      <DependentUpon>Region.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\RegionGrass_Generated.cs">
+      <DependentUpon>Region.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\RegionLand_Generated.cs">
+      <DependentUpon>Region.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Weather_Generated.cs">
+      <DependentUpon>Weather.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Worldspace_Generated.cs">
+      <DependentUpon>Worldspace.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Interfaces\IEmittance_Generated.cs" />
+    <Compile Include="Records\Major Records\Ingredient_Generated.cs">
+      <DependentUpon>Ingredient.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Terminal_Generated.cs">
+      <DependentUpon>Terminal.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\GodRays_Generated.cs">
+      <DependentUpon>GodRays.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\LensFlare_Generated.cs">
+      <DependentUpon>LensFlare.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Light_Generated.cs">
+      <DependentUpon>Light.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\StaticCollection_Generated.cs">
+      <DependentUpon>StaticCollection.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\StaticPart_Generated.cs">
+      <DependentUpon>StaticCollection.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Placement_Generated.cs">
+      <DependentUpon>StaticCollection.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\MoveableStatic_Generated.cs">
+      <DependentUpon>MovableStatic.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\SeasonalIngredientProduction_Generated.cs">
+      <DependentUpon>SeasonalIngredientProduction.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Tree_Generated.cs">
+      <DependentUpon>Tree.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Flora_Generated.cs">
+      <DependentUpon>Flora.xml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
