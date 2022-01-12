@@ -23,6 +23,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Ingredient
 - Light
 - MiscItem
+- MoveableStatic
 - Race
 - Spell
 - TalkingActivator
@@ -39,6 +40,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Ingredient
 - Light
 - MiscItem
+- MoveableStatic
 - TalkingActivator
 ### INamed
 - ActionRecord
@@ -57,6 +59,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - MaterialType
 - Message
 - MiscItem
+- MoveableStatic
 - ObjectEffect
 - Race
 - RegionMap
@@ -87,6 +90,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Ingredient
 - Light
 - MiscItem
+- MoveableStatic
 - ObjectEffect
 - SoundMarker
 - Spell
@@ -101,6 +105,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Ingredient
 - Light
 - MiscItem
+- MoveableStatic
 - TalkingActivator
 ### IWeightValue
 - Book
@@ -182,6 +187,12 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 ### Message
 - INamed
 ### MiscItem
+- IKeyworded
+- IModeled
+- INamed
+- IObjectBounded
+- IScripted
+### MoveableStatic
 - IKeyworded
 - IModeled
 - INamed

@@ -33,6 +33,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Faction),
                 typeof(Light),
                 typeof(MiscItem),
+                typeof(MoveableStatic),
                 typeof(Spell),
                 typeof(TextureSet),
             };
@@ -100,6 +101,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             dict[typeof(IRegionTarget)] = new Type[]
             {
                 typeof(LandscapeTexture),
+                typeof(MoveableStatic),
             };
             dict[typeof(IRegionTargetGetter)] = dict[typeof(IRegionTarget)];
             dict[typeof(ISpellRecord)] = new Type[]

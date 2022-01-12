@@ -86,6 +86,7 @@ namespace Mutagen.Bethesda.Fallout4
             _MiscItems_Object = new Fallout4Group<MiscItem>(this);
             _Statics_Object = new Fallout4Group<Static>(this);
             _StaticCollections_Object = new Fallout4Group<StaticCollection>(this);
+            _MoveableStatics_Object = new Fallout4Group<MoveableStatic>(this);
             _Grasses_Object = new Fallout4Group<Grass>(this);
             _VoiceTypes_Object = new Fallout4Group<VoiceType>(this);
             _Quests_Object = new Fallout4Group<Quest>(this);
@@ -309,6 +310,13 @@ namespace Mutagen.Bethesda.Fallout4
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IFallout4GroupGetter<IStaticCollectionGetter> IFallout4ModGetter.StaticCollections => _StaticCollections_Object;
         #endregion
+        #region MoveableStatics
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Fallout4Group<MoveableStatic> _MoveableStatics_Object;
+        public Fallout4Group<MoveableStatic> MoveableStatics => _MoveableStatics_Object;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFallout4GroupGetter<IMoveableStaticGetter> IFallout4ModGetter.MoveableStatics => _MoveableStatics_Object;
+        #endregion
         #region Grasses
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private Fallout4Group<Grass> _Grasses_Object;
@@ -433,6 +441,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.MiscItems = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Statics = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.StaticCollections = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
+                this.MoveableStatics = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Grasses = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.VoiceTypes = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Quests = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
@@ -474,6 +483,7 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem MiscItems,
                 TItem Statics,
                 TItem StaticCollections,
+                TItem MoveableStatics,
                 TItem Grasses,
                 TItem VoiceTypes,
                 TItem Quests,
@@ -513,6 +523,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.MiscItems = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(MiscItems, new Fallout4Group.Mask<TItem>(MiscItems));
                 this.Statics = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Statics, new Fallout4Group.Mask<TItem>(Statics));
                 this.StaticCollections = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(StaticCollections, new Fallout4Group.Mask<TItem>(StaticCollections));
+                this.MoveableStatics = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(MoveableStatics, new Fallout4Group.Mask<TItem>(MoveableStatics));
                 this.Grasses = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Grasses, new Fallout4Group.Mask<TItem>(Grasses));
                 this.VoiceTypes = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(VoiceTypes, new Fallout4Group.Mask<TItem>(VoiceTypes));
                 this.Quests = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Quests, new Fallout4Group.Mask<TItem>(Quests));
@@ -562,6 +573,7 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? MiscItems { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Statics { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? StaticCollections { get; set; }
+            public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? MoveableStatics { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Grasses { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? VoiceTypes { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Quests { get; set; }
@@ -612,6 +624,7 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!object.Equals(this.MiscItems, rhs.MiscItems)) return false;
                 if (!object.Equals(this.Statics, rhs.Statics)) return false;
                 if (!object.Equals(this.StaticCollections, rhs.StaticCollections)) return false;
+                if (!object.Equals(this.MoveableStatics, rhs.MoveableStatics)) return false;
                 if (!object.Equals(this.Grasses, rhs.Grasses)) return false;
                 if (!object.Equals(this.VoiceTypes, rhs.VoiceTypes)) return false;
                 if (!object.Equals(this.Quests, rhs.Quests)) return false;
@@ -655,6 +668,7 @@ namespace Mutagen.Bethesda.Fallout4
                 hash.Add(this.MiscItems);
                 hash.Add(this.Statics);
                 hash.Add(this.StaticCollections);
+                hash.Add(this.MoveableStatics);
                 hash.Add(this.Grasses);
                 hash.Add(this.VoiceTypes);
                 hash.Add(this.Quests);
@@ -820,6 +834,11 @@ namespace Mutagen.Bethesda.Fallout4
                 {
                     if (!eval(this.StaticCollections.Overall)) return false;
                     if (this.StaticCollections.Specific != null && !this.StaticCollections.Specific.All(eval)) return false;
+                }
+                if (MoveableStatics != null)
+                {
+                    if (!eval(this.MoveableStatics.Overall)) return false;
+                    if (this.MoveableStatics.Specific != null && !this.MoveableStatics.Specific.All(eval)) return false;
                 }
                 if (Grasses != null)
                 {
@@ -1018,6 +1037,11 @@ namespace Mutagen.Bethesda.Fallout4
                     if (eval(this.StaticCollections.Overall)) return true;
                     if (this.StaticCollections.Specific != null && this.StaticCollections.Specific.Any(eval)) return true;
                 }
+                if (MoveableStatics != null)
+                {
+                    if (eval(this.MoveableStatics.Overall)) return true;
+                    if (this.MoveableStatics.Specific != null && this.MoveableStatics.Specific.Any(eval)) return true;
+                }
                 if (Grasses != null)
                 {
                     if (eval(this.Grasses.Overall)) return true;
@@ -1102,6 +1126,7 @@ namespace Mutagen.Bethesda.Fallout4
                 obj.MiscItems = this.MiscItems == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.MiscItems.Overall), this.MiscItems.Specific?.Translate(eval));
                 obj.Statics = this.Statics == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Statics.Overall), this.Statics.Specific?.Translate(eval));
                 obj.StaticCollections = this.StaticCollections == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.StaticCollections.Overall), this.StaticCollections.Specific?.Translate(eval));
+                obj.MoveableStatics = this.MoveableStatics == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.MoveableStatics.Overall), this.MoveableStatics.Specific?.Translate(eval));
                 obj.Grasses = this.Grasses == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Grasses.Overall), this.Grasses.Specific?.Translate(eval));
                 obj.VoiceTypes = this.VoiceTypes == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.VoiceTypes.Overall), this.VoiceTypes.Specific?.Translate(eval));
                 obj.Quests = this.Quests == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Quests.Overall), this.Quests.Specific?.Translate(eval));
@@ -1252,6 +1277,10 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         StaticCollections?.ToString(fg);
                     }
+                    if (printMask?.MoveableStatics?.Overall ?? true)
+                    {
+                        MoveableStatics?.ToString(fg);
+                    }
                     if (printMask?.Grasses?.Overall ?? true)
                     {
                         Grasses?.ToString(fg);
@@ -1339,6 +1368,7 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<Exception?, Fallout4Group.ErrorMask<MiscItem.ErrorMask>?>? MiscItems;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Static.ErrorMask>?>? Statics;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<StaticCollection.ErrorMask>?>? StaticCollections;
+            public MaskItem<Exception?, Fallout4Group.ErrorMask<MoveableStatic.ErrorMask>?>? MoveableStatics;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Grass.ErrorMask>?>? Grasses;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<VoiceType.ErrorMask>?>? VoiceTypes;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Quest.ErrorMask>?>? Quests;
@@ -1415,6 +1445,8 @@ namespace Mutagen.Bethesda.Fallout4
                         return Statics;
                     case Fallout4Mod_FieldIndex.StaticCollections:
                         return StaticCollections;
+                    case Fallout4Mod_FieldIndex.MoveableStatics:
+                        return MoveableStatics;
                     case Fallout4Mod_FieldIndex.Grasses:
                         return Grasses;
                     case Fallout4Mod_FieldIndex.VoiceTypes:
@@ -1530,6 +1562,9 @@ namespace Mutagen.Bethesda.Fallout4
                         break;
                     case Fallout4Mod_FieldIndex.StaticCollections:
                         this.StaticCollections = new MaskItem<Exception?, Fallout4Group.ErrorMask<StaticCollection.ErrorMask>?>(ex, null);
+                        break;
+                    case Fallout4Mod_FieldIndex.MoveableStatics:
+                        this.MoveableStatics = new MaskItem<Exception?, Fallout4Group.ErrorMask<MoveableStatic.ErrorMask>?>(ex, null);
                         break;
                     case Fallout4Mod_FieldIndex.Grasses:
                         this.Grasses = new MaskItem<Exception?, Fallout4Group.ErrorMask<Grass.ErrorMask>?>(ex, null);
@@ -1655,6 +1690,9 @@ namespace Mutagen.Bethesda.Fallout4
                     case Fallout4Mod_FieldIndex.StaticCollections:
                         this.StaticCollections = (MaskItem<Exception?, Fallout4Group.ErrorMask<StaticCollection.ErrorMask>?>?)obj;
                         break;
+                    case Fallout4Mod_FieldIndex.MoveableStatics:
+                        this.MoveableStatics = (MaskItem<Exception?, Fallout4Group.ErrorMask<MoveableStatic.ErrorMask>?>?)obj;
+                        break;
                     case Fallout4Mod_FieldIndex.Grasses:
                         this.Grasses = (MaskItem<Exception?, Fallout4Group.ErrorMask<Grass.ErrorMask>?>?)obj;
                         break;
@@ -1717,6 +1755,7 @@ namespace Mutagen.Bethesda.Fallout4
                 if (MiscItems != null) return true;
                 if (Statics != null) return true;
                 if (StaticCollections != null) return true;
+                if (MoveableStatics != null) return true;
                 if (Grasses != null) return true;
                 if (VoiceTypes != null) return true;
                 if (Quests != null) return true;
@@ -1789,6 +1828,7 @@ namespace Mutagen.Bethesda.Fallout4
                 MiscItems?.ToString(fg);
                 Statics?.ToString(fg);
                 StaticCollections?.ToString(fg);
+                MoveableStatics?.ToString(fg);
                 Grasses?.ToString(fg);
                 VoiceTypes?.ToString(fg);
                 Quests?.ToString(fg);
@@ -1835,6 +1875,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.MiscItems = this.MiscItems.Combine(rhs.MiscItems, (l, r) => l.Combine(r));
                 ret.Statics = this.Statics.Combine(rhs.Statics, (l, r) => l.Combine(r));
                 ret.StaticCollections = this.StaticCollections.Combine(rhs.StaticCollections, (l, r) => l.Combine(r));
+                ret.MoveableStatics = this.MoveableStatics.Combine(rhs.MoveableStatics, (l, r) => l.Combine(r));
                 ret.Grasses = this.Grasses.Combine(rhs.Grasses, (l, r) => l.Combine(r));
                 ret.VoiceTypes = this.VoiceTypes.Combine(rhs.VoiceTypes, (l, r) => l.Combine(r));
                 ret.Quests = this.Quests.Combine(rhs.Quests, (l, r) => l.Combine(r));
@@ -1896,6 +1937,7 @@ namespace Mutagen.Bethesda.Fallout4
             public Fallout4Group.TranslationMask<MiscItem.TranslationMask>? MiscItems;
             public Fallout4Group.TranslationMask<Static.TranslationMask>? Statics;
             public Fallout4Group.TranslationMask<StaticCollection.TranslationMask>? StaticCollections;
+            public Fallout4Group.TranslationMask<MoveableStatic.TranslationMask>? MoveableStatics;
             public Fallout4Group.TranslationMask<Grass.TranslationMask>? Grasses;
             public Fallout4Group.TranslationMask<VoiceType.TranslationMask>? VoiceTypes;
             public Fallout4Group.TranslationMask<Quest.TranslationMask>? Quests;
@@ -1958,6 +2000,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((MiscItems != null ? MiscItems.OnOverall : DefaultOn, MiscItems?.GetCrystal()));
                 ret.Add((Statics != null ? Statics.OnOverall : DefaultOn, Statics?.GetCrystal()));
                 ret.Add((StaticCollections != null ? StaticCollections.OnOverall : DefaultOn, StaticCollections?.GetCrystal()));
+                ret.Add((MoveableStatics != null ? MoveableStatics.OnOverall : DefaultOn, MoveableStatics?.GetCrystal()));
                 ret.Add((Grasses != null ? Grasses.OnOverall : DefaultOn, Grasses?.GetCrystal()));
                 ret.Add((VoiceTypes != null ? VoiceTypes.OnOverall : DefaultOn, VoiceTypes?.GetCrystal()));
                 ret.Add((Quests != null ? Quests.OnOverall : DefaultOn, Quests?.GetCrystal()));
@@ -2037,6 +2080,7 @@ namespace Mutagen.Bethesda.Fallout4
             _MiscItems_Object = new Fallout4Group<MiscItem>(this);
             _Statics_Object = new Fallout4Group<Static>(this);
             _StaticCollections_Object = new Fallout4Group<StaticCollection>(this);
+            _MoveableStatics_Object = new Fallout4Group<MoveableStatic>(this);
             _Grasses_Object = new Fallout4Group<Grass>(this);
             _VoiceTypes_Object = new Fallout4Group<VoiceType>(this);
             _Quests_Object = new Fallout4Group<Quest>(this);
@@ -2167,6 +2211,10 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 this.StaticCollections.RecordCache.Set(rhsMod.StaticCollections.RecordCache.Items);
             }
+            if (mask?.MoveableStatics ?? true)
+            {
+                this.MoveableStatics.RecordCache.Set(rhsMod.MoveableStatics.RecordCache.Items);
+            }
             if (mask?.Grasses ?? true)
             {
                 this.Grasses.RecordCache.Set(rhsMod.Grasses.RecordCache.Items);
@@ -2238,6 +2286,7 @@ namespace Mutagen.Bethesda.Fallout4
             count += MiscItems.RecordCache.Count > 0 ? 1 : default(uint);
             count += Statics.RecordCache.Count > 0 ? 1 : default(uint);
             count += StaticCollections.RecordCache.Count > 0 ? 1 : default(uint);
+            count += MoveableStatics.RecordCache.Count > 0 ? 1 : default(uint);
             count += Grasses.RecordCache.Count > 0 ? 1 : default(uint);
             count += VoiceTypes.RecordCache.Count > 0 ? 1 : default(uint);
             count += Quests.RecordCache.Count > 0 ? 1 : default(uint);
@@ -2522,6 +2571,7 @@ namespace Mutagen.Bethesda.Fallout4
         new Fallout4Group<MiscItem> MiscItems { get; }
         new Fallout4Group<Static> Statics { get; }
         new Fallout4Group<StaticCollection> StaticCollections { get; }
+        new Fallout4Group<MoveableStatic> MoveableStatics { get; }
         new Fallout4Group<Grass> Grasses { get; }
         new Fallout4Group<VoiceType> VoiceTypes { get; }
         new Fallout4Group<Quest> Quests { get; }
@@ -2578,6 +2628,7 @@ namespace Mutagen.Bethesda.Fallout4
         IFallout4GroupGetter<IMiscItemGetter> MiscItems { get; }
         IFallout4GroupGetter<IStaticGetter> Statics { get; }
         IFallout4GroupGetter<IStaticCollectionGetter> StaticCollections { get; }
+        IFallout4GroupGetter<IMoveableStaticGetter> MoveableStatics { get; }
         IFallout4GroupGetter<IGrassGetter> Grasses { get; }
         IFallout4GroupGetter<IVoiceTypeGetter> VoiceTypes { get; }
         IFallout4GroupGetter<IQuestGetter> Quests { get; }
@@ -3172,14 +3223,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         MiscItems = 27,
         Statics = 28,
         StaticCollections = 29,
-        Grasses = 30,
-        VoiceTypes = 31,
-        Quests = 32,
-        MaterialTypes = 33,
-        ArmorAddons = 34,
-        Messages = 35,
-        MusicTypes = 36,
-        MusicTracks = 37,
+        MoveableStatics = 30,
+        Grasses = 31,
+        VoiceTypes = 32,
+        Quests = 33,
+        MaterialTypes = 34,
+        ArmorAddons = 35,
+        Messages = 36,
+        MusicTypes = 37,
+        MusicTracks = 38,
     }
     #endregion
 
@@ -3197,9 +3249,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public const string GUID = "9cae6baa-1084-4862-ae0a-07c79b9f2a3a";
 
-        public const ushort AdditionalFieldCount = 38;
+        public const ushort AdditionalFieldCount = 39;
 
-        public const ushort FieldCount = 38;
+        public const ushort FieldCount = 39;
 
         public static readonly Type MaskType = typeof(Fallout4Mod.Mask<>);
 
@@ -3297,6 +3349,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.MiscItems.Clear();
             item.Statics.Clear();
             item.StaticCollections.Clear();
+            item.MoveableStatics.Clear();
             item.Grasses.Clear();
             item.VoiceTypes.Clear();
             item.Quests.Clear();
@@ -3340,6 +3393,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.MiscItems.RemapLinks(mapping);
             obj.Statics.RemapLinks(mapping);
             obj.StaticCollections.RemapLinks(mapping);
+            obj.MoveableStatics.RemapLinks(mapping);
             obj.Grasses.RemapLinks(mapping);
             obj.VoiceTypes.RemapLinks(mapping);
             obj.Quests.RemapLinks(mapping);
@@ -3411,6 +3465,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.MiscItems.Remove(keys);
             obj.Statics.Remove(keys);
             obj.StaticCollections.Remove(keys);
+            obj.MoveableStatics.Remove(keys);
             obj.Grasses.Remove(keys);
             obj.VoiceTypes.Remove(keys);
             obj.Quests.Remove(keys);
@@ -3670,6 +3725,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         type: type,
                         keys: keys);
                     break;
+                case "MoveableStatic":
+                case "IMoveableStaticGetter":
+                case "IMoveableStatic":
+                case "IMoveableStaticInternal":
+                    obj.MoveableStatics.Remove(
+                        type: type,
+                        keys: keys);
+                    break;
                 case "Grass":
                 case "IGrassGetter":
                 case "IGrass":
@@ -3748,6 +3811,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     Remove(obj, keys, typeof(IFactionGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(ILightGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown);
+                    Remove(obj, keys, typeof(IMoveableStaticGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(ISpellGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(ITextureSetGetter), throwIfUnknown: throwIfUnknown);
                     break;
@@ -3799,6 +3863,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IRegionTarget":
                 case "IRegionTargetGetter":
                     Remove(obj, keys, typeof(ILandscapeTextureGetter), throwIfUnknown: throwIfUnknown);
+                    Remove(obj, keys, typeof(IMoveableStaticGetter), throwIfUnknown: throwIfUnknown);
                     break;
                 case "ISpellRecord":
                 case "ISpellRecordGetter":
@@ -3903,6 +3968,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ret.MiscItems = MaskItemExt.Factory(item.MiscItems.GetEqualsMask(rhs.MiscItems, include), include);
             ret.Statics = MaskItemExt.Factory(item.Statics.GetEqualsMask(rhs.Statics, include), include);
             ret.StaticCollections = MaskItemExt.Factory(item.StaticCollections.GetEqualsMask(rhs.StaticCollections, include), include);
+            ret.MoveableStatics = MaskItemExt.Factory(item.MoveableStatics.GetEqualsMask(rhs.MoveableStatics, include), include);
             ret.Grasses = MaskItemExt.Factory(item.Grasses.GetEqualsMask(rhs.Grasses, include), include);
             ret.VoiceTypes = MaskItemExt.Factory(item.VoiceTypes.GetEqualsMask(rhs.VoiceTypes, include), include);
             ret.Quests = MaskItemExt.Factory(item.Quests.GetEqualsMask(rhs.Quests, include), include);
@@ -4076,6 +4142,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             if (printMask?.StaticCollections?.Overall ?? true)
             {
                 item.StaticCollections?.ToString(fg, "StaticCollections");
+            }
+            if (printMask?.MoveableStatics?.Overall ?? true)
+            {
+                item.MoveableStatics?.ToString(fg, "MoveableStatics");
             }
             if (printMask?.Grasses?.Overall ?? true)
             {
@@ -4358,6 +4428,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 else if (!isStaticCollectionsEqual) return false;
             }
+            if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.MoveableStatics) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.MoveableStatics, rhs.MoveableStatics, out var lhsMoveableStatics, out var rhsMoveableStatics, out var isMoveableStaticsEqual))
+                {
+                    if (!object.Equals(lhsMoveableStatics, rhsMoveableStatics)) return false;
+                }
+                else if (!isMoveableStaticsEqual) return false;
+            }
             if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.Grasses) ?? true))
             {
                 if (EqualsMaskHelper.RefEquality(lhs.Grasses, rhs.Grasses, out var lhsGrasses, out var rhsGrasses, out var isGrassesEqual))
@@ -4458,6 +4536,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             hash.Add(item.MiscItems);
             hash.Add(item.Statics);
             hash.Add(item.StaticCollections);
+            hash.Add(item.MoveableStatics);
             hash.Add(item.Grasses);
             hash.Add(item.VoiceTypes);
             hash.Add(item.Quests);
@@ -4629,6 +4708,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IStaticCollection":
                 case "IStaticCollectionInternal":
                     return obj.StaticCollections;
+                case "MoveableStatic":
+                case "IMoveableStaticGetter":
+                case "IMoveableStatic":
+                case "IMoveableStaticInternal":
+                    return obj.MoveableStatics;
                 case "Grass":
                 case "IGrassGetter":
                 case "IGrass":
@@ -4689,7 +4773,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 mod: item,
                 modHeader: item.ModHeader.DeepCopy(),
                 modKey: modKey);
-            Stream[] outputStreams = new Stream[37];
+            Stream[] outputStreams = new Stream[38];
             List<Action> toDo = new List<Action>();
             toDo.Add(() => WriteGroupParallel(item.GameSettings, writer.MetaData.MasterReferences!, 0, outputStreams, param.StringsWriter));
             toDo.Add(() => WriteGroupParallel(item.Keywords, writer.MetaData.MasterReferences!, 1, outputStreams, param.StringsWriter));
@@ -4720,14 +4804,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             toDo.Add(() => WriteGroupParallel(item.MiscItems, writer.MetaData.MasterReferences!, 26, outputStreams, param.StringsWriter));
             toDo.Add(() => WriteGroupParallel(item.Statics, writer.MetaData.MasterReferences!, 27, outputStreams, param.StringsWriter));
             toDo.Add(() => WriteGroupParallel(item.StaticCollections, writer.MetaData.MasterReferences!, 28, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Grasses, writer.MetaData.MasterReferences!, 29, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.VoiceTypes, writer.MetaData.MasterReferences!, 30, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Quests, writer.MetaData.MasterReferences!, 31, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.MaterialTypes, writer.MetaData.MasterReferences!, 32, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.ArmorAddons, writer.MetaData.MasterReferences!, 33, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Messages, writer.MetaData.MasterReferences!, 34, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.MusicTypes, writer.MetaData.MasterReferences!, 35, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.MusicTracks, writer.MetaData.MasterReferences!, 36, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.MoveableStatics, writer.MetaData.MasterReferences!, 29, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Grasses, writer.MetaData.MasterReferences!, 30, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.VoiceTypes, writer.MetaData.MasterReferences!, 31, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Quests, writer.MetaData.MasterReferences!, 32, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.MaterialTypes, writer.MetaData.MasterReferences!, 33, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.ArmorAddons, writer.MetaData.MasterReferences!, 34, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Messages, writer.MetaData.MasterReferences!, 35, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.MusicTypes, writer.MetaData.MasterReferences!, 36, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.MusicTracks, writer.MetaData.MasterReferences!, 37, outputStreams, param.StringsWriter));
             Parallel.Invoke(toDo.ToArray());
             PluginUtilityTranslation.CompileStreamsInto(
                 outputStreams.NotNull(),
@@ -4984,6 +5069,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     yield return item;
                 }
             }
+            if (obj.MoveableStatics is IFormLinkContainerGetter MoveableStaticslinkCont)
+            {
+                foreach (var item in MoveableStaticslinkCont.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
             if (obj.Grasses is IFormLinkContainerGetter GrasseslinkCont)
             {
                 foreach (var item in GrasseslinkCont.ContainedFormLinks)
@@ -5158,6 +5250,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 yield return item;
             }
             foreach (var item in obj.StaticCollections.EnumerateMajorRecords())
+            {
+                yield return item;
+            }
+            foreach (var item in obj.MoveableStatics.EnumerateMajorRecords())
             {
                 yield return item;
             }
@@ -5489,6 +5585,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         yield return item;
                     }
                     yield break;
+                case "MoveableStatic":
+                case "IMoveableStaticGetter":
+                case "IMoveableStatic":
+                case "IMoveableStaticInternal":
+                    foreach (var item in obj.MoveableStatics.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
                 case "Grass":
                 case "IGrassGetter":
                 case "IGrass":
@@ -5613,6 +5718,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IMoveableStaticGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(ISpellGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -5654,6 +5763,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         yield return item;
                     }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IMoveableStaticGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -5899,11 +6012,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IMoveableStaticGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     yield break;
                 }
                 case "IRegionTargetGetter":
                 {
                     foreach (var item in EnumerateMajorRecords(obj, typeof(ILandscapeTextureGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IMoveableStaticGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -6232,6 +6353,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     record: item,
                     group: (m) => m.StaticCollections,
                     groupGetter: (m) => m.StaticCollections);
+            }
+            foreach (var item in obj.MoveableStatics)
+            {
+                yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, MoveableStatic, IMoveableStaticGetter>(
+                    modKey: obj.ModKey,
+                    record: item,
+                    group: (m) => m.MoveableStatics,
+                    groupGetter: (m) => m.MoveableStatics);
             }
             foreach (var item in obj.Grasses)
             {
@@ -6705,6 +6834,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                             groupGetter: (m) => m.StaticCollections);
                     }
                     yield break;
+                case "MoveableStatic":
+                case "IMoveableStaticGetter":
+                case "IMoveableStatic":
+                case "IMoveableStaticInternal":
+                    foreach (var item in obj.MoveableStatics)
+                    {
+                        yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, MoveableStatic, IMoveableStaticGetter>(
+                            modKey: obj.ModKey,
+                            record: item,
+                            group: (m) => m.MoveableStatics,
+                            groupGetter: (m) => m.MoveableStatics);
+                    }
+                    yield break;
                 case "Grass":
                 case "IGrassGetter":
                 case "IGrass":
@@ -6885,6 +7027,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         obj,
                         linkCache: linkCache,
                         type: typeof(IMiscItemGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
+                        type: typeof(IMoveableStaticGetter),
                         throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -7103,6 +7253,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         obj,
                         linkCache: linkCache,
                         type: typeof(ILandscapeTextureGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
+                        type: typeof(IMoveableStaticGetter),
                         throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -7796,6 +7954,26 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     errorMask?.PopIndex();
                 }
             }
+            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.MoveableStatics) ?? true))
+            {
+                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.MoveableStatics);
+                try
+                {
+                    item.MoveableStatics.DeepCopyIn(
+                        rhs: rhs.MoveableStatics,
+                        errorMask: errorMask,
+                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.MoveableStatics));
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
             if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.Grasses) ?? true))
             {
                 errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.Grasses);
@@ -8075,6 +8253,7 @@ namespace Mutagen.Bethesda.Fallout4
         public bool MiscItems;
         public bool Statics;
         public bool StaticCollections;
+        public bool MoveableStatics;
         public bool Grasses;
         public bool VoiceTypes;
         public bool Quests;
@@ -8117,6 +8296,7 @@ namespace Mutagen.Bethesda.Fallout4
             MiscItems = defaultValue;
             Statics = defaultValue;
             StaticCollections = defaultValue;
+            MoveableStatics = defaultValue;
             Grasses = defaultValue;
             VoiceTypes = defaultValue;
             Quests = defaultValue;
@@ -8471,6 +8651,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 {
                     ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)StaticCollectionsItem).BinaryWriteTranslator).Write<IStaticCollectionGetter>(
                         item: StaticCollectionsItem,
+                        writer: writer,
+                        translationParams: translationParams);
+                }
+            }
+            if (importMask?.MoveableStatics ?? true)
+            {
+                var MoveableStaticsItem = item.MoveableStatics;
+                if (MoveableStaticsItem.RecordCache.Count > 0)
+                {
+                    ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)MoveableStaticsItem).BinaryWriteTranslator).Write<IMoveableStaticGetter>(
+                        item: MoveableStaticsItem,
                         writer: writer,
                         translationParams: translationParams);
                 }
@@ -9035,6 +9226,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     }
                     return (int)Fallout4Mod_FieldIndex.StaticCollections;
                 }
+                case RecordTypeInts.MSTT:
+                {
+                    if (importMask?.MoveableStatics ?? true)
+                    {
+                        item.MoveableStatics.CopyInFromBinary(
+                            frame: frame,
+                            translationParams: null);
+                    }
+                    else
+                    {
+                        frame.Position += contentLength;
+                    }
+                    return (int)Fallout4Mod_FieldIndex.MoveableStatics;
+                }
                 case RecordTypeInts.GRAS:
                 {
                     if (importMask?.Grasses ?? true)
@@ -9452,6 +9657,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private IFallout4GroupGetter<IStaticCollectionGetter>? _StaticCollections => _StaticCollectionsLocation.HasValue ? Fallout4GroupBinaryOverlay<IStaticCollectionGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _StaticCollectionsLocation!.Value.Min, _StaticCollectionsLocation!.Value.Max), _package), _package) : default;
         public IFallout4GroupGetter<IStaticCollectionGetter> StaticCollections => _StaticCollections ?? new Fallout4Group<StaticCollection>(this);
         #endregion
+        #region MoveableStatics
+        private RangeInt64? _MoveableStaticsLocation;
+        private IFallout4GroupGetter<IMoveableStaticGetter>? _MoveableStatics => _MoveableStaticsLocation.HasValue ? Fallout4GroupBinaryOverlay<IMoveableStaticGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _MoveableStaticsLocation!.Value.Min, _MoveableStaticsLocation!.Value.Max), _package), _package) : default;
+        public IFallout4GroupGetter<IMoveableStaticGetter> MoveableStatics => _MoveableStatics ?? new Fallout4Group<MoveableStatic>(this);
+        #endregion
         #region Grasses
         private RangeInt64? _GrassesLocation;
         private IFallout4GroupGetter<IGrassGetter>? _Grasses => _GrassesLocation.HasValue ? Fallout4GroupBinaryOverlay<IGrassGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _GrassesLocation!.Value.Min, _GrassesLocation!.Value.Max), _package), _package) : default;
@@ -9723,6 +9933,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 {
                     _StaticCollectionsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
                     return (int)Fallout4Mod_FieldIndex.StaticCollections;
+                }
+                case RecordTypeInts.MSTT:
+                {
+                    _MoveableStaticsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    return (int)Fallout4Mod_FieldIndex.MoveableStatics;
                 }
                 case RecordTypeInts.GRAS:
                 {

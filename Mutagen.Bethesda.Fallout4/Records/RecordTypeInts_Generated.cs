@@ -112,6 +112,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int MODL = 0x4C444F4D;
         public const int MODS = 0x53444F4D;
         public const int MODT = 0x54444F4D;
+        public const int MSTT = 0x5454534D;
         public const int MSWP = 0x5057534D;
         public const int MUSC = 0x4353554D;
         public const int MUST = 0x5453554D;

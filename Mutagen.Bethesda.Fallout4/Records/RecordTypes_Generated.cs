@@ -114,6 +114,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType MODL = new(0x4C444F4D);
         public static readonly RecordType MODS = new(0x53444F4D);
         public static readonly RecordType MODT = new(0x54444F4D);
+        public static readonly RecordType MSTT = new(0x5454534D);
         public static readonly RecordType MSWP = new(0x5057534D);
         public static readonly RecordType MUSC = new(0x4353554D);
         public static readonly RecordType MUST = new(0x5453554D);

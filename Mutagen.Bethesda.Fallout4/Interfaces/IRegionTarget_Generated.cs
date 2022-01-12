@@ -8,7 +8,7 @@ using Mutagen.Bethesda;
 namespace Mutagen.Bethesda.Fallout4
 {
     /// <summary>
-    /// Implemented by: [LandscapeTexture]
+    /// Implemented by: [LandscapeTexture, MoveableStatic]
     /// </summary>
     public partial interface IRegionTarget :
         IFallout4MajorRecordInternal,
@@ -17,7 +17,7 @@ namespace Mutagen.Bethesda.Fallout4
     }
 
     /// <summary>
-    /// Implemented by: [LandscapeTexture]
+    /// Implemented by: [LandscapeTexture, MoveableStatic]
     /// </summary>
     public partial interface IRegionTargetGetter : IFallout4MajorRecordGetter
     {

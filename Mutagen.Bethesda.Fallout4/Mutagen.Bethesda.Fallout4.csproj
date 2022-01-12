@@ -179,6 +179,9 @@
     <Compile Include="Records\Major Records\MiscItem.cs">
       <DependentUpon>MiscItem.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Major Records\MoveableStatic.cs">
+      <DependentUpon>MovableStatic.xml</DependentUpon>
+    </Compile>
     <Compile Include="Records\Major Records\MusicTrack.cs">
       <DependentUpon>MusicTrack.xml</DependentUpon>
     </Compile>
@@ -770,6 +773,9 @@
     </Compile>
     <Compile Include="Records\Major Records\Placement_Generated.cs">
       <DependentUpon>StaticCollection.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\MoveableStatic_Generated.cs">
+      <DependentUpon>MovableStatic.xml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
