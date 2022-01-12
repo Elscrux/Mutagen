@@ -87,6 +87,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Race),
             };
             dict[typeof(IRelatableGetter)] = dict[typeof(IRelatable)];
+            dict[typeof(IRegionTarget)] = new Type[]
+            {
+                typeof(Flora),
+                typeof(LandscapeTexture),
+                typeof(MoveableStatic),
+                typeof(Tree),
+            };
+            dict[typeof(IRegionTargetGetter)] = dict[typeof(IRegionTarget)];
             dict[typeof(IHarvestTarget)] = new Type[]
             {
                 typeof(Ingredient),
@@ -98,13 +106,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Keyword),
             };
             dict[typeof(IKeywordLinkedReferenceGetter)] = dict[typeof(IKeywordLinkedReference)];
-            dict[typeof(IRegionTarget)] = new Type[]
-            {
-                typeof(LandscapeTexture),
-                typeof(MoveableStatic),
-                typeof(Tree),
-            };
-            dict[typeof(IRegionTargetGetter)] = dict[typeof(IRegionTarget)];
             dict[typeof(ISpellRecord)] = new Type[]
             {
                 typeof(LeveledSpell),

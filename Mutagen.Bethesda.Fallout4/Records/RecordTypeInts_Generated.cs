@@ -11,6 +11,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int ARMO = 0x4F4D5241;
         public const int ARTO = 0x4F545241;
         public const int ASPC = 0x43505341;
+        public const int ATTX = 0x58545441;
         public const int AVIF = 0x46495641;
         public const int BAMT = 0x544D4142;
         public const int BIDS = 0x53444942;
@@ -59,6 +60,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int EXPL = 0x4C505845;
         public const int FACT = 0x54434146;
         public const int FIMD = 0x444D4946;
+        public const int FLOR = 0x524F4C46;
         public const int FLST = 0x54534C46;
         public const int FLTV = 0x56544C46;
         public const int FNAM = 0x4D414E46;

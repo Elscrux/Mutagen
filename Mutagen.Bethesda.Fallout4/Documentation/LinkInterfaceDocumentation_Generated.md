@@ -55,6 +55,7 @@ A `FormLink<IItem>` could then point to all those record types by pointing to th
 ### IOwner
 - Faction
 ### IRegionTarget
+- Flora
 - LandscapeTexture
 - MoveableStatic
 - Tree
@@ -90,6 +91,8 @@ A `FormLink<IItem>` could then point to all those record types by pointing to th
 - IObjectId
 - IOwner
 - IRelatable
+### Flora
+- IRegionTarget
 ### Ingredient
 - IConstructible
 - IHarvestTarget

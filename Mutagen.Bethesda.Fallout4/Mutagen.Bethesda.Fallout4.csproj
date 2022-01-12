@@ -787,6 +787,9 @@
     <Compile Include="Records\Major Records\Tree_Generated.cs">
       <DependentUpon>Tree.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Major Records\Flora_Generated.cs">
+      <DependentUpon>Flora.xml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="GitInfo" Version="2.2.0">

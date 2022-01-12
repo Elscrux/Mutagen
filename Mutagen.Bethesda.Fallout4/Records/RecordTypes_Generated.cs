@@ -13,6 +13,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType ARMO = new(0x4F4D5241);
         public static readonly RecordType ARTO = new(0x4F545241);
         public static readonly RecordType ASPC = new(0x43505341);
+        public static readonly RecordType ATTX = new(0x58545441);
         public static readonly RecordType AVIF = new(0x46495641);
         public static readonly RecordType BAMT = new(0x544D4142);
         public static readonly RecordType BIDS = new(0x53444942);
@@ -61,6 +62,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType EXPL = new(0x4C505845);
         public static readonly RecordType FACT = new(0x54434146);
         public static readonly RecordType FIMD = new(0x444D4946);
+        public static readonly RecordType FLOR = new(0x524F4C46);
         public static readonly RecordType FLST = new(0x54534C46);
         public static readonly RecordType FLTV = new(0x56544C46);
         public static readonly RecordType FNAM = new(0x4D414E46);
