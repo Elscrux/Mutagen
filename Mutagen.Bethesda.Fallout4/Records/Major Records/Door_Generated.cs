@@ -1048,6 +1048,11 @@ namespace Mutagen.Bethesda.Fallout4
 
         protected override Type LinkType => typeof(IDoor);
 
+        public MajorFlag MajorFlags
+        {
+            get => (MajorFlag)this.MajorRecordFlagsRaw;
+            set => this.MajorRecordFlagsRaw = (int)value;
+        }
         #region Equals and Hash
         public override bool Equals(object? obj)
         {
@@ -1172,6 +1177,10 @@ namespace Mutagen.Bethesda.Fallout4
         new Door.Flag Flags { get; set; }
         new TranslatedString? AlternateTextOpen { get; set; }
         new TranslatedString? AlternateTextClose { get; set; }
+        #region Mutagen
+        new Door.MajorFlag MajorFlags { get; set; }
+        #endregion
+
     }
 
     public partial interface IDoorInternal :
@@ -1240,6 +1249,10 @@ namespace Mutagen.Bethesda.Fallout4
         Door.Flag Flags { get; }
         ITranslatedStringGetter? AlternateTextOpen { get; }
         ITranslatedStringGetter? AlternateTextClose { get; }
+
+        #region Mutagen
+        Door.MajorFlag MajorFlags { get; }
+        #endregion
 
     }
 
@@ -2779,6 +2792,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         protected override Type LinkType => typeof(IDoor);
 
+        public Door.MajorFlag MajorFlags => (Door.MajorFlag)this.MajorRecordFlagsRaw;
 
         #region VirtualMachineAdapter
         private RangeInt32? _VirtualMachineAdapterLocation;

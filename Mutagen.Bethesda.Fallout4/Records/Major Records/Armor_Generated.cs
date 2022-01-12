@@ -1615,6 +1615,11 @@ namespace Mutagen.Bethesda.Fallout4
 
         protected override Type LinkType => typeof(IArmor);
 
+        public MajorFlag MajorFlags
+        {
+            get => (MajorFlag)this.MajorRecordFlagsRaw;
+            set => this.MajorRecordFlagsRaw = (int)value;
+        }
         [Flags]
         public enum DATADataType
         {
@@ -1758,6 +1763,10 @@ namespace Mutagen.Bethesda.Fallout4
         new ExtendedList<ResistanceArmor> Resistances { get; }
         new Armor.DATADataType DATADataTypeState { get; set; }
         new Armor.FNAMDataType FNAMDataTypeState { get; set; }
+        #region Mutagen
+        new Armor.MajorFlag MajorFlags { get; set; }
+        #endregion
+
     }
 
     public partial interface IArmorInternal :
@@ -1836,6 +1845,10 @@ namespace Mutagen.Bethesda.Fallout4
         IReadOnlyList<IResistanceArmorGetter> Resistances { get; }
         Armor.DATADataType DATADataTypeState { get; }
         Armor.FNAMDataType FNAMDataTypeState { get; }
+
+        #region Mutagen
+        Armor.MajorFlag MajorFlags { get; }
+        #endregion
 
     }
 
@@ -3833,6 +3846,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         protected override Type LinkType => typeof(IArmor);
 
+        public Armor.MajorFlag MajorFlags => (Armor.MajorFlag)this.MajorRecordFlagsRaw;
 
         #region VirtualMachineAdapter
         private RangeInt32? _VirtualMachineAdapterLocation;
