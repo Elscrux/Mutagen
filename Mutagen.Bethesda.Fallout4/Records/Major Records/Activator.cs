@@ -36,4 +36,12 @@ namespace Mutagen.Bethesda.Fallout4
             IsARadio = 0x04,//?
         }
     }
+
+    namespace Internals
+    {
+        public partial class ActivatorBinaryOverlay
+        {
+            public IReadOnlyList<IConditionGetter>? Conditions { get; } 
+        }
+    }
 }

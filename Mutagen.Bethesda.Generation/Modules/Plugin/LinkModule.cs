@@ -56,7 +56,7 @@ namespace Mutagen.Bethesda.Generation.Modules.Plugin
             {
                 if (field is LoquiType loqui)
                 {
-                    var subCase = await HasLinks(loqui, includeBaseClass, specifications);
+                    var subCase = await HasLinks(loqui, includeBaseClass: true, specifications);
                     if (subCase > bestCase)
                     {
                         bestCase = subCase;
@@ -66,7 +66,7 @@ namespace Mutagen.Bethesda.Generation.Modules.Plugin
                 {
                     if (cont.SubTypeGeneration is LoquiType contLoqui)
                     {
-                        var subCase = await HasLinks(contLoqui, includeBaseClass, specifications);
+                        var subCase = await HasLinks(contLoqui, includeBaseClass: true, specifications);
                         if (subCase > bestCase)
                         {
                             bestCase = subCase;
@@ -81,7 +81,7 @@ namespace Mutagen.Bethesda.Generation.Modules.Plugin
                 {
                     if (dict.ValueTypeGen is LoquiType valLoqui)
                     {
-                        var subCase = await HasLinks(valLoqui, includeBaseClass, specifications);
+                        var subCase = await HasLinks(valLoqui, includeBaseClass: true, specifications);
                         if (subCase > bestCase)
                         {
                             bestCase = subCase;
@@ -89,7 +89,7 @@ namespace Mutagen.Bethesda.Generation.Modules.Plugin
                     }
                     if (dict.KeyTypeGen is LoquiType keyLoqui)
                     {
-                        var subCase = await HasLinks(keyLoqui, includeBaseClass, specifications);
+                        var subCase = await HasLinks(keyLoqui, includeBaseClass: true, specifications);
                         if (subCase > bestCase)
                         {
                             bestCase = subCase;
@@ -416,7 +416,7 @@ namespace Mutagen.Bethesda.Generation.Modules.Plugin
             await base.GenerateInClass(obj, fg);
             if (obj.GetObjectType() != ObjectType.Mod)
             {
-                var linkCase = await HasLinks(obj, includeBaseClass: false);
+                var linkCase = await HasLinks(obj, includeBaseClass: true);
                 if (linkCase == LinkCase.No) return;
             }
             await GenerateInterfaceImplementation(obj, fg, getter: false);
@@ -425,11 +425,11 @@ namespace Mutagen.Bethesda.Generation.Modules.Plugin
         public static async Task GenerateInterfaceImplementation(ObjectGeneration obj, FileGeneration fg, bool getter)
         {
             var shouldAlwaysOverride = obj.IsTopLevelGroup();
-            fg.AppendLine($"public{await obj.FunctionOverride(shouldAlwaysOverride, async (o) => await HasLinks(o, includeBaseClass: false) != LinkCase.No)}IEnumerable<{nameof(IFormLinkGetter)}> {nameof(IFormLinkContainerGetter.ContainedFormLinks)} => {obj.CommonClass(LoquiInterfaceType.IGetter, CommonGenerics.Class)}.Instance.GetContainedFormLinks(this);");
+            fg.AppendLine($"public{await obj.FunctionOverride(shouldAlwaysOverride, async (o) => await HasLinks(o, includeBaseClass: true) != LinkCase.No)}IEnumerable<{nameof(IFormLinkGetter)}> {nameof(IFormLinkContainerGetter.ContainedFormLinks)} => {obj.CommonClass(LoquiInterfaceType.IGetter, CommonGenerics.Class)}.Instance.GetContainedFormLinks(this);");
 
             if (!getter)
             {
-                fg.AppendLine($"public{await obj.FunctionOverride(async (o) => await HasLinks(o, includeBaseClass: false) != LinkCase.No)}void {nameof(IFormLinkContainer.RemapLinks)}(IReadOnlyDictionary<FormKey, FormKey> mapping) => {obj.CommonClass(LoquiInterfaceType.ISetter, CommonGenerics.Class)}.Instance.RemapLinks(this, mapping);");
+                fg.AppendLine($"public{await obj.FunctionOverride(async (o) => await HasLinks(o, includeBaseClass: true) != LinkCase.No)}void {nameof(IFormLinkContainer.RemapLinks)}(IReadOnlyDictionary<FormKey, FormKey> mapping) => {obj.CommonClass(LoquiInterfaceType.ISetter, CommonGenerics.Class)}.Instance.RemapLinks(this, mapping);");
             }
         }
     }

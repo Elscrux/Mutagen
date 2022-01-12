@@ -17,7 +17,7 @@
     </Fields>
     <LinkInterface>IEmittance</LinkInterface>
   </Object>
-  <Object name="RegionArea" objType="Subrecord" GUID="d2793766-4f2b-49da-95cf-04224a73ad70" ID="178">
+  <Object name="RegionArea" objType="Subrecord" recordType="RPLI" GUID="d2793766-4f2b-49da-95cf-04224a73ad70" ID="178">
     <Fields>
       <UInt32 name="EdgeFallOff" recordType="RPLI" />
       <List name="RegionPointListData" recordType="RPLD">

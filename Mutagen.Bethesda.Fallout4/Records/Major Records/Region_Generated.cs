@@ -2371,13 +2371,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     return (int)Region_FieldIndex.Worldspace;
                 }
                 case RecordTypeInts.RPLI:
-                case RecordTypeInts.RPLD:
-                case RecordTypeInts.ANAM:
                 {
                     item.RegionAreas.SetTo(
                         Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<RegionArea>.Instance.Parse(
                             reader: frame,
-                            triggeringRecord: RegionArea_Registration.TriggeringRecordTypes,
+                            triggeringRecord: RecordTypes.RPLI,
                             translationParams: translationParams,
                             transl: RegionArea.TryCreateFromBinary));
                     return (int)Region_FieldIndex.RegionAreas;
@@ -2562,14 +2560,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     return (int)Region_FieldIndex.Worldspace;
                 }
                 case RecordTypeInts.RPLI:
-                case RecordTypeInts.RPLD:
-                case RecordTypeInts.ANAM:
                 {
-                    this.RegionAreas = this.ParseRepeatedTypelessSubrecord<RegionAreaBinaryOverlay>(
-                        stream: stream,
+                    this.RegionAreas = BinaryOverlayList.FactoryByArray<RegionAreaBinaryOverlay>(
+                        mem: stream.RemainingMemory,
+                        package: _package,
                         parseParams: parseParams,
-                        trigger: RegionArea_Registration.TriggeringRecordTypes,
-                        factory: RegionAreaBinaryOverlay.RegionAreaFactory);
+                        getter: (s, p, recConv) => RegionAreaBinaryOverlay.RegionAreaFactory(new OverlayStream(s, p), p, recConv),
+                        locs: ParseRecordLocations(
+                            stream: stream,
+                            trigger: type,
+                            constants: _package.MetaData.Constants.SubConstants,
+                            skipHeader: false));
                     return (int)Region_FieldIndex.RegionAreas;
                 }
                 case RecordTypeInts.RDAT:

@@ -15,6 +15,7 @@ using Mutagen.Bethesda.Plugins.Aspects;
 using Mutagen.Bethesda.Plugins.Binary.Overlay;
 using Mutagen.Bethesda.Plugins.Binary.Streams;
 using Mutagen.Bethesda.Plugins.Binary.Translations;
+using Mutagen.Bethesda.Plugins.Cache;
 using Mutagen.Bethesda.Plugins.Exceptions;
 using Mutagen.Bethesda.Plugins.Internals;
 using Mutagen.Bethesda.Plugins.Records;
@@ -437,6 +438,11 @@ namespace Mutagen.Bethesda.Fallout4
         }
         #endregion
 
+        #region Mutagen
+        public IEnumerable<IFormLinkGetter> ContainedFormLinks => ArmorModelCommon.Instance.GetContainedFormLinks(this);
+        public void RemapLinks(IReadOnlyDictionary<FormKey, FormKey> mapping) => ArmorModelSetterCommon.Instance.RemapLinks(this, mapping);
+        #endregion
+
         #region Binary Translation
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected object BinaryWriteTranslator => ArmorModelBinaryWriteTranslation.Instance;
@@ -497,6 +503,7 @@ namespace Mutagen.Bethesda.Fallout4
     #region Interface
     public partial interface IArmorModel :
         IArmorModelGetter,
+        IFormLinkContainer,
         IHasIcons,
         ILoquiObjectSetter<IArmorModel>,
         IModeled
@@ -514,6 +521,7 @@ namespace Mutagen.Bethesda.Fallout4
     public partial interface IArmorModelGetter :
         ILoquiObject,
         IBinaryItem,
+        IFormLinkContainerGetter,
         IHasIconsGetter,
         ILoquiObject<IArmorModelGetter>,
         IModeledGetter
@@ -1286,6 +1294,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         void IPrintable.ToString(FileGeneration fg, string? name) => this.ToString(fg, name);
 
+        public IEnumerable<IFormLinkGetter> ContainedFormLinks => ArmorModelCommon.Instance.GetContainedFormLinks(this);
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected object BinaryWriteTranslator => ArmorModelBinaryWriteTranslation.Instance;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

@@ -26,11 +26,6 @@ namespace Mutagen.Bethesda.Fallout4
             public const byte PerkFlag = 0x01;
             public const byte SpellFlag = 0x04;
 
-            public static partial void FillBinaryFlagsCustom(MutagenFrame frame, IBookInternal item)
-            {
-                item.Flags = (Book.Flag)frame.ReadUInt8();
-            }
-
             public static partial void FillBinaryTeachesCustom(MutagenFrame frame, IBookInternal item)
             {
                 if ((((int)item.Flags) & SpellFlag) > 0)
@@ -59,25 +54,6 @@ namespace Mutagen.Bethesda.Fallout4
 
         public partial class BookBinaryWriteTranslation
         {
-            public static partial void WriteBinaryFlagsCustom(MutagenWriter writer, IBookGetter item)
-            {
-                byte flags = (byte)item.Flags;
-                switch (item.Teaches)
-                {
-                    case BookSpell _:
-                        flags = (byte)EnumExt.SetFlag(flags, BookBinaryCreateTranslation.PerkFlag, false);
-                        flags = (byte)EnumExt.SetFlag(flags, BookBinaryCreateTranslation.SpellFlag, true);
-                        break;
-                    case BookPerk _:
-                        flags = (byte)EnumExt.SetFlag(flags, BookBinaryCreateTranslation.PerkFlag, true);
-                        flags = (byte)EnumExt.SetFlag(flags, BookBinaryCreateTranslation.SpellFlag, false);
-                        break;
-                    default:
-                        break;
-                }
-                writer.Write(flags);
-            }
-
             public static partial void WriteBinaryTeachesCustom(MutagenWriter writer, IBookGetter item)
             {
                 switch (item.Teaches)

@@ -9999,28 +9999,28 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public IFallout4GroupGetter<IBookGetter> Books => _Books ?? new Fallout4Group<Book>(this);
         #endregion
         #region Containers
-        private RangeInt64? _ContainersLocation;
-        private IFallout4GroupGetter<IContainerGetter>? _Containers => _ContainersLocation.HasValue ? Fallout4GroupBinaryOverlay<IContainerGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _ContainersLocation!.Value.Min, _ContainersLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _ContainersLocations;
+        private IFallout4GroupGetter<IContainerGetter>? _Containers => _ContainersLocations != null ? Fallout4GroupBinaryOverlay<IContainerGetter>.Fallout4GroupFactory(_data, _ContainersLocations, _package) : default;
         public IFallout4GroupGetter<IContainerGetter> Containers => _Containers ?? new Fallout4Group<Container>(this);
         #endregion
         #region Doors
-        private RangeInt64? _DoorsLocation;
-        private IFallout4GroupGetter<IDoorGetter>? _Doors => _DoorsLocation.HasValue ? Fallout4GroupBinaryOverlay<IDoorGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _DoorsLocation!.Value.Min, _DoorsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _DoorsLocations;
+        private IFallout4GroupGetter<IDoorGetter>? _Doors => _DoorsLocations != null ? Fallout4GroupBinaryOverlay<IDoorGetter>.Fallout4GroupFactory(_data, _DoorsLocations, _package) : default;
         public IFallout4GroupGetter<IDoorGetter> Doors => _Doors ?? new Fallout4Group<Door>(this);
         #endregion
         #region Ingredients
-        private RangeInt64? _IngredientsLocation;
-        private IFallout4GroupGetter<IIngredientGetter>? _Ingredients => _IngredientsLocation.HasValue ? Fallout4GroupBinaryOverlay<IIngredientGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _IngredientsLocation!.Value.Min, _IngredientsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _IngredientsLocations;
+        private IFallout4GroupGetter<IIngredientGetter>? _Ingredients => _IngredientsLocations != null ? Fallout4GroupBinaryOverlay<IIngredientGetter>.Fallout4GroupFactory(_data, _IngredientsLocations, _package) : default;
         public IFallout4GroupGetter<IIngredientGetter> Ingredients => _Ingredients ?? new Fallout4Group<Ingredient>(this);
         #endregion
         #region Lights
-        private RangeInt64? _LightsLocation;
-        private IFallout4GroupGetter<ILightGetter>? _Lights => _LightsLocation.HasValue ? Fallout4GroupBinaryOverlay<ILightGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _LightsLocation!.Value.Min, _LightsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _LightsLocations;
+        private IFallout4GroupGetter<ILightGetter>? _Lights => _LightsLocations != null ? Fallout4GroupBinaryOverlay<ILightGetter>.Fallout4GroupFactory(_data, _LightsLocations, _package) : default;
         public IFallout4GroupGetter<ILightGetter> Lights => _Lights ?? new Fallout4Group<Light>(this);
         #endregion
         #region MiscItems
-        private RangeInt64? _MiscItemsLocation;
-        private IFallout4GroupGetter<IMiscItemGetter>? _MiscItems => _MiscItemsLocation.HasValue ? Fallout4GroupBinaryOverlay<IMiscItemGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _MiscItemsLocation!.Value.Min, _MiscItemsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _MiscItemsLocations;
+        private IFallout4GroupGetter<IMiscItemGetter>? _MiscItems => _MiscItemsLocations != null ? Fallout4GroupBinaryOverlay<IMiscItemGetter>.Fallout4GroupFactory(_data, _MiscItemsLocations, _package) : default;
         public IFallout4GroupGetter<IMiscItemGetter> MiscItems => _MiscItems ?? new Fallout4Group<MiscItem>(this);
         #endregion
         #region Statics
@@ -10029,13 +10029,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public IFallout4GroupGetter<IStaticGetter> Statics => _Statics ?? new Fallout4Group<Static>(this);
         #endregion
         #region StaticCollections
-        private RangeInt64? _StaticCollectionsLocation;
-        private IFallout4GroupGetter<IStaticCollectionGetter>? _StaticCollections => _StaticCollectionsLocation.HasValue ? Fallout4GroupBinaryOverlay<IStaticCollectionGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _StaticCollectionsLocation!.Value.Min, _StaticCollectionsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _StaticCollectionsLocations;
+        private IFallout4GroupGetter<IStaticCollectionGetter>? _StaticCollections => _StaticCollectionsLocations != null ? Fallout4GroupBinaryOverlay<IStaticCollectionGetter>.Fallout4GroupFactory(_data, _StaticCollectionsLocations, _package) : default;
         public IFallout4GroupGetter<IStaticCollectionGetter> StaticCollections => _StaticCollections ?? new Fallout4Group<StaticCollection>(this);
         #endregion
         #region MoveableStatics
-        private RangeInt64? _MoveableStaticsLocation;
-        private IFallout4GroupGetter<IMoveableStaticGetter>? _MoveableStatics => _MoveableStaticsLocation.HasValue ? Fallout4GroupBinaryOverlay<IMoveableStaticGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _MoveableStaticsLocation!.Value.Min, _MoveableStaticsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _MoveableStaticsLocations;
+        private IFallout4GroupGetter<IMoveableStaticGetter>? _MoveableStatics => _MoveableStaticsLocations != null ? Fallout4GroupBinaryOverlay<IMoveableStaticGetter>.Fallout4GroupFactory(_data, _MoveableStaticsLocations, _package) : default;
         public IFallout4GroupGetter<IMoveableStaticGetter> MoveableStatics => _MoveableStatics ?? new Fallout4Group<MoveableStatic>(this);
         #endregion
         #region Grasses
@@ -10044,13 +10044,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public IFallout4GroupGetter<IGrassGetter> Grasses => _Grasses ?? new Fallout4Group<Grass>(this);
         #endregion
         #region Trees
-        private RangeInt64? _TreesLocation;
-        private IFallout4GroupGetter<ITreeGetter>? _Trees => _TreesLocation.HasValue ? Fallout4GroupBinaryOverlay<ITreeGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _TreesLocation!.Value.Min, _TreesLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _TreesLocations;
+        private IFallout4GroupGetter<ITreeGetter>? _Trees => _TreesLocations != null ? Fallout4GroupBinaryOverlay<ITreeGetter>.Fallout4GroupFactory(_data, _TreesLocations, _package) : default;
         public IFallout4GroupGetter<ITreeGetter> Trees => _Trees ?? new Fallout4Group<Tree>(this);
         #endregion
         #region Florae
-        private RangeInt64? _FloraeLocation;
-        private IFallout4GroupGetter<IFloraGetter>? _Florae => _FloraeLocation.HasValue ? Fallout4GroupBinaryOverlay<IFloraGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _FloraeLocation!.Value.Min, _FloraeLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _FloraeLocations;
+        private IFallout4GroupGetter<IFloraGetter>? _Florae => _FloraeLocations != null ? Fallout4GroupBinaryOverlay<IFloraGetter>.Fallout4GroupFactory(_data, _FloraeLocations, _package) : default;
         public IFallout4GroupGetter<IFloraGetter> Florae => _Florae ?? new Fallout4Group<Flora>(this);
         #endregion
         #region VoiceTypes
@@ -10069,8 +10069,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public IFallout4GroupGetter<IMaterialTypeGetter> MaterialTypes => _MaterialTypes ?? new Fallout4Group<MaterialType>(this);
         #endregion
         #region ArmorAddons
-        private RangeInt64? _ArmorAddonsLocation;
-        private IFallout4GroupGetter<IArmorAddonGetter>? _ArmorAddons => _ArmorAddonsLocation.HasValue ? Fallout4GroupBinaryOverlay<IArmorAddonGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _ArmorAddonsLocation!.Value.Min, _ArmorAddonsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _ArmorAddonsLocations;
+        private IFallout4GroupGetter<IArmorAddonGetter>? _ArmorAddons => _ArmorAddonsLocations != null ? Fallout4GroupBinaryOverlay<IArmorAddonGetter>.Fallout4GroupFactory(_data, _ArmorAddonsLocations, _package) : default;
         public IFallout4GroupGetter<IArmorAddonGetter> ArmorAddons => _ArmorAddons ?? new Fallout4Group<ArmorAddon>(this);
         #endregion
         #region Messages
@@ -10079,13 +10079,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public IFallout4GroupGetter<IMessageGetter> Messages => _Messages ?? new Fallout4Group<Message>(this);
         #endregion
         #region MusicTypes
-        private RangeInt64? _MusicTypesLocation;
-        private IFallout4GroupGetter<IMusicTypeGetter>? _MusicTypes => _MusicTypesLocation.HasValue ? Fallout4GroupBinaryOverlay<IMusicTypeGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _MusicTypesLocation!.Value.Min, _MusicTypesLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _MusicTypesLocations;
+        private IFallout4GroupGetter<IMusicTypeGetter>? _MusicTypes => _MusicTypesLocations != null ? Fallout4GroupBinaryOverlay<IMusicTypeGetter>.Fallout4GroupFactory(_data, _MusicTypesLocations, _package) : default;
         public IFallout4GroupGetter<IMusicTypeGetter> MusicTypes => _MusicTypes ?? new Fallout4Group<MusicType>(this);
         #endregion
         #region MusicTracks
-        private RangeInt64? _MusicTracksLocation;
-        private IFallout4GroupGetter<IMusicTrackGetter>? _MusicTracks => _MusicTracksLocation.HasValue ? Fallout4GroupBinaryOverlay<IMusicTrackGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _MusicTracksLocation!.Value.Min, _MusicTracksLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _MusicTracksLocations;
+        private IFallout4GroupGetter<IMusicTrackGetter>? _MusicTracks => _MusicTracksLocations != null ? Fallout4GroupBinaryOverlay<IMusicTrackGetter>.Fallout4GroupFactory(_data, _MusicTracksLocations, _package) : default;
         public IFallout4GroupGetter<IMusicTrackGetter> MusicTracks => _MusicTracks ?? new Fallout4Group<MusicTrack>(this);
         #endregion
         protected Fallout4ModBinaryOverlay(
@@ -10309,27 +10309,32 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.CONT:
                 {
-                    _ContainersLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _ContainersLocations ??= new();
+                    _ContainersLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Containers;
                 }
                 case RecordTypeInts.DOOR:
                 {
-                    _DoorsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _DoorsLocations ??= new();
+                    _DoorsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Doors;
                 }
                 case RecordTypeInts.INGR:
                 {
-                    _IngredientsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _IngredientsLocations ??= new();
+                    _IngredientsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Ingredients;
                 }
                 case RecordTypeInts.LIGH:
                 {
-                    _LightsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _LightsLocations ??= new();
+                    _LightsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Lights;
                 }
                 case RecordTypeInts.MISC:
                 {
-                    _MiscItemsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _MiscItemsLocations ??= new();
+                    _MiscItemsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.MiscItems;
                 }
                 case RecordTypeInts.STAT:
@@ -10340,12 +10345,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.SCOL:
                 {
-                    _StaticCollectionsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _StaticCollectionsLocations ??= new();
+                    _StaticCollectionsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.StaticCollections;
                 }
                 case RecordTypeInts.MSTT:
                 {
-                    _MoveableStaticsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _MoveableStaticsLocations ??= new();
+                    _MoveableStaticsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.MoveableStatics;
                 }
                 case RecordTypeInts.GRAS:
@@ -10356,12 +10363,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.TREE:
                 {
-                    _TreesLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _TreesLocations ??= new();
+                    _TreesLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Trees;
                 }
                 case RecordTypeInts.FLOR:
                 {
-                    _FloraeLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _FloraeLocations ??= new();
+                    _FloraeLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Florae;
                 }
                 case RecordTypeInts.VTYP:
@@ -10384,7 +10393,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.ARMA:
                 {
-                    _ArmorAddonsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _ArmorAddonsLocations ??= new();
+                    _ArmorAddonsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.ArmorAddons;
                 }
                 case RecordTypeInts.MESG:
@@ -10395,12 +10405,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.MUSC:
                 {
-                    _MusicTypesLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _MusicTypesLocations ??= new();
+                    _MusicTypesLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.MusicTypes;
                 }
                 case RecordTypeInts.MUST:
                 {
-                    _MusicTracksLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _MusicTracksLocations ??= new();
+                    _MusicTracksLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.MusicTracks;
                 }
                 default:

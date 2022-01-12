@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Mutagen.Bethesda.Plugins.Records;
 
 namespace Mutagen.Bethesda.Generation
 {
@@ -16,7 +17,7 @@ namespace Mutagen.Bethesda.Generation
 
         static void AttachDebugInspector()
         {
-            string testString = "GroupBinaryWriteTranslation.WriteEmbedded<T>(group, stream);";
+            string testString = nameof(IFormLinkContainerGetter);
             FileGeneration.LineAppended
                 .Where(i => i.Contains(testString))
                 .Subscribe(s =>

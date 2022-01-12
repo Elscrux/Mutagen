@@ -516,6 +516,10 @@ namespace Mutagen.Bethesda.Fallout4
         }
         #endregion
 
+        #region Mutagen
+        public static readonly RecordType GrupRecordType = RegionArea_Registration.TriggeringRecordType;
+        #endregion
+
         #region Binary Translation
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected object BinaryWriteTranslator => RegionAreaBinaryWriteTranslation.Instance;
@@ -815,19 +819,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public static readonly Type? GenericRegistrationType = null;
 
-        public static ICollectionGetter<RecordType> TriggeringRecordTypes => _TriggeringRecordTypes.Value;
-        private static readonly Lazy<ICollectionGetter<RecordType>> _TriggeringRecordTypes = new Lazy<ICollectionGetter<RecordType>>(() =>
-        {
-            return new CollectionGetterWrapper<RecordType>(
-                new HashSet<RecordType>(
-                    new RecordType[]
-                    {
-                        RecordTypes.RPLI,
-                        RecordTypes.RPLD,
-                        RecordTypes.ANAM
-                    })
-            );
-        });
+        public static readonly RecordType TriggeringRecordType = RecordTypes.RPLI;
         public static readonly Type BinaryWriteTranslation = typeof(RegionAreaBinaryWriteTranslation);
         #region Interface
         ProtocolKey ILoquiRegistration.ProtocolKey => ProtocolKey;
@@ -888,6 +880,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
+            frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
             PluginUtilityTranslation.SubrecordParse(
                 record: item,
                 frame: frame,
@@ -1220,10 +1213,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             IRegionAreaGetter item,
             TypedWriteParams? translationParams = null)
         {
-            WriteRecordTypes(
-                item: item,
+            using (HeaderExport.Subrecord(
                 writer: writer,
-                translationParams: translationParams);
+                record: translationParams.ConvertToCustom(RecordTypes.RPLI),
+                overflowRecord: translationParams?.OverflowRecordType,
+                out var writerToUse))
+            {
+                WriteRecordTypes(
+                    item: item,
+                    writer: writerToUse,
+                    translationParams: translationParams);
+            }
         }
 
         public void Write(
@@ -1263,14 +1263,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 case RecordTypeInts.RPLI:
                 {
-                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)RegionArea_FieldIndex.EdgeFallOff) return ParseResult.Stop;
                     frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
                     item.EdgeFallOff = frame.ReadUInt32();
                     return (int)RegionArea_FieldIndex.EdgeFallOff;
                 }
                 case RecordTypeInts.RPLD:
                 {
-                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)RegionArea_FieldIndex.RegionPointListData) return ParseResult.Stop;
                     frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
                     item.RegionPointListData = 
                         Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<P2Float>.Instance.Parse(
@@ -1281,7 +1279,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.ANAM:
                 {
-                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)RegionArea_FieldIndex.Unknown) return ParseResult.Stop;
                     frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
                     item.Unknown = ByteArrayBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: frame.SpawnWithLength(contentLength));
                     return (int)RegionArea_FieldIndex.Unknown;
@@ -1385,12 +1382,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TypedParseParams? parseParams = null)
         {
             var ret = new RegionAreaBinaryOverlay(
-                bytes: stream.RemainingMemory,
+                bytes: HeaderTranslation.ExtractSubrecordMemory(stream.RemainingMemory, package.MetaData.Constants, parseParams),
                 package: package);
-            int offset = stream.Position;
-            ret.FillTypelessSubrecordTypes(
+            var finalPos = checked((int)(stream.Position + stream.GetSubrecord().TotalLength));
+            int offset = stream.Position + package.MetaData.Constants.SubConstants.TypeAndLengthLength;
+            ret.CustomFactoryEnd(
                 stream: stream,
-                finalPos: stream.Length,
+                finalPos: finalPos,
+                offset: offset);
+            ret.FillSubrecordTypes(
+                stream: stream,
+                finalPos: finalPos,
                 offset: offset,
                 parseParams: parseParams,
                 fill: ret.FillRecordType);
@@ -1422,13 +1424,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 case RecordTypeInts.RPLI:
                 {
-                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)RegionArea_FieldIndex.EdgeFallOff) return ParseResult.Stop;
                     _EdgeFallOffLocation = (stream.Position - offset);
                     return (int)RegionArea_FieldIndex.EdgeFallOff;
                 }
                 case RecordTypeInts.RPLD:
                 {
-                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)RegionArea_FieldIndex.RegionPointListData) return ParseResult.Stop;
                     var subMeta = stream.ReadSubrecord();
                     var subLen = subMeta.ContentLength;
                     this.RegionPointListData = BinaryOverlayList.FactoryByStartIndex<P2Float>(
@@ -1441,7 +1441,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.ANAM:
                 {
-                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)RegionArea_FieldIndex.Unknown) return ParseResult.Stop;
                     _UnknownLocation = (stream.Position - offset);
                     return (int)RegionArea_FieldIndex.Unknown;
                 }
