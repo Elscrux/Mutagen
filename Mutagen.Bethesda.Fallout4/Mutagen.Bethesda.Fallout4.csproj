@@ -209,6 +209,9 @@
     <Compile Include="Records\Major Records\RegionSound.cs">
       <DependentUpon>Region.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Major Records\StaticCollection.cs">
+      <DependentUpon>StaticCollection.xml</DependentUpon>
+    </Compile>
     <Compile Include="Records\Major Records\TalkingActivator.cs">
       <DependentUpon>TalkingActivator.xml</DependentUpon>
     </Compile>
@@ -758,6 +761,15 @@
     </Compile>
     <Compile Include="Records\Major Records\Light_Generated.cs">
       <DependentUpon>Light.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\StaticCollection_Generated.cs">
+      <DependentUpon>StaticCollection.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\StaticPart_Generated.cs">
+      <DependentUpon>StaticCollection.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Placement_Generated.cs">
+      <DependentUpon>StaticCollection.xml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

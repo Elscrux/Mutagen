@@ -129,6 +129,7 @@ namespace Mutagen.Bethesda.Plugins.Records.Internals
         public static readonly RecordType ROAD = new(0x44414F52);
         public static readonly RecordType SBSP = new(0x50534253);
         public static readonly RecordType SCEN = new(0x4E454353);
+        public static readonly RecordType SCOL = new(0x4C4F4353);
         public static readonly RecordType SCPT = new(0x54504353);
         public static readonly RecordType SCRL = new(0x4C524353);
         public static readonly RecordType SGST = new(0x54534753);

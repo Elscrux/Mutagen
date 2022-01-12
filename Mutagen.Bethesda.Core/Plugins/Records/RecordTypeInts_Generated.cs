@@ -127,6 +127,7 @@ namespace Mutagen.Bethesda.Plugins.Records.Internals
         public const int ROAD = 0x44414F52;
         public const int SBSP = 0x50534253;
         public const int SCEN = 0x4E454353;
+        public const int SCOL = 0x4C4F4353;
         public const int SCPT = 0x54504353;
         public const int SCRL = 0x4C524353;
         public const int SGST = 0x54534753;

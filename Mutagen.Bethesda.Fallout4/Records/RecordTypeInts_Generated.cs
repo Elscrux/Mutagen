@@ -153,6 +153,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int RNAM = 0x4D414E52;
         public const int RPLD = 0x444C5052;
         public const int RPLI = 0x494C5052;
+        public const int SCOL = 0x4C4F4353;
         public const int SCRN = 0x4E524353;
         public const int SDSC = 0x43534453;
         public const int SNAM = 0x4D414E53;

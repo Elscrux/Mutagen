@@ -155,6 +155,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType RNAM = new(0x4D414E52);
         public static readonly RecordType RPLD = new(0x444C5052);
         public static readonly RecordType RPLI = new(0x494C5052);
+        public static readonly RecordType SCOL = new(0x4C4F4353);
         public static readonly RecordType SCRN = new(0x4E524353);
         public static readonly RecordType SDSC = new(0x43534453);
         public static readonly RecordType SNAM = new(0x4D414E53);
