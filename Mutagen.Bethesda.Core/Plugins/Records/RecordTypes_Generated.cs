@@ -61,6 +61,7 @@ namespace Mutagen.Bethesda.Plugins.Records.Internals
         public static readonly RecordType FSTS = new(0x53545346);
         public static readonly RecordType FULL = new(0x4C4C5546);
         public static readonly RecordType FURN = new(0x4E525546);
+        public static readonly RecordType GDRY = new(0x59524447);
         public static readonly RecordType GLOB = new(0x424F4C47);
         public static readonly RecordType GMST = new(0x54534D47);
         public static readonly RecordType GRAS = new(0x53415247);

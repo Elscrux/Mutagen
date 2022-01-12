@@ -31,6 +31,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Container),
                 typeof(Door),
                 typeof(Faction),
+                typeof(Light),
                 typeof(MiscItem),
                 typeof(Spell),
                 typeof(TextureSet),
@@ -46,6 +47,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Armor),
                 typeof(Book),
                 typeof(Ingredient),
+                typeof(Light),
                 typeof(MiscItem),
             };
             dict[typeof(IItemGetter)] = dict[typeof(IItem)];
@@ -59,6 +61,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Armor),
                 typeof(Book),
                 typeof(Ingredient),
+                typeof(Light),
                 typeof(MiscItem),
             };
             dict[typeof(IConstructibleGetter)] = dict[typeof(IConstructible)];
@@ -105,6 +108,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Spell),
             };
             dict[typeof(ISpellRecordGetter)] = dict[typeof(ISpellRecord)];
+            dict[typeof(IEmittance)] = new Type[]
+            {
+                typeof(Light),
+                typeof(Region),
+            };
+            dict[typeof(IEmittanceGetter)] = dict[typeof(IEmittance)];
             dict[typeof(ILocationRecord)] = new Type[]
             {
                 typeof(LocationReferenceType),
@@ -116,11 +125,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Spell),
             };
             dict[typeof(IEffectRecordGetter)] = dict[typeof(IEffectRecord)];
-            dict[typeof(IEmittance)] = new Type[]
-            {
-                typeof(Region),
-            };
-            dict[typeof(IEmittanceGetter)] = dict[typeof(IEmittance)];
             InterfaceToObjectTypes = dict;
         }
     }

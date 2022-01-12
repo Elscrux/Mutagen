@@ -68,6 +68,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType FSTS = new(0x53545346);
         public static readonly RecordType FTYP = new(0x50595446);
         public static readonly RecordType FULL = new(0x4C4C5546);
+        public static readonly RecordType GDRY = new(0x59524447);
         public static readonly RecordType GLOB = new(0x424F4C47);
         public static readonly RecordType GMST = new(0x54534D47);
         public static readonly RecordType GNAM = new(0x4D414E47);
@@ -92,6 +93,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType KWDA = new(0x4144574B);
         public static readonly RecordType KYWD = new(0x4457594B);
         public static readonly RecordType LCRT = new(0x5452434C);
+        public static readonly RecordType LENS = new(0x534E454C);
+        public static readonly RecordType LIGH = new(0x4847494C);
         public static readonly RecordType LNAM = new(0x4D414E4C);
         public static readonly RecordType LTEX = new(0x5845544C);
         public static readonly RecordType LVSP = new(0x5053564C);
@@ -189,6 +192,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType VTYP = new(0x50595456);
         public static readonly RecordType WAIT = new(0x54494157);
         public static readonly RecordType WATR = new(0x52544157);
+        public static readonly RecordType WGDR = new(0x52444757);
         public static readonly RecordType WNAM = new(0x4D414E57);
         public static readonly RecordType WRLD = new(0x444C5257);
         public static readonly RecordType WTHR = new(0x52485457);

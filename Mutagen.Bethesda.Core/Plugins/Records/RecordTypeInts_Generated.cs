@@ -59,6 +59,7 @@ namespace Mutagen.Bethesda.Plugins.Records.Internals
         public const int FSTS = 0x53545346;
         public const int FULL = 0x4C4C5546;
         public const int FURN = 0x4E525546;
+        public const int GDRY = 0x59524447;
         public const int GLOB = 0x424F4C47;
         public const int GMST = 0x54534D47;
         public const int GRAS = 0x53415247;

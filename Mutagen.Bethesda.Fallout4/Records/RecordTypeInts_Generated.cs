@@ -66,6 +66,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int FSTS = 0x53545346;
         public const int FTYP = 0x50595446;
         public const int FULL = 0x4C4C5546;
+        public const int GDRY = 0x59524447;
         public const int GLOB = 0x424F4C47;
         public const int GMST = 0x54534D47;
         public const int GNAM = 0x4D414E47;
@@ -90,6 +91,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int KWDA = 0x4144574B;
         public const int KYWD = 0x4457594B;
         public const int LCRT = 0x5452434C;
+        public const int LENS = 0x534E454C;
+        public const int LIGH = 0x4847494C;
         public const int LNAM = 0x4D414E4C;
         public const int LTEX = 0x5845544C;
         public const int LVSP = 0x5053564C;
@@ -187,6 +190,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int VTYP = 0x50595456;
         public const int WAIT = 0x54494157;
         public const int WATR = 0x52544157;
+        public const int WGDR = 0x52444757;
         public const int WNAM = 0x4D414E57;
         public const int WRLD = 0x444C5257;
         public const int WTHR = 0x52485457;

@@ -21,6 +21,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Container
 - Door
 - Ingredient
+- Light
 - MiscItem
 - Race
 - Spell
@@ -36,6 +37,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Grass
 - HeadPart
 - Ingredient
+- Light
 - MiscItem
 - TalkingActivator
 ### INamed
@@ -51,6 +53,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - HeadPart
 - Ingredient
 - Keyword
+- Light
 - MaterialType
 - Message
 - MiscItem
@@ -82,6 +85,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Door
 - Grass
 - Ingredient
+- Light
 - MiscItem
 - ObjectEffect
 - SoundMarker
@@ -95,10 +99,12 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Container
 - Door
 - Ingredient
+- Light
 - MiscItem
 - TalkingActivator
 ### IWeightValue
 - Book
+- Light
 ## Concrete Classes to Interfaces
 ### AcousticSpace
 - IObjectBounded
@@ -164,6 +170,13 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 ### Keyword
 - IKeywordCommon
 - INamed
+### Light
+- IKeyworded
+- IModeled
+- INamed
+- IObjectBounded
+- IScripted
+- IWeightValue
 ### MaterialType
 - INamed
 ### Message

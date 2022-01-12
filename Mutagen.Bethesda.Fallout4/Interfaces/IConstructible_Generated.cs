@@ -8,7 +8,7 @@ using Mutagen.Bethesda;
 namespace Mutagen.Bethesda.Fallout4
 {
     /// <summary>
-    /// Implemented by: [Armor, Book, Ingredient, MiscItem]
+    /// Implemented by: [Armor, Book, Ingredient, Light, MiscItem]
     /// </summary>
     public partial interface IConstructible :
         IConstructibleGetter,
@@ -17,7 +17,7 @@ namespace Mutagen.Bethesda.Fallout4
     }
 
     /// <summary>
-    /// Implemented by: [Armor, Book, Ingredient, MiscItem]
+    /// Implemented by: [Armor, Book, Ingredient, Light, MiscItem]
     /// </summary>
     public partial interface IConstructibleGetter : IFallout4MajorRecordGetter
     {
