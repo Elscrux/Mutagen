@@ -184,16 +184,29 @@ namespace Mutagen.Bethesda.Fallout4
         #region BranchFlexibility
         public Single BranchFlexibility { get; set; } = default;
         #endregion
-        #region Unknown
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private MemorySlice<Byte> _Unknown = new byte[32];
-        public MemorySlice<Byte> Unknown
-        {
-            get => _Unknown;
-            set => this._Unknown = value;
-        }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        ReadOnlyMemorySlice<Byte> ITreeGetter.Unknown => this.Unknown;
+        #region TrunkAmplitude
+        public Single TrunkAmplitude { get; set; } = default;
+        #endregion
+        #region FrontAmplitude
+        public Single FrontAmplitude { get; set; } = default;
+        #endregion
+        #region BackAmplitude
+        public Single BackAmplitude { get; set; } = default;
+        #endregion
+        #region SideAmplitude
+        public Single SideAmplitude { get; set; } = default;
+        #endregion
+        #region FrontFrequency
+        public Single FrontFrequency { get; set; } = default;
+        #endregion
+        #region BackFrequency
+        public Single BackFrequency { get; set; } = default;
+        #endregion
+        #region SideFrequency
+        public Single SideFrequency { get; set; } = default;
+        #endregion
+        #region LeafFlexibility
+        public Single LeafFlexibility { get; set; } = default;
         #endregion
         #region LeafAmplitude
         public Single LeafAmplitude { get; set; } = default;
@@ -237,7 +250,14 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Name = initialValue;
                 this.TrunkFlexibility = initialValue;
                 this.BranchFlexibility = initialValue;
-                this.Unknown = initialValue;
+                this.TrunkAmplitude = initialValue;
+                this.FrontAmplitude = initialValue;
+                this.BackAmplitude = initialValue;
+                this.SideAmplitude = initialValue;
+                this.FrontFrequency = initialValue;
+                this.BackFrequency = initialValue;
+                this.SideFrequency = initialValue;
+                this.LeafFlexibility = initialValue;
                 this.LeafAmplitude = initialValue;
                 this.LeafFrequency = initialValue;
                 this.CNAMDataTypeState = initialValue;
@@ -259,7 +279,14 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem Name,
                 TItem TrunkFlexibility,
                 TItem BranchFlexibility,
-                TItem Unknown,
+                TItem TrunkAmplitude,
+                TItem FrontAmplitude,
+                TItem BackAmplitude,
+                TItem SideAmplitude,
+                TItem FrontFrequency,
+                TItem BackFrequency,
+                TItem SideFrequency,
+                TItem LeafFlexibility,
                 TItem LeafAmplitude,
                 TItem LeafFrequency,
                 TItem CNAMDataTypeState)
@@ -280,7 +307,14 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Name = Name;
                 this.TrunkFlexibility = TrunkFlexibility;
                 this.BranchFlexibility = BranchFlexibility;
-                this.Unknown = Unknown;
+                this.TrunkAmplitude = TrunkAmplitude;
+                this.FrontAmplitude = FrontAmplitude;
+                this.BackAmplitude = BackAmplitude;
+                this.SideAmplitude = SideAmplitude;
+                this.FrontFrequency = FrontFrequency;
+                this.BackFrequency = BackFrequency;
+                this.SideFrequency = SideFrequency;
+                this.LeafFlexibility = LeafFlexibility;
                 this.LeafAmplitude = LeafAmplitude;
                 this.LeafFrequency = LeafFrequency;
                 this.CNAMDataTypeState = CNAMDataTypeState;
@@ -304,7 +338,14 @@ namespace Mutagen.Bethesda.Fallout4
             public TItem Name;
             public TItem TrunkFlexibility;
             public TItem BranchFlexibility;
-            public TItem Unknown;
+            public TItem TrunkAmplitude;
+            public TItem FrontAmplitude;
+            public TItem BackAmplitude;
+            public TItem SideAmplitude;
+            public TItem FrontFrequency;
+            public TItem BackFrequency;
+            public TItem SideFrequency;
+            public TItem LeafFlexibility;
             public TItem LeafAmplitude;
             public TItem LeafFrequency;
             public TItem CNAMDataTypeState;
@@ -330,7 +371,14 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!object.Equals(this.Name, rhs.Name)) return false;
                 if (!object.Equals(this.TrunkFlexibility, rhs.TrunkFlexibility)) return false;
                 if (!object.Equals(this.BranchFlexibility, rhs.BranchFlexibility)) return false;
-                if (!object.Equals(this.Unknown, rhs.Unknown)) return false;
+                if (!object.Equals(this.TrunkAmplitude, rhs.TrunkAmplitude)) return false;
+                if (!object.Equals(this.FrontAmplitude, rhs.FrontAmplitude)) return false;
+                if (!object.Equals(this.BackAmplitude, rhs.BackAmplitude)) return false;
+                if (!object.Equals(this.SideAmplitude, rhs.SideAmplitude)) return false;
+                if (!object.Equals(this.FrontFrequency, rhs.FrontFrequency)) return false;
+                if (!object.Equals(this.BackFrequency, rhs.BackFrequency)) return false;
+                if (!object.Equals(this.SideFrequency, rhs.SideFrequency)) return false;
+                if (!object.Equals(this.LeafFlexibility, rhs.LeafFlexibility)) return false;
                 if (!object.Equals(this.LeafAmplitude, rhs.LeafAmplitude)) return false;
                 if (!object.Equals(this.LeafFrequency, rhs.LeafFrequency)) return false;
                 if (!object.Equals(this.CNAMDataTypeState, rhs.CNAMDataTypeState)) return false;
@@ -348,7 +396,14 @@ namespace Mutagen.Bethesda.Fallout4
                 hash.Add(this.Name);
                 hash.Add(this.TrunkFlexibility);
                 hash.Add(this.BranchFlexibility);
-                hash.Add(this.Unknown);
+                hash.Add(this.TrunkAmplitude);
+                hash.Add(this.FrontAmplitude);
+                hash.Add(this.BackAmplitude);
+                hash.Add(this.SideAmplitude);
+                hash.Add(this.FrontFrequency);
+                hash.Add(this.BackFrequency);
+                hash.Add(this.SideFrequency);
+                hash.Add(this.LeafFlexibility);
                 hash.Add(this.LeafAmplitude);
                 hash.Add(this.LeafFrequency);
                 hash.Add(this.CNAMDataTypeState);
@@ -387,7 +442,14 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!eval(this.Name)) return false;
                 if (!eval(this.TrunkFlexibility)) return false;
                 if (!eval(this.BranchFlexibility)) return false;
-                if (!eval(this.Unknown)) return false;
+                if (!eval(this.TrunkAmplitude)) return false;
+                if (!eval(this.FrontAmplitude)) return false;
+                if (!eval(this.BackAmplitude)) return false;
+                if (!eval(this.SideAmplitude)) return false;
+                if (!eval(this.FrontFrequency)) return false;
+                if (!eval(this.BackFrequency)) return false;
+                if (!eval(this.SideFrequency)) return false;
+                if (!eval(this.LeafFlexibility)) return false;
                 if (!eval(this.LeafAmplitude)) return false;
                 if (!eval(this.LeafFrequency)) return false;
                 if (!eval(this.CNAMDataTypeState)) return false;
@@ -424,7 +486,14 @@ namespace Mutagen.Bethesda.Fallout4
                 if (eval(this.Name)) return true;
                 if (eval(this.TrunkFlexibility)) return true;
                 if (eval(this.BranchFlexibility)) return true;
-                if (eval(this.Unknown)) return true;
+                if (eval(this.TrunkAmplitude)) return true;
+                if (eval(this.FrontAmplitude)) return true;
+                if (eval(this.BackAmplitude)) return true;
+                if (eval(this.SideAmplitude)) return true;
+                if (eval(this.FrontFrequency)) return true;
+                if (eval(this.BackFrequency)) return true;
+                if (eval(this.SideFrequency)) return true;
+                if (eval(this.LeafFlexibility)) return true;
                 if (eval(this.LeafAmplitude)) return true;
                 if (eval(this.LeafFrequency)) return true;
                 if (eval(this.CNAMDataTypeState)) return true;
@@ -452,7 +521,14 @@ namespace Mutagen.Bethesda.Fallout4
                 obj.Name = eval(this.Name);
                 obj.TrunkFlexibility = eval(this.TrunkFlexibility);
                 obj.BranchFlexibility = eval(this.BranchFlexibility);
-                obj.Unknown = eval(this.Unknown);
+                obj.TrunkAmplitude = eval(this.TrunkAmplitude);
+                obj.FrontAmplitude = eval(this.FrontAmplitude);
+                obj.BackAmplitude = eval(this.BackAmplitude);
+                obj.SideAmplitude = eval(this.SideAmplitude);
+                obj.FrontFrequency = eval(this.FrontFrequency);
+                obj.BackFrequency = eval(this.BackFrequency);
+                obj.SideFrequency = eval(this.SideFrequency);
+                obj.LeafFlexibility = eval(this.LeafFlexibility);
                 obj.LeafAmplitude = eval(this.LeafAmplitude);
                 obj.LeafFrequency = eval(this.LeafFrequency);
                 obj.CNAMDataTypeState = eval(this.CNAMDataTypeState);
@@ -514,9 +590,37 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         fg.AppendItem(BranchFlexibility, "BranchFlexibility");
                     }
-                    if (printMask?.Unknown ?? true)
+                    if (printMask?.TrunkAmplitude ?? true)
                     {
-                        fg.AppendItem(Unknown, "Unknown");
+                        fg.AppendItem(TrunkAmplitude, "TrunkAmplitude");
+                    }
+                    if (printMask?.FrontAmplitude ?? true)
+                    {
+                        fg.AppendItem(FrontAmplitude, "FrontAmplitude");
+                    }
+                    if (printMask?.BackAmplitude ?? true)
+                    {
+                        fg.AppendItem(BackAmplitude, "BackAmplitude");
+                    }
+                    if (printMask?.SideAmplitude ?? true)
+                    {
+                        fg.AppendItem(SideAmplitude, "SideAmplitude");
+                    }
+                    if (printMask?.FrontFrequency ?? true)
+                    {
+                        fg.AppendItem(FrontFrequency, "FrontFrequency");
+                    }
+                    if (printMask?.BackFrequency ?? true)
+                    {
+                        fg.AppendItem(BackFrequency, "BackFrequency");
+                    }
+                    if (printMask?.SideFrequency ?? true)
+                    {
+                        fg.AppendItem(SideFrequency, "SideFrequency");
+                    }
+                    if (printMask?.LeafFlexibility ?? true)
+                    {
+                        fg.AppendItem(LeafFlexibility, "LeafFlexibility");
                     }
                     if (printMask?.LeafAmplitude ?? true)
                     {
@@ -551,7 +655,14 @@ namespace Mutagen.Bethesda.Fallout4
             public Exception? Name;
             public Exception? TrunkFlexibility;
             public Exception? BranchFlexibility;
-            public Exception? Unknown;
+            public Exception? TrunkAmplitude;
+            public Exception? FrontAmplitude;
+            public Exception? BackAmplitude;
+            public Exception? SideAmplitude;
+            public Exception? FrontFrequency;
+            public Exception? BackFrequency;
+            public Exception? SideFrequency;
+            public Exception? LeafFlexibility;
             public Exception? LeafAmplitude;
             public Exception? LeafFrequency;
             public Exception? CNAMDataTypeState;
@@ -581,8 +692,22 @@ namespace Mutagen.Bethesda.Fallout4
                         return TrunkFlexibility;
                     case Tree_FieldIndex.BranchFlexibility:
                         return BranchFlexibility;
-                    case Tree_FieldIndex.Unknown:
-                        return Unknown;
+                    case Tree_FieldIndex.TrunkAmplitude:
+                        return TrunkAmplitude;
+                    case Tree_FieldIndex.FrontAmplitude:
+                        return FrontAmplitude;
+                    case Tree_FieldIndex.BackAmplitude:
+                        return BackAmplitude;
+                    case Tree_FieldIndex.SideAmplitude:
+                        return SideAmplitude;
+                    case Tree_FieldIndex.FrontFrequency:
+                        return FrontFrequency;
+                    case Tree_FieldIndex.BackFrequency:
+                        return BackFrequency;
+                    case Tree_FieldIndex.SideFrequency:
+                        return SideFrequency;
+                    case Tree_FieldIndex.LeafFlexibility:
+                        return LeafFlexibility;
                     case Tree_FieldIndex.LeafAmplitude:
                         return LeafAmplitude;
                     case Tree_FieldIndex.LeafFrequency:
@@ -626,8 +751,29 @@ namespace Mutagen.Bethesda.Fallout4
                     case Tree_FieldIndex.BranchFlexibility:
                         this.BranchFlexibility = ex;
                         break;
-                    case Tree_FieldIndex.Unknown:
-                        this.Unknown = ex;
+                    case Tree_FieldIndex.TrunkAmplitude:
+                        this.TrunkAmplitude = ex;
+                        break;
+                    case Tree_FieldIndex.FrontAmplitude:
+                        this.FrontAmplitude = ex;
+                        break;
+                    case Tree_FieldIndex.BackAmplitude:
+                        this.BackAmplitude = ex;
+                        break;
+                    case Tree_FieldIndex.SideAmplitude:
+                        this.SideAmplitude = ex;
+                        break;
+                    case Tree_FieldIndex.FrontFrequency:
+                        this.FrontFrequency = ex;
+                        break;
+                    case Tree_FieldIndex.BackFrequency:
+                        this.BackFrequency = ex;
+                        break;
+                    case Tree_FieldIndex.SideFrequency:
+                        this.SideFrequency = ex;
+                        break;
+                    case Tree_FieldIndex.LeafFlexibility:
+                        this.LeafFlexibility = ex;
                         break;
                     case Tree_FieldIndex.LeafAmplitude:
                         this.LeafAmplitude = ex;
@@ -676,8 +822,29 @@ namespace Mutagen.Bethesda.Fallout4
                     case Tree_FieldIndex.BranchFlexibility:
                         this.BranchFlexibility = (Exception?)obj;
                         break;
-                    case Tree_FieldIndex.Unknown:
-                        this.Unknown = (Exception?)obj;
+                    case Tree_FieldIndex.TrunkAmplitude:
+                        this.TrunkAmplitude = (Exception?)obj;
+                        break;
+                    case Tree_FieldIndex.FrontAmplitude:
+                        this.FrontAmplitude = (Exception?)obj;
+                        break;
+                    case Tree_FieldIndex.BackAmplitude:
+                        this.BackAmplitude = (Exception?)obj;
+                        break;
+                    case Tree_FieldIndex.SideAmplitude:
+                        this.SideAmplitude = (Exception?)obj;
+                        break;
+                    case Tree_FieldIndex.FrontFrequency:
+                        this.FrontFrequency = (Exception?)obj;
+                        break;
+                    case Tree_FieldIndex.BackFrequency:
+                        this.BackFrequency = (Exception?)obj;
+                        break;
+                    case Tree_FieldIndex.SideFrequency:
+                        this.SideFrequency = (Exception?)obj;
+                        break;
+                    case Tree_FieldIndex.LeafFlexibility:
+                        this.LeafFlexibility = (Exception?)obj;
                         break;
                     case Tree_FieldIndex.LeafAmplitude:
                         this.LeafAmplitude = (Exception?)obj;
@@ -706,7 +873,14 @@ namespace Mutagen.Bethesda.Fallout4
                 if (Name != null) return true;
                 if (TrunkFlexibility != null) return true;
                 if (BranchFlexibility != null) return true;
-                if (Unknown != null) return true;
+                if (TrunkAmplitude != null) return true;
+                if (FrontAmplitude != null) return true;
+                if (BackAmplitude != null) return true;
+                if (SideAmplitude != null) return true;
+                if (FrontFrequency != null) return true;
+                if (BackFrequency != null) return true;
+                if (SideFrequency != null) return true;
+                if (LeafFlexibility != null) return true;
                 if (LeafAmplitude != null) return true;
                 if (LeafFrequency != null) return true;
                 if (CNAMDataTypeState != null) return true;
@@ -754,7 +928,14 @@ namespace Mutagen.Bethesda.Fallout4
                 fg.AppendItem(Name, "Name");
                 fg.AppendItem(TrunkFlexibility, "TrunkFlexibility");
                 fg.AppendItem(BranchFlexibility, "BranchFlexibility");
-                fg.AppendItem(Unknown, "Unknown");
+                fg.AppendItem(TrunkAmplitude, "TrunkAmplitude");
+                fg.AppendItem(FrontAmplitude, "FrontAmplitude");
+                fg.AppendItem(BackAmplitude, "BackAmplitude");
+                fg.AppendItem(SideAmplitude, "SideAmplitude");
+                fg.AppendItem(FrontFrequency, "FrontFrequency");
+                fg.AppendItem(BackFrequency, "BackFrequency");
+                fg.AppendItem(SideFrequency, "SideFrequency");
+                fg.AppendItem(LeafFlexibility, "LeafFlexibility");
                 fg.AppendItem(LeafAmplitude, "LeafAmplitude");
                 fg.AppendItem(LeafFrequency, "LeafFrequency");
                 fg.AppendItem(CNAMDataTypeState, "CNAMDataTypeState");
@@ -775,7 +956,14 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Name = this.Name.Combine(rhs.Name);
                 ret.TrunkFlexibility = this.TrunkFlexibility.Combine(rhs.TrunkFlexibility);
                 ret.BranchFlexibility = this.BranchFlexibility.Combine(rhs.BranchFlexibility);
-                ret.Unknown = this.Unknown.Combine(rhs.Unknown);
+                ret.TrunkAmplitude = this.TrunkAmplitude.Combine(rhs.TrunkAmplitude);
+                ret.FrontAmplitude = this.FrontAmplitude.Combine(rhs.FrontAmplitude);
+                ret.BackAmplitude = this.BackAmplitude.Combine(rhs.BackAmplitude);
+                ret.SideAmplitude = this.SideAmplitude.Combine(rhs.SideAmplitude);
+                ret.FrontFrequency = this.FrontFrequency.Combine(rhs.FrontFrequency);
+                ret.BackFrequency = this.BackFrequency.Combine(rhs.BackFrequency);
+                ret.SideFrequency = this.SideFrequency.Combine(rhs.SideFrequency);
+                ret.LeafFlexibility = this.LeafFlexibility.Combine(rhs.LeafFlexibility);
                 ret.LeafAmplitude = this.LeafAmplitude.Combine(rhs.LeafAmplitude);
                 ret.LeafFrequency = this.LeafFrequency.Combine(rhs.LeafFrequency);
                 ret.CNAMDataTypeState = this.CNAMDataTypeState.Combine(rhs.CNAMDataTypeState);
@@ -810,7 +998,14 @@ namespace Mutagen.Bethesda.Fallout4
             public bool Name;
             public bool TrunkFlexibility;
             public bool BranchFlexibility;
-            public bool Unknown;
+            public bool TrunkAmplitude;
+            public bool FrontAmplitude;
+            public bool BackAmplitude;
+            public bool SideAmplitude;
+            public bool FrontFrequency;
+            public bool BackFrequency;
+            public bool SideFrequency;
+            public bool LeafFlexibility;
             public bool LeafAmplitude;
             public bool LeafFrequency;
             public bool CNAMDataTypeState;
@@ -827,7 +1022,14 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Name = defaultOn;
                 this.TrunkFlexibility = defaultOn;
                 this.BranchFlexibility = defaultOn;
-                this.Unknown = defaultOn;
+                this.TrunkAmplitude = defaultOn;
+                this.FrontAmplitude = defaultOn;
+                this.BackAmplitude = defaultOn;
+                this.SideAmplitude = defaultOn;
+                this.FrontFrequency = defaultOn;
+                this.BackFrequency = defaultOn;
+                this.SideFrequency = defaultOn;
+                this.LeafFlexibility = defaultOn;
                 this.LeafAmplitude = defaultOn;
                 this.LeafFrequency = defaultOn;
                 this.CNAMDataTypeState = defaultOn;
@@ -847,7 +1049,14 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((Name, null));
                 ret.Add((TrunkFlexibility, null));
                 ret.Add((BranchFlexibility, null));
-                ret.Add((Unknown, null));
+                ret.Add((TrunkAmplitude, null));
+                ret.Add((FrontAmplitude, null));
+                ret.Add((BackAmplitude, null));
+                ret.Add((SideAmplitude, null));
+                ret.Add((FrontFrequency, null));
+                ret.Add((BackFrequency, null));
+                ret.Add((SideFrequency, null));
+                ret.Add((LeafFlexibility, null));
                 ret.Add((LeafAmplitude, null));
                 ret.Add((LeafFrequency, null));
                 ret.Add((CNAMDataTypeState, null));
@@ -1031,7 +1240,14 @@ namespace Mutagen.Bethesda.Fallout4
         new TranslatedString? Name { get; set; }
         new Single TrunkFlexibility { get; set; }
         new Single BranchFlexibility { get; set; }
-        new MemorySlice<Byte> Unknown { get; set; }
+        new Single TrunkAmplitude { get; set; }
+        new Single FrontAmplitude { get; set; }
+        new Single BackAmplitude { get; set; }
+        new Single SideAmplitude { get; set; }
+        new Single FrontFrequency { get; set; }
+        new Single BackFrequency { get; set; }
+        new Single SideFrequency { get; set; }
+        new Single LeafFlexibility { get; set; }
         new Single LeafAmplitude { get; set; }
         new Single LeafFrequency { get; set; }
         new Tree.CNAMDataType CNAMDataTypeState { get; set; }
@@ -1096,7 +1312,14 @@ namespace Mutagen.Bethesda.Fallout4
         #endregion
         Single TrunkFlexibility { get; }
         Single BranchFlexibility { get; }
-        ReadOnlyMemorySlice<Byte> Unknown { get; }
+        Single TrunkAmplitude { get; }
+        Single FrontAmplitude { get; }
+        Single BackAmplitude { get; }
+        Single SideAmplitude { get; }
+        Single FrontFrequency { get; }
+        Single BackFrequency { get; }
+        Single SideFrequency { get; }
+        Single LeafFlexibility { get; }
         Single LeafAmplitude { get; }
         Single LeafFrequency { get; }
         Tree.CNAMDataType CNAMDataTypeState { get; }
@@ -1277,10 +1500,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         Name = 12,
         TrunkFlexibility = 13,
         BranchFlexibility = 14,
-        Unknown = 15,
-        LeafAmplitude = 16,
-        LeafFrequency = 17,
-        CNAMDataTypeState = 18,
+        TrunkAmplitude = 15,
+        FrontAmplitude = 16,
+        BackAmplitude = 17,
+        SideAmplitude = 18,
+        FrontFrequency = 19,
+        BackFrequency = 20,
+        SideFrequency = 21,
+        LeafFlexibility = 22,
+        LeafAmplitude = 23,
+        LeafFrequency = 24,
+        CNAMDataTypeState = 25,
     }
     #endregion
 
@@ -1298,9 +1528,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public const string GUID = "0cc3a259-8223-4da7-9ef5-9fcb393486a2";
 
-        public const ushort AdditionalFieldCount = 13;
+        public const ushort AdditionalFieldCount = 20;
 
-        public const ushort FieldCount = 19;
+        public const ushort FieldCount = 26;
 
         public static readonly Type MaskType = typeof(Tree.Mask<>);
 
@@ -1378,7 +1608,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.Name = default;
             item.TrunkFlexibility = default;
             item.BranchFlexibility = default;
-            item.Unknown = new byte[32];
+            item.TrunkAmplitude = default;
+            item.FrontAmplitude = default;
+            item.BackAmplitude = default;
+            item.SideAmplitude = default;
+            item.FrontFrequency = default;
+            item.BackFrequency = default;
+            item.SideFrequency = default;
+            item.LeafFlexibility = default;
             item.LeafAmplitude = default;
             item.LeafFrequency = default;
             item.CNAMDataTypeState = default;
@@ -1492,7 +1729,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ret.Name = object.Equals(item.Name, rhs.Name);
             ret.TrunkFlexibility = item.TrunkFlexibility.EqualsWithin(rhs.TrunkFlexibility);
             ret.BranchFlexibility = item.BranchFlexibility.EqualsWithin(rhs.BranchFlexibility);
-            ret.Unknown = MemoryExtensions.SequenceEqual(item.Unknown.Span, rhs.Unknown.Span);
+            ret.TrunkAmplitude = item.TrunkAmplitude.EqualsWithin(rhs.TrunkAmplitude);
+            ret.FrontAmplitude = item.FrontAmplitude.EqualsWithin(rhs.FrontAmplitude);
+            ret.BackAmplitude = item.BackAmplitude.EqualsWithin(rhs.BackAmplitude);
+            ret.SideAmplitude = item.SideAmplitude.EqualsWithin(rhs.SideAmplitude);
+            ret.FrontFrequency = item.FrontFrequency.EqualsWithin(rhs.FrontFrequency);
+            ret.BackFrequency = item.BackFrequency.EqualsWithin(rhs.BackFrequency);
+            ret.SideFrequency = item.SideFrequency.EqualsWithin(rhs.SideFrequency);
+            ret.LeafFlexibility = item.LeafFlexibility.EqualsWithin(rhs.LeafFlexibility);
             ret.LeafAmplitude = item.LeafAmplitude.EqualsWithin(rhs.LeafAmplitude);
             ret.LeafFrequency = item.LeafFrequency.EqualsWithin(rhs.LeafFrequency);
             ret.CNAMDataTypeState = item.CNAMDataTypeState == rhs.CNAMDataTypeState;
@@ -1587,9 +1831,37 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 fg.AppendItem(item.BranchFlexibility, "BranchFlexibility");
             }
-            if (printMask?.Unknown ?? true)
+            if (printMask?.TrunkAmplitude ?? true)
             {
-                fg.AppendLine($"Unknown => {SpanExt.ToHexString(item.Unknown)}");
+                fg.AppendItem(item.TrunkAmplitude, "TrunkAmplitude");
+            }
+            if (printMask?.FrontAmplitude ?? true)
+            {
+                fg.AppendItem(item.FrontAmplitude, "FrontAmplitude");
+            }
+            if (printMask?.BackAmplitude ?? true)
+            {
+                fg.AppendItem(item.BackAmplitude, "BackAmplitude");
+            }
+            if (printMask?.SideAmplitude ?? true)
+            {
+                fg.AppendItem(item.SideAmplitude, "SideAmplitude");
+            }
+            if (printMask?.FrontFrequency ?? true)
+            {
+                fg.AppendItem(item.FrontFrequency, "FrontFrequency");
+            }
+            if (printMask?.BackFrequency ?? true)
+            {
+                fg.AppendItem(item.BackFrequency, "BackFrequency");
+            }
+            if (printMask?.SideFrequency ?? true)
+            {
+                fg.AppendItem(item.SideFrequency, "SideFrequency");
+            }
+            if (printMask?.LeafFlexibility ?? true)
+            {
+                fg.AppendItem(item.LeafFlexibility, "LeafFlexibility");
             }
             if (printMask?.LeafAmplitude ?? true)
             {
@@ -1703,9 +1975,37 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 if (!lhs.BranchFlexibility.EqualsWithin(rhs.BranchFlexibility)) return false;
             }
-            if ((crystal?.GetShouldTranslate((int)Tree_FieldIndex.Unknown) ?? true))
+            if ((crystal?.GetShouldTranslate((int)Tree_FieldIndex.TrunkAmplitude) ?? true))
             {
-                if (!MemoryExtensions.SequenceEqual(lhs.Unknown.Span, rhs.Unknown.Span)) return false;
+                if (!lhs.TrunkAmplitude.EqualsWithin(rhs.TrunkAmplitude)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Tree_FieldIndex.FrontAmplitude) ?? true))
+            {
+                if (!lhs.FrontAmplitude.EqualsWithin(rhs.FrontAmplitude)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Tree_FieldIndex.BackAmplitude) ?? true))
+            {
+                if (!lhs.BackAmplitude.EqualsWithin(rhs.BackAmplitude)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Tree_FieldIndex.SideAmplitude) ?? true))
+            {
+                if (!lhs.SideAmplitude.EqualsWithin(rhs.SideAmplitude)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Tree_FieldIndex.FrontFrequency) ?? true))
+            {
+                if (!lhs.FrontFrequency.EqualsWithin(rhs.FrontFrequency)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Tree_FieldIndex.BackFrequency) ?? true))
+            {
+                if (!lhs.BackFrequency.EqualsWithin(rhs.BackFrequency)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Tree_FieldIndex.SideFrequency) ?? true))
+            {
+                if (!lhs.SideFrequency.EqualsWithin(rhs.SideFrequency)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Tree_FieldIndex.LeafFlexibility) ?? true))
+            {
+                if (!lhs.LeafFlexibility.EqualsWithin(rhs.LeafFlexibility)) return false;
             }
             if ((crystal?.GetShouldTranslate((int)Tree_FieldIndex.LeafAmplitude) ?? true))
             {
@@ -1768,7 +2068,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             }
             hash.Add(item.TrunkFlexibility);
             hash.Add(item.BranchFlexibility);
-            hash.Add(item.Unknown);
+            hash.Add(item.TrunkAmplitude);
+            hash.Add(item.FrontAmplitude);
+            hash.Add(item.BackAmplitude);
+            hash.Add(item.SideAmplitude);
+            hash.Add(item.FrontFrequency);
+            hash.Add(item.BackFrequency);
+            hash.Add(item.SideFrequency);
+            hash.Add(item.LeafFlexibility);
             hash.Add(item.LeafAmplitude);
             hash.Add(item.LeafFrequency);
             hash.Add(item.CNAMDataTypeState);
@@ -2017,9 +2324,37 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 item.BranchFlexibility = rhs.BranchFlexibility;
             }
-            if ((copyMask?.GetShouldTranslate((int)Tree_FieldIndex.Unknown) ?? true))
+            if ((copyMask?.GetShouldTranslate((int)Tree_FieldIndex.TrunkAmplitude) ?? true))
             {
-                item.Unknown = rhs.Unknown.ToArray();
+                item.TrunkAmplitude = rhs.TrunkAmplitude;
+            }
+            if ((copyMask?.GetShouldTranslate((int)Tree_FieldIndex.FrontAmplitude) ?? true))
+            {
+                item.FrontAmplitude = rhs.FrontAmplitude;
+            }
+            if ((copyMask?.GetShouldTranslate((int)Tree_FieldIndex.BackAmplitude) ?? true))
+            {
+                item.BackAmplitude = rhs.BackAmplitude;
+            }
+            if ((copyMask?.GetShouldTranslate((int)Tree_FieldIndex.SideAmplitude) ?? true))
+            {
+                item.SideAmplitude = rhs.SideAmplitude;
+            }
+            if ((copyMask?.GetShouldTranslate((int)Tree_FieldIndex.FrontFrequency) ?? true))
+            {
+                item.FrontFrequency = rhs.FrontFrequency;
+            }
+            if ((copyMask?.GetShouldTranslate((int)Tree_FieldIndex.BackFrequency) ?? true))
+            {
+                item.BackFrequency = rhs.BackFrequency;
+            }
+            if ((copyMask?.GetShouldTranslate((int)Tree_FieldIndex.SideFrequency) ?? true))
+            {
+                item.SideFrequency = rhs.SideFrequency;
+            }
+            if ((copyMask?.GetShouldTranslate((int)Tree_FieldIndex.LeafFlexibility) ?? true))
+            {
+                item.LeafFlexibility = rhs.LeafFlexibility;
             }
             if ((copyMask?.GetShouldTranslate((int)Tree_FieldIndex.LeafAmplitude) ?? true))
             {
@@ -2247,9 +2582,30 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
                     writer: writer,
                     item: item.BranchFlexibility);
-                ByteArrayBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
+                FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
                     writer: writer,
-                    item: item.Unknown);
+                    item: item.TrunkAmplitude);
+                FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
+                    writer: writer,
+                    item: item.FrontAmplitude);
+                FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
+                    writer: writer,
+                    item: item.BackAmplitude);
+                FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
+                    writer: writer,
+                    item: item.SideAmplitude);
+                FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
+                    writer: writer,
+                    item: item.FrontFrequency);
+                FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
+                    writer: writer,
+                    item: item.BackFrequency);
+                FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
+                    writer: writer,
+                    item: item.SideFrequency);
+                FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
+                    writer: writer,
+                    item: item.LeafFlexibility);
                 FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
                     writer: writer,
                     item: item.LeafAmplitude);
@@ -2397,7 +2753,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     var dataFrame = frame.SpawnWithLength(contentLength);
                     item.TrunkFlexibility = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
                     item.BranchFlexibility = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
-                    item.Unknown = ByteArrayBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame.SpawnWithLength(32));
+                    item.TrunkAmplitude = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
+                    item.FrontAmplitude = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
+                    item.BackAmplitude = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
+                    item.SideAmplitude = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
+                    item.FrontFrequency = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
+                    item.BackFrequency = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
+                    item.SideFrequency = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
+                    item.LeafFlexibility = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
                     item.LeafAmplitude = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
                     item.LeafFrequency = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
                     return (int)Tree_FieldIndex.LeafFrequency;
@@ -2507,10 +2870,45 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private bool _BranchFlexibility_IsSet => _CNAMLocation.HasValue;
         public Single BranchFlexibility => _BranchFlexibility_IsSet ? _data.Slice(_BranchFlexibilityLocation, 4).Float() : default;
         #endregion
-        #region Unknown
-        private int _UnknownLocation => _CNAMLocation!.Value + 0x8;
-        private bool _Unknown_IsSet => _CNAMLocation.HasValue;
-        public ReadOnlyMemorySlice<Byte> Unknown => _Unknown_IsSet ? _data.Span.Slice(_UnknownLocation, 32).ToArray() : default(ReadOnlyMemorySlice<byte>);
+        #region TrunkAmplitude
+        private int _TrunkAmplitudeLocation => _CNAMLocation!.Value + 0x8;
+        private bool _TrunkAmplitude_IsSet => _CNAMLocation.HasValue;
+        public Single TrunkAmplitude => _TrunkAmplitude_IsSet ? _data.Slice(_TrunkAmplitudeLocation, 4).Float() : default;
+        #endregion
+        #region FrontAmplitude
+        private int _FrontAmplitudeLocation => _CNAMLocation!.Value + 0xC;
+        private bool _FrontAmplitude_IsSet => _CNAMLocation.HasValue;
+        public Single FrontAmplitude => _FrontAmplitude_IsSet ? _data.Slice(_FrontAmplitudeLocation, 4).Float() : default;
+        #endregion
+        #region BackAmplitude
+        private int _BackAmplitudeLocation => _CNAMLocation!.Value + 0x10;
+        private bool _BackAmplitude_IsSet => _CNAMLocation.HasValue;
+        public Single BackAmplitude => _BackAmplitude_IsSet ? _data.Slice(_BackAmplitudeLocation, 4).Float() : default;
+        #endregion
+        #region SideAmplitude
+        private int _SideAmplitudeLocation => _CNAMLocation!.Value + 0x14;
+        private bool _SideAmplitude_IsSet => _CNAMLocation.HasValue;
+        public Single SideAmplitude => _SideAmplitude_IsSet ? _data.Slice(_SideAmplitudeLocation, 4).Float() : default;
+        #endregion
+        #region FrontFrequency
+        private int _FrontFrequencyLocation => _CNAMLocation!.Value + 0x18;
+        private bool _FrontFrequency_IsSet => _CNAMLocation.HasValue;
+        public Single FrontFrequency => _FrontFrequency_IsSet ? _data.Slice(_FrontFrequencyLocation, 4).Float() : default;
+        #endregion
+        #region BackFrequency
+        private int _BackFrequencyLocation => _CNAMLocation!.Value + 0x1C;
+        private bool _BackFrequency_IsSet => _CNAMLocation.HasValue;
+        public Single BackFrequency => _BackFrequency_IsSet ? _data.Slice(_BackFrequencyLocation, 4).Float() : default;
+        #endregion
+        #region SideFrequency
+        private int _SideFrequencyLocation => _CNAMLocation!.Value + 0x20;
+        private bool _SideFrequency_IsSet => _CNAMLocation.HasValue;
+        public Single SideFrequency => _SideFrequency_IsSet ? _data.Slice(_SideFrequencyLocation, 4).Float() : default;
+        #endregion
+        #region LeafFlexibility
+        private int _LeafFlexibilityLocation => _CNAMLocation!.Value + 0x24;
+        private bool _LeafFlexibility_IsSet => _CNAMLocation.HasValue;
+        public Single LeafFlexibility => _LeafFlexibility_IsSet ? _data.Slice(_LeafFlexibilityLocation, 4).Float() : default;
         #endregion
         #region LeafAmplitude
         private int _LeafAmplitudeLocation => _CNAMLocation!.Value + 0x28;
