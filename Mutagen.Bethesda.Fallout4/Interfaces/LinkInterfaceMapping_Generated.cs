@@ -102,6 +102,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 typeof(LandscapeTexture),
                 typeof(MoveableStatic),
+                typeof(Tree),
             };
             dict[typeof(IRegionTargetGetter)] = dict[typeof(IRegionTarget)];
             dict[typeof(ISpellRecord)] = new Type[]

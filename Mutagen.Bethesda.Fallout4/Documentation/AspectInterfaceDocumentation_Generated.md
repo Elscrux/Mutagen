@@ -42,6 +42,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - MiscItem
 - MoveableStatic
 - TalkingActivator
+- Tree
 ### INamed
 - ActionRecord
 - Activator
@@ -77,6 +78,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - ScriptStringProperty
 - Spell
 - TalkingActivator
+- Tree
 ### IObjectBounded
 - AcousticSpace
 - Activator
@@ -96,6 +98,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Spell
 - TalkingActivator
 - TextureSet
+- Tree
 ### IScripted
 - Activator
 - Armor
@@ -107,6 +110,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - MiscItem
 - MoveableStatic
 - TalkingActivator
+- Tree
 ### IWeightValue
 - Book
 - Light
@@ -257,3 +261,8 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - IScripted
 ### TextureSet
 - IObjectBounded
+### Tree
+- IModeled
+- INamed
+- IObjectBounded
+- IScripted

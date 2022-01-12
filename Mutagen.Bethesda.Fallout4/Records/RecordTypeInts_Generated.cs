@@ -129,6 +129,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int ONAM = 0x4D414E4F;
         public const int OTFT = 0x5446544F;
         public const int PERK = 0x4B524550;
+        public const int PFIG = 0x47494650;
+        public const int PFPC = 0x43504650;
         public const int PLCN = 0x4E434C50;
         public const int PLVD = 0x44564C50;
         public const int PNAM = 0x4D414E50;
@@ -174,6 +176,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int TERM = 0x4D524554;
         public const int TES4 = 0x34534554;
         public const int TNAM = 0x4D414E54;
+        public const int TREE = 0x45455254;
         public const int TRNS = 0x534E5254;
         public const int TX00 = 0x30305854;
         public const int TX01 = 0x31305854;

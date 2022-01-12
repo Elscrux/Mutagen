@@ -131,6 +131,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType ONAM = new(0x4D414E4F);
         public static readonly RecordType OTFT = new(0x5446544F);
         public static readonly RecordType PERK = new(0x4B524550);
+        public static readonly RecordType PFIG = new(0x47494650);
+        public static readonly RecordType PFPC = new(0x43504650);
         public static readonly RecordType PLCN = new(0x4E434C50);
         public static readonly RecordType PLVD = new(0x44564C50);
         public static readonly RecordType PNAM = new(0x4D414E50);
@@ -176,6 +178,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType TERM = new(0x4D524554);
         public static readonly RecordType TES4 = new(0x34534554);
         public static readonly RecordType TNAM = new(0x4D414E54);
+        public static readonly RecordType TREE = new(0x45455254);
         public static readonly RecordType TRNS = new(0x534E5254);
         public static readonly RecordType TX00 = new(0x30305854);
         public static readonly RecordType TX01 = new(0x31305854);

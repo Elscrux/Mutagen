@@ -35,6 +35,7 @@
 			<Group name="StaticCollections" refName="StaticCollection" />
 			<Group name="MoveableStatics" refName="MoveableStatic" />
 			<Group name="Grasses" refName="Grass" />
+			<Group name="Trees" refName="Tree" />
 			<Group name="VoiceTypes" refName="VoiceType" />
 			<Group name="Quests" refName="Quest" />
 			<Group name="MaterialTypes" refName="MaterialType" />
