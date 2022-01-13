@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Loqui xmlns="http://tempuri.org/LoquiSource.xsd">
+  <Object name="Attack" objType="Subrecord" GUID="4dbbbcdd-1e6b-4c77-b68c-acbd0286e2fd" ID="204">
+    <Fields>
+      <RefDirect name="AttackData" refName="AttackData" />
+      <String name="AttackEvent" recordType="ATKE" />
+      <FormLink name="WeaponSlot" recordType="ATKW" refName="EquipType" />
+      <FormLink name="RequiredSlot" recordType="ATKS" refName="EquipType" />
+      <String name="Description" recordType="ATKT" />
+    </Fields>
+  </Object>
+  <Object name="AttackData" objType="Subrecord" recordType="ATKD" GUID="a26f7958-d472-4738-b1fd-a3d87aecbcc5" ID="205">
+    <Fields>
+      <Float name="DamageMult" />
+      <Float name="Chance" />
+      <FormLink name="Spell" refName="Spell" />
+      <Enum name="Flags" enumName="AttackData.Flag" byteLength="4" />
+      <Float name="AttackAngle" />
+      <Float name="StrikeAngle" />
+      <Float name="Stagger" />
+      <Float name="Knockdown" />
+      <Float name="RecoveryTime" />
+      <Float name="ActionPointsMult" />
+      <Int32 name="StaggerOffset" />
+    </Fields>
+  </Object>
+</Loqui>

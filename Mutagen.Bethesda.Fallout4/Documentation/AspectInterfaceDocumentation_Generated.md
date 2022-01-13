@@ -32,6 +32,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Activator
 - ArmorModel
 - ArtObject
+- BodyData
 - Book
 - Container
 - DestructionStage
@@ -49,11 +50,14 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - ActionRecord
 - Activator
 - Armor
+- BipedObjectData
+- Bone
 - Book
 - Class
 - Component
 - Container
 - Door
+- FaceMorph
 - Faction
 - Flora
 - HeadPart
@@ -63,8 +67,11 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - MaterialType
 - Message
 - MiscItem
+- MorphGroup
+- MorphPreset
 - MoveableStatic
 - ObjectEffect
+- Phoneme
 - Race
 - RegionMap
 - ScriptBoolListProperty
@@ -81,6 +88,8 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - ScriptStringProperty
 - Spell
 - TalkingActivator
+- TintGroup
+- TintTemplateOption
 - Tree
 ### IObjectBounded
 - AcousticSpace
@@ -141,6 +150,12 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 ### ArtObject
 - IModeled
 - IObjectBounded
+### BipedObjectData
+- INamed
+### BodyData
+- IModeled
+### Bone
+- INamed
 ### Book
 - IKeyworded
 - IModeled
@@ -167,6 +182,8 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - INamed
 - IObjectBounded
 - IScripted
+### FaceMorph
+- INamed
 ### Faction
 - INamed
 ### Flora
@@ -207,6 +224,10 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - INamed
 - IObjectBounded
 - IScripted
+### MorphGroup
+- INamed
+### MorphPreset
+- INamed
 ### MoveableStatic
 - IKeyworded
 - IModeled
@@ -216,6 +237,8 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 ### ObjectEffect
 - INamed
 - IObjectBounded
+### Phoneme
+- INamed
 ### Race
 - IKeyworded
 - INamed
@@ -272,6 +295,10 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - IScripted
 ### TextureSet
 - IObjectBounded
+### TintGroup
+- INamed
+### TintTemplateOption
+- INamed
 ### Tree
 - IModeled
 - INamed

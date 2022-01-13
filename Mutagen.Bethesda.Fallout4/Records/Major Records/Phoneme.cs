@@ -1,7 +1,7 @@
 using System;
-using static Mutagen.Bethesda.Skyrim.Phoneme;
+using static Mutagen.Bethesda.Fallout4.Phoneme;
 
-namespace Mutagen.Bethesda.Skyrim
+namespace Mutagen.Bethesda.Fallout4
 {
     public partial class Phoneme
     {
@@ -58,7 +58,7 @@ namespace Mutagen.Bethesda.Skyrim
 
     public partial class PhonemeMixIn
     {
-        public static void Set(this IPhoneme phoneme, Slot slot, float f)
+        public static void Set(this IPhoneme phoneme, Phoneme.Slot slot, float f)
         {
             switch (slot)
             {
@@ -196,7 +196,7 @@ namespace Mutagen.Bethesda.Skyrim
             }
         }
 
-        public static float Get(this IPhonemeGetter phoneme, Slot slot)
+        public static float Get(this IPhonemeGetter phoneme, Phoneme.Slot slot)
         {
             switch (slot)
             {
