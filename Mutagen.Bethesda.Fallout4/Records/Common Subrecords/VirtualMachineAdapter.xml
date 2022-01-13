@@ -48,6 +48,17 @@
       <Bool name="Data" />
     </Fields>
   </Object>
+  <!--TODO is Variable really an int?!?-->
+  <Object name="ScriptVariableProperty" objType="Subrecord" baseClass="ScriptProperty">
+    <Fields>
+      <Int32 name="Data" />
+    </Fields>
+  </Object>
+  <Object name="ScriptStructProperty" objType="Subrecord" baseClass="ScriptProperty">
+    <Fields>
+		<RefList name="Members" refName="ScriptEntry" counterLength="4" />
+    </Fields>
+  </Object>
   <Object name="ScriptObjectListProperty" objType="Subrecord" baseClass="ScriptProperty" GUID="cd596198-106e-4bc5-b934-2996a002b9ad" ID="119">
     <Fields>
       <RefList name="Objects" refName="ScriptObjectProperty" counterLength="4" />
@@ -79,6 +90,19 @@
       <List name="Data" counterLength="4">
         <Bool />
       </List>
+    </Fields>
+  </Object>
+  <!--TODO is Variable really an int?!?-->
+  <Object name="ScriptVariableListProperty" objType="Subrecord" baseClass="ScriptProperty">
+    <Fields>
+      <List name="Data" counterLength="4">
+        <Int32 />
+      </List>
+    </Fields>
+  </Object>
+  <Object name="ScriptStructListProperty" objType="Subrecord" baseClass="ScriptProperty">
+    <Fields>
+      <RefList name="Structs" refName="ScriptStructProperty" counterLength="4" />
     </Fields>
   </Object>
   <Object name="ScriptFragment" objType="Subrecord" GUID="82853f4c-012a-4c5e-8fce-a74708283750" ID="124">

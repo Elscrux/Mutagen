@@ -82,6 +82,10 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - ScriptProperty
 - ScriptStringListProperty
 - ScriptStringProperty
+- ScriptStructListProperty
+- ScriptStructProperty
+- ScriptVariableListProperty
+- ScriptVariableProperty
 - Spell
 - TalkingActivator
 - Tree
@@ -268,6 +272,14 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 ### ScriptStringListProperty
 - INamed
 ### ScriptStringProperty
+- INamed
+### ScriptStructListProperty
+- INamed
+### ScriptStructProperty
+- INamed
+### ScriptVariableListProperty
+- INamed
+### ScriptVariableProperty
 - INamed
 ### SoundMarker
 - IObjectBounded
