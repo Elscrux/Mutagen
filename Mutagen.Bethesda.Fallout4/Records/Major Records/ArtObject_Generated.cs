@@ -15,6 +15,7 @@ using Mutagen.Bethesda.Plugins.Aspects;
 using Mutagen.Bethesda.Plugins.Binary.Overlay;
 using Mutagen.Bethesda.Plugins.Binary.Streams;
 using Mutagen.Bethesda.Plugins.Binary.Translations;
+using Mutagen.Bethesda.Plugins.Cache;
 using Mutagen.Bethesda.Plugins.Exceptions;
 using Mutagen.Bethesda.Plugins.Internals;
 using Mutagen.Bethesda.Plugins.Records;
@@ -461,6 +462,8 @@ namespace Mutagen.Bethesda.Fallout4
 
         #region Mutagen
         public static readonly RecordType GrupRecordType = ArtObject_Registration.TriggeringRecordType;
+        public override IEnumerable<IFormLinkGetter> ContainedFormLinks => ArtObjectCommon.Instance.GetContainedFormLinks(this);
+        public override void RemapLinks(IReadOnlyDictionary<FormKey, FormKey> mapping) => ArtObjectSetterCommon.Instance.RemapLinks(this, mapping);
         public ArtObject(FormKey formKey)
         {
             this.FormKey = formKey;
@@ -584,6 +587,7 @@ namespace Mutagen.Bethesda.Fallout4
     public partial interface IArtObject :
         IArtObjectGetter,
         IFallout4MajorRecordInternal,
+        IFormLinkContainer,
         ILoquiObjectSetter<IArtObjectInternal>,
         IModeled,
         IObjectBounded,
@@ -611,6 +615,7 @@ namespace Mutagen.Bethesda.Fallout4
     public partial interface IArtObjectGetter :
         IFallout4MajorRecordGetter,
         IBinaryItem,
+        IFormLinkContainerGetter,
         ILoquiObject<IArtObjectGetter>,
         IMapsToGetter<IArtObjectGetter>,
         IModeledGetter,
@@ -1642,6 +1647,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         void IPrintable.ToString(FileGeneration fg, string? name) => this.ToString(fg, name);
 
+        public override IEnumerable<IFormLinkGetter> ContainedFormLinks => ArtObjectCommon.Instance.GetContainedFormLinks(this);
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override object BinaryWriteTranslator => ArtObjectBinaryWriteTranslation.Instance;
         void IBinaryItem.WriteToBinary(

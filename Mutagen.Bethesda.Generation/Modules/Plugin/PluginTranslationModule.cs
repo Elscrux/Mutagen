@@ -619,6 +619,11 @@ namespace Mutagen.Bethesda.Generation.Modules.Plugin
             yield return "Mutagen.Bethesda.Plugins.Binary.Translations";
             yield return "Mutagen.Bethesda.Plugins.Binary.Streams";
             yield return "Mutagen.Bethesda.Plugins.Exceptions";
+            
+            if (obj.GetObjectType() == ObjectType.Group && !obj.IsListGroup())
+            {
+                yield return $"Mutagen.Bethesda.{obj.ProtoGen.Protocol.Namespace}.Records";
+            }
 
             if (await LinkModule.HasLinks(obj, includeBaseClass: false) != LinkModule.LinkCase.No
                 || obj.IterateFields().Any(f => f is FormKeyType))
@@ -2135,6 +2140,33 @@ namespace Mutagen.Bethesda.Generation.Modules.Plugin
                         fg.AppendLine();
                     }
 
+                    if (obj.IsTopLevelGroup())
+                    {
+                        using (var args = new FunctionWrapper(fg,
+                                   $"public static {obj.Interface(getter: true)} {obj.Name}Factory"))
+                        {
+                            args.Add($"{nameof(IBinaryReadStream)} stream");
+                            args.Add("IReadOnlyList<RangeInt64> locs");
+                            args.Add($"{nameof(BinaryOverlayFactoryPackage)} package");
+                        }
+                        using (new BraceWrapper(fg))
+                        {
+                            using (var args = new ArgsWrapper(fg,
+                                       $"var subGroups = locs.Select(x => {obj.ProtoGen.Protocol.Namespace}GroupFactory",
+                                       suffixLine: ").ToArray()"))
+                            {
+                                args.Add("new OverlayStream(LockExtractMemory(stream, x.Min, x.Max), package)");
+                                args.Add("package");
+                            }
+                            using (var args = new ArgsWrapper(fg,
+                                       $"return new {obj.ProtoGen.Protocol.Namespace}GroupWrapper<T>"))
+                            {
+                                args.Add($"new GroupMergeGetter<I{obj.ProtoGen.Protocol.Namespace}GroupGetter<T>, T>(subGroups)");
+                            }
+                        }
+                        fg.AppendLine();
+                    }
+
                     using (var args = new FunctionWrapper(fg,
                         $"public static {this.BinaryOverlayClass(obj)} {obj.Name}Factory"))
                     {
@@ -2284,7 +2316,7 @@ namespace Mutagen.Bethesda.Generation.Modules.Plugin
                         }
 
                         // Parse struct section ending positions 
-                        string structPassedAccessor = null;
+                        string? structPassedAccessor = null;
                         int? structPassedLen = 0;
                         await foreach (var lengths in IteratePassedLengths(
                             obj,

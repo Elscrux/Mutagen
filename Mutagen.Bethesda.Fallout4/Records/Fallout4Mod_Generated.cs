@@ -9923,203 +9923,203 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public IFallout4ModHeaderGetter ModHeader => _ModHeader ?? new Fallout4ModHeader();
         #endregion
         #region GameSettings
-        private RangeInt64? _GameSettingsLocation;
-        private IFallout4GroupGetter<IGameSettingGetter>? _GameSettings => _GameSettingsLocation.HasValue ? Fallout4GroupBinaryOverlay<IGameSettingGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _GameSettingsLocation!.Value.Min, _GameSettingsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _GameSettingsLocations;
+        private IFallout4GroupGetter<IGameSettingGetter>? _GameSettings => _GameSettingsLocations != null ? Fallout4GroupBinaryOverlay<IGameSettingGetter>.Fallout4GroupFactory(_data, _GameSettingsLocations, _package) : default;
         public IFallout4GroupGetter<IGameSettingGetter> GameSettings => _GameSettings ?? new Fallout4Group<GameSetting>(this);
         #endregion
         #region Keywords
-        private RangeInt64? _KeywordsLocation;
-        private IFallout4GroupGetter<IKeywordGetter>? _Keywords => _KeywordsLocation.HasValue ? Fallout4GroupBinaryOverlay<IKeywordGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _KeywordsLocation!.Value.Min, _KeywordsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _KeywordsLocations;
+        private IFallout4GroupGetter<IKeywordGetter>? _Keywords => _KeywordsLocations != null ? Fallout4GroupBinaryOverlay<IKeywordGetter>.Fallout4GroupFactory(_data, _KeywordsLocations, _package) : default;
         public IFallout4GroupGetter<IKeywordGetter> Keywords => _Keywords ?? new Fallout4Group<Keyword>(this);
         #endregion
         #region LocationReferenceTypes
-        private RangeInt64? _LocationReferenceTypesLocation;
-        private IFallout4GroupGetter<ILocationReferenceTypeGetter>? _LocationReferenceTypes => _LocationReferenceTypesLocation.HasValue ? Fallout4GroupBinaryOverlay<ILocationReferenceTypeGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _LocationReferenceTypesLocation!.Value.Min, _LocationReferenceTypesLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _LocationReferenceTypesLocations;
+        private IFallout4GroupGetter<ILocationReferenceTypeGetter>? _LocationReferenceTypes => _LocationReferenceTypesLocations != null ? Fallout4GroupBinaryOverlay<ILocationReferenceTypeGetter>.Fallout4GroupFactory(_data, _LocationReferenceTypesLocations, _package) : default;
         public IFallout4GroupGetter<ILocationReferenceTypeGetter> LocationReferenceTypes => _LocationReferenceTypes ?? new Fallout4Group<LocationReferenceType>(this);
         #endregion
         #region Actions
-        private RangeInt64? _ActionsLocation;
-        private IFallout4GroupGetter<IActionRecordGetter>? _Actions => _ActionsLocation.HasValue ? Fallout4GroupBinaryOverlay<IActionRecordGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _ActionsLocation!.Value.Min, _ActionsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _ActionsLocations;
+        private IFallout4GroupGetter<IActionRecordGetter>? _Actions => _ActionsLocations != null ? Fallout4GroupBinaryOverlay<IActionRecordGetter>.Fallout4GroupFactory(_data, _ActionsLocations, _package) : default;
         public IFallout4GroupGetter<IActionRecordGetter> Actions => _Actions ?? new Fallout4Group<ActionRecord>(this);
         #endregion
         #region Transforms
-        private RangeInt64? _TransformsLocation;
-        private IFallout4GroupGetter<ITransformGetter>? _Transforms => _TransformsLocation.HasValue ? Fallout4GroupBinaryOverlay<ITransformGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _TransformsLocation!.Value.Min, _TransformsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _TransformsLocations;
+        private IFallout4GroupGetter<ITransformGetter>? _Transforms => _TransformsLocations != null ? Fallout4GroupBinaryOverlay<ITransformGetter>.Fallout4GroupFactory(_data, _TransformsLocations, _package) : default;
         public IFallout4GroupGetter<ITransformGetter> Transforms => _Transforms ?? new Fallout4Group<Transform>(this);
         #endregion
         #region Components
-        private RangeInt64? _ComponentsLocation;
-        private IFallout4GroupGetter<IComponentGetter>? _Components => _ComponentsLocation.HasValue ? Fallout4GroupBinaryOverlay<IComponentGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _ComponentsLocation!.Value.Min, _ComponentsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _ComponentsLocations;
+        private IFallout4GroupGetter<IComponentGetter>? _Components => _ComponentsLocations != null ? Fallout4GroupBinaryOverlay<IComponentGetter>.Fallout4GroupFactory(_data, _ComponentsLocations, _package) : default;
         public IFallout4GroupGetter<IComponentGetter> Components => _Components ?? new Fallout4Group<Component>(this);
         #endregion
         #region TextureSets
-        private RangeInt64? _TextureSetsLocation;
-        private IFallout4GroupGetter<ITextureSetGetter>? _TextureSets => _TextureSetsLocation.HasValue ? Fallout4GroupBinaryOverlay<ITextureSetGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _TextureSetsLocation!.Value.Min, _TextureSetsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _TextureSetsLocations;
+        private IFallout4GroupGetter<ITextureSetGetter>? _TextureSets => _TextureSetsLocations != null ? Fallout4GroupBinaryOverlay<ITextureSetGetter>.Fallout4GroupFactory(_data, _TextureSetsLocations, _package) : default;
         public IFallout4GroupGetter<ITextureSetGetter> TextureSets => _TextureSets ?? new Fallout4Group<TextureSet>(this);
         #endregion
         #region Globals
-        private RangeInt64? _GlobalsLocation;
-        private IFallout4GroupGetter<IGlobalGetter>? _Globals => _GlobalsLocation.HasValue ? Fallout4GroupBinaryOverlay<IGlobalGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _GlobalsLocation!.Value.Min, _GlobalsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _GlobalsLocations;
+        private IFallout4GroupGetter<IGlobalGetter>? _Globals => _GlobalsLocations != null ? Fallout4GroupBinaryOverlay<IGlobalGetter>.Fallout4GroupFactory(_data, _GlobalsLocations, _package) : default;
         public IFallout4GroupGetter<IGlobalGetter> Globals => _Globals ?? new Fallout4Group<Global>(this);
         #endregion
         #region DamageTypes
-        private RangeInt64? _DamageTypesLocation;
-        private IFallout4GroupGetter<IADamageTypeGetter>? _DamageTypes => _DamageTypesLocation.HasValue ? Fallout4GroupBinaryOverlay<IADamageTypeGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _DamageTypesLocation!.Value.Min, _DamageTypesLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _DamageTypesLocations;
+        private IFallout4GroupGetter<IADamageTypeGetter>? _DamageTypes => _DamageTypesLocations != null ? Fallout4GroupBinaryOverlay<IADamageTypeGetter>.Fallout4GroupFactory(_data, _DamageTypesLocations, _package) : default;
         public IFallout4GroupGetter<IADamageTypeGetter> DamageTypes => _DamageTypes ?? new Fallout4Group<ADamageType>(this);
         #endregion
         #region Classes
-        private RangeInt64? _ClassesLocation;
-        private IFallout4GroupGetter<IClassGetter>? _Classes => _ClassesLocation.HasValue ? Fallout4GroupBinaryOverlay<IClassGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _ClassesLocation!.Value.Min, _ClassesLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _ClassesLocations;
+        private IFallout4GroupGetter<IClassGetter>? _Classes => _ClassesLocations != null ? Fallout4GroupBinaryOverlay<IClassGetter>.Fallout4GroupFactory(_data, _ClassesLocations, _package) : default;
         public IFallout4GroupGetter<IClassGetter> Classes => _Classes ?? new Fallout4Group<Class>(this);
         #endregion
         #region Factions
-        private RangeInt64? _FactionsLocation;
-        private IFallout4GroupGetter<IFactionGetter>? _Factions => _FactionsLocation.HasValue ? Fallout4GroupBinaryOverlay<IFactionGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _FactionsLocation!.Value.Min, _FactionsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _FactionsLocations;
+        private IFallout4GroupGetter<IFactionGetter>? _Factions => _FactionsLocations != null ? Fallout4GroupBinaryOverlay<IFactionGetter>.Fallout4GroupFactory(_data, _FactionsLocations, _package) : default;
         public IFallout4GroupGetter<IFactionGetter> Factions => _Factions ?? new Fallout4Group<Faction>(this);
         #endregion
         #region HeadParts
-        private RangeInt64? _HeadPartsLocation;
-        private IFallout4GroupGetter<IHeadPartGetter>? _HeadParts => _HeadPartsLocation.HasValue ? Fallout4GroupBinaryOverlay<IHeadPartGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _HeadPartsLocation!.Value.Min, _HeadPartsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _HeadPartsLocations;
+        private IFallout4GroupGetter<IHeadPartGetter>? _HeadParts => _HeadPartsLocations != null ? Fallout4GroupBinaryOverlay<IHeadPartGetter>.Fallout4GroupFactory(_data, _HeadPartsLocations, _package) : default;
         public IFallout4GroupGetter<IHeadPartGetter> HeadParts => _HeadParts ?? new Fallout4Group<HeadPart>(this);
         #endregion
         #region SoundMarkers
-        private RangeInt64? _SoundMarkersLocation;
-        private IFallout4GroupGetter<ISoundMarkerGetter>? _SoundMarkers => _SoundMarkersLocation.HasValue ? Fallout4GroupBinaryOverlay<ISoundMarkerGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _SoundMarkersLocation!.Value.Min, _SoundMarkersLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _SoundMarkersLocations;
+        private IFallout4GroupGetter<ISoundMarkerGetter>? _SoundMarkers => _SoundMarkersLocations != null ? Fallout4GroupBinaryOverlay<ISoundMarkerGetter>.Fallout4GroupFactory(_data, _SoundMarkersLocations, _package) : default;
         public IFallout4GroupGetter<ISoundMarkerGetter> SoundMarkers => _SoundMarkers ?? new Fallout4Group<SoundMarker>(this);
         #endregion
         #region AcousticSpaces
-        private RangeInt64? _AcousticSpacesLocation;
-        private IFallout4GroupGetter<IAcousticSpaceGetter>? _AcousticSpaces => _AcousticSpacesLocation.HasValue ? Fallout4GroupBinaryOverlay<IAcousticSpaceGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _AcousticSpacesLocation!.Value.Min, _AcousticSpacesLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _AcousticSpacesLocations;
+        private IFallout4GroupGetter<IAcousticSpaceGetter>? _AcousticSpaces => _AcousticSpacesLocations != null ? Fallout4GroupBinaryOverlay<IAcousticSpaceGetter>.Fallout4GroupFactory(_data, _AcousticSpacesLocations, _package) : default;
         public IFallout4GroupGetter<IAcousticSpaceGetter> AcousticSpaces => _AcousticSpaces ?? new Fallout4Group<AcousticSpace>(this);
         #endregion
         #region MagicEffects
-        private RangeInt64? _MagicEffectsLocation;
-        private IFallout4GroupGetter<IMagicEffectGetter>? _MagicEffects => _MagicEffectsLocation.HasValue ? Fallout4GroupBinaryOverlay<IMagicEffectGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _MagicEffectsLocation!.Value.Min, _MagicEffectsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _MagicEffectsLocations;
+        private IFallout4GroupGetter<IMagicEffectGetter>? _MagicEffects => _MagicEffectsLocations != null ? Fallout4GroupBinaryOverlay<IMagicEffectGetter>.Fallout4GroupFactory(_data, _MagicEffectsLocations, _package) : default;
         public IFallout4GroupGetter<IMagicEffectGetter> MagicEffects => _MagicEffects ?? new Fallout4Group<MagicEffect>(this);
         #endregion
         #region LandscapeTextures
-        private RangeInt64? _LandscapeTexturesLocation;
-        private IFallout4GroupGetter<ILandscapeTextureGetter>? _LandscapeTextures => _LandscapeTexturesLocation.HasValue ? Fallout4GroupBinaryOverlay<ILandscapeTextureGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _LandscapeTexturesLocation!.Value.Min, _LandscapeTexturesLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _LandscapeTexturesLocations;
+        private IFallout4GroupGetter<ILandscapeTextureGetter>? _LandscapeTextures => _LandscapeTexturesLocations != null ? Fallout4GroupBinaryOverlay<ILandscapeTextureGetter>.Fallout4GroupFactory(_data, _LandscapeTexturesLocations, _package) : default;
         public IFallout4GroupGetter<ILandscapeTextureGetter> LandscapeTextures => _LandscapeTextures ?? new Fallout4Group<LandscapeTexture>(this);
         #endregion
         #region ObjectEffects
-        private RangeInt64? _ObjectEffectsLocation;
-        private IFallout4GroupGetter<IObjectEffectGetter>? _ObjectEffects => _ObjectEffectsLocation.HasValue ? Fallout4GroupBinaryOverlay<IObjectEffectGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _ObjectEffectsLocation!.Value.Min, _ObjectEffectsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _ObjectEffectsLocations;
+        private IFallout4GroupGetter<IObjectEffectGetter>? _ObjectEffects => _ObjectEffectsLocations != null ? Fallout4GroupBinaryOverlay<IObjectEffectGetter>.Fallout4GroupFactory(_data, _ObjectEffectsLocations, _package) : default;
         public IFallout4GroupGetter<IObjectEffectGetter> ObjectEffects => _ObjectEffects ?? new Fallout4Group<ObjectEffect>(this);
         #endregion
         #region Spells
-        private RangeInt64? _SpellsLocation;
-        private IFallout4GroupGetter<ISpellGetter>? _Spells => _SpellsLocation.HasValue ? Fallout4GroupBinaryOverlay<ISpellGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _SpellsLocation!.Value.Min, _SpellsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _SpellsLocations;
+        private IFallout4GroupGetter<ISpellGetter>? _Spells => _SpellsLocations != null ? Fallout4GroupBinaryOverlay<ISpellGetter>.Fallout4GroupFactory(_data, _SpellsLocations, _package) : default;
         public IFallout4GroupGetter<ISpellGetter> Spells => _Spells ?? new Fallout4Group<Spell>(this);
         #endregion
         #region Activators
-        private RangeInt64? _ActivatorsLocation;
-        private IFallout4GroupGetter<IActivatorGetter>? _Activators => _ActivatorsLocation.HasValue ? Fallout4GroupBinaryOverlay<IActivatorGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _ActivatorsLocation!.Value.Min, _ActivatorsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _ActivatorsLocations;
+        private IFallout4GroupGetter<IActivatorGetter>? _Activators => _ActivatorsLocations != null ? Fallout4GroupBinaryOverlay<IActivatorGetter>.Fallout4GroupFactory(_data, _ActivatorsLocations, _package) : default;
         public IFallout4GroupGetter<IActivatorGetter> Activators => _Activators ?? new Fallout4Group<Activator>(this);
         #endregion
         #region TalkingActivators
-        private RangeInt64? _TalkingActivatorsLocation;
-        private IFallout4GroupGetter<ITalkingActivatorGetter>? _TalkingActivators => _TalkingActivatorsLocation.HasValue ? Fallout4GroupBinaryOverlay<ITalkingActivatorGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _TalkingActivatorsLocation!.Value.Min, _TalkingActivatorsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _TalkingActivatorsLocations;
+        private IFallout4GroupGetter<ITalkingActivatorGetter>? _TalkingActivators => _TalkingActivatorsLocations != null ? Fallout4GroupBinaryOverlay<ITalkingActivatorGetter>.Fallout4GroupFactory(_data, _TalkingActivatorsLocations, _package) : default;
         public IFallout4GroupGetter<ITalkingActivatorGetter> TalkingActivators => _TalkingActivators ?? new Fallout4Group<TalkingActivator>(this);
         #endregion
         #region Armors
-        private RangeInt64? _ArmorsLocation;
-        private IFallout4GroupGetter<IArmorGetter>? _Armors => _ArmorsLocation.HasValue ? Fallout4GroupBinaryOverlay<IArmorGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _ArmorsLocation!.Value.Min, _ArmorsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _ArmorsLocations;
+        private IFallout4GroupGetter<IArmorGetter>? _Armors => _ArmorsLocations != null ? Fallout4GroupBinaryOverlay<IArmorGetter>.Fallout4GroupFactory(_data, _ArmorsLocations, _package) : default;
         public IFallout4GroupGetter<IArmorGetter> Armors => _Armors ?? new Fallout4Group<Armor>(this);
         #endregion
         #region Books
-        private RangeInt64? _BooksLocation;
-        private IFallout4GroupGetter<IBookGetter>? _Books => _BooksLocation.HasValue ? Fallout4GroupBinaryOverlay<IBookGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _BooksLocation!.Value.Min, _BooksLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _BooksLocations;
+        private IFallout4GroupGetter<IBookGetter>? _Books => _BooksLocations != null ? Fallout4GroupBinaryOverlay<IBookGetter>.Fallout4GroupFactory(_data, _BooksLocations, _package) : default;
         public IFallout4GroupGetter<IBookGetter> Books => _Books ?? new Fallout4Group<Book>(this);
         #endregion
         #region Containers
-        private RangeInt64? _ContainersLocation;
-        private IFallout4GroupGetter<IContainerGetter>? _Containers => _ContainersLocation.HasValue ? Fallout4GroupBinaryOverlay<IContainerGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _ContainersLocation!.Value.Min, _ContainersLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _ContainersLocations;
+        private IFallout4GroupGetter<IContainerGetter>? _Containers => _ContainersLocations != null ? Fallout4GroupBinaryOverlay<IContainerGetter>.Fallout4GroupFactory(_data, _ContainersLocations, _package) : default;
         public IFallout4GroupGetter<IContainerGetter> Containers => _Containers ?? new Fallout4Group<Container>(this);
         #endregion
         #region Doors
-        private RangeInt64? _DoorsLocation;
-        private IFallout4GroupGetter<IDoorGetter>? _Doors => _DoorsLocation.HasValue ? Fallout4GroupBinaryOverlay<IDoorGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _DoorsLocation!.Value.Min, _DoorsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _DoorsLocations;
+        private IFallout4GroupGetter<IDoorGetter>? _Doors => _DoorsLocations != null ? Fallout4GroupBinaryOverlay<IDoorGetter>.Fallout4GroupFactory(_data, _DoorsLocations, _package) : default;
         public IFallout4GroupGetter<IDoorGetter> Doors => _Doors ?? new Fallout4Group<Door>(this);
         #endregion
         #region Ingredients
-        private RangeInt64? _IngredientsLocation;
-        private IFallout4GroupGetter<IIngredientGetter>? _Ingredients => _IngredientsLocation.HasValue ? Fallout4GroupBinaryOverlay<IIngredientGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _IngredientsLocation!.Value.Min, _IngredientsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _IngredientsLocations;
+        private IFallout4GroupGetter<IIngredientGetter>? _Ingredients => _IngredientsLocations != null ? Fallout4GroupBinaryOverlay<IIngredientGetter>.Fallout4GroupFactory(_data, _IngredientsLocations, _package) : default;
         public IFallout4GroupGetter<IIngredientGetter> Ingredients => _Ingredients ?? new Fallout4Group<Ingredient>(this);
         #endregion
         #region Lights
-        private RangeInt64? _LightsLocation;
-        private IFallout4GroupGetter<ILightGetter>? _Lights => _LightsLocation.HasValue ? Fallout4GroupBinaryOverlay<ILightGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _LightsLocation!.Value.Min, _LightsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _LightsLocations;
+        private IFallout4GroupGetter<ILightGetter>? _Lights => _LightsLocations != null ? Fallout4GroupBinaryOverlay<ILightGetter>.Fallout4GroupFactory(_data, _LightsLocations, _package) : default;
         public IFallout4GroupGetter<ILightGetter> Lights => _Lights ?? new Fallout4Group<Light>(this);
         #endregion
         #region MiscItems
-        private RangeInt64? _MiscItemsLocation;
-        private IFallout4GroupGetter<IMiscItemGetter>? _MiscItems => _MiscItemsLocation.HasValue ? Fallout4GroupBinaryOverlay<IMiscItemGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _MiscItemsLocation!.Value.Min, _MiscItemsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _MiscItemsLocations;
+        private IFallout4GroupGetter<IMiscItemGetter>? _MiscItems => _MiscItemsLocations != null ? Fallout4GroupBinaryOverlay<IMiscItemGetter>.Fallout4GroupFactory(_data, _MiscItemsLocations, _package) : default;
         public IFallout4GroupGetter<IMiscItemGetter> MiscItems => _MiscItems ?? new Fallout4Group<MiscItem>(this);
         #endregion
         #region Statics
-        private RangeInt64? _StaticsLocation;
-        private IFallout4GroupGetter<IStaticGetter>? _Statics => _StaticsLocation.HasValue ? Fallout4GroupBinaryOverlay<IStaticGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _StaticsLocation!.Value.Min, _StaticsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _StaticsLocations;
+        private IFallout4GroupGetter<IStaticGetter>? _Statics => _StaticsLocations != null ? Fallout4GroupBinaryOverlay<IStaticGetter>.Fallout4GroupFactory(_data, _StaticsLocations, _package) : default;
         public IFallout4GroupGetter<IStaticGetter> Statics => _Statics ?? new Fallout4Group<Static>(this);
         #endregion
         #region StaticCollections
-        private RangeInt64? _StaticCollectionsLocation;
-        private IFallout4GroupGetter<IStaticCollectionGetter>? _StaticCollections => _StaticCollectionsLocation.HasValue ? Fallout4GroupBinaryOverlay<IStaticCollectionGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _StaticCollectionsLocation!.Value.Min, _StaticCollectionsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _StaticCollectionsLocations;
+        private IFallout4GroupGetter<IStaticCollectionGetter>? _StaticCollections => _StaticCollectionsLocations != null ? Fallout4GroupBinaryOverlay<IStaticCollectionGetter>.Fallout4GroupFactory(_data, _StaticCollectionsLocations, _package) : default;
         public IFallout4GroupGetter<IStaticCollectionGetter> StaticCollections => _StaticCollections ?? new Fallout4Group<StaticCollection>(this);
         #endregion
         #region MoveableStatics
-        private RangeInt64? _MoveableStaticsLocation;
-        private IFallout4GroupGetter<IMoveableStaticGetter>? _MoveableStatics => _MoveableStaticsLocation.HasValue ? Fallout4GroupBinaryOverlay<IMoveableStaticGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _MoveableStaticsLocation!.Value.Min, _MoveableStaticsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _MoveableStaticsLocations;
+        private IFallout4GroupGetter<IMoveableStaticGetter>? _MoveableStatics => _MoveableStaticsLocations != null ? Fallout4GroupBinaryOverlay<IMoveableStaticGetter>.Fallout4GroupFactory(_data, _MoveableStaticsLocations, _package) : default;
         public IFallout4GroupGetter<IMoveableStaticGetter> MoveableStatics => _MoveableStatics ?? new Fallout4Group<MoveableStatic>(this);
         #endregion
         #region Grasses
-        private RangeInt64? _GrassesLocation;
-        private IFallout4GroupGetter<IGrassGetter>? _Grasses => _GrassesLocation.HasValue ? Fallout4GroupBinaryOverlay<IGrassGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _GrassesLocation!.Value.Min, _GrassesLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _GrassesLocations;
+        private IFallout4GroupGetter<IGrassGetter>? _Grasses => _GrassesLocations != null ? Fallout4GroupBinaryOverlay<IGrassGetter>.Fallout4GroupFactory(_data, _GrassesLocations, _package) : default;
         public IFallout4GroupGetter<IGrassGetter> Grasses => _Grasses ?? new Fallout4Group<Grass>(this);
         #endregion
         #region Trees
-        private RangeInt64? _TreesLocation;
-        private IFallout4GroupGetter<ITreeGetter>? _Trees => _TreesLocation.HasValue ? Fallout4GroupBinaryOverlay<ITreeGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _TreesLocation!.Value.Min, _TreesLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _TreesLocations;
+        private IFallout4GroupGetter<ITreeGetter>? _Trees => _TreesLocations != null ? Fallout4GroupBinaryOverlay<ITreeGetter>.Fallout4GroupFactory(_data, _TreesLocations, _package) : default;
         public IFallout4GroupGetter<ITreeGetter> Trees => _Trees ?? new Fallout4Group<Tree>(this);
         #endregion
         #region Florae
-        private RangeInt64? _FloraeLocation;
-        private IFallout4GroupGetter<IFloraGetter>? _Florae => _FloraeLocation.HasValue ? Fallout4GroupBinaryOverlay<IFloraGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _FloraeLocation!.Value.Min, _FloraeLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _FloraeLocations;
+        private IFallout4GroupGetter<IFloraGetter>? _Florae => _FloraeLocations != null ? Fallout4GroupBinaryOverlay<IFloraGetter>.Fallout4GroupFactory(_data, _FloraeLocations, _package) : default;
         public IFallout4GroupGetter<IFloraGetter> Florae => _Florae ?? new Fallout4Group<Flora>(this);
         #endregion
         #region VoiceTypes
-        private RangeInt64? _VoiceTypesLocation;
-        private IFallout4GroupGetter<IVoiceTypeGetter>? _VoiceTypes => _VoiceTypesLocation.HasValue ? Fallout4GroupBinaryOverlay<IVoiceTypeGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _VoiceTypesLocation!.Value.Min, _VoiceTypesLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _VoiceTypesLocations;
+        private IFallout4GroupGetter<IVoiceTypeGetter>? _VoiceTypes => _VoiceTypesLocations != null ? Fallout4GroupBinaryOverlay<IVoiceTypeGetter>.Fallout4GroupFactory(_data, _VoiceTypesLocations, _package) : default;
         public IFallout4GroupGetter<IVoiceTypeGetter> VoiceTypes => _VoiceTypes ?? new Fallout4Group<VoiceType>(this);
         #endregion
         #region Quests
-        private RangeInt64? _QuestsLocation;
-        private IFallout4GroupGetter<IQuestGetter>? _Quests => _QuestsLocation.HasValue ? Fallout4GroupBinaryOverlay<IQuestGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _QuestsLocation!.Value.Min, _QuestsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _QuestsLocations;
+        private IFallout4GroupGetter<IQuestGetter>? _Quests => _QuestsLocations != null ? Fallout4GroupBinaryOverlay<IQuestGetter>.Fallout4GroupFactory(_data, _QuestsLocations, _package) : default;
         public IFallout4GroupGetter<IQuestGetter> Quests => _Quests ?? new Fallout4Group<Quest>(this);
         #endregion
         #region MaterialTypes
-        private RangeInt64? _MaterialTypesLocation;
-        private IFallout4GroupGetter<IMaterialTypeGetter>? _MaterialTypes => _MaterialTypesLocation.HasValue ? Fallout4GroupBinaryOverlay<IMaterialTypeGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _MaterialTypesLocation!.Value.Min, _MaterialTypesLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _MaterialTypesLocations;
+        private IFallout4GroupGetter<IMaterialTypeGetter>? _MaterialTypes => _MaterialTypesLocations != null ? Fallout4GroupBinaryOverlay<IMaterialTypeGetter>.Fallout4GroupFactory(_data, _MaterialTypesLocations, _package) : default;
         public IFallout4GroupGetter<IMaterialTypeGetter> MaterialTypes => _MaterialTypes ?? new Fallout4Group<MaterialType>(this);
         #endregion
         #region ArmorAddons
-        private RangeInt64? _ArmorAddonsLocation;
-        private IFallout4GroupGetter<IArmorAddonGetter>? _ArmorAddons => _ArmorAddonsLocation.HasValue ? Fallout4GroupBinaryOverlay<IArmorAddonGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _ArmorAddonsLocation!.Value.Min, _ArmorAddonsLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _ArmorAddonsLocations;
+        private IFallout4GroupGetter<IArmorAddonGetter>? _ArmorAddons => _ArmorAddonsLocations != null ? Fallout4GroupBinaryOverlay<IArmorAddonGetter>.Fallout4GroupFactory(_data, _ArmorAddonsLocations, _package) : default;
         public IFallout4GroupGetter<IArmorAddonGetter> ArmorAddons => _ArmorAddons ?? new Fallout4Group<ArmorAddon>(this);
         #endregion
         #region Messages
-        private RangeInt64? _MessagesLocation;
-        private IFallout4GroupGetter<IMessageGetter>? _Messages => _MessagesLocation.HasValue ? Fallout4GroupBinaryOverlay<IMessageGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _MessagesLocation!.Value.Min, _MessagesLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _MessagesLocations;
+        private IFallout4GroupGetter<IMessageGetter>? _Messages => _MessagesLocations != null ? Fallout4GroupBinaryOverlay<IMessageGetter>.Fallout4GroupFactory(_data, _MessagesLocations, _package) : default;
         public IFallout4GroupGetter<IMessageGetter> Messages => _Messages ?? new Fallout4Group<Message>(this);
         #endregion
         #region MusicTypes
-        private RangeInt64? _MusicTypesLocation;
-        private IFallout4GroupGetter<IMusicTypeGetter>? _MusicTypes => _MusicTypesLocation.HasValue ? Fallout4GroupBinaryOverlay<IMusicTypeGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _MusicTypesLocation!.Value.Min, _MusicTypesLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _MusicTypesLocations;
+        private IFallout4GroupGetter<IMusicTypeGetter>? _MusicTypes => _MusicTypesLocations != null ? Fallout4GroupBinaryOverlay<IMusicTypeGetter>.Fallout4GroupFactory(_data, _MusicTypesLocations, _package) : default;
         public IFallout4GroupGetter<IMusicTypeGetter> MusicTypes => _MusicTypes ?? new Fallout4Group<MusicType>(this);
         #endregion
         #region MusicTracks
-        private RangeInt64? _MusicTracksLocation;
-        private IFallout4GroupGetter<IMusicTrackGetter>? _MusicTracks => _MusicTracksLocation.HasValue ? Fallout4GroupBinaryOverlay<IMusicTrackGetter>.Fallout4GroupFactory(new OverlayStream(PluginBinaryOverlay.LockExtractMemory(_data, _MusicTracksLocation!.Value.Min, _MusicTracksLocation!.Value.Max), _package), _package) : default;
+        private List<RangeInt64>? _MusicTracksLocations;
+        private IFallout4GroupGetter<IMusicTrackGetter>? _MusicTracks => _MusicTracksLocations != null ? Fallout4GroupBinaryOverlay<IMusicTrackGetter>.Fallout4GroupFactory(_data, _MusicTracksLocations, _package) : default;
         public IFallout4GroupGetter<IMusicTrackGetter> MusicTracks => _MusicTracks ?? new Fallout4Group<MusicTrack>(this);
         #endregion
         protected Fallout4ModBinaryOverlay(
@@ -10211,202 +10211,242 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.GMST:
                 {
-                    _GameSettingsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _GameSettingsLocations ??= new();
+                    _GameSettingsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.GameSettings;
                 }
                 case RecordTypeInts.KYWD:
                 {
-                    _KeywordsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _KeywordsLocations ??= new();
+                    _KeywordsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Keywords;
                 }
                 case RecordTypeInts.LCRT:
                 {
-                    _LocationReferenceTypesLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _LocationReferenceTypesLocations ??= new();
+                    _LocationReferenceTypesLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.LocationReferenceTypes;
                 }
                 case RecordTypeInts.AACT:
                 {
-                    _ActionsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _ActionsLocations ??= new();
+                    _ActionsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Actions;
                 }
                 case RecordTypeInts.TRNS:
                 {
-                    _TransformsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _TransformsLocations ??= new();
+                    _TransformsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Transforms;
                 }
                 case RecordTypeInts.CMPO:
                 {
-                    _ComponentsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _ComponentsLocations ??= new();
+                    _ComponentsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Components;
                 }
                 case RecordTypeInts.TXST:
                 {
-                    _TextureSetsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _TextureSetsLocations ??= new();
+                    _TextureSetsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.TextureSets;
                 }
                 case RecordTypeInts.GLOB:
                 {
-                    _GlobalsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _GlobalsLocations ??= new();
+                    _GlobalsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Globals;
                 }
                 case RecordTypeInts.DMGT:
                 {
-                    _DamageTypesLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _DamageTypesLocations ??= new();
+                    _DamageTypesLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.DamageTypes;
                 }
                 case RecordTypeInts.CLAS:
                 {
-                    _ClassesLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _ClassesLocations ??= new();
+                    _ClassesLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Classes;
                 }
                 case RecordTypeInts.FACT:
                 {
-                    _FactionsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _FactionsLocations ??= new();
+                    _FactionsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Factions;
                 }
                 case RecordTypeInts.HDPT:
                 {
-                    _HeadPartsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _HeadPartsLocations ??= new();
+                    _HeadPartsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.HeadParts;
                 }
                 case RecordTypeInts.SOUN:
                 {
-                    _SoundMarkersLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _SoundMarkersLocations ??= new();
+                    _SoundMarkersLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.SoundMarkers;
                 }
                 case RecordTypeInts.ASPC:
                 {
-                    _AcousticSpacesLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _AcousticSpacesLocations ??= new();
+                    _AcousticSpacesLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.AcousticSpaces;
                 }
                 case RecordTypeInts.MGEF:
                 {
-                    _MagicEffectsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _MagicEffectsLocations ??= new();
+                    _MagicEffectsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.MagicEffects;
                 }
                 case RecordTypeInts.LTEX:
                 {
-                    _LandscapeTexturesLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _LandscapeTexturesLocations ??= new();
+                    _LandscapeTexturesLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.LandscapeTextures;
                 }
                 case RecordTypeInts.ENCH:
                 {
-                    _ObjectEffectsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _ObjectEffectsLocations ??= new();
+                    _ObjectEffectsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.ObjectEffects;
                 }
                 case RecordTypeInts.SPEL:
                 {
-                    _SpellsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _SpellsLocations ??= new();
+                    _SpellsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Spells;
                 }
                 case RecordTypeInts.ACTI:
                 {
-                    _ActivatorsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _ActivatorsLocations ??= new();
+                    _ActivatorsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Activators;
                 }
                 case RecordTypeInts.TACT:
                 {
-                    _TalkingActivatorsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _TalkingActivatorsLocations ??= new();
+                    _TalkingActivatorsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.TalkingActivators;
                 }
                 case RecordTypeInts.ARMO:
                 {
-                    _ArmorsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _ArmorsLocations ??= new();
+                    _ArmorsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Armors;
                 }
                 case RecordTypeInts.BOOK:
                 {
-                    _BooksLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _BooksLocations ??= new();
+                    _BooksLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Books;
                 }
                 case RecordTypeInts.CONT:
                 {
-                    _ContainersLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _ContainersLocations ??= new();
+                    _ContainersLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Containers;
                 }
                 case RecordTypeInts.DOOR:
                 {
-                    _DoorsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _DoorsLocations ??= new();
+                    _DoorsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Doors;
                 }
                 case RecordTypeInts.INGR:
                 {
-                    _IngredientsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _IngredientsLocations ??= new();
+                    _IngredientsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Ingredients;
                 }
                 case RecordTypeInts.LIGH:
                 {
-                    _LightsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _LightsLocations ??= new();
+                    _LightsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Lights;
                 }
                 case RecordTypeInts.MISC:
                 {
-                    _MiscItemsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _MiscItemsLocations ??= new();
+                    _MiscItemsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.MiscItems;
                 }
                 case RecordTypeInts.STAT:
                 {
-                    _StaticsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _StaticsLocations ??= new();
+                    _StaticsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Statics;
                 }
                 case RecordTypeInts.SCOL:
                 {
-                    _StaticCollectionsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _StaticCollectionsLocations ??= new();
+                    _StaticCollectionsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.StaticCollections;
                 }
                 case RecordTypeInts.MSTT:
                 {
-                    _MoveableStaticsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _MoveableStaticsLocations ??= new();
+                    _MoveableStaticsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.MoveableStatics;
                 }
                 case RecordTypeInts.GRAS:
                 {
-                    _GrassesLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _GrassesLocations ??= new();
+                    _GrassesLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Grasses;
                 }
                 case RecordTypeInts.TREE:
                 {
-                    _TreesLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _TreesLocations ??= new();
+                    _TreesLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Trees;
                 }
                 case RecordTypeInts.FLOR:
                 {
-                    _FloraeLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _FloraeLocations ??= new();
+                    _FloraeLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Florae;
                 }
                 case RecordTypeInts.VTYP:
                 {
-                    _VoiceTypesLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _VoiceTypesLocations ??= new();
+                    _VoiceTypesLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.VoiceTypes;
                 }
                 case RecordTypeInts.QUST:
                 {
-                    _QuestsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _QuestsLocations ??= new();
+                    _QuestsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Quests;
                 }
                 case RecordTypeInts.MATT:
                 {
-                    _MaterialTypesLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _MaterialTypesLocations ??= new();
+                    _MaterialTypesLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.MaterialTypes;
                 }
                 case RecordTypeInts.ARMA:
                 {
-                    _ArmorAddonsLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _ArmorAddonsLocations ??= new();
+                    _ArmorAddonsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.ArmorAddons;
                 }
                 case RecordTypeInts.MESG:
                 {
-                    _MessagesLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _MessagesLocations ??= new();
+                    _MessagesLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Messages;
                 }
                 case RecordTypeInts.MUSC:
                 {
-                    _MusicTypesLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _MusicTypesLocations ??= new();
+                    _MusicTypesLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.MusicTypes;
                 }
                 case RecordTypeInts.MUST:
                 {
-                    _MusicTracksLocation = new RangeInt64((stream.Position - offset), finalPos - offset);
+                    _MusicTracksLocations ??= new();
+                    _MusicTracksLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.MusicTracks;
                 }
                 default:
