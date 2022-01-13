@@ -10,6 +10,7 @@ A `FormLink<IItem>` could then point to all those record types by pointing to th
 ### IConstructible
 - Armor
 - Book
+- Furniture
 - Ingredient
 - Light
 - MiscItem
@@ -98,6 +99,7 @@ A `FormLink<IItem>` could then point to all those record types by pointing to th
 ### Flora
 - IRegionTarget
 ### Furniture
+- IConstructible
 - IObjectId
 ### Ingredient
 - IConstructible

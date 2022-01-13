@@ -62,6 +62,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 typeof(Armor),
                 typeof(Book),
+                typeof(Furniture),
                 typeof(Ingredient),
                 typeof(Light),
                 typeof(MiscItem),
