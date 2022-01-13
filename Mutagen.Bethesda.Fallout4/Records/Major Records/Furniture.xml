@@ -20,7 +20,8 @@
 			<Enum name="Flags" enumName="Furniture.Flag" recordType="FNAM" binary="Custom" />
 			<RefList name="Conditions" refName="Condition" counterRecType="CITC" binaryOverlay="Custom" />
 			<RefList name="Items" counterRecType="COCT" refName="ContainerEntry" />
-			<Enum name="ActiveMarkersFlags" enumName="Furniture.ActiveMarkers" byteLength="4" recordType="MNAM" />
+			<!--<Enum name="ActiveMarkersFlags" enumName="Furniture.ActiveMarkers" byteLength="4" recordType="MNAM" />-->
+			<CustomLogic name="Flags2" recordType="MNAM" />
 			<RefDirect name="WorkbenchData" refName="WorkbenchData" />
 			<FormLink name="AssociatedForm" recordType="NAM1">
 				<Interface>IFurnitureAssociation</Interface>
@@ -30,6 +31,7 @@
 			<String name="ModelFilename" recordType="XMRK" />
 		</Fields>
 		<LinkInterface>IObjectId</LinkInterface>
+		<LinkInterface>IConstructible</LinkInterface>
 	</Object>
 	<Object name="WorkbenchData" objType="Subrecord" recordType="WBDT" GUID="31f37852-fcfa-40f2-827f-6c6161c76b64" ID="205">
 		<Fields>

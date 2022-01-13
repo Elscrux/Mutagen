@@ -8,7 +8,7 @@ using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Mutagen.Bethesda.Skyrim
+namespace Mutagen.Bethesda.Fallout4
 {
     public partial class Furniture
     {

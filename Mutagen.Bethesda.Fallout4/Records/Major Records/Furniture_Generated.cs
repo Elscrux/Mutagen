@@ -274,11 +274,6 @@ namespace Mutagen.Bethesda.Fallout4
         #endregion
 
         #endregion
-        #region ActiveMarkersFlags
-        public Furniture.ActiveMarkers? ActiveMarkersFlags { get; set; }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        Furniture.ActiveMarkers? IFurnitureGetter.ActiveMarkersFlags => this.ActiveMarkersFlags;
-        #endregion
         #region WorkbenchData
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private WorkbenchData? _WorkbenchData;
@@ -359,7 +354,6 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Flags = initialValue;
                 this.Conditions = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, Condition.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, Condition.Mask<TItem>?>>());
                 this.Items = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ContainerEntry.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, ContainerEntry.Mask<TItem>?>>());
-                this.ActiveMarkersFlags = initialValue;
                 this.WorkbenchData = new MaskItem<TItem, WorkbenchData.Mask<TItem>?>(initialValue, new WorkbenchData.Mask<TItem>(initialValue));
                 this.AssociatedForm = initialValue;
                 this.Markers = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, FurnitureMarker.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, FurnitureMarker.Mask<TItem>?>>());
@@ -389,7 +383,6 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem Flags,
                 TItem Conditions,
                 TItem Items,
-                TItem ActiveMarkersFlags,
                 TItem WorkbenchData,
                 TItem AssociatedForm,
                 TItem Markers,
@@ -418,7 +411,6 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Flags = Flags;
                 this.Conditions = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, Condition.Mask<TItem>?>>?>(Conditions, Enumerable.Empty<MaskItemIndexed<TItem, Condition.Mask<TItem>?>>());
                 this.Items = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ContainerEntry.Mask<TItem>?>>?>(Items, Enumerable.Empty<MaskItemIndexed<TItem, ContainerEntry.Mask<TItem>?>>());
-                this.ActiveMarkersFlags = ActiveMarkersFlags;
                 this.WorkbenchData = new MaskItem<TItem, WorkbenchData.Mask<TItem>?>(WorkbenchData, new WorkbenchData.Mask<TItem>(WorkbenchData));
                 this.AssociatedForm = AssociatedForm;
                 this.Markers = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, FurnitureMarker.Mask<TItem>?>>?>(Markers, Enumerable.Empty<MaskItemIndexed<TItem, FurnitureMarker.Mask<TItem>?>>());
@@ -450,7 +442,6 @@ namespace Mutagen.Bethesda.Fallout4
             public TItem Flags;
             public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, Condition.Mask<TItem>?>>?>? Conditions;
             public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ContainerEntry.Mask<TItem>?>>?>? Items;
-            public TItem ActiveMarkersFlags;
             public MaskItem<TItem, WorkbenchData.Mask<TItem>?>? WorkbenchData { get; set; }
             public TItem AssociatedForm;
             public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, FurnitureMarker.Mask<TItem>?>>?>? Markers;
@@ -484,7 +475,6 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!object.Equals(this.Flags, rhs.Flags)) return false;
                 if (!object.Equals(this.Conditions, rhs.Conditions)) return false;
                 if (!object.Equals(this.Items, rhs.Items)) return false;
-                if (!object.Equals(this.ActiveMarkersFlags, rhs.ActiveMarkersFlags)) return false;
                 if (!object.Equals(this.WorkbenchData, rhs.WorkbenchData)) return false;
                 if (!object.Equals(this.AssociatedForm, rhs.AssociatedForm)) return false;
                 if (!object.Equals(this.Markers, rhs.Markers)) return false;
@@ -510,7 +500,6 @@ namespace Mutagen.Bethesda.Fallout4
                 hash.Add(this.Flags);
                 hash.Add(this.Conditions);
                 hash.Add(this.Items);
-                hash.Add(this.ActiveMarkersFlags);
                 hash.Add(this.WorkbenchData);
                 hash.Add(this.AssociatedForm);
                 hash.Add(this.Markers);
@@ -597,7 +586,6 @@ namespace Mutagen.Bethesda.Fallout4
                         }
                     }
                 }
-                if (!eval(this.ActiveMarkersFlags)) return false;
                 if (WorkbenchData != null)
                 {
                     if (!eval(this.WorkbenchData.Overall)) return false;
@@ -697,7 +685,6 @@ namespace Mutagen.Bethesda.Fallout4
                         }
                     }
                 }
-                if (eval(this.ActiveMarkersFlags)) return true;
                 if (WorkbenchData != null)
                 {
                     if (eval(this.WorkbenchData.Overall)) return true;
@@ -789,7 +776,6 @@ namespace Mutagen.Bethesda.Fallout4
                         }
                     }
                 }
-                obj.ActiveMarkersFlags = eval(this.ActiveMarkersFlags);
                 obj.WorkbenchData = this.WorkbenchData == null ? null : new MaskItem<R, WorkbenchData.Mask<R>?>(eval(this.WorkbenchData.Overall), this.WorkbenchData.Specific?.Translate(eval));
                 obj.AssociatedForm = eval(this.AssociatedForm);
                 if (Markers != null)
@@ -951,10 +937,6 @@ namespace Mutagen.Bethesda.Fallout4
                         }
                         fg.AppendLine("]");
                     }
-                    if (printMask?.ActiveMarkersFlags ?? true)
-                    {
-                        fg.AppendItem(ActiveMarkersFlags, "ActiveMarkersFlags");
-                    }
                     if (printMask?.WorkbenchData?.Overall ?? true)
                     {
                         WorkbenchData?.ToString(fg);
@@ -1018,7 +1000,6 @@ namespace Mutagen.Bethesda.Fallout4
             public Exception? Flags;
             public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, Condition.ErrorMask?>>?>? Conditions;
             public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ContainerEntry.ErrorMask?>>?>? Items;
-            public Exception? ActiveMarkersFlags;
             public MaskItem<Exception?, WorkbenchData.ErrorMask?>? WorkbenchData;
             public Exception? AssociatedForm;
             public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, FurnitureMarker.ErrorMask?>>?>? Markers;
@@ -1063,8 +1044,6 @@ namespace Mutagen.Bethesda.Fallout4
                         return Conditions;
                     case Furniture_FieldIndex.Items:
                         return Items;
-                    case Furniture_FieldIndex.ActiveMarkersFlags:
-                        return ActiveMarkersFlags;
                     case Furniture_FieldIndex.WorkbenchData:
                         return WorkbenchData;
                     case Furniture_FieldIndex.AssociatedForm:
@@ -1130,9 +1109,6 @@ namespace Mutagen.Bethesda.Fallout4
                         break;
                     case Furniture_FieldIndex.Items:
                         this.Items = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ContainerEntry.ErrorMask?>>?>(ex, null);
-                        break;
-                    case Furniture_FieldIndex.ActiveMarkersFlags:
-                        this.ActiveMarkersFlags = ex;
                         break;
                     case Furniture_FieldIndex.WorkbenchData:
                         this.WorkbenchData = new MaskItem<Exception?, WorkbenchData.ErrorMask?>(ex, null);
@@ -1205,9 +1181,6 @@ namespace Mutagen.Bethesda.Fallout4
                     case Furniture_FieldIndex.Items:
                         this.Items = (MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ContainerEntry.ErrorMask?>>?>)obj;
                         break;
-                    case Furniture_FieldIndex.ActiveMarkersFlags:
-                        this.ActiveMarkersFlags = (Exception?)obj;
-                        break;
                     case Furniture_FieldIndex.WorkbenchData:
                         this.WorkbenchData = (MaskItem<Exception?, WorkbenchData.ErrorMask?>?)obj;
                         break;
@@ -1245,7 +1218,6 @@ namespace Mutagen.Bethesda.Fallout4
                 if (Flags != null) return true;
                 if (Conditions != null) return true;
                 if (Items != null) return true;
-                if (ActiveMarkersFlags != null) return true;
                 if (WorkbenchData != null) return true;
                 if (AssociatedForm != null) return true;
                 if (Markers != null) return true;
@@ -1364,7 +1336,6 @@ namespace Mutagen.Bethesda.Fallout4
                     }
                     fg.AppendLine("]");
                 }
-                fg.AppendItem(ActiveMarkersFlags, "ActiveMarkersFlags");
                 WorkbenchData?.ToString(fg);
                 fg.AppendItem(AssociatedForm, "AssociatedForm");
                 if (Markers is {} MarkersItem)
@@ -1414,7 +1385,6 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Flags = this.Flags.Combine(rhs.Flags);
                 ret.Conditions = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, Condition.ErrorMask?>>?>(ExceptionExt.Combine(this.Conditions?.Overall, rhs.Conditions?.Overall), ExceptionExt.Combine(this.Conditions?.Specific, rhs.Conditions?.Specific));
                 ret.Items = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ContainerEntry.ErrorMask?>>?>(ExceptionExt.Combine(this.Items?.Overall, rhs.Items?.Overall), ExceptionExt.Combine(this.Items?.Specific, rhs.Items?.Specific));
-                ret.ActiveMarkersFlags = this.ActiveMarkersFlags.Combine(rhs.ActiveMarkersFlags);
                 ret.WorkbenchData = this.WorkbenchData.Combine(rhs.WorkbenchData, (l, r) => l.Combine(r));
                 ret.AssociatedForm = this.AssociatedForm.Combine(rhs.AssociatedForm);
                 ret.Markers = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, FurnitureMarker.ErrorMask?>>?>(ExceptionExt.Combine(this.Markers?.Overall, rhs.Markers?.Overall), ExceptionExt.Combine(this.Markers?.Specific, rhs.Markers?.Specific));
@@ -1457,7 +1427,6 @@ namespace Mutagen.Bethesda.Fallout4
             public bool Flags;
             public Condition.TranslationMask? Conditions;
             public ContainerEntry.TranslationMask? Items;
-            public bool ActiveMarkersFlags;
             public WorkbenchData.TranslationMask? WorkbenchData;
             public bool AssociatedForm;
             public FurnitureMarker.TranslationMask? Markers;
@@ -1478,7 +1447,6 @@ namespace Mutagen.Bethesda.Fallout4
                 this.WaterType = defaultOn;
                 this.ATTXActivateTextOverride = defaultOn;
                 this.Flags = defaultOn;
-                this.ActiveMarkersFlags = defaultOn;
                 this.AssociatedForm = defaultOn;
                 this.ModelFilename = defaultOn;
             }
@@ -1504,7 +1472,6 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((Flags, null));
                 ret.Add((Conditions == null ? DefaultOn : !Conditions.GetCrystal().CopyNothing, Conditions?.GetCrystal()));
                 ret.Add((Items == null ? DefaultOn : !Items.GetCrystal().CopyNothing, Items?.GetCrystal()));
-                ret.Add((ActiveMarkersFlags, null));
                 ret.Add((WorkbenchData != null ? WorkbenchData.OnOverall : DefaultOn, WorkbenchData?.GetCrystal()));
                 ret.Add((AssociatedForm, null));
                 ret.Add((Markers == null ? DefaultOn : !Markers.GetCrystal().CopyNothing, Markers?.GetCrystal()));
@@ -1695,7 +1662,6 @@ namespace Mutagen.Bethesda.Fallout4
         new Furniture.Flag? Flags { get; set; }
         new ExtendedList<Condition>? Conditions { get; set; }
         new ExtendedList<ContainerEntry>? Items { get; set; }
-        new Furniture.ActiveMarkers? ActiveMarkersFlags { get; set; }
         new WorkbenchData? WorkbenchData { get; set; }
         new IFormLinkNullable<IFurnitureAssociationGetter> AssociatedForm { get; set; }
         new ExtendedList<FurnitureMarker>? Markers { get; set; }
@@ -1773,7 +1739,6 @@ namespace Mutagen.Bethesda.Fallout4
         Furniture.Flag? Flags { get; }
         IReadOnlyList<IConditionGetter>? Conditions { get; }
         IReadOnlyList<IContainerEntryGetter>? Items { get; }
-        Furniture.ActiveMarkers? ActiveMarkersFlags { get; }
         IWorkbenchDataGetter? WorkbenchData { get; }
         IFormLinkNullableGetter<IFurnitureAssociationGetter> AssociatedForm { get; }
         IReadOnlyList<IFurnitureMarkerGetter>? Markers { get; }
@@ -1962,11 +1927,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         Flags = 19,
         Conditions = 20,
         Items = 21,
-        ActiveMarkersFlags = 22,
-        WorkbenchData = 23,
-        AssociatedForm = 24,
-        Markers = 25,
-        ModelFilename = 26,
+        WorkbenchData = 22,
+        AssociatedForm = 23,
+        Markers = 24,
+        ModelFilename = 25,
     }
     #endregion
 
@@ -1984,9 +1948,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public const string GUID = "37ea297d-9233-4548-b692-fe2d298b35c4";
 
-        public const ushort AdditionalFieldCount = 21;
+        public const ushort AdditionalFieldCount = 20;
 
-        public const ushort FieldCount = 27;
+        public const ushort FieldCount = 26;
 
         public static readonly Type MaskType = typeof(Furniture.Mask<>);
 
@@ -2071,7 +2035,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.Flags = default;
             item.Conditions = null;
             item.Items = null;
-            item.ActiveMarkersFlags = default;
             item.WorkbenchData = null;
             item.AssociatedForm.Clear();
             item.Markers = null;
@@ -2214,7 +2177,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 rhs.Items,
                 (loqLhs, loqRhs) => loqLhs.GetEqualsMask(loqRhs, include),
                 include);
-            ret.ActiveMarkersFlags = item.ActiveMarkersFlags == rhs.ActiveMarkersFlags;
             ret.WorkbenchData = EqualsMaskHelper.EqualsHelper(
                 item.WorkbenchData,
                 rhs.WorkbenchData,
@@ -2394,11 +2356,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 fg.AppendLine("]");
             }
-            if ((printMask?.ActiveMarkersFlags ?? true)
-                && item.ActiveMarkersFlags is {} ActiveMarkersFlagsItem)
-            {
-                fg.AppendItem(ActiveMarkersFlagsItem, "ActiveMarkersFlags");
-            }
             if ((printMask?.WorkbenchData?.Overall ?? true)
                 && item.WorkbenchData is {} WorkbenchDataItem)
             {
@@ -2568,10 +2525,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 if (!lhs.Items.SequenceEqualNullable(rhs.Items)) return false;
             }
-            if ((crystal?.GetShouldTranslate((int)Furniture_FieldIndex.ActiveMarkersFlags) ?? true))
-            {
-                if (lhs.ActiveMarkersFlags != rhs.ActiveMarkersFlags) return false;
-            }
             if ((crystal?.GetShouldTranslate((int)Furniture_FieldIndex.WorkbenchData) ?? true))
             {
                 if (EqualsMaskHelper.RefEquality(lhs.WorkbenchData, rhs.WorkbenchData, out var lhsWorkbenchData, out var rhsWorkbenchData, out var isWorkbenchDataEqual))
@@ -2660,10 +2613,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             }
             hash.Add(item.Conditions);
             hash.Add(item.Items);
-            if (item.ActiveMarkersFlags is {} ActiveMarkersFlagsitem)
-            {
-                hash.Add(ActiveMarkersFlagsitem);
-            }
             if (item.WorkbenchData is {} WorkbenchDataitem)
             {
                 hash.Add(WorkbenchDataitem);
@@ -3122,10 +3071,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     errorMask?.PopIndex();
                 }
             }
-            if ((copyMask?.GetShouldTranslate((int)Furniture_FieldIndex.ActiveMarkersFlags) ?? true))
-            {
-                item.ActiveMarkersFlags = rhs.ActiveMarkersFlags;
-            }
             if ((copyMask?.GetShouldTranslate((int)Furniture_FieldIndex.WorkbenchData) ?? true))
             {
                 errorMask?.PushIndex((int)Furniture_FieldIndex.WorkbenchData);
@@ -3456,11 +3401,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         writer: subWriter,
                         translationParams: conv);
                 });
-            EnumBinaryTranslation<Furniture.ActiveMarkers, MutagenFrame, MutagenWriter>.Instance.WriteNullable(
-                writer,
-                item.ActiveMarkersFlags,
-                length: 4,
-                header: translationParams.ConvertToCustom(RecordTypes.MNAM));
+            FurnitureBinaryWriteTranslation.WriteBinaryFlags2(
+                writer: writer,
+                item: item);
             if (item.WorkbenchData is {} WorkbenchDataItem)
             {
                 ((WorkbenchDataBinaryWriteTranslation)((IBinaryItem)WorkbenchDataItem).BinaryWriteTranslator).Write(
@@ -3494,6 +3437,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             IFurnitureGetter item)
         {
             WriteBinaryFlagsCustom(
+                writer: writer,
+                item: item);
+        }
+
+        public static partial void WriteBinaryFlags2Custom(
+            MutagenWriter writer,
+            IFurnitureGetter item);
+
+        public static void WriteBinaryFlags2(
+            MutagenWriter writer,
+            IFurnitureGetter item)
+        {
+            WriteBinaryFlags2Custom(
                 writer: writer,
                 item: item);
         }
@@ -3743,11 +3699,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.MNAM:
                 {
-                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
-                    item.ActiveMarkersFlags = EnumBinaryTranslation<Furniture.ActiveMarkers, MutagenFrame, MutagenWriter>.Instance.Parse(
-                        reader: frame,
-                        length: contentLength);
-                    return (int)Furniture_FieldIndex.ActiveMarkersFlags;
+                    return FurnitureBinaryCreateTranslation.FillBinaryFlags2Custom(
+                        frame: frame.SpawnWithLength(frame.MetaData.Constants.SubConstants.HeaderLength + contentLength),
+                        item: item);
                 }
                 case RecordTypeInts.WBDT:
                 {
@@ -3793,6 +3747,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
 
         public static partial void FillBinaryFlagsCustom(
+            MutagenFrame frame,
+            IFurnitureInternal item);
+
+        public static partial ParseResult FillBinaryFlags2Custom(
             MutagenFrame frame,
             IFurnitureInternal item);
 
@@ -3924,9 +3882,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             PreviousParse lastParsed);
         #endregion
         public IReadOnlyList<IContainerEntryGetter>? Items { get; private set; }
-        #region ActiveMarkersFlags
-        private int? _ActiveMarkersFlagsLocation;
-        public Furniture.ActiveMarkers? ActiveMarkersFlags => _ActiveMarkersFlagsLocation.HasValue ? (Furniture.ActiveMarkers)BinaryPrimitives.ReadInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _ActiveMarkersFlagsLocation!.Value, _package.MetaData.Constants)) : default(Furniture.ActiveMarkers?);
+        #region Flags2
+        public partial ParseResult Flags2CustomParse(
+            OverlayStream stream,
+            int offset);
         #endregion
         #region WorkbenchData
         private RangeInt32? _WorkbenchDataLocation;
@@ -4137,8 +4096,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.MNAM:
                 {
-                    _ActiveMarkersFlagsLocation = (stream.Position - offset);
-                    return (int)Furniture_FieldIndex.ActiveMarkersFlags;
+                    return Flags2CustomParse(
+                        stream,
+                        offset);
                 }
                 case RecordTypeInts.WBDT:
                 {

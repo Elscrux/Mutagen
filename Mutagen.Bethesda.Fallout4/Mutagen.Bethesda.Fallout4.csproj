@@ -32,6 +32,7 @@
     <Compile Include="Enums\CompareOperator.cs" />
     <Compile Include="Enums\GroupTypeEnum.cs" />
     <Compile Include="Enums\Size.cs" />
+    <Compile Include="Enums\Skill.cs" />
     <Compile Include="Enums\SpellDataFlag.cs" />
     <Compile Include="Enums\SpellType.cs" />
     <Compile Include="Enums\TargetObjectType.cs" />
