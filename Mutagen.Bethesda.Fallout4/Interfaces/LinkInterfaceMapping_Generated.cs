@@ -31,6 +31,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Container),
                 typeof(Door),
                 typeof(Faction),
+                typeof(Furniture),
                 typeof(Light),
                 typeof(MiscItem),
                 typeof(MoveableStatic),
@@ -71,6 +72,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Armor),
             };
             dict[typeof(IBindableEquipmentGetter)] = dict[typeof(IBindableEquipment)];
+            dict[typeof(IFurnitureAssociation)] = new Type[]
+            {
+                typeof(Armor),
+            };
+            dict[typeof(IFurnitureAssociationGetter)] = dict[typeof(IFurnitureAssociation)];
             dict[typeof(ILocationTargetable)] = new Type[]
             {
                 typeof(Door),

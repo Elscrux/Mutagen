@@ -53,6 +53,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int EFID = 0x44494645;
         public const int EFIT = 0x54494645;
         public const int EITM = 0x4D544945;
+        public const int ENAM = 0x4D414E45;
         public const int ENCH = 0x48434E45;
         public const int ENIT = 0x54494E45;
         public const int EQUP = 0x50555145;
@@ -64,10 +65,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int FLST = 0x54534C46;
         public const int FLTV = 0x56544C46;
         public const int FNAM = 0x4D414E46;
+        public const int FNPR = 0x52504E46;
         public const int FSTP = 0x50545346;
         public const int FSTS = 0x53545346;
         public const int FTYP = 0x50595446;
         public const int FULL = 0x4C4C5546;
+        public const int FURN = 0x4E525546;
         public const int GDRY = 0x59524447;
         public const int GLOB = 0x424F4C47;
         public const int GMST = 0x54534D47;
@@ -197,11 +200,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int VTYP = 0x50595456;
         public const int WAIT = 0x54494157;
         public const int WATR = 0x52544157;
+        public const int WBDT = 0x54444257;
         public const int WGDR = 0x52444757;
         public const int WNAM = 0x4D414E57;
         public const int WRLD = 0x444C5257;
         public const int WTHR = 0x52485457;
         public const int XCNT = 0x544E4358;
+        public const int XMRK = 0x4B524D58;
         public const int XNAM = 0x4D414E58;
         public const int XTRI = 0x49525458;
         public const int XXXX = 0x58585858;

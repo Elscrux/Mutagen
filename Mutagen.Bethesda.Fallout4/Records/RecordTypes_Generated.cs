@@ -55,6 +55,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType EFID = new(0x44494645);
         public static readonly RecordType EFIT = new(0x54494645);
         public static readonly RecordType EITM = new(0x4D544945);
+        public static readonly RecordType ENAM = new(0x4D414E45);
         public static readonly RecordType ENCH = new(0x48434E45);
         public static readonly RecordType ENIT = new(0x54494E45);
         public static readonly RecordType EQUP = new(0x50555145);
@@ -66,10 +67,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType FLST = new(0x54534C46);
         public static readonly RecordType FLTV = new(0x56544C46);
         public static readonly RecordType FNAM = new(0x4D414E46);
+        public static readonly RecordType FNPR = new(0x52504E46);
         public static readonly RecordType FSTP = new(0x50545346);
         public static readonly RecordType FSTS = new(0x53545346);
         public static readonly RecordType FTYP = new(0x50595446);
         public static readonly RecordType FULL = new(0x4C4C5546);
+        public static readonly RecordType FURN = new(0x4E525546);
         public static readonly RecordType GDRY = new(0x59524447);
         public static readonly RecordType GLOB = new(0x424F4C47);
         public static readonly RecordType GMST = new(0x54534D47);
@@ -199,11 +202,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType VTYP = new(0x50595456);
         public static readonly RecordType WAIT = new(0x54494157);
         public static readonly RecordType WATR = new(0x52544157);
+        public static readonly RecordType WBDT = new(0x54444257);
         public static readonly RecordType WGDR = new(0x52444757);
         public static readonly RecordType WNAM = new(0x4D414E57);
         public static readonly RecordType WRLD = new(0x444C5257);
         public static readonly RecordType WTHR = new(0x52485457);
         public static readonly RecordType XCNT = new(0x544E4358);
+        public static readonly RecordType XMRK = new(0x4B524D58);
         public static readonly RecordType XNAM = new(0x4D414E58);
         public static readonly RecordType XTRI = new(0x49525458);
         public static readonly RecordType XXXX = new(0x58585858);

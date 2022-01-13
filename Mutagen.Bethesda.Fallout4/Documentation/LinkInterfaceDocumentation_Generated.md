@@ -21,6 +21,8 @@ A `FormLink<IItem>` could then point to all those record types by pointing to th
 ### IEmittance
 - Light
 - Region
+### IFurnitureAssociation
+- Armor
 ### IHarvestTarget
 - Ingredient
 - MiscItem
@@ -45,6 +47,7 @@ A `FormLink<IItem>` could then point to all those record types by pointing to th
 - Container
 - Door
 - Faction
+- Furniture
 - Light
 - MiscItem
 - MoveableStatic
@@ -75,6 +78,7 @@ A `FormLink<IItem>` could then point to all those record types by pointing to th
 ### Armor
 - IBindableEquipment
 - IConstructible
+- IFurnitureAssociation
 - IItem
 - IObjectId
 - IOutfitTarget
@@ -93,6 +97,8 @@ A `FormLink<IItem>` could then point to all those record types by pointing to th
 - IRelatable
 ### Flora
 - IRegionTarget
+### Furniture
+- IObjectId
 ### Ingredient
 - IConstructible
 - IHarvestTarget

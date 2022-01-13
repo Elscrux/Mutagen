@@ -21,6 +21,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Container
 - Door
 - Flora
+- Furniture
 - Ingredient
 - Light
 - MiscItem
@@ -37,6 +38,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - DestructionStage
 - Door
 - Flora
+- Furniture
 - Grass
 - HeadPart
 - Ingredient
@@ -56,6 +58,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Door
 - Faction
 - Flora
+- Furniture
 - HeadPart
 - Ingredient
 - Keyword
@@ -92,6 +95,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Container
 - Door
 - Flora
+- Furniture
 - Grass
 - Ingredient
 - Light
@@ -110,6 +114,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Container
 - Door
 - Flora
+- Furniture
 - Ingredient
 - Light
 - MiscItem
@@ -170,6 +175,12 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 ### Faction
 - INamed
 ### Flora
+- IKeyworded
+- IModeled
+- INamed
+- IObjectBounded
+- IScripted
+### Furniture
 - IKeyworded
 - IModeled
 - INamed

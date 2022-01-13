@@ -3965,6 +3965,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IBindableEquipmentGetter":
                     Remove(obj, keys, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown);
                     break;
+                case "IFurnitureAssociation":
+                case "IFurnitureAssociationGetter":
+                    Remove(obj, keys, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown);
+                    break;
                 case "ILocationTargetable":
                 case "ILocationTargetableGetter":
                     Remove(obj, keys, typeof(IDoorGetter), throwIfUnknown: throwIfUnknown);
@@ -6120,6 +6124,23 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     }
                     yield break;
                 }
+                case "IFurnitureAssociation":
+                {
+                    if (!Fallout4Mod_Registration.SetterType.IsAssignableFrom(obj.GetType())) yield break;
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "IFurnitureAssociationGetter":
+                {
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
                 case "ILocationTargetable":
                 {
                     if (!Fallout4Mod_Registration.SetterType.IsAssignableFrom(obj.GetType())) yield break;
@@ -7428,6 +7449,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case "IBindableEquipment":
                 case "IBindableEquipmentGetter":
+                {
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
+                        type: typeof(IArmorGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "IFurnitureAssociation":
+                case "IFurnitureAssociationGetter":
                 {
                     foreach (var item in EnumerateMajorRecordContexts(
                         obj,

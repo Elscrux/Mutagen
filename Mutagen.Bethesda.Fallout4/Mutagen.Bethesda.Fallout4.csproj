@@ -117,6 +117,9 @@
     <Compile Include="Records\Major Records\FootstepSet.cs">
       <DependentUpon>FootstepSet.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Major Records\Furniture.cs">
+      <DependentUpon>Furniture.xml</DependentUpon>
+    </Compile>
     <Compile Include="Records\Major Records\GameSetting.cs">
       <DependentUpon>GameSetting.xml</DependentUpon>
     </Compile>
@@ -230,6 +233,9 @@
     </Compile>
     <Compile Include="Records\Major Records\VoiceType.cs">
       <DependentUpon>VoiceType.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\WorkbenchData.cs">
+      <DependentUpon>Furniture.xml</DependentUpon>
     </Compile>
     <Compile Include="Records\ProtocolDefinition_Fallout4.cs" />
     <Compile Include="Records\Fallout4MajorRecord.cs">
@@ -790,6 +796,19 @@
     <Compile Include="Records\Major Records\Flora_Generated.cs">
       <DependentUpon>Flora.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Major Records\Furniture_Generated.cs">
+      <DependentUpon>Furniture.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\WorkbenchData_Generated.cs">
+      <DependentUpon>Furniture.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\FurnitureMarker_Generated.cs">
+      <DependentUpon>Furniture.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\EntryPoints_Generated.cs">
+      <DependentUpon>Furniture.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Interfaces\IFurnitureAssociation_Generated.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="GitInfo" Version="2.2.0">

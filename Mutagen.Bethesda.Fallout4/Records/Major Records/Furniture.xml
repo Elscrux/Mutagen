@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Loqui xmlns="http://tempuri.org/LoquiSource.xsd">
+	<Object name="Furniture" recordType="FURN" baseClass="Fallout4MajorRecord" objType="Record" majorFlag="true" GUID="37ea297d-9233-4548-b692-fe2d298b35c4" ID="204">
+		<Fields>
+			<RefDirect name="VirtualMachineAdapter" refName="VirtualMachineAdapter" />
+			<RefDirect name="ObjectBounds" refName="ObjectBounds" nullable="False" />
+			<RefDirect name="PreviewTransform" refName="PreviewTransform" nullable="False" />
+			<String name="Name" recordType="FULL" translated="Normal" />
+			<RefDirect name="Model" refName="Model" />
+			<RefDirect name="Destructible" refName="Destructible" />
+			<List name="Keywords" counterRecType="KSIZ" recordType="KWDA">
+				<FormLink refName="Keyword" />
+			</List>
+			<RefDirect name="Properties" refName="Properties" />
+			<FormLink name="NativeTerminal" refName="Terminal" recordType="NTRM" />
+			<FormLink name="ForcedLocRefType" refName="LocationReferenceType" recordType="FTYP" />
+			<ByteArray name="PNAM" recordType="PNAM" />
+			<FormLink name="WaterType" refName="Water" recordType="WNAM" />
+			<String name="ATTXActivateTextOverride" recordType="RNAM" translated="Normal" />
+			<Enum name="Flags" enumName="Furniture.Flag" recordType="FNAM" binary="Custom" />
+			<RefList name="Conditions" refName="Condition" counterRecType="CITC" binaryOverlay="Custom" />
+			<RefList name="Items" counterRecType="COCT" refName="ContainerEntry" />
+			<Enum name="ActiveMarkersFlags" enumName="Furniture.ActiveMarkers" byteLength="4" recordType="MNAM" />
+			<RefDirect name="WorkbenchData" refName="WorkbenchData" />
+			<FormLink name="AssociatedForm" recordType="NAM1">
+				<Interface>IFurnitureAssociation</Interface>
+			</FormLink>
+			<CustomLogic name="DisabledMarkers" recordType="ENAM" />
+			<RefList name="Markers" refName="FurnitureMarker" recordType="FNPR" binary="Custom" />
+			<String name="ModelFilename" recordType="XMRK" />
+		</Fields>
+		<LinkInterface>IObjectId</LinkInterface>
+	</Object>
+	<Object name="WorkbenchData" objType="Subrecord" recordType="WBDT" GUID="31f37852-fcfa-40f2-827f-6c6161c76b64" ID="205">
+		<Fields>
+			<Enum name="BenchType" enumName="WorkbenchData.Type" byteLength="1" />
+			<Enum name="UsesSkill" enumName="Skill" byteLength="1" nullable="True" nullableBinaryFallback="-1" />
+		</Fields>
+	</Object>
+	<Object name="FurnitureMarker" objType="Subrecord" GUID="c838abc7-4a7c-405f-ae6e-5cbd4a2d626b" ID="206">
+		<Fields>
+			<Bool name="Enabled" />
+			<RefDirect name="DisabledEntryPoints" refName="EntryPoints" nullable="True" />
+			<FormLink name="MarkerKeyword" refName="Keyword" nullable="True" />
+			<RefDirect name="EntryPoints" refName="EntryPoints" nullable="True" />
+		</Fields>
+	</Object>
+	<Object name="EntryPoints" objType="Subrecord" GUID="4ff8782c-e6de-4300-86df-1192f028f619" ID="207">
+		<Fields>
+			<Enum name="Type" enumName="Furniture.AnimationType" byteLength="2" />
+			<Enum name="Points" enumName="Furniture.Entry" byteLength="2" />
+		</Fields>
+	</Object>
+</Loqui>
