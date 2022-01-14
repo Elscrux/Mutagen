@@ -8,18 +8,18 @@ using Mutagen.Bethesda;
 namespace Mutagen.Bethesda.Fallout4
 {
     /// <summary>
-    /// Implemented by: [Ingredient, LeveledItem, MiscItem]
+    /// Implemented by: [LeveledNpc]
     /// </summary>
-    public partial interface IHarvestTarget :
+    public partial interface INpcSpawn :
         IFallout4MajorRecordInternal,
-        IHarvestTargetGetter
+        INpcSpawnGetter
     {
     }
 
     /// <summary>
-    /// Implemented by: [Ingredient, LeveledItem, MiscItem]
+    /// Implemented by: [LeveledNpc]
     /// </summary>
-    public partial interface IHarvestTargetGetter : IFallout4MajorRecordGetter
+    public partial interface INpcSpawnGetter : IFallout4MajorRecordGetter
     {
     }
 }

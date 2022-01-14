@@ -26,6 +26,7 @@ A `FormLink<IItem>` could then point to all those record types by pointing to th
 - Armor
 ### IHarvestTarget
 - Ingredient
+- LeveledItem
 - MiscItem
 ### IIdleRelation
 - ActionRecord
@@ -33,6 +34,7 @@ A `FormLink<IItem>` could then point to all those record types by pointing to th
 - Armor
 - Book
 - Ingredient
+- LeveledItem
 - Light
 - MiscItem
 ### IKeywordLinkedReference
@@ -41,6 +43,8 @@ A `FormLink<IItem>` could then point to all those record types by pointing to th
 - LocationReferenceType
 ### ILocationTargetable
 - Door
+### INpcSpawn
+- LeveledNpc
 ### IObjectId
 - Activator
 - Armor
@@ -56,6 +60,7 @@ A `FormLink<IItem>` could then point to all those record types by pointing to th
 - TextureSet
 ### IOutfitTarget
 - Armor
+- LeveledItem
 ### IOwner
 - Faction
 ### IRegionTarget
@@ -109,6 +114,12 @@ A `FormLink<IItem>` could then point to all those record types by pointing to th
 - IKeywordLinkedReference
 ### LandscapeTexture
 - IRegionTarget
+### LeveledItem
+- IHarvestTarget
+- IItem
+- IOutfitTarget
+### LeveledNpc
+- INpcSpawn
 ### LeveledSpell
 - ISpellRecord
 ### Light

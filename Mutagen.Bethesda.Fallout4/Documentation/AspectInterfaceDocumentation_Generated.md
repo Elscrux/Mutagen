@@ -42,6 +42,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Grass
 - HeadPart
 - Ingredient
+- LeveledNpc
 - Light
 - MiscItem
 - MoveableStatic
@@ -104,6 +105,8 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Furniture
 - Grass
 - Ingredient
+- LeveledItem
+- LeveledNpc
 - Light
 - MiscItem
 - MoveableStatic
@@ -207,6 +210,11 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 ### Keyword
 - IKeywordCommon
 - INamed
+### LeveledItem
+- IObjectBounded
+### LeveledNpc
+- IModeled
+- IObjectBounded
 ### Light
 - IKeyworded
 - IModeled

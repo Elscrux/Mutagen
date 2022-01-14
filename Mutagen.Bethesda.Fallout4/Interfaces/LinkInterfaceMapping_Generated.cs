@@ -49,6 +49,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Armor),
                 typeof(Book),
                 typeof(Ingredient),
+                typeof(LeveledItem),
                 typeof(Light),
                 typeof(MiscItem),
             };
@@ -56,6 +57,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             dict[typeof(IOutfitTarget)] = new Type[]
             {
                 typeof(Armor),
+                typeof(LeveledItem),
             };
             dict[typeof(IOutfitTargetGetter)] = dict[typeof(IOutfitTarget)];
             dict[typeof(IConstructible)] = new Type[]
@@ -105,6 +107,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             dict[typeof(IHarvestTarget)] = new Type[]
             {
                 typeof(Ingredient),
+                typeof(LeveledItem),
                 typeof(MiscItem),
             };
             dict[typeof(IHarvestTargetGetter)] = dict[typeof(IHarvestTarget)];
@@ -113,6 +116,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Keyword),
             };
             dict[typeof(IKeywordLinkedReferenceGetter)] = dict[typeof(IKeywordLinkedReference)];
+            dict[typeof(INpcSpawn)] = new Type[]
+            {
+                typeof(LeveledNpc),
+            };
+            dict[typeof(INpcSpawnGetter)] = dict[typeof(INpcSpawn)];
             dict[typeof(ISpellRecord)] = new Type[]
             {
                 typeof(LeveledSpell),

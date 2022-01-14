@@ -91,6 +91,8 @@ namespace Mutagen.Bethesda.Fallout4
             _Trees_Object = new Fallout4Group<Tree>(this);
             _Florae_Object = new Fallout4Group<Flora>(this);
             _Furniture_Object = new Fallout4Group<Furniture>(this);
+            _LeveledNpcs_Object = new Fallout4Group<LeveledNpc>(this);
+            _LeveledItems_Object = new Fallout4Group<LeveledItem>(this);
             _VoiceTypes_Object = new Fallout4Group<VoiceType>(this);
             _Quests_Object = new Fallout4Group<Quest>(this);
             _MaterialTypes_Object = new Fallout4Group<MaterialType>(this);
@@ -348,6 +350,20 @@ namespace Mutagen.Bethesda.Fallout4
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IFallout4GroupGetter<IFurnitureGetter> IFallout4ModGetter.Furniture => _Furniture_Object;
         #endregion
+        #region LeveledNpcs
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Fallout4Group<LeveledNpc> _LeveledNpcs_Object;
+        public Fallout4Group<LeveledNpc> LeveledNpcs => _LeveledNpcs_Object;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFallout4GroupGetter<ILeveledNpcGetter> IFallout4ModGetter.LeveledNpcs => _LeveledNpcs_Object;
+        #endregion
+        #region LeveledItems
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Fallout4Group<LeveledItem> _LeveledItems_Object;
+        public Fallout4Group<LeveledItem> LeveledItems => _LeveledItems_Object;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFallout4GroupGetter<ILeveledItemGetter> IFallout4ModGetter.LeveledItems => _LeveledItems_Object;
+        #endregion
         #region VoiceTypes
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private Fallout4Group<VoiceType> _VoiceTypes_Object;
@@ -470,6 +486,8 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Trees = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Florae = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Furniture = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
+                this.LeveledNpcs = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
+                this.LeveledItems = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.VoiceTypes = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Quests = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.MaterialTypes = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
@@ -515,6 +533,8 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem Trees,
                 TItem Florae,
                 TItem Furniture,
+                TItem LeveledNpcs,
+                TItem LeveledItems,
                 TItem VoiceTypes,
                 TItem Quests,
                 TItem MaterialTypes,
@@ -558,6 +578,8 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Trees = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Trees, new Fallout4Group.Mask<TItem>(Trees));
                 this.Florae = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Florae, new Fallout4Group.Mask<TItem>(Florae));
                 this.Furniture = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Furniture, new Fallout4Group.Mask<TItem>(Furniture));
+                this.LeveledNpcs = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(LeveledNpcs, new Fallout4Group.Mask<TItem>(LeveledNpcs));
+                this.LeveledItems = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(LeveledItems, new Fallout4Group.Mask<TItem>(LeveledItems));
                 this.VoiceTypes = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(VoiceTypes, new Fallout4Group.Mask<TItem>(VoiceTypes));
                 this.Quests = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Quests, new Fallout4Group.Mask<TItem>(Quests));
                 this.MaterialTypes = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(MaterialTypes, new Fallout4Group.Mask<TItem>(MaterialTypes));
@@ -611,6 +633,8 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Trees { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Florae { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Furniture { get; set; }
+            public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? LeveledNpcs { get; set; }
+            public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? LeveledItems { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? VoiceTypes { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Quests { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? MaterialTypes { get; set; }
@@ -665,6 +689,8 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!object.Equals(this.Trees, rhs.Trees)) return false;
                 if (!object.Equals(this.Florae, rhs.Florae)) return false;
                 if (!object.Equals(this.Furniture, rhs.Furniture)) return false;
+                if (!object.Equals(this.LeveledNpcs, rhs.LeveledNpcs)) return false;
+                if (!object.Equals(this.LeveledItems, rhs.LeveledItems)) return false;
                 if (!object.Equals(this.VoiceTypes, rhs.VoiceTypes)) return false;
                 if (!object.Equals(this.Quests, rhs.Quests)) return false;
                 if (!object.Equals(this.MaterialTypes, rhs.MaterialTypes)) return false;
@@ -712,6 +738,8 @@ namespace Mutagen.Bethesda.Fallout4
                 hash.Add(this.Trees);
                 hash.Add(this.Florae);
                 hash.Add(this.Furniture);
+                hash.Add(this.LeveledNpcs);
+                hash.Add(this.LeveledItems);
                 hash.Add(this.VoiceTypes);
                 hash.Add(this.Quests);
                 hash.Add(this.MaterialTypes);
@@ -901,6 +929,16 @@ namespace Mutagen.Bethesda.Fallout4
                 {
                     if (!eval(this.Furniture.Overall)) return false;
                     if (this.Furniture.Specific != null && !this.Furniture.Specific.All(eval)) return false;
+                }
+                if (LeveledNpcs != null)
+                {
+                    if (!eval(this.LeveledNpcs.Overall)) return false;
+                    if (this.LeveledNpcs.Specific != null && !this.LeveledNpcs.Specific.All(eval)) return false;
+                }
+                if (LeveledItems != null)
+                {
+                    if (!eval(this.LeveledItems.Overall)) return false;
+                    if (this.LeveledItems.Specific != null && !this.LeveledItems.Specific.All(eval)) return false;
                 }
                 if (VoiceTypes != null)
                 {
@@ -1119,6 +1157,16 @@ namespace Mutagen.Bethesda.Fallout4
                     if (eval(this.Furniture.Overall)) return true;
                     if (this.Furniture.Specific != null && this.Furniture.Specific.Any(eval)) return true;
                 }
+                if (LeveledNpcs != null)
+                {
+                    if (eval(this.LeveledNpcs.Overall)) return true;
+                    if (this.LeveledNpcs.Specific != null && this.LeveledNpcs.Specific.Any(eval)) return true;
+                }
+                if (LeveledItems != null)
+                {
+                    if (eval(this.LeveledItems.Overall)) return true;
+                    if (this.LeveledItems.Specific != null && this.LeveledItems.Specific.Any(eval)) return true;
+                }
                 if (VoiceTypes != null)
                 {
                     if (eval(this.VoiceTypes.Overall)) return true;
@@ -1203,6 +1251,8 @@ namespace Mutagen.Bethesda.Fallout4
                 obj.Trees = this.Trees == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Trees.Overall), this.Trees.Specific?.Translate(eval));
                 obj.Florae = this.Florae == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Florae.Overall), this.Florae.Specific?.Translate(eval));
                 obj.Furniture = this.Furniture == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Furniture.Overall), this.Furniture.Specific?.Translate(eval));
+                obj.LeveledNpcs = this.LeveledNpcs == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.LeveledNpcs.Overall), this.LeveledNpcs.Specific?.Translate(eval));
+                obj.LeveledItems = this.LeveledItems == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.LeveledItems.Overall), this.LeveledItems.Specific?.Translate(eval));
                 obj.VoiceTypes = this.VoiceTypes == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.VoiceTypes.Overall), this.VoiceTypes.Specific?.Translate(eval));
                 obj.Quests = this.Quests == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Quests.Overall), this.Quests.Specific?.Translate(eval));
                 obj.MaterialTypes = this.MaterialTypes == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.MaterialTypes.Overall), this.MaterialTypes.Specific?.Translate(eval));
@@ -1372,6 +1422,14 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         Furniture?.ToString(fg);
                     }
+                    if (printMask?.LeveledNpcs?.Overall ?? true)
+                    {
+                        LeveledNpcs?.ToString(fg);
+                    }
+                    if (printMask?.LeveledItems?.Overall ?? true)
+                    {
+                        LeveledItems?.ToString(fg);
+                    }
                     if (printMask?.VoiceTypes?.Overall ?? true)
                     {
                         VoiceTypes?.ToString(fg);
@@ -1460,6 +1518,8 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Tree.ErrorMask>?>? Trees;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Flora.ErrorMask>?>? Florae;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Furniture.ErrorMask>?>? Furniture;
+            public MaskItem<Exception?, Fallout4Group.ErrorMask<LeveledNpc.ErrorMask>?>? LeveledNpcs;
+            public MaskItem<Exception?, Fallout4Group.ErrorMask<LeveledItem.ErrorMask>?>? LeveledItems;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<VoiceType.ErrorMask>?>? VoiceTypes;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Quest.ErrorMask>?>? Quests;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<MaterialType.ErrorMask>?>? MaterialTypes;
@@ -1545,6 +1605,10 @@ namespace Mutagen.Bethesda.Fallout4
                         return Florae;
                     case Fallout4Mod_FieldIndex.Furniture:
                         return Furniture;
+                    case Fallout4Mod_FieldIndex.LeveledNpcs:
+                        return LeveledNpcs;
+                    case Fallout4Mod_FieldIndex.LeveledItems:
+                        return LeveledItems;
                     case Fallout4Mod_FieldIndex.VoiceTypes:
                         return VoiceTypes;
                     case Fallout4Mod_FieldIndex.Quests:
@@ -1673,6 +1737,12 @@ namespace Mutagen.Bethesda.Fallout4
                         break;
                     case Fallout4Mod_FieldIndex.Furniture:
                         this.Furniture = new MaskItem<Exception?, Fallout4Group.ErrorMask<Furniture.ErrorMask>?>(ex, null);
+                        break;
+                    case Fallout4Mod_FieldIndex.LeveledNpcs:
+                        this.LeveledNpcs = new MaskItem<Exception?, Fallout4Group.ErrorMask<LeveledNpc.ErrorMask>?>(ex, null);
+                        break;
+                    case Fallout4Mod_FieldIndex.LeveledItems:
+                        this.LeveledItems = new MaskItem<Exception?, Fallout4Group.ErrorMask<LeveledItem.ErrorMask>?>(ex, null);
                         break;
                     case Fallout4Mod_FieldIndex.VoiceTypes:
                         this.VoiceTypes = new MaskItem<Exception?, Fallout4Group.ErrorMask<VoiceType.ErrorMask>?>(ex, null);
@@ -1810,6 +1880,12 @@ namespace Mutagen.Bethesda.Fallout4
                     case Fallout4Mod_FieldIndex.Furniture:
                         this.Furniture = (MaskItem<Exception?, Fallout4Group.ErrorMask<Furniture.ErrorMask>?>?)obj;
                         break;
+                    case Fallout4Mod_FieldIndex.LeveledNpcs:
+                        this.LeveledNpcs = (MaskItem<Exception?, Fallout4Group.ErrorMask<LeveledNpc.ErrorMask>?>?)obj;
+                        break;
+                    case Fallout4Mod_FieldIndex.LeveledItems:
+                        this.LeveledItems = (MaskItem<Exception?, Fallout4Group.ErrorMask<LeveledItem.ErrorMask>?>?)obj;
+                        break;
                     case Fallout4Mod_FieldIndex.VoiceTypes:
                         this.VoiceTypes = (MaskItem<Exception?, Fallout4Group.ErrorMask<VoiceType.ErrorMask>?>?)obj;
                         break;
@@ -1874,6 +1950,8 @@ namespace Mutagen.Bethesda.Fallout4
                 if (Trees != null) return true;
                 if (Florae != null) return true;
                 if (Furniture != null) return true;
+                if (LeveledNpcs != null) return true;
+                if (LeveledItems != null) return true;
                 if (VoiceTypes != null) return true;
                 if (Quests != null) return true;
                 if (MaterialTypes != null) return true;
@@ -1950,6 +2028,8 @@ namespace Mutagen.Bethesda.Fallout4
                 Trees?.ToString(fg);
                 Florae?.ToString(fg);
                 Furniture?.ToString(fg);
+                LeveledNpcs?.ToString(fg);
+                LeveledItems?.ToString(fg);
                 VoiceTypes?.ToString(fg);
                 Quests?.ToString(fg);
                 MaterialTypes?.ToString(fg);
@@ -2000,6 +2080,8 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Trees = this.Trees.Combine(rhs.Trees, (l, r) => l.Combine(r));
                 ret.Florae = this.Florae.Combine(rhs.Florae, (l, r) => l.Combine(r));
                 ret.Furniture = this.Furniture.Combine(rhs.Furniture, (l, r) => l.Combine(r));
+                ret.LeveledNpcs = this.LeveledNpcs.Combine(rhs.LeveledNpcs, (l, r) => l.Combine(r));
+                ret.LeveledItems = this.LeveledItems.Combine(rhs.LeveledItems, (l, r) => l.Combine(r));
                 ret.VoiceTypes = this.VoiceTypes.Combine(rhs.VoiceTypes, (l, r) => l.Combine(r));
                 ret.Quests = this.Quests.Combine(rhs.Quests, (l, r) => l.Combine(r));
                 ret.MaterialTypes = this.MaterialTypes.Combine(rhs.MaterialTypes, (l, r) => l.Combine(r));
@@ -2065,6 +2147,8 @@ namespace Mutagen.Bethesda.Fallout4
             public Fallout4Group.TranslationMask<Tree.TranslationMask>? Trees;
             public Fallout4Group.TranslationMask<Flora.TranslationMask>? Florae;
             public Fallout4Group.TranslationMask<Furniture.TranslationMask>? Furniture;
+            public Fallout4Group.TranslationMask<LeveledNpc.TranslationMask>? LeveledNpcs;
+            public Fallout4Group.TranslationMask<LeveledItem.TranslationMask>? LeveledItems;
             public Fallout4Group.TranslationMask<VoiceType.TranslationMask>? VoiceTypes;
             public Fallout4Group.TranslationMask<Quest.TranslationMask>? Quests;
             public Fallout4Group.TranslationMask<MaterialType.TranslationMask>? MaterialTypes;
@@ -2131,6 +2215,8 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((Trees != null ? Trees.OnOverall : DefaultOn, Trees?.GetCrystal()));
                 ret.Add((Florae != null ? Florae.OnOverall : DefaultOn, Florae?.GetCrystal()));
                 ret.Add((Furniture != null ? Furniture.OnOverall : DefaultOn, Furniture?.GetCrystal()));
+                ret.Add((LeveledNpcs != null ? LeveledNpcs.OnOverall : DefaultOn, LeveledNpcs?.GetCrystal()));
+                ret.Add((LeveledItems != null ? LeveledItems.OnOverall : DefaultOn, LeveledItems?.GetCrystal()));
                 ret.Add((VoiceTypes != null ? VoiceTypes.OnOverall : DefaultOn, VoiceTypes?.GetCrystal()));
                 ret.Add((Quests != null ? Quests.OnOverall : DefaultOn, Quests?.GetCrystal()));
                 ret.Add((MaterialTypes != null ? MaterialTypes.OnOverall : DefaultOn, MaterialTypes?.GetCrystal()));
@@ -2214,6 +2300,8 @@ namespace Mutagen.Bethesda.Fallout4
             _Trees_Object = new Fallout4Group<Tree>(this);
             _Florae_Object = new Fallout4Group<Flora>(this);
             _Furniture_Object = new Fallout4Group<Furniture>(this);
+            _LeveledNpcs_Object = new Fallout4Group<LeveledNpc>(this);
+            _LeveledItems_Object = new Fallout4Group<LeveledItem>(this);
             _VoiceTypes_Object = new Fallout4Group<VoiceType>(this);
             _Quests_Object = new Fallout4Group<Quest>(this);
             _MaterialTypes_Object = new Fallout4Group<MaterialType>(this);
@@ -2363,6 +2451,14 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 this.Furniture.RecordCache.Set(rhsMod.Furniture.RecordCache.Items);
             }
+            if (mask?.LeveledNpcs ?? true)
+            {
+                this.LeveledNpcs.RecordCache.Set(rhsMod.LeveledNpcs.RecordCache.Items);
+            }
+            if (mask?.LeveledItems ?? true)
+            {
+                this.LeveledItems.RecordCache.Set(rhsMod.LeveledItems.RecordCache.Items);
+            }
             if (mask?.VoiceTypes ?? true)
             {
                 this.VoiceTypes.RecordCache.Set(rhsMod.VoiceTypes.RecordCache.Items);
@@ -2435,6 +2531,8 @@ namespace Mutagen.Bethesda.Fallout4
             count += Trees.RecordCache.Count > 0 ? 1 : default(uint);
             count += Florae.RecordCache.Count > 0 ? 1 : default(uint);
             count += Furniture.RecordCache.Count > 0 ? 1 : default(uint);
+            count += LeveledNpcs.RecordCache.Count > 0 ? 1 : default(uint);
+            count += LeveledItems.RecordCache.Count > 0 ? 1 : default(uint);
             count += VoiceTypes.RecordCache.Count > 0 ? 1 : default(uint);
             count += Quests.RecordCache.Count > 0 ? 1 : default(uint);
             count += MaterialTypes.RecordCache.Count > 0 ? 1 : default(uint);
@@ -2723,6 +2821,8 @@ namespace Mutagen.Bethesda.Fallout4
         new Fallout4Group<Tree> Trees { get; }
         new Fallout4Group<Flora> Florae { get; }
         new Fallout4Group<Furniture> Furniture { get; }
+        new Fallout4Group<LeveledNpc> LeveledNpcs { get; }
+        new Fallout4Group<LeveledItem> LeveledItems { get; }
         new Fallout4Group<VoiceType> VoiceTypes { get; }
         new Fallout4Group<Quest> Quests { get; }
         new Fallout4Group<MaterialType> MaterialTypes { get; }
@@ -2783,6 +2883,8 @@ namespace Mutagen.Bethesda.Fallout4
         IFallout4GroupGetter<ITreeGetter> Trees { get; }
         IFallout4GroupGetter<IFloraGetter> Florae { get; }
         IFallout4GroupGetter<IFurnitureGetter> Furniture { get; }
+        IFallout4GroupGetter<ILeveledNpcGetter> LeveledNpcs { get; }
+        IFallout4GroupGetter<ILeveledItemGetter> LeveledItems { get; }
         IFallout4GroupGetter<IVoiceTypeGetter> VoiceTypes { get; }
         IFallout4GroupGetter<IQuestGetter> Quests { get; }
         IFallout4GroupGetter<IMaterialTypeGetter> MaterialTypes { get; }
@@ -3381,13 +3483,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         Trees = 32,
         Florae = 33,
         Furniture = 34,
-        VoiceTypes = 35,
-        Quests = 36,
-        MaterialTypes = 37,
-        ArmorAddons = 38,
-        Messages = 39,
-        MusicTypes = 40,
-        MusicTracks = 41,
+        LeveledNpcs = 35,
+        LeveledItems = 36,
+        VoiceTypes = 37,
+        Quests = 38,
+        MaterialTypes = 39,
+        ArmorAddons = 40,
+        Messages = 41,
+        MusicTypes = 42,
+        MusicTracks = 43,
     }
     #endregion
 
@@ -3405,9 +3509,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public const string GUID = "9cae6baa-1084-4862-ae0a-07c79b9f2a3a";
 
-        public const ushort AdditionalFieldCount = 42;
+        public const ushort AdditionalFieldCount = 44;
 
-        public const ushort FieldCount = 42;
+        public const ushort FieldCount = 44;
 
         public static readonly Type MaskType = typeof(Fallout4Mod.Mask<>);
 
@@ -3510,6 +3614,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.Trees.Clear();
             item.Florae.Clear();
             item.Furniture.Clear();
+            item.LeveledNpcs.Clear();
+            item.LeveledItems.Clear();
             item.VoiceTypes.Clear();
             item.Quests.Clear();
             item.MaterialTypes.Clear();
@@ -3557,6 +3663,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.Trees.RemapLinks(mapping);
             obj.Florae.RemapLinks(mapping);
             obj.Furniture.RemapLinks(mapping);
+            obj.LeveledNpcs.RemapLinks(mapping);
+            obj.LeveledItems.RemapLinks(mapping);
             obj.VoiceTypes.RemapLinks(mapping);
             obj.Quests.RemapLinks(mapping);
             obj.MaterialTypes.RemapLinks(mapping);
@@ -3632,6 +3740,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.Trees.Remove(keys);
             obj.Florae.Remove(keys);
             obj.Furniture.Remove(keys);
+            obj.LeveledNpcs.Remove(keys);
+            obj.LeveledItems.Remove(keys);
             obj.VoiceTypes.Remove(keys);
             obj.Quests.Remove(keys);
             obj.MaterialTypes.Remove(keys);
@@ -3930,6 +4040,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         type: type,
                         keys: keys);
                     break;
+                case "LeveledNpc":
+                case "ILeveledNpcGetter":
+                case "ILeveledNpc":
+                case "ILeveledNpcInternal":
+                    obj.LeveledNpcs.Remove(
+                        type: type,
+                        keys: keys);
+                    break;
+                case "LeveledItem":
+                case "ILeveledItemGetter":
+                case "ILeveledItem":
+                case "ILeveledItemInternal":
+                    obj.LeveledItems.Remove(
+                        type: type,
+                        keys: keys);
+                    break;
                 case "VoiceType":
                 case "IVoiceTypeGetter":
                 case "IVoiceType":
@@ -4010,12 +4136,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     Remove(obj, keys, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IBookGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IIngredientGetter), throwIfUnknown: throwIfUnknown);
+                    Remove(obj, keys, typeof(ILeveledItemGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(ILightGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown);
                     break;
                 case "IOutfitTarget":
                 case "IOutfitTargetGetter":
                     Remove(obj, keys, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown);
+                    Remove(obj, keys, typeof(ILeveledItemGetter), throwIfUnknown: throwIfUnknown);
                     break;
                 case "IConstructible":
                 case "IConstructibleGetter":
@@ -4056,11 +4184,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IHarvestTarget":
                 case "IHarvestTargetGetter":
                     Remove(obj, keys, typeof(IIngredientGetter), throwIfUnknown: throwIfUnknown);
+                    Remove(obj, keys, typeof(ILeveledItemGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown);
                     break;
                 case "IKeywordLinkedReference":
                 case "IKeywordLinkedReferenceGetter":
                     Remove(obj, keys, typeof(IKeywordGetter), throwIfUnknown: throwIfUnknown);
+                    break;
+                case "INpcSpawn":
+                case "INpcSpawnGetter":
+                    Remove(obj, keys, typeof(ILeveledNpcGetter), throwIfUnknown: throwIfUnknown);
                     break;
                 case "ISpellRecord":
                 case "ISpellRecordGetter":
@@ -4170,6 +4303,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ret.Trees = MaskItemExt.Factory(item.Trees.GetEqualsMask(rhs.Trees, include), include);
             ret.Florae = MaskItemExt.Factory(item.Florae.GetEqualsMask(rhs.Florae, include), include);
             ret.Furniture = MaskItemExt.Factory(item.Furniture.GetEqualsMask(rhs.Furniture, include), include);
+            ret.LeveledNpcs = MaskItemExt.Factory(item.LeveledNpcs.GetEqualsMask(rhs.LeveledNpcs, include), include);
+            ret.LeveledItems = MaskItemExt.Factory(item.LeveledItems.GetEqualsMask(rhs.LeveledItems, include), include);
             ret.VoiceTypes = MaskItemExt.Factory(item.VoiceTypes.GetEqualsMask(rhs.VoiceTypes, include), include);
             ret.Quests = MaskItemExt.Factory(item.Quests.GetEqualsMask(rhs.Quests, include), include);
             ret.MaterialTypes = MaskItemExt.Factory(item.MaterialTypes.GetEqualsMask(rhs.MaterialTypes, include), include);
@@ -4362,6 +4497,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             if (printMask?.Furniture?.Overall ?? true)
             {
                 item.Furniture?.ToString(fg, "Furniture");
+            }
+            if (printMask?.LeveledNpcs?.Overall ?? true)
+            {
+                item.LeveledNpcs?.ToString(fg, "LeveledNpcs");
+            }
+            if (printMask?.LeveledItems?.Overall ?? true)
+            {
+                item.LeveledItems?.ToString(fg, "LeveledItems");
             }
             if (printMask?.VoiceTypes?.Overall ?? true)
             {
@@ -4680,6 +4823,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 else if (!isFurnitureEqual) return false;
             }
+            if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.LeveledNpcs) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.LeveledNpcs, rhs.LeveledNpcs, out var lhsLeveledNpcs, out var rhsLeveledNpcs, out var isLeveledNpcsEqual))
+                {
+                    if (!object.Equals(lhsLeveledNpcs, rhsLeveledNpcs)) return false;
+                }
+                else if (!isLeveledNpcsEqual) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.LeveledItems) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.LeveledItems, rhs.LeveledItems, out var lhsLeveledItems, out var rhsLeveledItems, out var isLeveledItemsEqual))
+                {
+                    if (!object.Equals(lhsLeveledItems, rhsLeveledItems)) return false;
+                }
+                else if (!isLeveledItemsEqual) return false;
+            }
             if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.VoiceTypes) ?? true))
             {
                 if (EqualsMaskHelper.RefEquality(lhs.VoiceTypes, rhs.VoiceTypes, out var lhsVoiceTypes, out var rhsVoiceTypes, out var isVoiceTypesEqual))
@@ -4777,6 +4936,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             hash.Add(item.Trees);
             hash.Add(item.Florae);
             hash.Add(item.Furniture);
+            hash.Add(item.LeveledNpcs);
+            hash.Add(item.LeveledItems);
             hash.Add(item.VoiceTypes);
             hash.Add(item.Quests);
             hash.Add(item.MaterialTypes);
@@ -4972,6 +5133,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IFurniture":
                 case "IFurnitureInternal":
                     return obj.Furniture;
+                case "LeveledNpc":
+                case "ILeveledNpcGetter":
+                case "ILeveledNpc":
+                case "ILeveledNpcInternal":
+                    return obj.LeveledNpcs;
+                case "LeveledItem":
+                case "ILeveledItemGetter":
+                case "ILeveledItem":
+                case "ILeveledItemInternal":
+                    return obj.LeveledItems;
                 case "VoiceType":
                 case "IVoiceTypeGetter":
                 case "IVoiceType":
@@ -5027,7 +5198,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 mod: item,
                 modHeader: item.ModHeader.DeepCopy(),
                 modKey: modKey);
-            Stream[] outputStreams = new Stream[41];
+            Stream[] outputStreams = new Stream[43];
             List<Action> toDo = new List<Action>();
             toDo.Add(() => WriteGroupParallel(item.GameSettings, writer.MetaData.MasterReferences!, 0, outputStreams, param.StringsWriter));
             toDo.Add(() => WriteGroupParallel(item.Keywords, writer.MetaData.MasterReferences!, 1, outputStreams, param.StringsWriter));
@@ -5063,13 +5234,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             toDo.Add(() => WriteGroupParallel(item.Trees, writer.MetaData.MasterReferences!, 31, outputStreams, param.StringsWriter));
             toDo.Add(() => WriteGroupParallel(item.Florae, writer.MetaData.MasterReferences!, 32, outputStreams, param.StringsWriter));
             toDo.Add(() => WriteGroupParallel(item.Furniture, writer.MetaData.MasterReferences!, 33, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.VoiceTypes, writer.MetaData.MasterReferences!, 34, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Quests, writer.MetaData.MasterReferences!, 35, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.MaterialTypes, writer.MetaData.MasterReferences!, 36, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.ArmorAddons, writer.MetaData.MasterReferences!, 37, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Messages, writer.MetaData.MasterReferences!, 38, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.MusicTypes, writer.MetaData.MasterReferences!, 39, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.MusicTracks, writer.MetaData.MasterReferences!, 40, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.LeveledNpcs, writer.MetaData.MasterReferences!, 34, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.LeveledItems, writer.MetaData.MasterReferences!, 35, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.VoiceTypes, writer.MetaData.MasterReferences!, 36, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Quests, writer.MetaData.MasterReferences!, 37, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.MaterialTypes, writer.MetaData.MasterReferences!, 38, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.ArmorAddons, writer.MetaData.MasterReferences!, 39, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Messages, writer.MetaData.MasterReferences!, 40, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.MusicTypes, writer.MetaData.MasterReferences!, 41, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.MusicTracks, writer.MetaData.MasterReferences!, 42, outputStreams, param.StringsWriter));
             Parallel.Invoke(toDo.ToArray());
             PluginUtilityTranslation.CompileStreamsInto(
                 outputStreams.NotNull(),
@@ -5361,6 +5534,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     yield return item;
                 }
             }
+            if (obj.LeveledNpcs is IFormLinkContainerGetter LeveledNpcslinkCont)
+            {
+                foreach (var item in LeveledNpcslinkCont.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
+            if (obj.LeveledItems is IFormLinkContainerGetter LeveledItemslinkCont)
+            {
+                foreach (var item in LeveledItemslinkCont.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
             if (obj.VoiceTypes is IFormLinkContainerGetter VoiceTypeslinkCont)
             {
                 foreach (var item in VoiceTypeslinkCont.ContainedFormLinks)
@@ -5548,6 +5735,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 yield return item;
             }
             foreach (var item in obj.Furniture.EnumerateMajorRecords())
+            {
+                yield return item;
+            }
+            foreach (var item in obj.LeveledNpcs.EnumerateMajorRecords())
+            {
+                yield return item;
+            }
+            foreach (var item in obj.LeveledItems.EnumerateMajorRecords())
             {
                 yield return item;
             }
@@ -5920,6 +6115,24 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         yield return item;
                     }
                     yield break;
+                case "LeveledNpc":
+                case "ILeveledNpcGetter":
+                case "ILeveledNpc":
+                case "ILeveledNpcInternal":
+                    foreach (var item in obj.LeveledNpcs.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                case "LeveledItem":
+                case "ILeveledItemGetter":
+                case "ILeveledItem":
+                case "ILeveledItemInternal":
+                    foreach (var item in obj.LeveledItems.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
                 case "VoiceType":
                 case "IVoiceTypeGetter":
                 case "IVoiceType":
@@ -6120,6 +6333,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(ILeveledItemGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(ILightGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -6144,6 +6361,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(ILeveledItemGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(ILightGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -6161,11 +6382,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(ILeveledItemGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     yield break;
                 }
                 case "IOutfitTargetGetter":
                 {
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(ILeveledItemGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -6361,6 +6590,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(ILeveledItemGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -6370,6 +6603,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IHarvestTargetGetter":
                 {
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IIngredientGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(ILeveledItemGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -6391,6 +6628,23 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IKeywordLinkedReferenceGetter":
                 {
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IKeywordGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "INpcSpawn":
+                {
+                    if (!Fallout4Mod_Registration.SetterType.IsAssignableFrom(obj.GetType())) yield break;
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(ILeveledNpcGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "INpcSpawnGetter":
+                {
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(ILeveledNpcGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -6759,6 +7013,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     record: item,
                     group: (m) => m.Furniture,
                     groupGetter: (m) => m.Furniture);
+            }
+            foreach (var item in obj.LeveledNpcs)
+            {
+                yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, LeveledNpc, ILeveledNpcGetter>(
+                    modKey: obj.ModKey,
+                    record: item,
+                    group: (m) => m.LeveledNpcs,
+                    groupGetter: (m) => m.LeveledNpcs);
+            }
+            foreach (var item in obj.LeveledItems)
+            {
+                yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, LeveledItem, ILeveledItemGetter>(
+                    modKey: obj.ModKey,
+                    record: item,
+                    group: (m) => m.LeveledItems,
+                    groupGetter: (m) => m.LeveledItems);
             }
             foreach (var item in obj.VoiceTypes)
             {
@@ -7289,6 +7559,32 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                             groupGetter: (m) => m.Furniture);
                     }
                     yield break;
+                case "LeveledNpc":
+                case "ILeveledNpcGetter":
+                case "ILeveledNpc":
+                case "ILeveledNpcInternal":
+                    foreach (var item in obj.LeveledNpcs)
+                    {
+                        yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, LeveledNpc, ILeveledNpcGetter>(
+                            modKey: obj.ModKey,
+                            record: item,
+                            group: (m) => m.LeveledNpcs,
+                            groupGetter: (m) => m.LeveledNpcs);
+                    }
+                    yield break;
+                case "LeveledItem":
+                case "ILeveledItemGetter":
+                case "ILeveledItem":
+                case "ILeveledItemInternal":
+                    foreach (var item in obj.LeveledItems)
+                    {
+                        yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, LeveledItem, ILeveledItemGetter>(
+                            modKey: obj.ModKey,
+                            record: item,
+                            group: (m) => m.LeveledItems,
+                            groupGetter: (m) => m.LeveledItems);
+                    }
+                    yield break;
                 case "VoiceType":
                 case "IVoiceTypeGetter":
                 case "IVoiceType":
@@ -7524,6 +7820,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     foreach (var item in EnumerateMajorRecordContexts(
                         obj,
                         linkCache: linkCache,
+                        type: typeof(ILeveledItemGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
                         type: typeof(ILightGetter),
                         throwIfUnknown: throwIfUnknown))
                     {
@@ -7546,6 +7850,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         obj,
                         linkCache: linkCache,
                         type: typeof(IArmorGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
+                        type: typeof(ILeveledItemGetter),
                         throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -7721,6 +8033,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     foreach (var item in EnumerateMajorRecordContexts(
                         obj,
                         linkCache: linkCache,
+                        type: typeof(ILeveledItemGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
                         type: typeof(IMiscItemGetter),
                         throwIfUnknown: throwIfUnknown))
                     {
@@ -7735,6 +8055,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         obj,
                         linkCache: linkCache,
                         type: typeof(IKeywordGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "INpcSpawn":
+                case "INpcSpawnGetter":
+                {
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
+                        type: typeof(ILeveledNpcGetter),
                         throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -8528,6 +8861,46 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     errorMask?.PopIndex();
                 }
             }
+            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.LeveledNpcs) ?? true))
+            {
+                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.LeveledNpcs);
+                try
+                {
+                    item.LeveledNpcs.DeepCopyIn(
+                        rhs: rhs.LeveledNpcs,
+                        errorMask: errorMask,
+                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.LeveledNpcs));
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.LeveledItems) ?? true))
+            {
+                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.LeveledItems);
+                try
+                {
+                    item.LeveledItems.DeepCopyIn(
+                        rhs: rhs.LeveledItems,
+                        errorMask: errorMask,
+                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.LeveledItems));
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
             if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.VoiceTypes) ?? true))
             {
                 errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.VoiceTypes);
@@ -8792,6 +9165,8 @@ namespace Mutagen.Bethesda.Fallout4
         public bool Trees;
         public bool Florae;
         public bool Furniture;
+        public bool LeveledNpcs;
+        public bool LeveledItems;
         public bool VoiceTypes;
         public bool Quests;
         public bool MaterialTypes;
@@ -8838,6 +9213,8 @@ namespace Mutagen.Bethesda.Fallout4
             Trees = defaultValue;
             Florae = defaultValue;
             Furniture = defaultValue;
+            LeveledNpcs = defaultValue;
+            LeveledItems = defaultValue;
             VoiceTypes = defaultValue;
             Quests = defaultValue;
             MaterialTypes = defaultValue;
@@ -9246,6 +9623,28 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 {
                     ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)FurnitureItem).BinaryWriteTranslator).Write<IFurnitureGetter>(
                         item: FurnitureItem,
+                        writer: writer,
+                        translationParams: translationParams);
+                }
+            }
+            if (importMask?.LeveledNpcs ?? true)
+            {
+                var LeveledNpcsItem = item.LeveledNpcs;
+                if (LeveledNpcsItem.RecordCache.Count > 0)
+                {
+                    ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)LeveledNpcsItem).BinaryWriteTranslator).Write<ILeveledNpcGetter>(
+                        item: LeveledNpcsItem,
+                        writer: writer,
+                        translationParams: translationParams);
+                }
+            }
+            if (importMask?.LeveledItems ?? true)
+            {
+                var LeveledItemsItem = item.LeveledItems;
+                if (LeveledItemsItem.RecordCache.Count > 0)
+                {
+                    ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)LeveledItemsItem).BinaryWriteTranslator).Write<ILeveledItemGetter>(
+                        item: LeveledItemsItem,
                         writer: writer,
                         translationParams: translationParams);
                 }
@@ -9869,6 +10268,34 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     }
                     return (int)Fallout4Mod_FieldIndex.Furniture;
                 }
+                case RecordTypeInts.LVLN:
+                {
+                    if (importMask?.LeveledNpcs ?? true)
+                    {
+                        item.LeveledNpcs.CopyInFromBinary(
+                            frame: frame,
+                            translationParams: null);
+                    }
+                    else
+                    {
+                        frame.Position += contentLength;
+                    }
+                    return (int)Fallout4Mod_FieldIndex.LeveledNpcs;
+                }
+                case RecordTypeInts.LVLI:
+                {
+                    if (importMask?.LeveledItems ?? true)
+                    {
+                        item.LeveledItems.CopyInFromBinary(
+                            frame: frame,
+                            translationParams: null);
+                    }
+                    else
+                    {
+                        frame.Position += contentLength;
+                    }
+                    return (int)Fallout4Mod_FieldIndex.LeveledItems;
+                }
                 case RecordTypeInts.VTYP:
                 {
                     if (importMask?.VoiceTypes ?? true)
@@ -10297,6 +10724,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private IFallout4GroupGetter<IFurnitureGetter>? _Furniture => _FurnitureLocations != null ? Fallout4GroupBinaryOverlay<IFurnitureGetter>.Fallout4GroupFactory(_data, _FurnitureLocations, _package) : default;
         public IFallout4GroupGetter<IFurnitureGetter> Furniture => _Furniture ?? new Fallout4Group<Furniture>(this);
         #endregion
+        #region LeveledNpcs
+        private List<RangeInt64>? _LeveledNpcsLocations;
+        private IFallout4GroupGetter<ILeveledNpcGetter>? _LeveledNpcs => _LeveledNpcsLocations != null ? Fallout4GroupBinaryOverlay<ILeveledNpcGetter>.Fallout4GroupFactory(_data, _LeveledNpcsLocations, _package) : default;
+        public IFallout4GroupGetter<ILeveledNpcGetter> LeveledNpcs => _LeveledNpcs ?? new Fallout4Group<LeveledNpc>(this);
+        #endregion
+        #region LeveledItems
+        private List<RangeInt64>? _LeveledItemsLocations;
+        private IFallout4GroupGetter<ILeveledItemGetter>? _LeveledItems => _LeveledItemsLocations != null ? Fallout4GroupBinaryOverlay<ILeveledItemGetter>.Fallout4GroupFactory(_data, _LeveledItemsLocations, _package) : default;
+        public IFallout4GroupGetter<ILeveledItemGetter> LeveledItems => _LeveledItems ?? new Fallout4Group<LeveledItem>(this);
+        #endregion
         #region VoiceTypes
         private List<RangeInt64>? _VoiceTypesLocations;
         private IFallout4GroupGetter<IVoiceTypeGetter>? _VoiceTypes => _VoiceTypesLocations != null ? Fallout4GroupBinaryOverlay<IVoiceTypeGetter>.Fallout4GroupFactory(_data, _VoiceTypesLocations, _package) : default;
@@ -10622,6 +11059,18 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     _FurnitureLocations ??= new();
                     _FurnitureLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Furniture;
+                }
+                case RecordTypeInts.LVLN:
+                {
+                    _LeveledNpcsLocations ??= new();
+                    _LeveledNpcsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
+                    return (int)Fallout4Mod_FieldIndex.LeveledNpcs;
+                }
+                case RecordTypeInts.LVLI:
+                {
+                    _LeveledItemsLocations ??= new();
+                    _LeveledItemsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
+                    return (int)Fallout4Mod_FieldIndex.LeveledItems;
                 }
                 case RecordTypeInts.VTYP:
                 {
