@@ -427,6 +427,7 @@ namespace Mutagen.Bethesda.Fallout4
     public partial interface IStatic :
         IFallout4MajorRecordInternal,
         ILoquiObjectSetter<IStaticInternal>,
+        IObjectId,
         IStaticGetter
     {
     }
@@ -443,7 +444,8 @@ namespace Mutagen.Bethesda.Fallout4
         IFallout4MajorRecordGetter,
         IBinaryItem,
         ILoquiObject<IStaticGetter>,
-        IMapsToGetter<IStaticGetter>
+        IMapsToGetter<IStaticGetter>,
+        IObjectIdGetter
     {
         static new ILoquiRegistration StaticRegistration => Static_Registration.Instance;
 

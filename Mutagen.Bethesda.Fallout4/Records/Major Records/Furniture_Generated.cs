@@ -37,14 +37,14 @@ using System.Text;
 namespace Mutagen.Bethesda.Fallout4
 {
     #region Class
-    public partial class Weapon :
+    public partial class Furniture :
         Fallout4MajorRecord,
-        IEquatable<IWeaponGetter>,
-        ILoquiObjectSetter<Weapon>,
-        IWeaponInternal
+        IEquatable<IFurnitureGetter>,
+        IFurnitureInternal,
+        ILoquiObjectSetter<Furniture>
     {
         #region Ctor
-        protected Weapon()
+        protected Furniture()
         {
             CustomCtor();
         }
@@ -58,7 +58,7 @@ namespace Mutagen.Bethesda.Fallout4
             FileGeneration fg,
             string? name = null)
         {
-            WeaponMixIn.ToString(
+            FurnitureMixIn.ToString(
                 item: this,
                 name: name);
         }
@@ -143,7 +143,7 @@ namespace Mutagen.Bethesda.Fallout4
             #region Translate
             public new Mask<R> Translate<R>(Func<TItem, R> eval)
             {
-                var ret = new Weapon.Mask<R>();
+                var ret = new Furniture.Mask<R>();
                 this.Translate_InternalFill(ret, eval);
                 return ret;
             }
@@ -160,16 +160,16 @@ namespace Mutagen.Bethesda.Fallout4
                 return ToString(printMask: null);
             }
 
-            public string ToString(Weapon.Mask<bool>? printMask = null)
+            public string ToString(Furniture.Mask<bool>? printMask = null)
             {
                 var fg = new FileGeneration();
                 ToString(fg, printMask);
                 return fg.ToString();
             }
 
-            public void ToString(FileGeneration fg, Weapon.Mask<bool>? printMask = null)
+            public void ToString(FileGeneration fg, Furniture.Mask<bool>? printMask = null)
             {
-                fg.AppendLine($"{nameof(Weapon.Mask<TItem>)} =>");
+                fg.AppendLine($"{nameof(Furniture.Mask<TItem>)} =>");
                 fg.AppendLine("[");
                 using (new DepthWrapper(fg))
                 {
@@ -187,7 +187,7 @@ namespace Mutagen.Bethesda.Fallout4
             #region IErrorMask
             public override object? GetNthMask(int index)
             {
-                Weapon_FieldIndex enu = (Weapon_FieldIndex)index;
+                Furniture_FieldIndex enu = (Furniture_FieldIndex)index;
                 switch (enu)
                 {
                     default:
@@ -197,7 +197,7 @@ namespace Mutagen.Bethesda.Fallout4
 
             public override void SetNthException(int index, Exception ex)
             {
-                Weapon_FieldIndex enu = (Weapon_FieldIndex)index;
+                Furniture_FieldIndex enu = (Furniture_FieldIndex)index;
                 switch (enu)
                 {
                     default:
@@ -208,7 +208,7 @@ namespace Mutagen.Bethesda.Fallout4
 
             public override void SetNthMask(int index, object obj)
             {
-                Weapon_FieldIndex enu = (Weapon_FieldIndex)index;
+                Furniture_FieldIndex enu = (Furniture_FieldIndex)index;
                 switch (enu)
                 {
                     default:
@@ -303,14 +303,14 @@ namespace Mutagen.Bethesda.Fallout4
         #endregion
 
         #region Mutagen
-        public static readonly RecordType GrupRecordType = Weapon_Registration.TriggeringRecordType;
-        public Weapon(FormKey formKey)
+        public static readonly RecordType GrupRecordType = Furniture_Registration.TriggeringRecordType;
+        public Furniture(FormKey formKey)
         {
             this.FormKey = formKey;
             CustomCtor();
         }
 
-        private Weapon(
+        private Furniture(
             FormKey formKey,
             GameRelease gameRelease)
         {
@@ -319,7 +319,7 @@ namespace Mutagen.Bethesda.Fallout4
             CustomCtor();
         }
 
-        internal Weapon(
+        internal Furniture(
             FormKey formKey,
             ushort formVersion)
         {
@@ -328,12 +328,12 @@ namespace Mutagen.Bethesda.Fallout4
             CustomCtor();
         }
 
-        public Weapon(IFallout4Mod mod)
+        public Furniture(IFallout4Mod mod)
             : this(mod.GetNextFormKey())
         {
         }
 
-        public Weapon(IFallout4Mod mod, string editorID)
+        public Furniture(IFallout4Mod mod, string editorID)
             : this(mod.GetNextFormKey(editorID))
         {
             this.EditorID = editorID;
@@ -341,10 +341,10 @@ namespace Mutagen.Bethesda.Fallout4
 
         public override string ToString()
         {
-            return MajorRecordPrinter<Weapon>.ToString(this);
+            return MajorRecordPrinter<Furniture>.ToString(this);
         }
 
-        protected override Type LinkType => typeof(IWeapon);
+        protected override Type LinkType => typeof(IFurniture);
 
         #region Equals and Hash
         public override bool Equals(object? obj)
@@ -353,16 +353,16 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 return formLink.Equals(this);
             }
-            if (obj is not IWeaponGetter rhs) return false;
-            return ((WeaponCommon)((IWeaponGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
+            if (obj is not IFurnitureGetter rhs) return false;
+            return ((FurnitureCommon)((IFurnitureGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
         }
 
-        public bool Equals(IWeaponGetter? obj)
+        public bool Equals(IFurnitureGetter? obj)
         {
-            return ((WeaponCommon)((IWeaponGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
+            return ((FurnitureCommon)((IFurnitureGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
         }
 
-        public override int GetHashCode() => ((WeaponCommon)((IWeaponGetter)this).CommonInstance()!).GetHashCode(this);
+        public override int GetHashCode() => ((FurnitureCommon)((IFurnitureGetter)this).CommonInstance()!).GetHashCode(this);
 
         #endregion
 
@@ -370,23 +370,23 @@ namespace Mutagen.Bethesda.Fallout4
 
         #region Binary Translation
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected override object BinaryWriteTranslator => WeaponBinaryWriteTranslation.Instance;
+        protected override object BinaryWriteTranslator => FurnitureBinaryWriteTranslation.Instance;
         void IBinaryItem.WriteToBinary(
             MutagenWriter writer,
             TypedWriteParams? translationParams = null)
         {
-            ((WeaponBinaryWriteTranslation)this.BinaryWriteTranslator).Write(
+            ((FurnitureBinaryWriteTranslation)this.BinaryWriteTranslator).Write(
                 item: this,
                 writer: writer,
                 translationParams: translationParams);
         }
         #region Binary Create
-        public new static Weapon CreateFromBinary(
+        public new static Furniture CreateFromBinary(
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
-            var ret = new Weapon();
-            ((WeaponSetterCommon)((IWeaponGetter)ret).CommonSetterInstance()!).CopyInFromBinary(
+            var ret = new Furniture();
+            ((FurnitureSetterCommon)((IFurnitureGetter)ret).CommonSetterInstance()!).CopyInFromBinary(
                 item: ret,
                 frame: frame,
                 translationParams: translationParams);
@@ -397,7 +397,7 @@ namespace Mutagen.Bethesda.Fallout4
 
         public static bool TryCreateFromBinary(
             MutagenFrame frame,
-            out Weapon item,
+            out Furniture item,
             TypedParseParams? translationParams = null)
         {
             var startPos = frame.Position;
@@ -412,84 +412,84 @@ namespace Mutagen.Bethesda.Fallout4
 
         void IClearable.Clear()
         {
-            ((WeaponSetterCommon)((IWeaponGetter)this).CommonSetterInstance()!).Clear(this);
+            ((FurnitureSetterCommon)((IFurnitureGetter)this).CommonSetterInstance()!).Clear(this);
         }
 
-        internal static new Weapon GetNew()
+        internal static new Furniture GetNew()
         {
-            return new Weapon();
+            return new Furniture();
         }
 
     }
     #endregion
 
     #region Interface
-    public partial interface IWeapon :
+    public partial interface IFurniture :
         IFallout4MajorRecordInternal,
-        ILoquiObjectSetter<IWeaponInternal>,
-        IObjectId,
-        IWeaponGetter
+        IFurnitureGetter,
+        ILoquiObjectSetter<IFurnitureInternal>,
+        IObjectId
     {
     }
 
-    public partial interface IWeaponInternal :
+    public partial interface IFurnitureInternal :
         IFallout4MajorRecordInternal,
-        IWeapon,
-        IWeaponGetter
+        IFurniture,
+        IFurnitureGetter
     {
     }
 
-    [AssociatedRecordTypesAttribute(Mutagen.Bethesda.Fallout4.Internals.RecordTypeInts.WEAP)]
-    public partial interface IWeaponGetter :
+    [AssociatedRecordTypesAttribute(Mutagen.Bethesda.Fallout4.Internals.RecordTypeInts.FURN)]
+    public partial interface IFurnitureGetter :
         IFallout4MajorRecordGetter,
         IBinaryItem,
-        ILoquiObject<IWeaponGetter>,
-        IMapsToGetter<IWeaponGetter>,
+        ILoquiObject<IFurnitureGetter>,
+        IMapsToGetter<IFurnitureGetter>,
         IObjectIdGetter
     {
-        static new ILoquiRegistration StaticRegistration => Weapon_Registration.Instance;
+        static new ILoquiRegistration StaticRegistration => Furniture_Registration.Instance;
 
     }
 
     #endregion
 
     #region Common MixIn
-    public static partial class WeaponMixIn
+    public static partial class FurnitureMixIn
     {
-        public static void Clear(this IWeaponInternal item)
+        public static void Clear(this IFurnitureInternal item)
         {
-            ((WeaponSetterCommon)((IWeaponGetter)item).CommonSetterInstance()!).Clear(item: item);
+            ((FurnitureSetterCommon)((IFurnitureGetter)item).CommonSetterInstance()!).Clear(item: item);
         }
 
-        public static Weapon.Mask<bool> GetEqualsMask(
-            this IWeaponGetter item,
-            IWeaponGetter rhs,
+        public static Furniture.Mask<bool> GetEqualsMask(
+            this IFurnitureGetter item,
+            IFurnitureGetter rhs,
             EqualsMaskHelper.Include include = EqualsMaskHelper.Include.All)
         {
-            return ((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).GetEqualsMask(
+            return ((FurnitureCommon)((IFurnitureGetter)item).CommonInstance()!).GetEqualsMask(
                 item: item,
                 rhs: rhs,
                 include: include);
         }
 
         public static string ToString(
-            this IWeaponGetter item,
+            this IFurnitureGetter item,
             string? name = null,
-            Weapon.Mask<bool>? printMask = null)
+            Furniture.Mask<bool>? printMask = null)
         {
-            return ((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).ToString(
+            return ((FurnitureCommon)((IFurnitureGetter)item).CommonInstance()!).ToString(
                 item: item,
                 name: name,
                 printMask: printMask);
         }
 
         public static void ToString(
-            this IWeaponGetter item,
+            this IFurnitureGetter item,
             FileGeneration fg,
             string? name = null,
-            Weapon.Mask<bool>? printMask = null)
+            Furniture.Mask<bool>? printMask = null)
         {
-            ((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).ToString(
+            ((FurnitureCommon)((IFurnitureGetter)item).CommonInstance()!).ToString(
                 item: item,
                 fg: fg,
                 name: name,
@@ -497,39 +497,39 @@ namespace Mutagen.Bethesda.Fallout4
         }
 
         public static bool Equals(
-            this IWeaponGetter item,
-            IWeaponGetter rhs,
-            Weapon.TranslationMask? equalsMask = null)
+            this IFurnitureGetter item,
+            IFurnitureGetter rhs,
+            Furniture.TranslationMask? equalsMask = null)
         {
-            return ((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).Equals(
+            return ((FurnitureCommon)((IFurnitureGetter)item).CommonInstance()!).Equals(
                 lhs: item,
                 rhs: rhs,
                 crystal: equalsMask?.GetCrystal());
         }
 
         public static void DeepCopyIn(
-            this IWeaponInternal lhs,
-            IWeaponGetter rhs,
-            out Weapon.ErrorMask errorMask,
-            Weapon.TranslationMask? copyMask = null)
+            this IFurnitureInternal lhs,
+            IFurnitureGetter rhs,
+            out Furniture.ErrorMask errorMask,
+            Furniture.TranslationMask? copyMask = null)
         {
             var errorMaskBuilder = new ErrorMaskBuilder();
-            ((WeaponSetterTranslationCommon)((IWeaponGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
+            ((FurnitureSetterTranslationCommon)((IFurnitureGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: lhs,
                 rhs: rhs,
                 errorMask: errorMaskBuilder,
                 copyMask: copyMask?.GetCrystal(),
                 deepCopy: false);
-            errorMask = Weapon.ErrorMask.Factory(errorMaskBuilder);
+            errorMask = Furniture.ErrorMask.Factory(errorMaskBuilder);
         }
 
         public static void DeepCopyIn(
-            this IWeaponInternal lhs,
-            IWeaponGetter rhs,
+            this IFurnitureInternal lhs,
+            IFurnitureGetter rhs,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask)
         {
-            ((WeaponSetterTranslationCommon)((IWeaponGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
+            ((FurnitureSetterTranslationCommon)((IFurnitureGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: lhs,
                 rhs: rhs,
                 errorMask: errorMask,
@@ -537,44 +537,44 @@ namespace Mutagen.Bethesda.Fallout4
                 deepCopy: false);
         }
 
-        public static Weapon DeepCopy(
-            this IWeaponGetter item,
-            Weapon.TranslationMask? copyMask = null)
+        public static Furniture DeepCopy(
+            this IFurnitureGetter item,
+            Furniture.TranslationMask? copyMask = null)
         {
-            return ((WeaponSetterTranslationCommon)((IWeaponGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
+            return ((FurnitureSetterTranslationCommon)((IFurnitureGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
                 item: item,
                 copyMask: copyMask);
         }
 
-        public static Weapon DeepCopy(
-            this IWeaponGetter item,
-            out Weapon.ErrorMask errorMask,
-            Weapon.TranslationMask? copyMask = null)
+        public static Furniture DeepCopy(
+            this IFurnitureGetter item,
+            out Furniture.ErrorMask errorMask,
+            Furniture.TranslationMask? copyMask = null)
         {
-            return ((WeaponSetterTranslationCommon)((IWeaponGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
+            return ((FurnitureSetterTranslationCommon)((IFurnitureGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
                 item: item,
                 copyMask: copyMask,
                 errorMask: out errorMask);
         }
 
-        public static Weapon DeepCopy(
-            this IWeaponGetter item,
+        public static Furniture DeepCopy(
+            this IFurnitureGetter item,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask = null)
         {
-            return ((WeaponSetterTranslationCommon)((IWeaponGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
+            return ((FurnitureSetterTranslationCommon)((IFurnitureGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
                 item: item,
                 copyMask: copyMask,
                 errorMask: errorMask);
         }
 
         #region Mutagen
-        public static Weapon Duplicate(
-            this IWeaponGetter item,
+        public static Furniture Duplicate(
+            this IFurnitureGetter item,
             FormKey formKey,
-            Weapon.TranslationMask? copyMask = null)
+            Furniture.TranslationMask? copyMask = null)
         {
-            return ((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).Duplicate(
+            return ((FurnitureCommon)((IFurnitureGetter)item).CommonInstance()!).Duplicate(
                 item: item,
                 formKey: formKey,
                 copyMask: copyMask?.GetCrystal());
@@ -584,11 +584,11 @@ namespace Mutagen.Bethesda.Fallout4
 
         #region Binary Translation
         public static void CopyInFromBinary(
-            this IWeaponInternal item,
+            this IFurnitureInternal item,
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
-            ((WeaponSetterCommon)((IWeaponGetter)item).CommonSetterInstance()!).CopyInFromBinary(
+            ((FurnitureSetterCommon)((IFurnitureGetter)item).CommonSetterInstance()!).CopyInFromBinary(
                 item: item,
                 frame: frame,
                 translationParams: translationParams);
@@ -604,7 +604,7 @@ namespace Mutagen.Bethesda.Fallout4
 namespace Mutagen.Bethesda.Fallout4.Internals
 {
     #region Field Index
-    public enum Weapon_FieldIndex
+    public enum Furniture_FieldIndex
     {
         MajorRecordFlagsRaw = 0,
         FormKey = 1,
@@ -616,40 +616,40 @@ namespace Mutagen.Bethesda.Fallout4.Internals
     #endregion
 
     #region Registration
-    public partial class Weapon_Registration : ILoquiRegistration
+    public partial class Furniture_Registration : ILoquiRegistration
     {
-        public static readonly Weapon_Registration Instance = new Weapon_Registration();
+        public static readonly Furniture_Registration Instance = new Furniture_Registration();
 
         public static ProtocolKey ProtocolKey => ProtocolDefinition_Fallout4.ProtocolKey;
 
         public static readonly ObjectKey ObjectKey = new ObjectKey(
             protocolKey: ProtocolDefinition_Fallout4.ProtocolKey,
-            msgID: 229,
+            msgID: 231,
             version: 0);
 
-        public const string GUID = "f44322c4-c4ca-432c-a5e1-9d5938dcf19d";
+        public const string GUID = "b0359dc1-e50e-4400-a1b9-e620e78763a1";
 
         public const ushort AdditionalFieldCount = 0;
 
         public const ushort FieldCount = 6;
 
-        public static readonly Type MaskType = typeof(Weapon.Mask<>);
+        public static readonly Type MaskType = typeof(Furniture.Mask<>);
 
-        public static readonly Type ErrorMaskType = typeof(Weapon.ErrorMask);
+        public static readonly Type ErrorMaskType = typeof(Furniture.ErrorMask);
 
-        public static readonly Type ClassType = typeof(Weapon);
+        public static readonly Type ClassType = typeof(Furniture);
 
-        public static readonly Type GetterType = typeof(IWeaponGetter);
+        public static readonly Type GetterType = typeof(IFurnitureGetter);
 
         public static readonly Type? InternalGetterType = null;
 
-        public static readonly Type SetterType = typeof(IWeapon);
+        public static readonly Type SetterType = typeof(IFurniture);
 
-        public static readonly Type? InternalSetterType = typeof(IWeaponInternal);
+        public static readonly Type? InternalSetterType = typeof(IFurnitureInternal);
 
-        public const string FullName = "Mutagen.Bethesda.Fallout4.Weapon";
+        public const string FullName = "Mutagen.Bethesda.Fallout4.Furniture";
 
-        public const string Name = "Weapon";
+        public const string Name = "Furniture";
 
         public const string Namespace = "Mutagen.Bethesda.Fallout4";
 
@@ -657,8 +657,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public static readonly Type? GenericRegistrationType = null;
 
-        public static readonly RecordType TriggeringRecordType = RecordTypes.WEAP;
-        public static readonly Type BinaryWriteTranslation = typeof(WeaponBinaryWriteTranslation);
+        public static readonly RecordType TriggeringRecordType = RecordTypes.FURN;
+        public static readonly Type BinaryWriteTranslation = typeof(FurnitureBinaryWriteTranslation);
         #region Interface
         ProtocolKey ILoquiRegistration.ProtocolKey => ProtocolKey;
         ObjectKey ILoquiRegistration.ObjectKey => ObjectKey;
@@ -691,13 +691,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
     #endregion
 
     #region Common
-    public partial class WeaponSetterCommon : Fallout4MajorRecordSetterCommon
+    public partial class FurnitureSetterCommon : Fallout4MajorRecordSetterCommon
     {
-        public new static readonly WeaponSetterCommon Instance = new WeaponSetterCommon();
+        public new static readonly FurnitureSetterCommon Instance = new FurnitureSetterCommon();
 
         partial void ClearPartial();
         
-        public void Clear(IWeaponInternal item)
+        public void Clear(IFurnitureInternal item)
         {
             ClearPartial();
             base.Clear(item);
@@ -705,16 +705,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         
         public override void Clear(IFallout4MajorRecordInternal item)
         {
-            Clear(item: (IWeaponInternal)item);
+            Clear(item: (IFurnitureInternal)item);
         }
         
         public override void Clear(IMajorRecordInternal item)
         {
-            Clear(item: (IWeaponInternal)item);
+            Clear(item: (IFurnitureInternal)item);
         }
         
         #region Mutagen
-        public void RemapLinks(IWeapon obj, IReadOnlyDictionary<FormKey, FormKey> mapping)
+        public void RemapLinks(IFurniture obj, IReadOnlyDictionary<FormKey, FormKey> mapping)
         {
             base.RemapLinks(obj, mapping);
         }
@@ -723,16 +723,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         
         #region Binary Translation
         public virtual void CopyInFromBinary(
-            IWeaponInternal item,
+            IFurnitureInternal item,
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
-            PluginUtilityTranslation.MajorRecordParse<IWeaponInternal>(
+            PluginUtilityTranslation.MajorRecordParse<IFurnitureInternal>(
                 record: item,
                 frame: frame,
                 translationParams: translationParams,
-                fillStructs: WeaponBinaryCreateTranslation.FillBinaryStructs,
-                fillTyped: WeaponBinaryCreateTranslation.FillBinaryRecordTypes);
+                fillStructs: FurnitureBinaryCreateTranslation.FillBinaryStructs,
+                fillTyped: FurnitureBinaryCreateTranslation.FillBinaryRecordTypes);
         }
         
         public override void CopyInFromBinary(
@@ -741,7 +741,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TypedParseParams? translationParams = null)
         {
             CopyInFromBinary(
-                item: (Weapon)item,
+                item: (Furniture)item,
                 frame: frame,
                 translationParams: translationParams);
         }
@@ -752,7 +752,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TypedParseParams? translationParams = null)
         {
             CopyInFromBinary(
-                item: (Weapon)item,
+                item: (Furniture)item,
                 frame: frame,
                 translationParams: translationParams);
         }
@@ -760,17 +760,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         #endregion
         
     }
-    public partial class WeaponCommon : Fallout4MajorRecordCommon
+    public partial class FurnitureCommon : Fallout4MajorRecordCommon
     {
-        public new static readonly WeaponCommon Instance = new WeaponCommon();
+        public new static readonly FurnitureCommon Instance = new FurnitureCommon();
 
-        public Weapon.Mask<bool> GetEqualsMask(
-            IWeaponGetter item,
-            IWeaponGetter rhs,
+        public Furniture.Mask<bool> GetEqualsMask(
+            IFurnitureGetter item,
+            IFurnitureGetter rhs,
             EqualsMaskHelper.Include include = EqualsMaskHelper.Include.All)
         {
-            var ret = new Weapon.Mask<bool>(false);
-            ((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).FillEqualsMask(
+            var ret = new Furniture.Mask<bool>(false);
+            ((FurnitureCommon)((IFurnitureGetter)item).CommonInstance()!).FillEqualsMask(
                 item: item,
                 rhs: rhs,
                 ret: ret,
@@ -779,9 +779,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         public void FillEqualsMask(
-            IWeaponGetter item,
-            IWeaponGetter rhs,
-            Weapon.Mask<bool> ret,
+            IFurnitureGetter item,
+            IFurnitureGetter rhs,
+            Furniture.Mask<bool> ret,
             EqualsMaskHelper.Include include = EqualsMaskHelper.Include.All)
         {
             if (rhs == null) return;
@@ -789,9 +789,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         public string ToString(
-            IWeaponGetter item,
+            IFurnitureGetter item,
             string? name = null,
-            Weapon.Mask<bool>? printMask = null)
+            Furniture.Mask<bool>? printMask = null)
         {
             var fg = new FileGeneration();
             ToString(
@@ -803,18 +803,18 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         public void ToString(
-            IWeaponGetter item,
+            IFurnitureGetter item,
             FileGeneration fg,
             string? name = null,
-            Weapon.Mask<bool>? printMask = null)
+            Furniture.Mask<bool>? printMask = null)
         {
             if (name == null)
             {
-                fg.AppendLine($"Weapon =>");
+                fg.AppendLine($"Furniture =>");
             }
             else
             {
-                fg.AppendLine($"{name} (Weapon) =>");
+                fg.AppendLine($"{name} (Furniture) =>");
             }
             fg.AppendLine("[");
             using (new DepthWrapper(fg))
@@ -828,9 +828,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         protected static void ToStringFields(
-            IWeaponGetter item,
+            IFurnitureGetter item,
             FileGeneration fg,
-            Weapon.Mask<bool>? printMask = null)
+            Furniture.Mask<bool>? printMask = null)
         {
             Fallout4MajorRecordCommon.ToStringFields(
                 item: item,
@@ -838,39 +838,39 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 printMask: printMask);
         }
         
-        public static Weapon_FieldIndex ConvertFieldIndex(Fallout4MajorRecord_FieldIndex index)
+        public static Furniture_FieldIndex ConvertFieldIndex(Fallout4MajorRecord_FieldIndex index)
         {
             switch (index)
             {
                 case Fallout4MajorRecord_FieldIndex.MajorRecordFlagsRaw:
-                    return (Weapon_FieldIndex)((int)index);
+                    return (Furniture_FieldIndex)((int)index);
                 case Fallout4MajorRecord_FieldIndex.FormKey:
-                    return (Weapon_FieldIndex)((int)index);
+                    return (Furniture_FieldIndex)((int)index);
                 case Fallout4MajorRecord_FieldIndex.VersionControl:
-                    return (Weapon_FieldIndex)((int)index);
+                    return (Furniture_FieldIndex)((int)index);
                 case Fallout4MajorRecord_FieldIndex.EditorID:
-                    return (Weapon_FieldIndex)((int)index);
+                    return (Furniture_FieldIndex)((int)index);
                 case Fallout4MajorRecord_FieldIndex.FormVersion:
-                    return (Weapon_FieldIndex)((int)index);
+                    return (Furniture_FieldIndex)((int)index);
                 case Fallout4MajorRecord_FieldIndex.Version2:
-                    return (Weapon_FieldIndex)((int)index);
+                    return (Furniture_FieldIndex)((int)index);
                 default:
                     throw new ArgumentException($"Index is out of range: {index.ToStringFast_Enum_Only()}");
             }
         }
         
-        public static new Weapon_FieldIndex ConvertFieldIndex(MajorRecord_FieldIndex index)
+        public static new Furniture_FieldIndex ConvertFieldIndex(MajorRecord_FieldIndex index)
         {
             switch (index)
             {
                 case MajorRecord_FieldIndex.MajorRecordFlagsRaw:
-                    return (Weapon_FieldIndex)((int)index);
+                    return (Furniture_FieldIndex)((int)index);
                 case MajorRecord_FieldIndex.FormKey:
-                    return (Weapon_FieldIndex)((int)index);
+                    return (Furniture_FieldIndex)((int)index);
                 case MajorRecord_FieldIndex.VersionControl:
-                    return (Weapon_FieldIndex)((int)index);
+                    return (Furniture_FieldIndex)((int)index);
                 case MajorRecord_FieldIndex.EditorID:
-                    return (Weapon_FieldIndex)((int)index);
+                    return (Furniture_FieldIndex)((int)index);
                 default:
                     throw new ArgumentException($"Index is out of range: {index.ToStringFast_Enum_Only()}");
             }
@@ -878,8 +878,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         
         #region Equals and Hash
         public virtual bool Equals(
-            IWeaponGetter? lhs,
-            IWeaponGetter? rhs,
+            IFurnitureGetter? lhs,
+            IFurnitureGetter? rhs,
             TranslationCrystal? crystal)
         {
             if (!EqualsMaskHelper.RefEquality(lhs, rhs, out var isEqual)) return isEqual;
@@ -893,8 +893,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TranslationCrystal? crystal)
         {
             return Equals(
-                lhs: (IWeaponGetter?)lhs,
-                rhs: rhs as IWeaponGetter,
+                lhs: (IFurnitureGetter?)lhs,
+                rhs: rhs as IFurnitureGetter,
                 crystal: crystal);
         }
         
@@ -904,12 +904,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TranslationCrystal? crystal)
         {
             return Equals(
-                lhs: (IWeaponGetter?)lhs,
-                rhs: rhs as IWeaponGetter,
+                lhs: (IFurnitureGetter?)lhs,
+                rhs: rhs as IFurnitureGetter,
                 crystal: crystal);
         }
         
-        public virtual int GetHashCode(IWeaponGetter item)
+        public virtual int GetHashCode(IFurnitureGetter item)
         {
             var hash = new HashCode();
             hash.Add(base.GetHashCode());
@@ -918,12 +918,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         
         public override int GetHashCode(IFallout4MajorRecordGetter item)
         {
-            return GetHashCode(item: (IWeaponGetter)item);
+            return GetHashCode(item: (IFurnitureGetter)item);
         }
         
         public override int GetHashCode(IMajorRecordGetter item)
         {
-            return GetHashCode(item: (IWeaponGetter)item);
+            return GetHashCode(item: (IFurnitureGetter)item);
         }
         
         #endregion
@@ -931,11 +931,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         
         public override object GetNew()
         {
-            return Weapon.GetNew();
+            return Furniture.GetNew();
         }
         
         #region Mutagen
-        public IEnumerable<IFormLinkGetter> GetContainedFormLinks(IWeaponGetter obj)
+        public IEnumerable<IFormLinkGetter> GetContainedFormLinks(IFurnitureGetter obj)
         {
             foreach (var item in base.GetContainedFormLinks(obj))
             {
@@ -945,12 +945,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         #region Duplicate
-        public Weapon Duplicate(
-            IWeaponGetter item,
+        public Furniture Duplicate(
+            IFurnitureGetter item,
             FormKey formKey,
             TranslationCrystal? copyMask)
         {
-            var newRec = new Weapon(formKey);
+            var newRec = new Furniture(formKey);
             newRec.DeepCopyIn(item, default(ErrorMaskBuilder?), copyMask);
             return newRec;
         }
@@ -961,7 +961,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TranslationCrystal? copyMask)
         {
             return this.Duplicate(
-                item: (IWeaponGetter)item,
+                item: (IFurnitureGetter)item,
                 formKey: formKey,
                 copyMask: copyMask);
         }
@@ -972,7 +972,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TranslationCrystal? copyMask)
         {
             return this.Duplicate(
-                item: (IWeaponGetter)item,
+                item: (IFurnitureGetter)item,
                 formKey: formKey,
                 copyMask: copyMask);
         }
@@ -982,14 +982,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         #endregion
         
     }
-    public partial class WeaponSetterTranslationCommon : Fallout4MajorRecordSetterTranslationCommon
+    public partial class FurnitureSetterTranslationCommon : Fallout4MajorRecordSetterTranslationCommon
     {
-        public new static readonly WeaponSetterTranslationCommon Instance = new WeaponSetterTranslationCommon();
+        public new static readonly FurnitureSetterTranslationCommon Instance = new FurnitureSetterTranslationCommon();
 
         #region DeepCopyIn
         public void DeepCopyIn(
-            IWeaponInternal item,
-            IWeaponGetter rhs,
+            IFurnitureInternal item,
+            IFurnitureGetter rhs,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask,
             bool deepCopy)
@@ -1003,8 +1003,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         public void DeepCopyIn(
-            IWeapon item,
-            IWeaponGetter rhs,
+            IFurniture item,
+            IFurnitureGetter rhs,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask,
             bool deepCopy)
@@ -1025,8 +1025,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             bool deepCopy)
         {
             this.DeepCopyIn(
-                item: (IWeaponInternal)item,
-                rhs: (IWeaponGetter)rhs,
+                item: (IFurnitureInternal)item,
+                rhs: (IFurnitureGetter)rhs,
                 errorMask: errorMask,
                 copyMask: copyMask,
                 deepCopy: deepCopy);
@@ -1040,8 +1040,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             bool deepCopy)
         {
             this.DeepCopyIn(
-                item: (IWeapon)item,
-                rhs: (IWeaponGetter)rhs,
+                item: (IFurniture)item,
+                rhs: (IFurnitureGetter)rhs,
                 errorMask: errorMask,
                 copyMask: copyMask,
                 deepCopy: deepCopy);
@@ -1055,8 +1055,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             bool deepCopy)
         {
             this.DeepCopyIn(
-                item: (IWeaponInternal)item,
-                rhs: (IWeaponGetter)rhs,
+                item: (IFurnitureInternal)item,
+                rhs: (IFurnitureGetter)rhs,
                 errorMask: errorMask,
                 copyMask: copyMask,
                 deepCopy: deepCopy);
@@ -1070,8 +1070,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             bool deepCopy)
         {
             this.DeepCopyIn(
-                item: (IWeapon)item,
-                rhs: (IWeaponGetter)rhs,
+                item: (IFurniture)item,
+                rhs: (IFurnitureGetter)rhs,
                 errorMask: errorMask,
                 copyMask: copyMask,
                 deepCopy: deepCopy);
@@ -1079,12 +1079,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         
         #endregion
         
-        public Weapon DeepCopy(
-            IWeaponGetter item,
-            Weapon.TranslationMask? copyMask = null)
+        public Furniture DeepCopy(
+            IFurnitureGetter item,
+            Furniture.TranslationMask? copyMask = null)
         {
-            Weapon ret = (Weapon)((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).GetNew();
-            ((WeaponSetterTranslationCommon)((IWeaponGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
+            Furniture ret = (Furniture)((FurnitureCommon)((IFurnitureGetter)item).CommonInstance()!).GetNew();
+            ((FurnitureSetterTranslationCommon)((IFurnitureGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: ret,
                 rhs: item,
                 errorMask: null,
@@ -1093,30 +1093,30 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             return ret;
         }
         
-        public Weapon DeepCopy(
-            IWeaponGetter item,
-            out Weapon.ErrorMask errorMask,
-            Weapon.TranslationMask? copyMask = null)
+        public Furniture DeepCopy(
+            IFurnitureGetter item,
+            out Furniture.ErrorMask errorMask,
+            Furniture.TranslationMask? copyMask = null)
         {
             var errorMaskBuilder = new ErrorMaskBuilder();
-            Weapon ret = (Weapon)((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).GetNew();
-            ((WeaponSetterTranslationCommon)((IWeaponGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
+            Furniture ret = (Furniture)((FurnitureCommon)((IFurnitureGetter)item).CommonInstance()!).GetNew();
+            ((FurnitureSetterTranslationCommon)((IFurnitureGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
                 ret,
                 item,
                 errorMask: errorMaskBuilder,
                 copyMask: copyMask?.GetCrystal(),
                 deepCopy: true);
-            errorMask = Weapon.ErrorMask.Factory(errorMaskBuilder);
+            errorMask = Furniture.ErrorMask.Factory(errorMaskBuilder);
             return ret;
         }
         
-        public Weapon DeepCopy(
-            IWeaponGetter item,
+        public Furniture DeepCopy(
+            IFurnitureGetter item,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask = null)
         {
-            Weapon ret = (Weapon)((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).GetNew();
-            ((WeaponSetterTranslationCommon)((IWeaponGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
+            Furniture ret = (Furniture)((FurnitureCommon)((IFurnitureGetter)item).CommonInstance()!).GetNew();
+            ((FurnitureSetterTranslationCommon)((IFurnitureGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: ret,
                 rhs: item,
                 errorMask: errorMask,
@@ -1132,21 +1132,21 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
 namespace Mutagen.Bethesda.Fallout4
 {
-    public partial class Weapon
+    public partial class Furniture
     {
         #region Common Routing
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        ILoquiRegistration ILoquiObject.Registration => Weapon_Registration.Instance;
-        public new static Weapon_Registration StaticRegistration => Weapon_Registration.Instance;
+        ILoquiRegistration ILoquiObject.Registration => Furniture_Registration.Instance;
+        public new static Furniture_Registration StaticRegistration => Furniture_Registration.Instance;
         [DebuggerStepThrough]
-        protected override object CommonInstance() => WeaponCommon.Instance;
+        protected override object CommonInstance() => FurnitureCommon.Instance;
         [DebuggerStepThrough]
         protected override object CommonSetterInstance()
         {
-            return WeaponSetterCommon.Instance;
+            return FurnitureSetterCommon.Instance;
         }
         [DebuggerStepThrough]
-        protected override object CommonSetterTranslationInstance() => WeaponSetterTranslationCommon.Instance;
+        protected override object CommonSetterTranslationInstance() => FurnitureSetterTranslationCommon.Instance;
 
         #endregion
 
@@ -1157,20 +1157,20 @@ namespace Mutagen.Bethesda.Fallout4
 #region Binary Translation
 namespace Mutagen.Bethesda.Fallout4.Internals
 {
-    public partial class WeaponBinaryWriteTranslation :
+    public partial class FurnitureBinaryWriteTranslation :
         Fallout4MajorRecordBinaryWriteTranslation,
         IBinaryWriteTranslator
     {
-        public new readonly static WeaponBinaryWriteTranslation Instance = new WeaponBinaryWriteTranslation();
+        public new readonly static FurnitureBinaryWriteTranslation Instance = new FurnitureBinaryWriteTranslation();
 
         public void Write(
             MutagenWriter writer,
-            IWeaponGetter item,
+            IFurnitureGetter item,
             TypedWriteParams? translationParams = null)
         {
             using (HeaderExport.Record(
                 writer: writer,
-                record: translationParams.ConvertToCustom(RecordTypes.WEAP)))
+                record: translationParams.ConvertToCustom(RecordTypes.FURN)))
             {
                 try
                 {
@@ -1195,7 +1195,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TypedWriteParams? translationParams = null)
         {
             Write(
-                item: (IWeaponGetter)item,
+                item: (IFurnitureGetter)item,
                 writer: writer,
                 translationParams: translationParams);
         }
@@ -1206,7 +1206,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TypedWriteParams? translationParams = null)
         {
             Write(
-                item: (IWeaponGetter)item,
+                item: (IFurnitureGetter)item,
                 writer: writer,
                 translationParams: translationParams);
         }
@@ -1217,20 +1217,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TypedWriteParams? translationParams = null)
         {
             Write(
-                item: (IWeaponGetter)item,
+                item: (IFurnitureGetter)item,
                 writer: writer,
                 translationParams: translationParams);
         }
 
     }
 
-    public partial class WeaponBinaryCreateTranslation : Fallout4MajorRecordBinaryCreateTranslation
+    public partial class FurnitureBinaryCreateTranslation : Fallout4MajorRecordBinaryCreateTranslation
     {
-        public new readonly static WeaponBinaryCreateTranslation Instance = new WeaponBinaryCreateTranslation();
+        public new readonly static FurnitureBinaryCreateTranslation Instance = new FurnitureBinaryCreateTranslation();
 
-        public override RecordType RecordType => RecordTypes.WEAP;
+        public override RecordType RecordType => RecordTypes.FURN;
         public static void FillBinaryStructs(
-            IWeaponInternal item,
+            IFurnitureInternal item,
             MutagenFrame frame)
         {
             Fallout4MajorRecordBinaryCreateTranslation.FillBinaryStructs(
@@ -1244,7 +1244,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 namespace Mutagen.Bethesda.Fallout4
 {
     #region Binary Write Mixins
-    public static class WeaponBinaryTranslationMixIn
+    public static class FurnitureBinaryTranslationMixIn
     {
     }
     #endregion
@@ -1253,35 +1253,35 @@ namespace Mutagen.Bethesda.Fallout4
 }
 namespace Mutagen.Bethesda.Fallout4.Internals
 {
-    public partial class WeaponBinaryOverlay :
+    public partial class FurnitureBinaryOverlay :
         Fallout4MajorRecordBinaryOverlay,
-        IWeaponGetter
+        IFurnitureGetter
     {
         #region Common Routing
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        ILoquiRegistration ILoquiObject.Registration => Weapon_Registration.Instance;
-        public new static Weapon_Registration StaticRegistration => Weapon_Registration.Instance;
+        ILoquiRegistration ILoquiObject.Registration => Furniture_Registration.Instance;
+        public new static Furniture_Registration StaticRegistration => Furniture_Registration.Instance;
         [DebuggerStepThrough]
-        protected override object CommonInstance() => WeaponCommon.Instance;
+        protected override object CommonInstance() => FurnitureCommon.Instance;
         [DebuggerStepThrough]
-        protected override object CommonSetterTranslationInstance() => WeaponSetterTranslationCommon.Instance;
+        protected override object CommonSetterTranslationInstance() => FurnitureSetterTranslationCommon.Instance;
 
         #endregion
 
         void IPrintable.ToString(FileGeneration fg, string? name) => this.ToString(fg, name);
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected override object BinaryWriteTranslator => WeaponBinaryWriteTranslation.Instance;
+        protected override object BinaryWriteTranslator => FurnitureBinaryWriteTranslation.Instance;
         void IBinaryItem.WriteToBinary(
             MutagenWriter writer,
             TypedWriteParams? translationParams = null)
         {
-            ((WeaponBinaryWriteTranslation)this.BinaryWriteTranslator).Write(
+            ((FurnitureBinaryWriteTranslation)this.BinaryWriteTranslator).Write(
                 item: this,
                 writer: writer,
                 translationParams: translationParams);
         }
-        protected override Type LinkType => typeof(IWeapon);
+        protected override Type LinkType => typeof(IFurniture);
 
 
         partial void CustomFactoryEnd(
@@ -1290,7 +1290,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             int offset);
 
         partial void CustomCtor();
-        protected WeaponBinaryOverlay(
+        protected FurnitureBinaryOverlay(
             ReadOnlyMemorySlice<byte> bytes,
             BinaryOverlayFactoryPackage package)
             : base(
@@ -1300,13 +1300,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             this.CustomCtor();
         }
 
-        public static WeaponBinaryOverlay WeaponFactory(
+        public static FurnitureBinaryOverlay FurnitureFactory(
             OverlayStream stream,
             BinaryOverlayFactoryPackage package,
             TypedParseParams? parseParams = null)
         {
             stream = PluginUtilityTranslation.DecompressStream(stream);
-            var ret = new WeaponBinaryOverlay(
+            var ret = new FurnitureBinaryOverlay(
                 bytes: HeaderTranslation.ExtractRecordMemory(stream.RemainingMemory, package.MetaData.Constants),
                 package: package);
             var finalPos = checked((int)(stream.Position + stream.GetMajorRecord().TotalLength));
@@ -1327,12 +1327,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             return ret;
         }
 
-        public static WeaponBinaryOverlay WeaponFactory(
+        public static FurnitureBinaryOverlay FurnitureFactory(
             ReadOnlyMemorySlice<byte> slice,
             BinaryOverlayFactoryPackage package,
             TypedParseParams? parseParams = null)
         {
-            return WeaponFactory(
+            return FurnitureFactory(
                 stream: new OverlayStream(slice, package),
                 package: package,
                 parseParams: parseParams);
@@ -1344,7 +1344,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             FileGeneration fg,
             string? name = null)
         {
-            WeaponMixIn.ToString(
+            FurnitureMixIn.ToString(
                 item: this,
                 name: name);
         }
@@ -1353,7 +1353,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public override string ToString()
         {
-            return MajorRecordPrinter<Weapon>.ToString(this);
+            return MajorRecordPrinter<Furniture>.ToString(this);
         }
 
         #region Equals and Hash
@@ -1363,16 +1363,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 return formLink.Equals(this);
             }
-            if (obj is not IWeaponGetter rhs) return false;
-            return ((WeaponCommon)((IWeaponGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
+            if (obj is not IFurnitureGetter rhs) return false;
+            return ((FurnitureCommon)((IFurnitureGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
         }
 
-        public bool Equals(IWeaponGetter? obj)
+        public bool Equals(IFurnitureGetter? obj)
         {
-            return ((WeaponCommon)((IWeaponGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
+            return ((FurnitureCommon)((IFurnitureGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
         }
 
-        public override int GetHashCode() => ((WeaponCommon)((IWeaponGetter)this).CommonInstance()!).GetHashCode(this);
+        public override int GetHashCode() => ((FurnitureCommon)((IFurnitureGetter)this).CommonInstance()!).GetHashCode(this);
 
         #endregion
 

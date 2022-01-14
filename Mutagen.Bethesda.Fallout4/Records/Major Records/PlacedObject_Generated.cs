@@ -426,6 +426,7 @@ namespace Mutagen.Bethesda.Fallout4
     #region Interface
     public partial interface IPlacedObject :
         IFallout4MajorRecordInternal,
+        ILocationTargetable,
         ILoquiObjectSetter<IPlacedObjectInternal>,
         IPlacedObjectGetter
     {
@@ -442,6 +443,7 @@ namespace Mutagen.Bethesda.Fallout4
     public partial interface IPlacedObjectGetter :
         IFallout4MajorRecordGetter,
         IBinaryItem,
+        ILocationTargetableGetter,
         ILoquiObject<IPlacedObjectGetter>,
         IMapsToGetter<IPlacedObjectGetter>
     {

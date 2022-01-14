@@ -114,6 +114,7 @@ namespace Mutagen.Bethesda.Skyrim.Internals
                 typeof(Door),
                 typeof(PlacedNpc),
                 typeof(PlacedObject),
+                typeof(APlacedTrap),
             };
             dict[typeof(ILocationTargetableGetter)] = dict[typeof(ILocationTargetable)];
             dict[typeof(IOwner)] = new Type[]

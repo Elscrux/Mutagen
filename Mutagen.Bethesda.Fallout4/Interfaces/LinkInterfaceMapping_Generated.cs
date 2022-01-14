@@ -26,16 +26,29 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             dict[typeof(IObjectId)] = new Type[]
             {
                 typeof(Activator),
+                typeof(Ammunition),
                 typeof(Armor),
                 typeof(Book),
                 typeof(Container),
                 typeof(Door),
                 typeof(Faction),
+                typeof(FormList),
+                typeof(Furniture),
+                typeof(IdleMarker),
+                typeof(Ingestible),
+                typeof(Ingredient),
+                typeof(Key),
                 typeof(Light),
                 typeof(MiscItem),
                 typeof(MoveableStatic),
+                typeof(Note),
+                typeof(Npc),
+                typeof(ObjectModification),
+                typeof(Projectile),
                 typeof(Spell),
+                typeof(Static),
                 typeof(TextureSet),
+                typeof(Weapon),
             };
             dict[typeof(IObjectIdGetter)] = dict[typeof(IObjectId)];
             dict[typeof(IDamageTypeTarget)] = new Type[]
@@ -71,11 +84,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Armor),
             };
             dict[typeof(IBindableEquipmentGetter)] = dict[typeof(IBindableEquipment)];
-            dict[typeof(ILocationTargetable)] = new Type[]
-            {
-                typeof(Door),
-            };
-            dict[typeof(ILocationTargetableGetter)] = dict[typeof(ILocationTargetable)];
             dict[typeof(IOwner)] = new Type[]
             {
                 typeof(Faction),
@@ -129,6 +137,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Spell),
             };
             dict[typeof(IEffectRecordGetter)] = dict[typeof(IEffectRecord)];
+            dict[typeof(ILocationTargetable)] = new Type[]
+            {
+                typeof(PlacedNpc),
+                typeof(PlacedObject),
+                typeof(APlacedTrap),
+            };
+            dict[typeof(ILocationTargetableGetter)] = dict[typeof(ILocationTargetable)];
             InterfaceToObjectTypes = dict;
         }
     }

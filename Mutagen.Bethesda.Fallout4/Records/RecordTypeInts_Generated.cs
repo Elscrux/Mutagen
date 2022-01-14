@@ -3,8 +3,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
     public class RecordTypeInts
     {
         public const int AACT = 0x54434141;
+        public const int ACHR = 0x52484341;
         public const int ACTI = 0x49544341;
         public const int AHCM = 0x4D434841;
+        public const int ALCH = 0x48434C41;
+        public const int AMMO = 0x4F4D4D41;
         public const int ANAM = 0x4D414E41;
         public const int AORU = 0x55524F41;
         public const int APPR = 0x52505041;
@@ -84,6 +87,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int FTSM = 0x4D535446;
         public const int FTYP = 0x50595446;
         public const int FULL = 0x4C4C5546;
+        public const int FURN = 0x4E525546;
         public const int GDRY = 0x59524447;
         public const int GLOB = 0x424F4C47;
         public const int GMST = 0x54534D47;
@@ -98,6 +102,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int HNAM = 0x4D414E48;
         public const int ICO2 = 0x324F4349;
         public const int ICON = 0x4E4F4349;
+        public const int IDLM = 0x4D4C4449;
         public const int INAM = 0x4D414E49;
         public const int INCC = 0x43434E49;
         public const int INDX = 0x58444E49;
@@ -107,6 +112,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int ITXT = 0x54585449;
         public const int JAIL = 0x4C49414A;
         public const int JOUT = 0x54554F4A;
+        public const int KEYM = 0x4D59454B;
         public const int KNAM = 0x4D414E4B;
         public const int KSIZ = 0x5A49534B;
         public const int KWDA = 0x4144574B;
@@ -164,11 +170,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int NAME = 0x454D414E;
         public const int NAVM = 0x4D56414E;
         public const int NNAM = 0x4D414E4E;
+        public const int NOTE = 0x45544F4E;
         public const int NPC_ = 0x5F43504E;
         public const int NTOP = 0x504F544E;
         public const int NTRM = 0x4D52544E;
         public const int OBND = 0x444E424F;
         public const int OFST = 0x5453464F;
+        public const int OMOD = 0x444F4D4F;
         public const int ONAM = 0x4D414E4F;
         public const int OTFT = 0x5446544F;
         public const int PERK = 0x4B524550;
@@ -179,6 +187,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int PLCN = 0x4E434C50;
         public const int PLVD = 0x44564C50;
         public const int PNAM = 0x4D414E50;
+        public const int PROJ = 0x4A4F5250;
         public const int PRPS = 0x53505250;
         public const int PTOP = 0x504F5450;
         public const int PTRN = 0x4E525450;

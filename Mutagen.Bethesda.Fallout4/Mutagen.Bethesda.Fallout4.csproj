@@ -216,6 +216,9 @@
     <Compile Include="Records\Major Records\Phoneme.cs">
       <DependentUpon>Race.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Major Records\PlacedNpc_Generated.cs">
+      <DependentUpon>PlacedNpc.xml</DependentUpon>
+    </Compile>
     <Compile Include="Records\Major Records\Race.cs">
       <DependentUpon>Race.xml</DependentUpon>
     </Compile>
@@ -359,16 +362,7 @@
     <Compile Include="Records\Major Records\ActorValueInformation_Generated.cs">
       <DependentUpon>ActorValueInformation.xml</DependentUpon>
     </Compile>
-    <Compile Include="Records\Major Records\ADamageType_Generated.cs">
-      <DependentUpon>DamageType.xml</DependentUpon>
-    </Compile>
-    <Compile Include="Records\Major Records\DamageTypeIndexed_Generated.cs">
-      <DependentUpon>DamageType.xml</DependentUpon>
-    </Compile>
     <Compile Include="Interfaces\IDamageTypeTarget_Generated.cs" />
-    <Compile Include="Records\Major Records\DamageType_Generated.cs">
-      <DependentUpon>DamageType.xml</DependentUpon>
-    </Compile>
     <Compile Include="ImplicitsMixIn_Generated.cs" />
     <Compile Include="Records\Common Subrecords\BipedBodyTemplate_Generated.cs">
       <DependentUpon>BipedBodyTemplate.xml</DependentUpon>
@@ -895,6 +889,42 @@
     <Compile Include="Records\Major Records\Weapon_Generated.cs">
       <DependentUpon>Weapon.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Major Records\ADamageType_Generated.cs">
+      <DependentUpon>DamageType.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\DamageType_Generated.cs">
+      <DependentUpon>DamageType.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\DamageTypeIndexed_Generated.cs">
+      <DependentUpon>DamageType.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Ammunition_Generated.cs">
+      <DependentUpon>Ammunition.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Furniture_Generated.cs">
+      <DependentUpon>Furniture.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\IdleMarker_Generated.cs">
+      <DependentUpon>IdleMarker.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Ingestible_Generated.cs">
+      <DependentUpon>Ingestible.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Key_Generated.cs">
+      <DependentUpon>Key.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Note_Generated.cs">
+      <DependentUpon>Note.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\ObjectModification_Generated.cs">
+      <DependentUpon>ObjectModification.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\APlacedTrap_Generated.cs">
+      <DependentUpon>PlacedTrap.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Projectile_Generated.cs">
+      <DependentUpon>Projectile.xml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="GitInfo" Version="2.2.0">
@@ -910,6 +940,36 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mutagen.Bethesda.Core\Mutagen.Bethesda.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Records\Major Records\PlacedNpc.xml">
+      <DefaultPackFolder>none</DefaultPackFolder>
+      <BuildAction>None</BuildAction>
+    </None>
+    <None Update="Records\Major Records\ObjectModification.xml">
+      <DefaultPackFolder>none</DefaultPackFolder>
+      <BuildAction>None</BuildAction>
+    </None>
+    <None Update="Records\Major Records\Note.xml">
+      <DefaultPackFolder>none</DefaultPackFolder>
+      <BuildAction>None</BuildAction>
+    </None>
+    <None Update="Records\Major Records\Key.xml">
+      <DefaultPackFolder>none</DefaultPackFolder>
+      <BuildAction>None</BuildAction>
+    </None>
+    <None Update="Records\Major Records\Ingestible.xml">
+      <DefaultPackFolder>none</DefaultPackFolder>
+      <BuildAction>None</BuildAction>
+    </None>
+    <None Update="Records\Major Records\IdleMarker.xml">
+      <DefaultPackFolder>none</DefaultPackFolder>
+      <BuildAction>None</BuildAction>
+    </None>
+    <None Update="Records\Major Records\Projectile.xml">
+      <DefaultPackFolder>none</DefaultPackFolder>
+      <BuildAction>None</BuildAction>
+    </None>
   </ItemGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="RD /S /Q &quot;%25USERPROFILE%25\.nuget\packages\mutagen.bethesda.Fallout4&quot;" />

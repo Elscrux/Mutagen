@@ -427,7 +427,8 @@ namespace Mutagen.Bethesda.Fallout4
     public partial interface INpc :
         IFallout4MajorRecordInternal,
         ILoquiObjectSetter<INpcInternal>,
-        INpcGetter
+        INpcGetter,
+        IObjectId
     {
     }
 
@@ -443,7 +444,8 @@ namespace Mutagen.Bethesda.Fallout4
         IFallout4MajorRecordGetter,
         IBinaryItem,
         ILoquiObject<INpcGetter>,
-        IMapsToGetter<INpcGetter>
+        IMapsToGetter<INpcGetter>,
+        IObjectIdGetter
     {
         static new ILoquiRegistration StaticRegistration => Npc_Registration.Instance;
 

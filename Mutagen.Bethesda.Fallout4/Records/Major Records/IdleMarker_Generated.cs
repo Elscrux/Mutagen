@@ -37,14 +37,14 @@ using System.Text;
 namespace Mutagen.Bethesda.Fallout4
 {
     #region Class
-    public partial class Weapon :
+    public partial class IdleMarker :
         Fallout4MajorRecord,
-        IEquatable<IWeaponGetter>,
-        ILoquiObjectSetter<Weapon>,
-        IWeaponInternal
+        IEquatable<IIdleMarkerGetter>,
+        IIdleMarkerInternal,
+        ILoquiObjectSetter<IdleMarker>
     {
         #region Ctor
-        protected Weapon()
+        protected IdleMarker()
         {
             CustomCtor();
         }
@@ -58,7 +58,7 @@ namespace Mutagen.Bethesda.Fallout4
             FileGeneration fg,
             string? name = null)
         {
-            WeaponMixIn.ToString(
+            IdleMarkerMixIn.ToString(
                 item: this,
                 name: name);
         }
@@ -143,7 +143,7 @@ namespace Mutagen.Bethesda.Fallout4
             #region Translate
             public new Mask<R> Translate<R>(Func<TItem, R> eval)
             {
-                var ret = new Weapon.Mask<R>();
+                var ret = new IdleMarker.Mask<R>();
                 this.Translate_InternalFill(ret, eval);
                 return ret;
             }
@@ -160,16 +160,16 @@ namespace Mutagen.Bethesda.Fallout4
                 return ToString(printMask: null);
             }
 
-            public string ToString(Weapon.Mask<bool>? printMask = null)
+            public string ToString(IdleMarker.Mask<bool>? printMask = null)
             {
                 var fg = new FileGeneration();
                 ToString(fg, printMask);
                 return fg.ToString();
             }
 
-            public void ToString(FileGeneration fg, Weapon.Mask<bool>? printMask = null)
+            public void ToString(FileGeneration fg, IdleMarker.Mask<bool>? printMask = null)
             {
-                fg.AppendLine($"{nameof(Weapon.Mask<TItem>)} =>");
+                fg.AppendLine($"{nameof(IdleMarker.Mask<TItem>)} =>");
                 fg.AppendLine("[");
                 using (new DepthWrapper(fg))
                 {
@@ -187,7 +187,7 @@ namespace Mutagen.Bethesda.Fallout4
             #region IErrorMask
             public override object? GetNthMask(int index)
             {
-                Weapon_FieldIndex enu = (Weapon_FieldIndex)index;
+                IdleMarker_FieldIndex enu = (IdleMarker_FieldIndex)index;
                 switch (enu)
                 {
                     default:
@@ -197,7 +197,7 @@ namespace Mutagen.Bethesda.Fallout4
 
             public override void SetNthException(int index, Exception ex)
             {
-                Weapon_FieldIndex enu = (Weapon_FieldIndex)index;
+                IdleMarker_FieldIndex enu = (IdleMarker_FieldIndex)index;
                 switch (enu)
                 {
                     default:
@@ -208,7 +208,7 @@ namespace Mutagen.Bethesda.Fallout4
 
             public override void SetNthMask(int index, object obj)
             {
-                Weapon_FieldIndex enu = (Weapon_FieldIndex)index;
+                IdleMarker_FieldIndex enu = (IdleMarker_FieldIndex)index;
                 switch (enu)
                 {
                     default:
@@ -303,14 +303,14 @@ namespace Mutagen.Bethesda.Fallout4
         #endregion
 
         #region Mutagen
-        public static readonly RecordType GrupRecordType = Weapon_Registration.TriggeringRecordType;
-        public Weapon(FormKey formKey)
+        public static readonly RecordType GrupRecordType = IdleMarker_Registration.TriggeringRecordType;
+        public IdleMarker(FormKey formKey)
         {
             this.FormKey = formKey;
             CustomCtor();
         }
 
-        private Weapon(
+        private IdleMarker(
             FormKey formKey,
             GameRelease gameRelease)
         {
@@ -319,7 +319,7 @@ namespace Mutagen.Bethesda.Fallout4
             CustomCtor();
         }
 
-        internal Weapon(
+        internal IdleMarker(
             FormKey formKey,
             ushort formVersion)
         {
@@ -328,12 +328,12 @@ namespace Mutagen.Bethesda.Fallout4
             CustomCtor();
         }
 
-        public Weapon(IFallout4Mod mod)
+        public IdleMarker(IFallout4Mod mod)
             : this(mod.GetNextFormKey())
         {
         }
 
-        public Weapon(IFallout4Mod mod, string editorID)
+        public IdleMarker(IFallout4Mod mod, string editorID)
             : this(mod.GetNextFormKey(editorID))
         {
             this.EditorID = editorID;
@@ -341,10 +341,10 @@ namespace Mutagen.Bethesda.Fallout4
 
         public override string ToString()
         {
-            return MajorRecordPrinter<Weapon>.ToString(this);
+            return MajorRecordPrinter<IdleMarker>.ToString(this);
         }
 
-        protected override Type LinkType => typeof(IWeapon);
+        protected override Type LinkType => typeof(IIdleMarker);
 
         #region Equals and Hash
         public override bool Equals(object? obj)
@@ -353,16 +353,16 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 return formLink.Equals(this);
             }
-            if (obj is not IWeaponGetter rhs) return false;
-            return ((WeaponCommon)((IWeaponGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
+            if (obj is not IIdleMarkerGetter rhs) return false;
+            return ((IdleMarkerCommon)((IIdleMarkerGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
         }
 
-        public bool Equals(IWeaponGetter? obj)
+        public bool Equals(IIdleMarkerGetter? obj)
         {
-            return ((WeaponCommon)((IWeaponGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
+            return ((IdleMarkerCommon)((IIdleMarkerGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
         }
 
-        public override int GetHashCode() => ((WeaponCommon)((IWeaponGetter)this).CommonInstance()!).GetHashCode(this);
+        public override int GetHashCode() => ((IdleMarkerCommon)((IIdleMarkerGetter)this).CommonInstance()!).GetHashCode(this);
 
         #endregion
 
@@ -370,23 +370,23 @@ namespace Mutagen.Bethesda.Fallout4
 
         #region Binary Translation
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected override object BinaryWriteTranslator => WeaponBinaryWriteTranslation.Instance;
+        protected override object BinaryWriteTranslator => IdleMarkerBinaryWriteTranslation.Instance;
         void IBinaryItem.WriteToBinary(
             MutagenWriter writer,
             TypedWriteParams? translationParams = null)
         {
-            ((WeaponBinaryWriteTranslation)this.BinaryWriteTranslator).Write(
+            ((IdleMarkerBinaryWriteTranslation)this.BinaryWriteTranslator).Write(
                 item: this,
                 writer: writer,
                 translationParams: translationParams);
         }
         #region Binary Create
-        public new static Weapon CreateFromBinary(
+        public new static IdleMarker CreateFromBinary(
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
-            var ret = new Weapon();
-            ((WeaponSetterCommon)((IWeaponGetter)ret).CommonSetterInstance()!).CopyInFromBinary(
+            var ret = new IdleMarker();
+            ((IdleMarkerSetterCommon)((IIdleMarkerGetter)ret).CommonSetterInstance()!).CopyInFromBinary(
                 item: ret,
                 frame: frame,
                 translationParams: translationParams);
@@ -397,7 +397,7 @@ namespace Mutagen.Bethesda.Fallout4
 
         public static bool TryCreateFromBinary(
             MutagenFrame frame,
-            out Weapon item,
+            out IdleMarker item,
             TypedParseParams? translationParams = null)
         {
             var startPos = frame.Position;
@@ -412,84 +412,84 @@ namespace Mutagen.Bethesda.Fallout4
 
         void IClearable.Clear()
         {
-            ((WeaponSetterCommon)((IWeaponGetter)this).CommonSetterInstance()!).Clear(this);
+            ((IdleMarkerSetterCommon)((IIdleMarkerGetter)this).CommonSetterInstance()!).Clear(this);
         }
 
-        internal static new Weapon GetNew()
+        internal static new IdleMarker GetNew()
         {
-            return new Weapon();
+            return new IdleMarker();
         }
 
     }
     #endregion
 
     #region Interface
-    public partial interface IWeapon :
+    public partial interface IIdleMarker :
         IFallout4MajorRecordInternal,
-        ILoquiObjectSetter<IWeaponInternal>,
-        IObjectId,
-        IWeaponGetter
+        IIdleMarkerGetter,
+        ILoquiObjectSetter<IIdleMarkerInternal>,
+        IObjectId
     {
     }
 
-    public partial interface IWeaponInternal :
+    public partial interface IIdleMarkerInternal :
         IFallout4MajorRecordInternal,
-        IWeapon,
-        IWeaponGetter
+        IIdleMarker,
+        IIdleMarkerGetter
     {
     }
 
-    [AssociatedRecordTypesAttribute(Mutagen.Bethesda.Fallout4.Internals.RecordTypeInts.WEAP)]
-    public partial interface IWeaponGetter :
+    [AssociatedRecordTypesAttribute(Mutagen.Bethesda.Fallout4.Internals.RecordTypeInts.IDLM)]
+    public partial interface IIdleMarkerGetter :
         IFallout4MajorRecordGetter,
         IBinaryItem,
-        ILoquiObject<IWeaponGetter>,
-        IMapsToGetter<IWeaponGetter>,
+        ILoquiObject<IIdleMarkerGetter>,
+        IMapsToGetter<IIdleMarkerGetter>,
         IObjectIdGetter
     {
-        static new ILoquiRegistration StaticRegistration => Weapon_Registration.Instance;
+        static new ILoquiRegistration StaticRegistration => IdleMarker_Registration.Instance;
 
     }
 
     #endregion
 
     #region Common MixIn
-    public static partial class WeaponMixIn
+    public static partial class IdleMarkerMixIn
     {
-        public static void Clear(this IWeaponInternal item)
+        public static void Clear(this IIdleMarkerInternal item)
         {
-            ((WeaponSetterCommon)((IWeaponGetter)item).CommonSetterInstance()!).Clear(item: item);
+            ((IdleMarkerSetterCommon)((IIdleMarkerGetter)item).CommonSetterInstance()!).Clear(item: item);
         }
 
-        public static Weapon.Mask<bool> GetEqualsMask(
-            this IWeaponGetter item,
-            IWeaponGetter rhs,
+        public static IdleMarker.Mask<bool> GetEqualsMask(
+            this IIdleMarkerGetter item,
+            IIdleMarkerGetter rhs,
             EqualsMaskHelper.Include include = EqualsMaskHelper.Include.All)
         {
-            return ((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).GetEqualsMask(
+            return ((IdleMarkerCommon)((IIdleMarkerGetter)item).CommonInstance()!).GetEqualsMask(
                 item: item,
                 rhs: rhs,
                 include: include);
         }
 
         public static string ToString(
-            this IWeaponGetter item,
+            this IIdleMarkerGetter item,
             string? name = null,
-            Weapon.Mask<bool>? printMask = null)
+            IdleMarker.Mask<bool>? printMask = null)
         {
-            return ((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).ToString(
+            return ((IdleMarkerCommon)((IIdleMarkerGetter)item).CommonInstance()!).ToString(
                 item: item,
                 name: name,
                 printMask: printMask);
         }
 
         public static void ToString(
-            this IWeaponGetter item,
+            this IIdleMarkerGetter item,
             FileGeneration fg,
             string? name = null,
-            Weapon.Mask<bool>? printMask = null)
+            IdleMarker.Mask<bool>? printMask = null)
         {
-            ((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).ToString(
+            ((IdleMarkerCommon)((IIdleMarkerGetter)item).CommonInstance()!).ToString(
                 item: item,
                 fg: fg,
                 name: name,
@@ -497,39 +497,39 @@ namespace Mutagen.Bethesda.Fallout4
         }
 
         public static bool Equals(
-            this IWeaponGetter item,
-            IWeaponGetter rhs,
-            Weapon.TranslationMask? equalsMask = null)
+            this IIdleMarkerGetter item,
+            IIdleMarkerGetter rhs,
+            IdleMarker.TranslationMask? equalsMask = null)
         {
-            return ((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).Equals(
+            return ((IdleMarkerCommon)((IIdleMarkerGetter)item).CommonInstance()!).Equals(
                 lhs: item,
                 rhs: rhs,
                 crystal: equalsMask?.GetCrystal());
         }
 
         public static void DeepCopyIn(
-            this IWeaponInternal lhs,
-            IWeaponGetter rhs,
-            out Weapon.ErrorMask errorMask,
-            Weapon.TranslationMask? copyMask = null)
+            this IIdleMarkerInternal lhs,
+            IIdleMarkerGetter rhs,
+            out IdleMarker.ErrorMask errorMask,
+            IdleMarker.TranslationMask? copyMask = null)
         {
             var errorMaskBuilder = new ErrorMaskBuilder();
-            ((WeaponSetterTranslationCommon)((IWeaponGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
+            ((IdleMarkerSetterTranslationCommon)((IIdleMarkerGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: lhs,
                 rhs: rhs,
                 errorMask: errorMaskBuilder,
                 copyMask: copyMask?.GetCrystal(),
                 deepCopy: false);
-            errorMask = Weapon.ErrorMask.Factory(errorMaskBuilder);
+            errorMask = IdleMarker.ErrorMask.Factory(errorMaskBuilder);
         }
 
         public static void DeepCopyIn(
-            this IWeaponInternal lhs,
-            IWeaponGetter rhs,
+            this IIdleMarkerInternal lhs,
+            IIdleMarkerGetter rhs,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask)
         {
-            ((WeaponSetterTranslationCommon)((IWeaponGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
+            ((IdleMarkerSetterTranslationCommon)((IIdleMarkerGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: lhs,
                 rhs: rhs,
                 errorMask: errorMask,
@@ -537,44 +537,44 @@ namespace Mutagen.Bethesda.Fallout4
                 deepCopy: false);
         }
 
-        public static Weapon DeepCopy(
-            this IWeaponGetter item,
-            Weapon.TranslationMask? copyMask = null)
+        public static IdleMarker DeepCopy(
+            this IIdleMarkerGetter item,
+            IdleMarker.TranslationMask? copyMask = null)
         {
-            return ((WeaponSetterTranslationCommon)((IWeaponGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
+            return ((IdleMarkerSetterTranslationCommon)((IIdleMarkerGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
                 item: item,
                 copyMask: copyMask);
         }
 
-        public static Weapon DeepCopy(
-            this IWeaponGetter item,
-            out Weapon.ErrorMask errorMask,
-            Weapon.TranslationMask? copyMask = null)
+        public static IdleMarker DeepCopy(
+            this IIdleMarkerGetter item,
+            out IdleMarker.ErrorMask errorMask,
+            IdleMarker.TranslationMask? copyMask = null)
         {
-            return ((WeaponSetterTranslationCommon)((IWeaponGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
+            return ((IdleMarkerSetterTranslationCommon)((IIdleMarkerGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
                 item: item,
                 copyMask: copyMask,
                 errorMask: out errorMask);
         }
 
-        public static Weapon DeepCopy(
-            this IWeaponGetter item,
+        public static IdleMarker DeepCopy(
+            this IIdleMarkerGetter item,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask = null)
         {
-            return ((WeaponSetterTranslationCommon)((IWeaponGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
+            return ((IdleMarkerSetterTranslationCommon)((IIdleMarkerGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
                 item: item,
                 copyMask: copyMask,
                 errorMask: errorMask);
         }
 
         #region Mutagen
-        public static Weapon Duplicate(
-            this IWeaponGetter item,
+        public static IdleMarker Duplicate(
+            this IIdleMarkerGetter item,
             FormKey formKey,
-            Weapon.TranslationMask? copyMask = null)
+            IdleMarker.TranslationMask? copyMask = null)
         {
-            return ((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).Duplicate(
+            return ((IdleMarkerCommon)((IIdleMarkerGetter)item).CommonInstance()!).Duplicate(
                 item: item,
                 formKey: formKey,
                 copyMask: copyMask?.GetCrystal());
@@ -584,11 +584,11 @@ namespace Mutagen.Bethesda.Fallout4
 
         #region Binary Translation
         public static void CopyInFromBinary(
-            this IWeaponInternal item,
+            this IIdleMarkerInternal item,
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
-            ((WeaponSetterCommon)((IWeaponGetter)item).CommonSetterInstance()!).CopyInFromBinary(
+            ((IdleMarkerSetterCommon)((IIdleMarkerGetter)item).CommonSetterInstance()!).CopyInFromBinary(
                 item: item,
                 frame: frame,
                 translationParams: translationParams);
@@ -604,7 +604,7 @@ namespace Mutagen.Bethesda.Fallout4
 namespace Mutagen.Bethesda.Fallout4.Internals
 {
     #region Field Index
-    public enum Weapon_FieldIndex
+    public enum IdleMarker_FieldIndex
     {
         MajorRecordFlagsRaw = 0,
         FormKey = 1,
@@ -616,40 +616,40 @@ namespace Mutagen.Bethesda.Fallout4.Internals
     #endregion
 
     #region Registration
-    public partial class Weapon_Registration : ILoquiRegistration
+    public partial class IdleMarker_Registration : ILoquiRegistration
     {
-        public static readonly Weapon_Registration Instance = new Weapon_Registration();
+        public static readonly IdleMarker_Registration Instance = new IdleMarker_Registration();
 
         public static ProtocolKey ProtocolKey => ProtocolDefinition_Fallout4.ProtocolKey;
 
         public static readonly ObjectKey ObjectKey = new ObjectKey(
             protocolKey: ProtocolDefinition_Fallout4.ProtocolKey,
-            msgID: 229,
+            msgID: 232,
             version: 0);
 
-        public const string GUID = "f44322c4-c4ca-432c-a5e1-9d5938dcf19d";
+        public const string GUID = "cd13f861-e1bc-4d00-860c-477d1c5ad2bf";
 
         public const ushort AdditionalFieldCount = 0;
 
         public const ushort FieldCount = 6;
 
-        public static readonly Type MaskType = typeof(Weapon.Mask<>);
+        public static readonly Type MaskType = typeof(IdleMarker.Mask<>);
 
-        public static readonly Type ErrorMaskType = typeof(Weapon.ErrorMask);
+        public static readonly Type ErrorMaskType = typeof(IdleMarker.ErrorMask);
 
-        public static readonly Type ClassType = typeof(Weapon);
+        public static readonly Type ClassType = typeof(IdleMarker);
 
-        public static readonly Type GetterType = typeof(IWeaponGetter);
+        public static readonly Type GetterType = typeof(IIdleMarkerGetter);
 
         public static readonly Type? InternalGetterType = null;
 
-        public static readonly Type SetterType = typeof(IWeapon);
+        public static readonly Type SetterType = typeof(IIdleMarker);
 
-        public static readonly Type? InternalSetterType = typeof(IWeaponInternal);
+        public static readonly Type? InternalSetterType = typeof(IIdleMarkerInternal);
 
-        public const string FullName = "Mutagen.Bethesda.Fallout4.Weapon";
+        public const string FullName = "Mutagen.Bethesda.Fallout4.IdleMarker";
 
-        public const string Name = "Weapon";
+        public const string Name = "IdleMarker";
 
         public const string Namespace = "Mutagen.Bethesda.Fallout4";
 
@@ -657,8 +657,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public static readonly Type? GenericRegistrationType = null;
 
-        public static readonly RecordType TriggeringRecordType = RecordTypes.WEAP;
-        public static readonly Type BinaryWriteTranslation = typeof(WeaponBinaryWriteTranslation);
+        public static readonly RecordType TriggeringRecordType = RecordTypes.IDLM;
+        public static readonly Type BinaryWriteTranslation = typeof(IdleMarkerBinaryWriteTranslation);
         #region Interface
         ProtocolKey ILoquiRegistration.ProtocolKey => ProtocolKey;
         ObjectKey ILoquiRegistration.ObjectKey => ObjectKey;
@@ -691,13 +691,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
     #endregion
 
     #region Common
-    public partial class WeaponSetterCommon : Fallout4MajorRecordSetterCommon
+    public partial class IdleMarkerSetterCommon : Fallout4MajorRecordSetterCommon
     {
-        public new static readonly WeaponSetterCommon Instance = new WeaponSetterCommon();
+        public new static readonly IdleMarkerSetterCommon Instance = new IdleMarkerSetterCommon();
 
         partial void ClearPartial();
         
-        public void Clear(IWeaponInternal item)
+        public void Clear(IIdleMarkerInternal item)
         {
             ClearPartial();
             base.Clear(item);
@@ -705,16 +705,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         
         public override void Clear(IFallout4MajorRecordInternal item)
         {
-            Clear(item: (IWeaponInternal)item);
+            Clear(item: (IIdleMarkerInternal)item);
         }
         
         public override void Clear(IMajorRecordInternal item)
         {
-            Clear(item: (IWeaponInternal)item);
+            Clear(item: (IIdleMarkerInternal)item);
         }
         
         #region Mutagen
-        public void RemapLinks(IWeapon obj, IReadOnlyDictionary<FormKey, FormKey> mapping)
+        public void RemapLinks(IIdleMarker obj, IReadOnlyDictionary<FormKey, FormKey> mapping)
         {
             base.RemapLinks(obj, mapping);
         }
@@ -723,16 +723,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         
         #region Binary Translation
         public virtual void CopyInFromBinary(
-            IWeaponInternal item,
+            IIdleMarkerInternal item,
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
-            PluginUtilityTranslation.MajorRecordParse<IWeaponInternal>(
+            PluginUtilityTranslation.MajorRecordParse<IIdleMarkerInternal>(
                 record: item,
                 frame: frame,
                 translationParams: translationParams,
-                fillStructs: WeaponBinaryCreateTranslation.FillBinaryStructs,
-                fillTyped: WeaponBinaryCreateTranslation.FillBinaryRecordTypes);
+                fillStructs: IdleMarkerBinaryCreateTranslation.FillBinaryStructs,
+                fillTyped: IdleMarkerBinaryCreateTranslation.FillBinaryRecordTypes);
         }
         
         public override void CopyInFromBinary(
@@ -741,7 +741,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TypedParseParams? translationParams = null)
         {
             CopyInFromBinary(
-                item: (Weapon)item,
+                item: (IdleMarker)item,
                 frame: frame,
                 translationParams: translationParams);
         }
@@ -752,7 +752,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TypedParseParams? translationParams = null)
         {
             CopyInFromBinary(
-                item: (Weapon)item,
+                item: (IdleMarker)item,
                 frame: frame,
                 translationParams: translationParams);
         }
@@ -760,17 +760,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         #endregion
         
     }
-    public partial class WeaponCommon : Fallout4MajorRecordCommon
+    public partial class IdleMarkerCommon : Fallout4MajorRecordCommon
     {
-        public new static readonly WeaponCommon Instance = new WeaponCommon();
+        public new static readonly IdleMarkerCommon Instance = new IdleMarkerCommon();
 
-        public Weapon.Mask<bool> GetEqualsMask(
-            IWeaponGetter item,
-            IWeaponGetter rhs,
+        public IdleMarker.Mask<bool> GetEqualsMask(
+            IIdleMarkerGetter item,
+            IIdleMarkerGetter rhs,
             EqualsMaskHelper.Include include = EqualsMaskHelper.Include.All)
         {
-            var ret = new Weapon.Mask<bool>(false);
-            ((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).FillEqualsMask(
+            var ret = new IdleMarker.Mask<bool>(false);
+            ((IdleMarkerCommon)((IIdleMarkerGetter)item).CommonInstance()!).FillEqualsMask(
                 item: item,
                 rhs: rhs,
                 ret: ret,
@@ -779,9 +779,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         public void FillEqualsMask(
-            IWeaponGetter item,
-            IWeaponGetter rhs,
-            Weapon.Mask<bool> ret,
+            IIdleMarkerGetter item,
+            IIdleMarkerGetter rhs,
+            IdleMarker.Mask<bool> ret,
             EqualsMaskHelper.Include include = EqualsMaskHelper.Include.All)
         {
             if (rhs == null) return;
@@ -789,9 +789,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         public string ToString(
-            IWeaponGetter item,
+            IIdleMarkerGetter item,
             string? name = null,
-            Weapon.Mask<bool>? printMask = null)
+            IdleMarker.Mask<bool>? printMask = null)
         {
             var fg = new FileGeneration();
             ToString(
@@ -803,18 +803,18 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         public void ToString(
-            IWeaponGetter item,
+            IIdleMarkerGetter item,
             FileGeneration fg,
             string? name = null,
-            Weapon.Mask<bool>? printMask = null)
+            IdleMarker.Mask<bool>? printMask = null)
         {
             if (name == null)
             {
-                fg.AppendLine($"Weapon =>");
+                fg.AppendLine($"IdleMarker =>");
             }
             else
             {
-                fg.AppendLine($"{name} (Weapon) =>");
+                fg.AppendLine($"{name} (IdleMarker) =>");
             }
             fg.AppendLine("[");
             using (new DepthWrapper(fg))
@@ -828,9 +828,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         protected static void ToStringFields(
-            IWeaponGetter item,
+            IIdleMarkerGetter item,
             FileGeneration fg,
-            Weapon.Mask<bool>? printMask = null)
+            IdleMarker.Mask<bool>? printMask = null)
         {
             Fallout4MajorRecordCommon.ToStringFields(
                 item: item,
@@ -838,39 +838,39 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 printMask: printMask);
         }
         
-        public static Weapon_FieldIndex ConvertFieldIndex(Fallout4MajorRecord_FieldIndex index)
+        public static IdleMarker_FieldIndex ConvertFieldIndex(Fallout4MajorRecord_FieldIndex index)
         {
             switch (index)
             {
                 case Fallout4MajorRecord_FieldIndex.MajorRecordFlagsRaw:
-                    return (Weapon_FieldIndex)((int)index);
+                    return (IdleMarker_FieldIndex)((int)index);
                 case Fallout4MajorRecord_FieldIndex.FormKey:
-                    return (Weapon_FieldIndex)((int)index);
+                    return (IdleMarker_FieldIndex)((int)index);
                 case Fallout4MajorRecord_FieldIndex.VersionControl:
-                    return (Weapon_FieldIndex)((int)index);
+                    return (IdleMarker_FieldIndex)((int)index);
                 case Fallout4MajorRecord_FieldIndex.EditorID:
-                    return (Weapon_FieldIndex)((int)index);
+                    return (IdleMarker_FieldIndex)((int)index);
                 case Fallout4MajorRecord_FieldIndex.FormVersion:
-                    return (Weapon_FieldIndex)((int)index);
+                    return (IdleMarker_FieldIndex)((int)index);
                 case Fallout4MajorRecord_FieldIndex.Version2:
-                    return (Weapon_FieldIndex)((int)index);
+                    return (IdleMarker_FieldIndex)((int)index);
                 default:
                     throw new ArgumentException($"Index is out of range: {index.ToStringFast_Enum_Only()}");
             }
         }
         
-        public static new Weapon_FieldIndex ConvertFieldIndex(MajorRecord_FieldIndex index)
+        public static new IdleMarker_FieldIndex ConvertFieldIndex(MajorRecord_FieldIndex index)
         {
             switch (index)
             {
                 case MajorRecord_FieldIndex.MajorRecordFlagsRaw:
-                    return (Weapon_FieldIndex)((int)index);
+                    return (IdleMarker_FieldIndex)((int)index);
                 case MajorRecord_FieldIndex.FormKey:
-                    return (Weapon_FieldIndex)((int)index);
+                    return (IdleMarker_FieldIndex)((int)index);
                 case MajorRecord_FieldIndex.VersionControl:
-                    return (Weapon_FieldIndex)((int)index);
+                    return (IdleMarker_FieldIndex)((int)index);
                 case MajorRecord_FieldIndex.EditorID:
-                    return (Weapon_FieldIndex)((int)index);
+                    return (IdleMarker_FieldIndex)((int)index);
                 default:
                     throw new ArgumentException($"Index is out of range: {index.ToStringFast_Enum_Only()}");
             }
@@ -878,8 +878,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         
         #region Equals and Hash
         public virtual bool Equals(
-            IWeaponGetter? lhs,
-            IWeaponGetter? rhs,
+            IIdleMarkerGetter? lhs,
+            IIdleMarkerGetter? rhs,
             TranslationCrystal? crystal)
         {
             if (!EqualsMaskHelper.RefEquality(lhs, rhs, out var isEqual)) return isEqual;
@@ -893,8 +893,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TranslationCrystal? crystal)
         {
             return Equals(
-                lhs: (IWeaponGetter?)lhs,
-                rhs: rhs as IWeaponGetter,
+                lhs: (IIdleMarkerGetter?)lhs,
+                rhs: rhs as IIdleMarkerGetter,
                 crystal: crystal);
         }
         
@@ -904,12 +904,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TranslationCrystal? crystal)
         {
             return Equals(
-                lhs: (IWeaponGetter?)lhs,
-                rhs: rhs as IWeaponGetter,
+                lhs: (IIdleMarkerGetter?)lhs,
+                rhs: rhs as IIdleMarkerGetter,
                 crystal: crystal);
         }
         
-        public virtual int GetHashCode(IWeaponGetter item)
+        public virtual int GetHashCode(IIdleMarkerGetter item)
         {
             var hash = new HashCode();
             hash.Add(base.GetHashCode());
@@ -918,12 +918,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         
         public override int GetHashCode(IFallout4MajorRecordGetter item)
         {
-            return GetHashCode(item: (IWeaponGetter)item);
+            return GetHashCode(item: (IIdleMarkerGetter)item);
         }
         
         public override int GetHashCode(IMajorRecordGetter item)
         {
-            return GetHashCode(item: (IWeaponGetter)item);
+            return GetHashCode(item: (IIdleMarkerGetter)item);
         }
         
         #endregion
@@ -931,11 +931,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         
         public override object GetNew()
         {
-            return Weapon.GetNew();
+            return IdleMarker.GetNew();
         }
         
         #region Mutagen
-        public IEnumerable<IFormLinkGetter> GetContainedFormLinks(IWeaponGetter obj)
+        public IEnumerable<IFormLinkGetter> GetContainedFormLinks(IIdleMarkerGetter obj)
         {
             foreach (var item in base.GetContainedFormLinks(obj))
             {
@@ -945,12 +945,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         #region Duplicate
-        public Weapon Duplicate(
-            IWeaponGetter item,
+        public IdleMarker Duplicate(
+            IIdleMarkerGetter item,
             FormKey formKey,
             TranslationCrystal? copyMask)
         {
-            var newRec = new Weapon(formKey);
+            var newRec = new IdleMarker(formKey);
             newRec.DeepCopyIn(item, default(ErrorMaskBuilder?), copyMask);
             return newRec;
         }
@@ -961,7 +961,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TranslationCrystal? copyMask)
         {
             return this.Duplicate(
-                item: (IWeaponGetter)item,
+                item: (IIdleMarkerGetter)item,
                 formKey: formKey,
                 copyMask: copyMask);
         }
@@ -972,7 +972,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TranslationCrystal? copyMask)
         {
             return this.Duplicate(
-                item: (IWeaponGetter)item,
+                item: (IIdleMarkerGetter)item,
                 formKey: formKey,
                 copyMask: copyMask);
         }
@@ -982,14 +982,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         #endregion
         
     }
-    public partial class WeaponSetterTranslationCommon : Fallout4MajorRecordSetterTranslationCommon
+    public partial class IdleMarkerSetterTranslationCommon : Fallout4MajorRecordSetterTranslationCommon
     {
-        public new static readonly WeaponSetterTranslationCommon Instance = new WeaponSetterTranslationCommon();
+        public new static readonly IdleMarkerSetterTranslationCommon Instance = new IdleMarkerSetterTranslationCommon();
 
         #region DeepCopyIn
         public void DeepCopyIn(
-            IWeaponInternal item,
-            IWeaponGetter rhs,
+            IIdleMarkerInternal item,
+            IIdleMarkerGetter rhs,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask,
             bool deepCopy)
@@ -1003,8 +1003,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         public void DeepCopyIn(
-            IWeapon item,
-            IWeaponGetter rhs,
+            IIdleMarker item,
+            IIdleMarkerGetter rhs,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask,
             bool deepCopy)
@@ -1025,8 +1025,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             bool deepCopy)
         {
             this.DeepCopyIn(
-                item: (IWeaponInternal)item,
-                rhs: (IWeaponGetter)rhs,
+                item: (IIdleMarkerInternal)item,
+                rhs: (IIdleMarkerGetter)rhs,
                 errorMask: errorMask,
                 copyMask: copyMask,
                 deepCopy: deepCopy);
@@ -1040,8 +1040,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             bool deepCopy)
         {
             this.DeepCopyIn(
-                item: (IWeapon)item,
-                rhs: (IWeaponGetter)rhs,
+                item: (IIdleMarker)item,
+                rhs: (IIdleMarkerGetter)rhs,
                 errorMask: errorMask,
                 copyMask: copyMask,
                 deepCopy: deepCopy);
@@ -1055,8 +1055,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             bool deepCopy)
         {
             this.DeepCopyIn(
-                item: (IWeaponInternal)item,
-                rhs: (IWeaponGetter)rhs,
+                item: (IIdleMarkerInternal)item,
+                rhs: (IIdleMarkerGetter)rhs,
                 errorMask: errorMask,
                 copyMask: copyMask,
                 deepCopy: deepCopy);
@@ -1070,8 +1070,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             bool deepCopy)
         {
             this.DeepCopyIn(
-                item: (IWeapon)item,
-                rhs: (IWeaponGetter)rhs,
+                item: (IIdleMarker)item,
+                rhs: (IIdleMarkerGetter)rhs,
                 errorMask: errorMask,
                 copyMask: copyMask,
                 deepCopy: deepCopy);
@@ -1079,12 +1079,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         
         #endregion
         
-        public Weapon DeepCopy(
-            IWeaponGetter item,
-            Weapon.TranslationMask? copyMask = null)
+        public IdleMarker DeepCopy(
+            IIdleMarkerGetter item,
+            IdleMarker.TranslationMask? copyMask = null)
         {
-            Weapon ret = (Weapon)((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).GetNew();
-            ((WeaponSetterTranslationCommon)((IWeaponGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
+            IdleMarker ret = (IdleMarker)((IdleMarkerCommon)((IIdleMarkerGetter)item).CommonInstance()!).GetNew();
+            ((IdleMarkerSetterTranslationCommon)((IIdleMarkerGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: ret,
                 rhs: item,
                 errorMask: null,
@@ -1093,30 +1093,30 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             return ret;
         }
         
-        public Weapon DeepCopy(
-            IWeaponGetter item,
-            out Weapon.ErrorMask errorMask,
-            Weapon.TranslationMask? copyMask = null)
+        public IdleMarker DeepCopy(
+            IIdleMarkerGetter item,
+            out IdleMarker.ErrorMask errorMask,
+            IdleMarker.TranslationMask? copyMask = null)
         {
             var errorMaskBuilder = new ErrorMaskBuilder();
-            Weapon ret = (Weapon)((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).GetNew();
-            ((WeaponSetterTranslationCommon)((IWeaponGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
+            IdleMarker ret = (IdleMarker)((IdleMarkerCommon)((IIdleMarkerGetter)item).CommonInstance()!).GetNew();
+            ((IdleMarkerSetterTranslationCommon)((IIdleMarkerGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
                 ret,
                 item,
                 errorMask: errorMaskBuilder,
                 copyMask: copyMask?.GetCrystal(),
                 deepCopy: true);
-            errorMask = Weapon.ErrorMask.Factory(errorMaskBuilder);
+            errorMask = IdleMarker.ErrorMask.Factory(errorMaskBuilder);
             return ret;
         }
         
-        public Weapon DeepCopy(
-            IWeaponGetter item,
+        public IdleMarker DeepCopy(
+            IIdleMarkerGetter item,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask = null)
         {
-            Weapon ret = (Weapon)((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).GetNew();
-            ((WeaponSetterTranslationCommon)((IWeaponGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
+            IdleMarker ret = (IdleMarker)((IdleMarkerCommon)((IIdleMarkerGetter)item).CommonInstance()!).GetNew();
+            ((IdleMarkerSetterTranslationCommon)((IIdleMarkerGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: ret,
                 rhs: item,
                 errorMask: errorMask,
@@ -1132,21 +1132,21 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
 namespace Mutagen.Bethesda.Fallout4
 {
-    public partial class Weapon
+    public partial class IdleMarker
     {
         #region Common Routing
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        ILoquiRegistration ILoquiObject.Registration => Weapon_Registration.Instance;
-        public new static Weapon_Registration StaticRegistration => Weapon_Registration.Instance;
+        ILoquiRegistration ILoquiObject.Registration => IdleMarker_Registration.Instance;
+        public new static IdleMarker_Registration StaticRegistration => IdleMarker_Registration.Instance;
         [DebuggerStepThrough]
-        protected override object CommonInstance() => WeaponCommon.Instance;
+        protected override object CommonInstance() => IdleMarkerCommon.Instance;
         [DebuggerStepThrough]
         protected override object CommonSetterInstance()
         {
-            return WeaponSetterCommon.Instance;
+            return IdleMarkerSetterCommon.Instance;
         }
         [DebuggerStepThrough]
-        protected override object CommonSetterTranslationInstance() => WeaponSetterTranslationCommon.Instance;
+        protected override object CommonSetterTranslationInstance() => IdleMarkerSetterTranslationCommon.Instance;
 
         #endregion
 
@@ -1157,20 +1157,20 @@ namespace Mutagen.Bethesda.Fallout4
 #region Binary Translation
 namespace Mutagen.Bethesda.Fallout4.Internals
 {
-    public partial class WeaponBinaryWriteTranslation :
+    public partial class IdleMarkerBinaryWriteTranslation :
         Fallout4MajorRecordBinaryWriteTranslation,
         IBinaryWriteTranslator
     {
-        public new readonly static WeaponBinaryWriteTranslation Instance = new WeaponBinaryWriteTranslation();
+        public new readonly static IdleMarkerBinaryWriteTranslation Instance = new IdleMarkerBinaryWriteTranslation();
 
         public void Write(
             MutagenWriter writer,
-            IWeaponGetter item,
+            IIdleMarkerGetter item,
             TypedWriteParams? translationParams = null)
         {
             using (HeaderExport.Record(
                 writer: writer,
-                record: translationParams.ConvertToCustom(RecordTypes.WEAP)))
+                record: translationParams.ConvertToCustom(RecordTypes.IDLM)))
             {
                 try
                 {
@@ -1195,7 +1195,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TypedWriteParams? translationParams = null)
         {
             Write(
-                item: (IWeaponGetter)item,
+                item: (IIdleMarkerGetter)item,
                 writer: writer,
                 translationParams: translationParams);
         }
@@ -1206,7 +1206,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TypedWriteParams? translationParams = null)
         {
             Write(
-                item: (IWeaponGetter)item,
+                item: (IIdleMarkerGetter)item,
                 writer: writer,
                 translationParams: translationParams);
         }
@@ -1217,20 +1217,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TypedWriteParams? translationParams = null)
         {
             Write(
-                item: (IWeaponGetter)item,
+                item: (IIdleMarkerGetter)item,
                 writer: writer,
                 translationParams: translationParams);
         }
 
     }
 
-    public partial class WeaponBinaryCreateTranslation : Fallout4MajorRecordBinaryCreateTranslation
+    public partial class IdleMarkerBinaryCreateTranslation : Fallout4MajorRecordBinaryCreateTranslation
     {
-        public new readonly static WeaponBinaryCreateTranslation Instance = new WeaponBinaryCreateTranslation();
+        public new readonly static IdleMarkerBinaryCreateTranslation Instance = new IdleMarkerBinaryCreateTranslation();
 
-        public override RecordType RecordType => RecordTypes.WEAP;
+        public override RecordType RecordType => RecordTypes.IDLM;
         public static void FillBinaryStructs(
-            IWeaponInternal item,
+            IIdleMarkerInternal item,
             MutagenFrame frame)
         {
             Fallout4MajorRecordBinaryCreateTranslation.FillBinaryStructs(
@@ -1244,7 +1244,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 namespace Mutagen.Bethesda.Fallout4
 {
     #region Binary Write Mixins
-    public static class WeaponBinaryTranslationMixIn
+    public static class IdleMarkerBinaryTranslationMixIn
     {
     }
     #endregion
@@ -1253,35 +1253,35 @@ namespace Mutagen.Bethesda.Fallout4
 }
 namespace Mutagen.Bethesda.Fallout4.Internals
 {
-    public partial class WeaponBinaryOverlay :
+    public partial class IdleMarkerBinaryOverlay :
         Fallout4MajorRecordBinaryOverlay,
-        IWeaponGetter
+        IIdleMarkerGetter
     {
         #region Common Routing
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        ILoquiRegistration ILoquiObject.Registration => Weapon_Registration.Instance;
-        public new static Weapon_Registration StaticRegistration => Weapon_Registration.Instance;
+        ILoquiRegistration ILoquiObject.Registration => IdleMarker_Registration.Instance;
+        public new static IdleMarker_Registration StaticRegistration => IdleMarker_Registration.Instance;
         [DebuggerStepThrough]
-        protected override object CommonInstance() => WeaponCommon.Instance;
+        protected override object CommonInstance() => IdleMarkerCommon.Instance;
         [DebuggerStepThrough]
-        protected override object CommonSetterTranslationInstance() => WeaponSetterTranslationCommon.Instance;
+        protected override object CommonSetterTranslationInstance() => IdleMarkerSetterTranslationCommon.Instance;
 
         #endregion
 
         void IPrintable.ToString(FileGeneration fg, string? name) => this.ToString(fg, name);
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected override object BinaryWriteTranslator => WeaponBinaryWriteTranslation.Instance;
+        protected override object BinaryWriteTranslator => IdleMarkerBinaryWriteTranslation.Instance;
         void IBinaryItem.WriteToBinary(
             MutagenWriter writer,
             TypedWriteParams? translationParams = null)
         {
-            ((WeaponBinaryWriteTranslation)this.BinaryWriteTranslator).Write(
+            ((IdleMarkerBinaryWriteTranslation)this.BinaryWriteTranslator).Write(
                 item: this,
                 writer: writer,
                 translationParams: translationParams);
         }
-        protected override Type LinkType => typeof(IWeapon);
+        protected override Type LinkType => typeof(IIdleMarker);
 
 
         partial void CustomFactoryEnd(
@@ -1290,7 +1290,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             int offset);
 
         partial void CustomCtor();
-        protected WeaponBinaryOverlay(
+        protected IdleMarkerBinaryOverlay(
             ReadOnlyMemorySlice<byte> bytes,
             BinaryOverlayFactoryPackage package)
             : base(
@@ -1300,13 +1300,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             this.CustomCtor();
         }
 
-        public static WeaponBinaryOverlay WeaponFactory(
+        public static IdleMarkerBinaryOverlay IdleMarkerFactory(
             OverlayStream stream,
             BinaryOverlayFactoryPackage package,
             TypedParseParams? parseParams = null)
         {
             stream = PluginUtilityTranslation.DecompressStream(stream);
-            var ret = new WeaponBinaryOverlay(
+            var ret = new IdleMarkerBinaryOverlay(
                 bytes: HeaderTranslation.ExtractRecordMemory(stream.RemainingMemory, package.MetaData.Constants),
                 package: package);
             var finalPos = checked((int)(stream.Position + stream.GetMajorRecord().TotalLength));
@@ -1327,12 +1327,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             return ret;
         }
 
-        public static WeaponBinaryOverlay WeaponFactory(
+        public static IdleMarkerBinaryOverlay IdleMarkerFactory(
             ReadOnlyMemorySlice<byte> slice,
             BinaryOverlayFactoryPackage package,
             TypedParseParams? parseParams = null)
         {
-            return WeaponFactory(
+            return IdleMarkerFactory(
                 stream: new OverlayStream(slice, package),
                 package: package,
                 parseParams: parseParams);
@@ -1344,7 +1344,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             FileGeneration fg,
             string? name = null)
         {
-            WeaponMixIn.ToString(
+            IdleMarkerMixIn.ToString(
                 item: this,
                 name: name);
         }
@@ -1353,7 +1353,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public override string ToString()
         {
-            return MajorRecordPrinter<Weapon>.ToString(this);
+            return MajorRecordPrinter<IdleMarker>.ToString(this);
         }
 
         #region Equals and Hash
@@ -1363,16 +1363,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 return formLink.Equals(this);
             }
-            if (obj is not IWeaponGetter rhs) return false;
-            return ((WeaponCommon)((IWeaponGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
+            if (obj is not IIdleMarkerGetter rhs) return false;
+            return ((IdleMarkerCommon)((IIdleMarkerGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
         }
 
-        public bool Equals(IWeaponGetter? obj)
+        public bool Equals(IIdleMarkerGetter? obj)
         {
-            return ((WeaponCommon)((IWeaponGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
+            return ((IdleMarkerCommon)((IIdleMarkerGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
         }
 
-        public override int GetHashCode() => ((WeaponCommon)((IWeaponGetter)this).CommonInstance()!).GetHashCode(this);
+        public override int GetHashCode() => ((IdleMarkerCommon)((IIdleMarkerGetter)this).CommonInstance()!).GetHashCode(this);
 
         #endregion
 
