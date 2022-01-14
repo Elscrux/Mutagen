@@ -73,6 +73,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - ScriptBoolListProperty
 - ScriptBoolProperty
 - ScriptEntry
+- ScriptEntryStruct
 - ScriptFloatListProperty
 - ScriptFloatProperty
 - ScriptIntListProperty
@@ -80,6 +81,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - ScriptObjectListProperty
 - ScriptObjectProperty
 - ScriptProperty
+- ScriptPropertyStruct
 - ScriptStringListProperty
 - ScriptStringProperty
 - ScriptStructListProperty
@@ -255,6 +257,8 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - INamed
 ### ScriptEntry
 - INamed
+### ScriptEntryStruct
+- INamed
 ### ScriptFloatListProperty
 - INamed
 ### ScriptFloatProperty
@@ -268,6 +272,8 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 ### ScriptObjectProperty
 - INamed
 ### ScriptProperty
+- INamed
+### ScriptPropertyStruct
 - INamed
 ### ScriptStringListProperty
 - INamed

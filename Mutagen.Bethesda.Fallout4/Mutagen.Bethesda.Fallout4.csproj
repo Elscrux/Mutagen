@@ -76,10 +76,16 @@
     <Compile Include="Records\Common Subrecords\ScriptEntry.cs">
       <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Common Subrecords\ScriptEntryStruct.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
     <Compile Include="Records\Common Subrecords\ScriptFragments.cs">
       <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
     </Compile>
     <Compile Include="Records\Common Subrecords\ScriptProperty.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ScriptPropertyStruct.cs">
       <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
     </Compile>
     <Compile Include="Records\Fallout4Group.cs">
@@ -825,13 +831,10 @@
     <Compile Include="Records\Common Subrecords\ScriptStructListProperty_Generated.cs">
       <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
     </Compile>
-    <Compile Include="Records\Common Subrecords\ScriptStruct_Generated.cs">
+    <Compile Include="Records\Common Subrecords\ScriptEntryStruct_Generated.cs">
       <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
     </Compile>
-    <Compile Include="Records\Common Subrecords\ScriptStructMember_Generated.cs">
-      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
-    </Compile>
-    <Compile Include="Records\Common Subrecords\ScriptPropertyStructMember_Generated.cs">
+    <Compile Include="Records\Common Subrecords\ScriptPropertyStruct_Generated.cs">
       <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
     </Compile>
   </ItemGroup>
