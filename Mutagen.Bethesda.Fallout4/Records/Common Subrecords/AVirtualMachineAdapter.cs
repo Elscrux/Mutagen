@@ -52,9 +52,9 @@ namespace Mutagen.Bethesda.Fallout4
                 item.Scripts.AddRange(ReadEntries(frame, item.ObjectFormat));
             }
 
-            static void FillProperties(MutagenFrame frame, ushort objectFormat, IScriptEntry item)
+            static void FillProperties(MutagenFrame frame, ushort objectFormat, IScriptEntry item, bool isStruct = false)
             {
-                var count = frame.ReadUInt16();
+                var count = isStruct ? frame.ReadUInt32() : frame.ReadUInt16();
                 for (int i = 0; i < count; i++)
                 {
                     var name = StringBinaryTranslation.Instance.Parse(frame, stringBinaryType: StringBinaryType.PrependLengthUShort);
@@ -95,8 +95,16 @@ namespace Mutagen.Bethesda.Fallout4
                                 objList.Objects.Add(subObj);
                             }
                             break;
+                        case ScriptStructProperty subStruct:
+                            throw new NotImplementedException();
                         case ScriptStructListProperty structList:
                             var structListCount = frame.ReadUInt32();
+                            for (int j = 0; j < structListCount; j++)
+                            {
+                                var subStructs = new ScriptStructProperty();
+                                FillStruct(frame, subStructs, objectFormat);
+                                structList.Structs.Add(subStructs);
+                            }
                             break;
                         default:
                             prop.CopyInFromBinary(frame);
@@ -127,6 +135,13 @@ namespace Mutagen.Bethesda.Fallout4
                     default:
                         throw new NotImplementedException();
                 }
+            }
+
+            public static void FillStruct(MutagenFrame frame, IScriptStructProperty subStructs, ushort objectFormat)
+            {
+                var member = new ScriptEntryStruct();
+                FillProperties(frame, objectFormat, member, true);
+                subStructs.Members.Add(member);
             }
         }
 
