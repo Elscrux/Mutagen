@@ -91,6 +91,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int ITXT = 0x54585449;
         public const int JAIL = 0x4C49414A;
         public const int JOUT = 0x54554F4A;
+        public const int KEYM = 0x4D59454B;
         public const int KNAM = 0x4D414E4B;
         public const int KSIZ = 0x5A49534B;
         public const int KWDA = 0x4144574B;

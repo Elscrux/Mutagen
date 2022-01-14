@@ -32,6 +32,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Door),
                 typeof(Faction),
                 typeof(Furniture),
+                typeof(Key),
                 typeof(Light),
                 typeof(MiscItem),
                 typeof(MoveableStatic),
@@ -49,6 +50,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Armor),
                 typeof(Book),
                 typeof(Ingredient),
+                typeof(Key),
                 typeof(LeveledItem),
                 typeof(Light),
                 typeof(MiscItem),
@@ -66,6 +68,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Book),
                 typeof(Furniture),
                 typeof(Ingredient),
+                typeof(Key),
                 typeof(Light),
                 typeof(MiscItem),
             };

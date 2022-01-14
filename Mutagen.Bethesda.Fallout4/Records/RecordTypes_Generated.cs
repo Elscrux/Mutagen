@@ -93,6 +93,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType ITXT = new(0x54585449);
         public static readonly RecordType JAIL = new(0x4C49414A);
         public static readonly RecordType JOUT = new(0x54554F4A);
+        public static readonly RecordType KEYM = new(0x4D59454B);
         public static readonly RecordType KNAM = new(0x4D414E4B);
         public static readonly RecordType KSIZ = new(0x5A49534B);
         public static readonly RecordType KWDA = new(0x4144574B);
