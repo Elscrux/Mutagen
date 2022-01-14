@@ -4,6 +4,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
     {
         public const int AACT = 0x54434141;
         public const int ACTI = 0x49544341;
+        public const int ALCH = 0x48434C41;
         public const int ANAM = 0x4D414E41;
         public const int AORU = 0x55524F41;
         public const int APPR = 0x52505041;

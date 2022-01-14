@@ -22,6 +22,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Door
 - Flora
 - Furniture
+- Ingestible
 - Ingredient
 - Key
 - Light
@@ -42,6 +43,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Furniture
 - Grass
 - HeadPart
+- Ingestible
 - Ingredient
 - Key
 - LeveledNpc
@@ -63,6 +65,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Flora
 - Furniture
 - HeadPart
+- Ingestible
 - Ingredient
 - Key
 - Keyword
@@ -107,6 +110,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Flora
 - Furniture
 - Grass
+- Ingestible
 - Ingredient
 - Key
 - LeveledItem
@@ -137,6 +141,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Tree
 ### IWeightValue
 - Book
+- Ingestible
 - Key
 - Light
 ## Concrete Classes to Interfaces
@@ -207,6 +212,12 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 ### HeadPart
 - IModeled
 - INamed
+### Ingestible
+- IKeyworded
+- IModeled
+- INamed
+- IObjectBounded
+- IWeightValue
 ### Ingredient
 - IKeyworded
 - IModeled

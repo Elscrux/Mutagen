@@ -92,6 +92,8 @@ namespace Mutagen.Bethesda.Fallout4
             _Florae_Object = new Fallout4Group<Flora>(this);
             _Furniture_Object = new Fallout4Group<Furniture>(this);
             _LeveledNpcs_Object = new Fallout4Group<LeveledNpc>(this);
+            _Keys_Object = new Fallout4Group<Key>(this);
+            _Ingestibles_Object = new Fallout4Group<Ingestible>(this);
             _LeveledItems_Object = new Fallout4Group<LeveledItem>(this);
             _VoiceTypes_Object = new Fallout4Group<VoiceType>(this);
             _Quests_Object = new Fallout4Group<Quest>(this);
@@ -357,6 +359,20 @@ namespace Mutagen.Bethesda.Fallout4
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IFallout4GroupGetter<ILeveledNpcGetter> IFallout4ModGetter.LeveledNpcs => _LeveledNpcs_Object;
         #endregion
+        #region Keys
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Fallout4Group<Key> _Keys_Object;
+        public Fallout4Group<Key> Keys => _Keys_Object;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFallout4GroupGetter<IKeyGetter> IFallout4ModGetter.Keys => _Keys_Object;
+        #endregion
+        #region Ingestibles
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Fallout4Group<Ingestible> _Ingestibles_Object;
+        public Fallout4Group<Ingestible> Ingestibles => _Ingestibles_Object;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFallout4GroupGetter<IIngestibleGetter> IFallout4ModGetter.Ingestibles => _Ingestibles_Object;
+        #endregion
         #region LeveledItems
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private Fallout4Group<LeveledItem> _LeveledItems_Object;
@@ -487,6 +503,8 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Florae = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Furniture = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.LeveledNpcs = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
+                this.Keys = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
+                this.Ingestibles = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.LeveledItems = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.VoiceTypes = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Quests = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
@@ -534,6 +552,8 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem Florae,
                 TItem Furniture,
                 TItem LeveledNpcs,
+                TItem Keys,
+                TItem Ingestibles,
                 TItem LeveledItems,
                 TItem VoiceTypes,
                 TItem Quests,
@@ -579,6 +599,8 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Florae = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Florae, new Fallout4Group.Mask<TItem>(Florae));
                 this.Furniture = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Furniture, new Fallout4Group.Mask<TItem>(Furniture));
                 this.LeveledNpcs = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(LeveledNpcs, new Fallout4Group.Mask<TItem>(LeveledNpcs));
+                this.Keys = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Keys, new Fallout4Group.Mask<TItem>(Keys));
+                this.Ingestibles = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Ingestibles, new Fallout4Group.Mask<TItem>(Ingestibles));
                 this.LeveledItems = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(LeveledItems, new Fallout4Group.Mask<TItem>(LeveledItems));
                 this.VoiceTypes = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(VoiceTypes, new Fallout4Group.Mask<TItem>(VoiceTypes));
                 this.Quests = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Quests, new Fallout4Group.Mask<TItem>(Quests));
@@ -634,6 +656,8 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Florae { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Furniture { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? LeveledNpcs { get; set; }
+            public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Keys { get; set; }
+            public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Ingestibles { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? LeveledItems { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? VoiceTypes { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Quests { get; set; }
@@ -690,6 +714,8 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!object.Equals(this.Florae, rhs.Florae)) return false;
                 if (!object.Equals(this.Furniture, rhs.Furniture)) return false;
                 if (!object.Equals(this.LeveledNpcs, rhs.LeveledNpcs)) return false;
+                if (!object.Equals(this.Keys, rhs.Keys)) return false;
+                if (!object.Equals(this.Ingestibles, rhs.Ingestibles)) return false;
                 if (!object.Equals(this.LeveledItems, rhs.LeveledItems)) return false;
                 if (!object.Equals(this.VoiceTypes, rhs.VoiceTypes)) return false;
                 if (!object.Equals(this.Quests, rhs.Quests)) return false;
@@ -739,6 +765,8 @@ namespace Mutagen.Bethesda.Fallout4
                 hash.Add(this.Florae);
                 hash.Add(this.Furniture);
                 hash.Add(this.LeveledNpcs);
+                hash.Add(this.Keys);
+                hash.Add(this.Ingestibles);
                 hash.Add(this.LeveledItems);
                 hash.Add(this.VoiceTypes);
                 hash.Add(this.Quests);
@@ -934,6 +962,16 @@ namespace Mutagen.Bethesda.Fallout4
                 {
                     if (!eval(this.LeveledNpcs.Overall)) return false;
                     if (this.LeveledNpcs.Specific != null && !this.LeveledNpcs.Specific.All(eval)) return false;
+                }
+                if (Keys != null)
+                {
+                    if (!eval(this.Keys.Overall)) return false;
+                    if (this.Keys.Specific != null && !this.Keys.Specific.All(eval)) return false;
+                }
+                if (Ingestibles != null)
+                {
+                    if (!eval(this.Ingestibles.Overall)) return false;
+                    if (this.Ingestibles.Specific != null && !this.Ingestibles.Specific.All(eval)) return false;
                 }
                 if (LeveledItems != null)
                 {
@@ -1162,6 +1200,16 @@ namespace Mutagen.Bethesda.Fallout4
                     if (eval(this.LeveledNpcs.Overall)) return true;
                     if (this.LeveledNpcs.Specific != null && this.LeveledNpcs.Specific.Any(eval)) return true;
                 }
+                if (Keys != null)
+                {
+                    if (eval(this.Keys.Overall)) return true;
+                    if (this.Keys.Specific != null && this.Keys.Specific.Any(eval)) return true;
+                }
+                if (Ingestibles != null)
+                {
+                    if (eval(this.Ingestibles.Overall)) return true;
+                    if (this.Ingestibles.Specific != null && this.Ingestibles.Specific.Any(eval)) return true;
+                }
                 if (LeveledItems != null)
                 {
                     if (eval(this.LeveledItems.Overall)) return true;
@@ -1252,6 +1300,8 @@ namespace Mutagen.Bethesda.Fallout4
                 obj.Florae = this.Florae == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Florae.Overall), this.Florae.Specific?.Translate(eval));
                 obj.Furniture = this.Furniture == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Furniture.Overall), this.Furniture.Specific?.Translate(eval));
                 obj.LeveledNpcs = this.LeveledNpcs == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.LeveledNpcs.Overall), this.LeveledNpcs.Specific?.Translate(eval));
+                obj.Keys = this.Keys == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Keys.Overall), this.Keys.Specific?.Translate(eval));
+                obj.Ingestibles = this.Ingestibles == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Ingestibles.Overall), this.Ingestibles.Specific?.Translate(eval));
                 obj.LeveledItems = this.LeveledItems == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.LeveledItems.Overall), this.LeveledItems.Specific?.Translate(eval));
                 obj.VoiceTypes = this.VoiceTypes == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.VoiceTypes.Overall), this.VoiceTypes.Specific?.Translate(eval));
                 obj.Quests = this.Quests == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Quests.Overall), this.Quests.Specific?.Translate(eval));
@@ -1426,6 +1476,14 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         LeveledNpcs?.ToString(fg);
                     }
+                    if (printMask?.Keys?.Overall ?? true)
+                    {
+                        Keys?.ToString(fg);
+                    }
+                    if (printMask?.Ingestibles?.Overall ?? true)
+                    {
+                        Ingestibles?.ToString(fg);
+                    }
                     if (printMask?.LeveledItems?.Overall ?? true)
                     {
                         LeveledItems?.ToString(fg);
@@ -1519,6 +1577,8 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Flora.ErrorMask>?>? Florae;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Furniture.ErrorMask>?>? Furniture;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<LeveledNpc.ErrorMask>?>? LeveledNpcs;
+            public MaskItem<Exception?, Fallout4Group.ErrorMask<Key.ErrorMask>?>? Keys;
+            public MaskItem<Exception?, Fallout4Group.ErrorMask<Ingestible.ErrorMask>?>? Ingestibles;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<LeveledItem.ErrorMask>?>? LeveledItems;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<VoiceType.ErrorMask>?>? VoiceTypes;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Quest.ErrorMask>?>? Quests;
@@ -1607,6 +1667,10 @@ namespace Mutagen.Bethesda.Fallout4
                         return Furniture;
                     case Fallout4Mod_FieldIndex.LeveledNpcs:
                         return LeveledNpcs;
+                    case Fallout4Mod_FieldIndex.Keys:
+                        return Keys;
+                    case Fallout4Mod_FieldIndex.Ingestibles:
+                        return Ingestibles;
                     case Fallout4Mod_FieldIndex.LeveledItems:
                         return LeveledItems;
                     case Fallout4Mod_FieldIndex.VoiceTypes:
@@ -1740,6 +1804,12 @@ namespace Mutagen.Bethesda.Fallout4
                         break;
                     case Fallout4Mod_FieldIndex.LeveledNpcs:
                         this.LeveledNpcs = new MaskItem<Exception?, Fallout4Group.ErrorMask<LeveledNpc.ErrorMask>?>(ex, null);
+                        break;
+                    case Fallout4Mod_FieldIndex.Keys:
+                        this.Keys = new MaskItem<Exception?, Fallout4Group.ErrorMask<Key.ErrorMask>?>(ex, null);
+                        break;
+                    case Fallout4Mod_FieldIndex.Ingestibles:
+                        this.Ingestibles = new MaskItem<Exception?, Fallout4Group.ErrorMask<Ingestible.ErrorMask>?>(ex, null);
                         break;
                     case Fallout4Mod_FieldIndex.LeveledItems:
                         this.LeveledItems = new MaskItem<Exception?, Fallout4Group.ErrorMask<LeveledItem.ErrorMask>?>(ex, null);
@@ -1883,6 +1953,12 @@ namespace Mutagen.Bethesda.Fallout4
                     case Fallout4Mod_FieldIndex.LeveledNpcs:
                         this.LeveledNpcs = (MaskItem<Exception?, Fallout4Group.ErrorMask<LeveledNpc.ErrorMask>?>?)obj;
                         break;
+                    case Fallout4Mod_FieldIndex.Keys:
+                        this.Keys = (MaskItem<Exception?, Fallout4Group.ErrorMask<Key.ErrorMask>?>?)obj;
+                        break;
+                    case Fallout4Mod_FieldIndex.Ingestibles:
+                        this.Ingestibles = (MaskItem<Exception?, Fallout4Group.ErrorMask<Ingestible.ErrorMask>?>?)obj;
+                        break;
                     case Fallout4Mod_FieldIndex.LeveledItems:
                         this.LeveledItems = (MaskItem<Exception?, Fallout4Group.ErrorMask<LeveledItem.ErrorMask>?>?)obj;
                         break;
@@ -1951,6 +2027,8 @@ namespace Mutagen.Bethesda.Fallout4
                 if (Florae != null) return true;
                 if (Furniture != null) return true;
                 if (LeveledNpcs != null) return true;
+                if (Keys != null) return true;
+                if (Ingestibles != null) return true;
                 if (LeveledItems != null) return true;
                 if (VoiceTypes != null) return true;
                 if (Quests != null) return true;
@@ -2029,6 +2107,8 @@ namespace Mutagen.Bethesda.Fallout4
                 Florae?.ToString(fg);
                 Furniture?.ToString(fg);
                 LeveledNpcs?.ToString(fg);
+                Keys?.ToString(fg);
+                Ingestibles?.ToString(fg);
                 LeveledItems?.ToString(fg);
                 VoiceTypes?.ToString(fg);
                 Quests?.ToString(fg);
@@ -2081,6 +2161,8 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Florae = this.Florae.Combine(rhs.Florae, (l, r) => l.Combine(r));
                 ret.Furniture = this.Furniture.Combine(rhs.Furniture, (l, r) => l.Combine(r));
                 ret.LeveledNpcs = this.LeveledNpcs.Combine(rhs.LeveledNpcs, (l, r) => l.Combine(r));
+                ret.Keys = this.Keys.Combine(rhs.Keys, (l, r) => l.Combine(r));
+                ret.Ingestibles = this.Ingestibles.Combine(rhs.Ingestibles, (l, r) => l.Combine(r));
                 ret.LeveledItems = this.LeveledItems.Combine(rhs.LeveledItems, (l, r) => l.Combine(r));
                 ret.VoiceTypes = this.VoiceTypes.Combine(rhs.VoiceTypes, (l, r) => l.Combine(r));
                 ret.Quests = this.Quests.Combine(rhs.Quests, (l, r) => l.Combine(r));
@@ -2148,6 +2230,8 @@ namespace Mutagen.Bethesda.Fallout4
             public Fallout4Group.TranslationMask<Flora.TranslationMask>? Florae;
             public Fallout4Group.TranslationMask<Furniture.TranslationMask>? Furniture;
             public Fallout4Group.TranslationMask<LeveledNpc.TranslationMask>? LeveledNpcs;
+            public Fallout4Group.TranslationMask<Key.TranslationMask>? Keys;
+            public Fallout4Group.TranslationMask<Ingestible.TranslationMask>? Ingestibles;
             public Fallout4Group.TranslationMask<LeveledItem.TranslationMask>? LeveledItems;
             public Fallout4Group.TranslationMask<VoiceType.TranslationMask>? VoiceTypes;
             public Fallout4Group.TranslationMask<Quest.TranslationMask>? Quests;
@@ -2216,6 +2300,8 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((Florae != null ? Florae.OnOverall : DefaultOn, Florae?.GetCrystal()));
                 ret.Add((Furniture != null ? Furniture.OnOverall : DefaultOn, Furniture?.GetCrystal()));
                 ret.Add((LeveledNpcs != null ? LeveledNpcs.OnOverall : DefaultOn, LeveledNpcs?.GetCrystal()));
+                ret.Add((Keys != null ? Keys.OnOverall : DefaultOn, Keys?.GetCrystal()));
+                ret.Add((Ingestibles != null ? Ingestibles.OnOverall : DefaultOn, Ingestibles?.GetCrystal()));
                 ret.Add((LeveledItems != null ? LeveledItems.OnOverall : DefaultOn, LeveledItems?.GetCrystal()));
                 ret.Add((VoiceTypes != null ? VoiceTypes.OnOverall : DefaultOn, VoiceTypes?.GetCrystal()));
                 ret.Add((Quests != null ? Quests.OnOverall : DefaultOn, Quests?.GetCrystal()));
@@ -2301,6 +2387,8 @@ namespace Mutagen.Bethesda.Fallout4
             _Florae_Object = new Fallout4Group<Flora>(this);
             _Furniture_Object = new Fallout4Group<Furniture>(this);
             _LeveledNpcs_Object = new Fallout4Group<LeveledNpc>(this);
+            _Keys_Object = new Fallout4Group<Key>(this);
+            _Ingestibles_Object = new Fallout4Group<Ingestible>(this);
             _LeveledItems_Object = new Fallout4Group<LeveledItem>(this);
             _VoiceTypes_Object = new Fallout4Group<VoiceType>(this);
             _Quests_Object = new Fallout4Group<Quest>(this);
@@ -2455,6 +2543,14 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 this.LeveledNpcs.RecordCache.Set(rhsMod.LeveledNpcs.RecordCache.Items);
             }
+            if (mask?.Keys ?? true)
+            {
+                this.Keys.RecordCache.Set(rhsMod.Keys.RecordCache.Items);
+            }
+            if (mask?.Ingestibles ?? true)
+            {
+                this.Ingestibles.RecordCache.Set(rhsMod.Ingestibles.RecordCache.Items);
+            }
             if (mask?.LeveledItems ?? true)
             {
                 this.LeveledItems.RecordCache.Set(rhsMod.LeveledItems.RecordCache.Items);
@@ -2532,6 +2628,8 @@ namespace Mutagen.Bethesda.Fallout4
             count += Florae.RecordCache.Count > 0 ? 1 : default(uint);
             count += Furniture.RecordCache.Count > 0 ? 1 : default(uint);
             count += LeveledNpcs.RecordCache.Count > 0 ? 1 : default(uint);
+            count += Keys.RecordCache.Count > 0 ? 1 : default(uint);
+            count += Ingestibles.RecordCache.Count > 0 ? 1 : default(uint);
             count += LeveledItems.RecordCache.Count > 0 ? 1 : default(uint);
             count += VoiceTypes.RecordCache.Count > 0 ? 1 : default(uint);
             count += Quests.RecordCache.Count > 0 ? 1 : default(uint);
@@ -2822,6 +2920,8 @@ namespace Mutagen.Bethesda.Fallout4
         new Fallout4Group<Flora> Florae { get; }
         new Fallout4Group<Furniture> Furniture { get; }
         new Fallout4Group<LeveledNpc> LeveledNpcs { get; }
+        new Fallout4Group<Key> Keys { get; }
+        new Fallout4Group<Ingestible> Ingestibles { get; }
         new Fallout4Group<LeveledItem> LeveledItems { get; }
         new Fallout4Group<VoiceType> VoiceTypes { get; }
         new Fallout4Group<Quest> Quests { get; }
@@ -2884,6 +2984,8 @@ namespace Mutagen.Bethesda.Fallout4
         IFallout4GroupGetter<IFloraGetter> Florae { get; }
         IFallout4GroupGetter<IFurnitureGetter> Furniture { get; }
         IFallout4GroupGetter<ILeveledNpcGetter> LeveledNpcs { get; }
+        IFallout4GroupGetter<IKeyGetter> Keys { get; }
+        IFallout4GroupGetter<IIngestibleGetter> Ingestibles { get; }
         IFallout4GroupGetter<ILeveledItemGetter> LeveledItems { get; }
         IFallout4GroupGetter<IVoiceTypeGetter> VoiceTypes { get; }
         IFallout4GroupGetter<IQuestGetter> Quests { get; }
@@ -3484,14 +3586,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         Florae = 33,
         Furniture = 34,
         LeveledNpcs = 35,
-        LeveledItems = 36,
-        VoiceTypes = 37,
-        Quests = 38,
-        MaterialTypes = 39,
-        ArmorAddons = 40,
-        Messages = 41,
-        MusicTypes = 42,
-        MusicTracks = 43,
+        Keys = 36,
+        Ingestibles = 37,
+        LeveledItems = 38,
+        VoiceTypes = 39,
+        Quests = 40,
+        MaterialTypes = 41,
+        ArmorAddons = 42,
+        Messages = 43,
+        MusicTypes = 44,
+        MusicTracks = 45,
     }
     #endregion
 
@@ -3509,9 +3613,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public const string GUID = "9cae6baa-1084-4862-ae0a-07c79b9f2a3a";
 
-        public const ushort AdditionalFieldCount = 44;
+        public const ushort AdditionalFieldCount = 46;
 
-        public const ushort FieldCount = 44;
+        public const ushort FieldCount = 46;
 
         public static readonly Type MaskType = typeof(Fallout4Mod.Mask<>);
 
@@ -3615,6 +3719,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.Florae.Clear();
             item.Furniture.Clear();
             item.LeveledNpcs.Clear();
+            item.Keys.Clear();
+            item.Ingestibles.Clear();
             item.LeveledItems.Clear();
             item.VoiceTypes.Clear();
             item.Quests.Clear();
@@ -3664,6 +3770,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.Florae.RemapLinks(mapping);
             obj.Furniture.RemapLinks(mapping);
             obj.LeveledNpcs.RemapLinks(mapping);
+            obj.Keys.RemapLinks(mapping);
+            obj.Ingestibles.RemapLinks(mapping);
             obj.LeveledItems.RemapLinks(mapping);
             obj.VoiceTypes.RemapLinks(mapping);
             obj.Quests.RemapLinks(mapping);
@@ -3741,6 +3849,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.Florae.Remove(keys);
             obj.Furniture.Remove(keys);
             obj.LeveledNpcs.Remove(keys);
+            obj.Keys.Remove(keys);
+            obj.Ingestibles.Remove(keys);
             obj.LeveledItems.Remove(keys);
             obj.VoiceTypes.Remove(keys);
             obj.Quests.Remove(keys);
@@ -4048,6 +4158,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         type: type,
                         keys: keys);
                     break;
+                case "Key":
+                case "IKeyGetter":
+                case "IKey":
+                case "IKeyInternal":
+                    obj.Keys.Remove(
+                        type: type,
+                        keys: keys);
+                    break;
+                case "Ingestible":
+                case "IIngestibleGetter":
+                case "IIngestible":
+                case "IIngestibleInternal":
+                    obj.Ingestibles.Remove(
+                        type: type,
+                        keys: keys);
+                    break;
                 case "LeveledItem":
                 case "ILeveledItemGetter":
                 case "ILeveledItem":
@@ -4125,6 +4251,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     Remove(obj, keys, typeof(IDoorGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IFactionGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IFurnitureGetter), throwIfUnknown: throwIfUnknown);
+                    Remove(obj, keys, typeof(IIngestibleGetter), throwIfUnknown: throwIfUnknown);
+                    Remove(obj, keys, typeof(IKeyGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(ILightGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IMoveableStaticGetter), throwIfUnknown: throwIfUnknown);
@@ -4135,7 +4263,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IItemGetter":
                     Remove(obj, keys, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IBookGetter), throwIfUnknown: throwIfUnknown);
+                    Remove(obj, keys, typeof(IIngestibleGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IIngredientGetter), throwIfUnknown: throwIfUnknown);
+                    Remove(obj, keys, typeof(IKeyGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(ILeveledItemGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(ILightGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown);
@@ -4150,7 +4280,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     Remove(obj, keys, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IBookGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IFurnitureGetter), throwIfUnknown: throwIfUnknown);
+                    Remove(obj, keys, typeof(IIngestibleGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IIngredientGetter), throwIfUnknown: throwIfUnknown);
+                    Remove(obj, keys, typeof(IKeyGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(ILightGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown);
                     break;
@@ -4183,6 +4315,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     break;
                 case "IHarvestTarget":
                 case "IHarvestTargetGetter":
+                    Remove(obj, keys, typeof(IIngestibleGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IIngredientGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(ILeveledItemGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown);
@@ -4304,6 +4437,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ret.Florae = MaskItemExt.Factory(item.Florae.GetEqualsMask(rhs.Florae, include), include);
             ret.Furniture = MaskItemExt.Factory(item.Furniture.GetEqualsMask(rhs.Furniture, include), include);
             ret.LeveledNpcs = MaskItemExt.Factory(item.LeveledNpcs.GetEqualsMask(rhs.LeveledNpcs, include), include);
+            ret.Keys = MaskItemExt.Factory(item.Keys.GetEqualsMask(rhs.Keys, include), include);
+            ret.Ingestibles = MaskItemExt.Factory(item.Ingestibles.GetEqualsMask(rhs.Ingestibles, include), include);
             ret.LeveledItems = MaskItemExt.Factory(item.LeveledItems.GetEqualsMask(rhs.LeveledItems, include), include);
             ret.VoiceTypes = MaskItemExt.Factory(item.VoiceTypes.GetEqualsMask(rhs.VoiceTypes, include), include);
             ret.Quests = MaskItemExt.Factory(item.Quests.GetEqualsMask(rhs.Quests, include), include);
@@ -4501,6 +4636,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             if (printMask?.LeveledNpcs?.Overall ?? true)
             {
                 item.LeveledNpcs?.ToString(fg, "LeveledNpcs");
+            }
+            if (printMask?.Keys?.Overall ?? true)
+            {
+                item.Keys?.ToString(fg, "Keys");
+            }
+            if (printMask?.Ingestibles?.Overall ?? true)
+            {
+                item.Ingestibles?.ToString(fg, "Ingestibles");
             }
             if (printMask?.LeveledItems?.Overall ?? true)
             {
@@ -4831,6 +4974,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 else if (!isLeveledNpcsEqual) return false;
             }
+            if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.Keys) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.Keys, rhs.Keys, out var lhsKeys, out var rhsKeys, out var isKeysEqual))
+                {
+                    if (!object.Equals(lhsKeys, rhsKeys)) return false;
+                }
+                else if (!isKeysEqual) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.Ingestibles) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.Ingestibles, rhs.Ingestibles, out var lhsIngestibles, out var rhsIngestibles, out var isIngestiblesEqual))
+                {
+                    if (!object.Equals(lhsIngestibles, rhsIngestibles)) return false;
+                }
+                else if (!isIngestiblesEqual) return false;
+            }
             if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.LeveledItems) ?? true))
             {
                 if (EqualsMaskHelper.RefEquality(lhs.LeveledItems, rhs.LeveledItems, out var lhsLeveledItems, out var rhsLeveledItems, out var isLeveledItemsEqual))
@@ -4937,6 +5096,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             hash.Add(item.Florae);
             hash.Add(item.Furniture);
             hash.Add(item.LeveledNpcs);
+            hash.Add(item.Keys);
+            hash.Add(item.Ingestibles);
             hash.Add(item.LeveledItems);
             hash.Add(item.VoiceTypes);
             hash.Add(item.Quests);
@@ -5138,6 +5299,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "ILeveledNpc":
                 case "ILeveledNpcInternal":
                     return obj.LeveledNpcs;
+                case "Key":
+                case "IKeyGetter":
+                case "IKey":
+                case "IKeyInternal":
+                    return obj.Keys;
+                case "Ingestible":
+                case "IIngestibleGetter":
+                case "IIngestible":
+                case "IIngestibleInternal":
+                    return obj.Ingestibles;
                 case "LeveledItem":
                 case "ILeveledItemGetter":
                 case "ILeveledItem":
@@ -5198,7 +5369,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 mod: item,
                 modHeader: item.ModHeader.DeepCopy(),
                 modKey: modKey);
-            Stream[] outputStreams = new Stream[43];
+            Stream[] outputStreams = new Stream[45];
             List<Action> toDo = new List<Action>();
             toDo.Add(() => WriteGroupParallel(item.GameSettings, writer.MetaData.MasterReferences!, 0, outputStreams, param.StringsWriter));
             toDo.Add(() => WriteGroupParallel(item.Keywords, writer.MetaData.MasterReferences!, 1, outputStreams, param.StringsWriter));
@@ -5235,14 +5406,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             toDo.Add(() => WriteGroupParallel(item.Florae, writer.MetaData.MasterReferences!, 32, outputStreams, param.StringsWriter));
             toDo.Add(() => WriteGroupParallel(item.Furniture, writer.MetaData.MasterReferences!, 33, outputStreams, param.StringsWriter));
             toDo.Add(() => WriteGroupParallel(item.LeveledNpcs, writer.MetaData.MasterReferences!, 34, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.LeveledItems, writer.MetaData.MasterReferences!, 35, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.VoiceTypes, writer.MetaData.MasterReferences!, 36, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Quests, writer.MetaData.MasterReferences!, 37, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.MaterialTypes, writer.MetaData.MasterReferences!, 38, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.ArmorAddons, writer.MetaData.MasterReferences!, 39, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Messages, writer.MetaData.MasterReferences!, 40, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.MusicTypes, writer.MetaData.MasterReferences!, 41, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.MusicTracks, writer.MetaData.MasterReferences!, 42, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Keys, writer.MetaData.MasterReferences!, 35, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Ingestibles, writer.MetaData.MasterReferences!, 36, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.LeveledItems, writer.MetaData.MasterReferences!, 37, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.VoiceTypes, writer.MetaData.MasterReferences!, 38, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Quests, writer.MetaData.MasterReferences!, 39, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.MaterialTypes, writer.MetaData.MasterReferences!, 40, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.ArmorAddons, writer.MetaData.MasterReferences!, 41, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Messages, writer.MetaData.MasterReferences!, 42, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.MusicTypes, writer.MetaData.MasterReferences!, 43, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.MusicTracks, writer.MetaData.MasterReferences!, 44, outputStreams, param.StringsWriter));
             Parallel.Invoke(toDo.ToArray());
             PluginUtilityTranslation.CompileStreamsInto(
                 outputStreams.NotNull(),
@@ -5541,6 +5714,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     yield return item;
                 }
             }
+            if (obj.Keys is IFormLinkContainerGetter KeyslinkCont)
+            {
+                foreach (var item in KeyslinkCont.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
+            if (obj.Ingestibles is IFormLinkContainerGetter IngestibleslinkCont)
+            {
+                foreach (var item in IngestibleslinkCont.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
             if (obj.LeveledItems is IFormLinkContainerGetter LeveledItemslinkCont)
             {
                 foreach (var item in LeveledItemslinkCont.ContainedFormLinks)
@@ -5739,6 +5926,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 yield return item;
             }
             foreach (var item in obj.LeveledNpcs.EnumerateMajorRecords())
+            {
+                yield return item;
+            }
+            foreach (var item in obj.Keys.EnumerateMajorRecords())
+            {
+                yield return item;
+            }
+            foreach (var item in obj.Ingestibles.EnumerateMajorRecords())
             {
                 yield return item;
             }
@@ -6124,6 +6319,24 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         yield return item;
                     }
                     yield break;
+                case "Key":
+                case "IKeyGetter":
+                case "IKey":
+                case "IKeyInternal":
+                    foreach (var item in obj.Keys.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                case "Ingestible":
+                case "IIngestibleGetter":
+                case "IIngestible":
+                case "IIngestibleInternal":
+                    foreach (var item in obj.Ingestibles.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
                 case "LeveledItem":
                 case "ILeveledItemGetter":
                 case "ILeveledItem":
@@ -6244,6 +6457,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IIngestibleGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IKeyGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(ILightGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -6296,6 +6517,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IIngestibleGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IKeyGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(ILightGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -6329,7 +6558,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IIngestibleGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IIngredientGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IKeyGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -6357,7 +6594,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IIngestibleGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IIngredientGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IKeyGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -6415,7 +6660,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IIngestibleGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IIngredientGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IKeyGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -6443,7 +6696,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IIngestibleGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IIngredientGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IKeyGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -6586,6 +6847,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IHarvestTarget":
                 {
                     if (!Fallout4Mod_Registration.SetterType.IsAssignableFrom(obj.GetType())) yield break;
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IIngestibleGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IIngredientGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -6602,6 +6867,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case "IHarvestTargetGetter":
                 {
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IIngestibleGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IIngredientGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -7021,6 +7290,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     record: item,
                     group: (m) => m.LeveledNpcs,
                     groupGetter: (m) => m.LeveledNpcs);
+            }
+            foreach (var item in obj.Keys)
+            {
+                yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, Key, IKeyGetter>(
+                    modKey: obj.ModKey,
+                    record: item,
+                    group: (m) => m.Keys,
+                    groupGetter: (m) => m.Keys);
+            }
+            foreach (var item in obj.Ingestibles)
+            {
+                yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, Ingestible, IIngestibleGetter>(
+                    modKey: obj.ModKey,
+                    record: item,
+                    group: (m) => m.Ingestibles,
+                    groupGetter: (m) => m.Ingestibles);
             }
             foreach (var item in obj.LeveledItems)
             {
@@ -7572,6 +7857,32 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                             groupGetter: (m) => m.LeveledNpcs);
                     }
                     yield break;
+                case "Key":
+                case "IKeyGetter":
+                case "IKey":
+                case "IKeyInternal":
+                    foreach (var item in obj.Keys)
+                    {
+                        yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, Key, IKeyGetter>(
+                            modKey: obj.ModKey,
+                            record: item,
+                            group: (m) => m.Keys,
+                            groupGetter: (m) => m.Keys);
+                    }
+                    yield break;
+                case "Ingestible":
+                case "IIngestibleGetter":
+                case "IIngestible":
+                case "IIngestibleInternal":
+                    foreach (var item in obj.Ingestibles)
+                    {
+                        yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, Ingestible, IIngestibleGetter>(
+                            modKey: obj.ModKey,
+                            record: item,
+                            group: (m) => m.Ingestibles,
+                            groupGetter: (m) => m.Ingestibles);
+                    }
+                    yield break;
                 case "LeveledItem":
                 case "ILeveledItemGetter":
                 case "ILeveledItem":
@@ -7751,6 +8062,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     foreach (var item in EnumerateMajorRecordContexts(
                         obj,
                         linkCache: linkCache,
+                        type: typeof(IIngestibleGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
+                        type: typeof(IKeyGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
                         type: typeof(ILightGetter),
                         throwIfUnknown: throwIfUnknown))
                     {
@@ -7812,7 +8139,23 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     foreach (var item in EnumerateMajorRecordContexts(
                         obj,
                         linkCache: linkCache,
+                        type: typeof(IIngestibleGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
                         type: typeof(IIngredientGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
+                        type: typeof(IKeyGetter),
                         throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -7894,7 +8237,23 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     foreach (var item in EnumerateMajorRecordContexts(
                         obj,
                         linkCache: linkCache,
+                        type: typeof(IIngestibleGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
                         type: typeof(IIngredientGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
+                        type: typeof(IKeyGetter),
                         throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -8022,6 +8381,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IHarvestTarget":
                 case "IHarvestTargetGetter":
                 {
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
+                        type: typeof(IIngestibleGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     foreach (var item in EnumerateMajorRecordContexts(
                         obj,
                         linkCache: linkCache,
@@ -8881,6 +9248,46 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     errorMask?.PopIndex();
                 }
             }
+            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.Keys) ?? true))
+            {
+                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.Keys);
+                try
+                {
+                    item.Keys.DeepCopyIn(
+                        rhs: rhs.Keys,
+                        errorMask: errorMask,
+                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.Keys));
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.Ingestibles) ?? true))
+            {
+                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.Ingestibles);
+                try
+                {
+                    item.Ingestibles.DeepCopyIn(
+                        rhs: rhs.Ingestibles,
+                        errorMask: errorMask,
+                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.Ingestibles));
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
             if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.LeveledItems) ?? true))
             {
                 errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.LeveledItems);
@@ -9166,6 +9573,8 @@ namespace Mutagen.Bethesda.Fallout4
         public bool Florae;
         public bool Furniture;
         public bool LeveledNpcs;
+        public bool Keys;
+        public bool Ingestibles;
         public bool LeveledItems;
         public bool VoiceTypes;
         public bool Quests;
@@ -9214,6 +9623,8 @@ namespace Mutagen.Bethesda.Fallout4
             Florae = defaultValue;
             Furniture = defaultValue;
             LeveledNpcs = defaultValue;
+            Keys = defaultValue;
+            Ingestibles = defaultValue;
             LeveledItems = defaultValue;
             VoiceTypes = defaultValue;
             Quests = defaultValue;
@@ -9634,6 +10045,28 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 {
                     ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)LeveledNpcsItem).BinaryWriteTranslator).Write<ILeveledNpcGetter>(
                         item: LeveledNpcsItem,
+                        writer: writer,
+                        translationParams: translationParams);
+                }
+            }
+            if (importMask?.Keys ?? true)
+            {
+                var KeysItem = item.Keys;
+                if (KeysItem.RecordCache.Count > 0)
+                {
+                    ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)KeysItem).BinaryWriteTranslator).Write<IKeyGetter>(
+                        item: KeysItem,
+                        writer: writer,
+                        translationParams: translationParams);
+                }
+            }
+            if (importMask?.Ingestibles ?? true)
+            {
+                var IngestiblesItem = item.Ingestibles;
+                if (IngestiblesItem.RecordCache.Count > 0)
+                {
+                    ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)IngestiblesItem).BinaryWriteTranslator).Write<IIngestibleGetter>(
+                        item: IngestiblesItem,
                         writer: writer,
                         translationParams: translationParams);
                 }
@@ -10282,6 +10715,34 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     }
                     return (int)Fallout4Mod_FieldIndex.LeveledNpcs;
                 }
+                case RecordTypeInts.KEYM:
+                {
+                    if (importMask?.Keys ?? true)
+                    {
+                        item.Keys.CopyInFromBinary(
+                            frame: frame,
+                            translationParams: null);
+                    }
+                    else
+                    {
+                        frame.Position += contentLength;
+                    }
+                    return (int)Fallout4Mod_FieldIndex.Keys;
+                }
+                case RecordTypeInts.ALCH:
+                {
+                    if (importMask?.Ingestibles ?? true)
+                    {
+                        item.Ingestibles.CopyInFromBinary(
+                            frame: frame,
+                            translationParams: null);
+                    }
+                    else
+                    {
+                        frame.Position += contentLength;
+                    }
+                    return (int)Fallout4Mod_FieldIndex.Ingestibles;
+                }
                 case RecordTypeInts.LVLI:
                 {
                     if (importMask?.LeveledItems ?? true)
@@ -10729,6 +11190,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private IFallout4GroupGetter<ILeveledNpcGetter>? _LeveledNpcs => _LeveledNpcsLocations != null ? Fallout4GroupBinaryOverlay<ILeveledNpcGetter>.Fallout4GroupFactory(_data, _LeveledNpcsLocations, _package) : default;
         public IFallout4GroupGetter<ILeveledNpcGetter> LeveledNpcs => _LeveledNpcs ?? new Fallout4Group<LeveledNpc>(this);
         #endregion
+        #region Keys
+        private List<RangeInt64>? _KeysLocations;
+        private IFallout4GroupGetter<IKeyGetter>? _Keys => _KeysLocations != null ? Fallout4GroupBinaryOverlay<IKeyGetter>.Fallout4GroupFactory(_data, _KeysLocations, _package) : default;
+        public IFallout4GroupGetter<IKeyGetter> Keys => _Keys ?? new Fallout4Group<Key>(this);
+        #endregion
+        #region Ingestibles
+        private List<RangeInt64>? _IngestiblesLocations;
+        private IFallout4GroupGetter<IIngestibleGetter>? _Ingestibles => _IngestiblesLocations != null ? Fallout4GroupBinaryOverlay<IIngestibleGetter>.Fallout4GroupFactory(_data, _IngestiblesLocations, _package) : default;
+        public IFallout4GroupGetter<IIngestibleGetter> Ingestibles => _Ingestibles ?? new Fallout4Group<Ingestible>(this);
+        #endregion
         #region LeveledItems
         private List<RangeInt64>? _LeveledItemsLocations;
         private IFallout4GroupGetter<ILeveledItemGetter>? _LeveledItems => _LeveledItemsLocations != null ? Fallout4GroupBinaryOverlay<ILeveledItemGetter>.Fallout4GroupFactory(_data, _LeveledItemsLocations, _package) : default;
@@ -11065,6 +11536,18 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     _LeveledNpcsLocations ??= new();
                     _LeveledNpcsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.LeveledNpcs;
+                }
+                case RecordTypeInts.KEYM:
+                {
+                    _KeysLocations ??= new();
+                    _KeysLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
+                    return (int)Fallout4Mod_FieldIndex.Keys;
+                }
+                case RecordTypeInts.ALCH:
+                {
+                    _IngestiblesLocations ??= new();
+                    _IngestiblesLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
+                    return (int)Fallout4Mod_FieldIndex.Ingestibles;
                 }
                 case RecordTypeInts.LVLI:
                 {

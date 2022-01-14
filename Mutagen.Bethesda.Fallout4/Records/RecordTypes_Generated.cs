@@ -6,6 +6,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
     {
         public static readonly RecordType AACT = new(0x54434141);
         public static readonly RecordType ACTI = new(0x49544341);
+        public static readonly RecordType ALCH = new(0x48434C41);
         public static readonly RecordType ANAM = new(0x4D414E41);
         public static readonly RecordType AORU = new(0x55524F41);
         public static readonly RecordType APPR = new(0x52505041);

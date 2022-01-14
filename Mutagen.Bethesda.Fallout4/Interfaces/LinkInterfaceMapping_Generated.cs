@@ -32,6 +32,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Door),
                 typeof(Faction),
                 typeof(Furniture),
+                typeof(Ingestible),
                 typeof(Key),
                 typeof(Light),
                 typeof(MiscItem),
@@ -49,6 +50,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 typeof(Armor),
                 typeof(Book),
+                typeof(Ingestible),
                 typeof(Ingredient),
                 typeof(Key),
                 typeof(LeveledItem),
@@ -67,6 +69,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Armor),
                 typeof(Book),
                 typeof(Furniture),
+                typeof(Ingestible),
                 typeof(Ingredient),
                 typeof(Key),
                 typeof(Light),
@@ -109,6 +112,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             dict[typeof(IRegionTargetGetter)] = dict[typeof(IRegionTarget)];
             dict[typeof(IHarvestTarget)] = new Type[]
             {
+                typeof(Ingestible),
                 typeof(Ingredient),
                 typeof(LeveledItem),
                 typeof(MiscItem),

@@ -95,6 +95,9 @@ namespace Mutagen.Bethesda.Fallout4
                                 objList.Objects.Add(subObj);
                             }
                             break;
+                        case ScriptStructListProperty structList:
+                            var structListCount = frame.ReadUInt32();
+                            break;
                         default:
                             prop.CopyInFromBinary(frame);
                             break;

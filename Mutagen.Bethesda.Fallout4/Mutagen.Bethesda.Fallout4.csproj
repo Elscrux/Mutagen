@@ -172,6 +172,9 @@
     <Compile Include="Records\Major Records\HeadPart.cs">
       <DependentUpon>HeadPart.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Major Records\Ingestible.cs">
+      <DependentUpon>Ingestible.xml</DependentUpon>
+    </Compile>
     <Compile Include="Records\Major Records\Ingredient.cs">
       <DependentUpon>Ingredient.xml</DependentUpon>
     </Compile>
@@ -873,6 +876,9 @@
     </Compile>
     <Compile Include="Records\Major Records\Key_Generated.cs">
       <DependentUpon>Key.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Ingestible_Generated.cs">
+      <DependentUpon>Ingestible.xml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
