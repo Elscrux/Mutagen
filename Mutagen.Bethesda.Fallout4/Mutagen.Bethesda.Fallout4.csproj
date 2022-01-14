@@ -858,9 +858,6 @@
     <Compile Include="Records\Major Records\LeveledNpcEntryData_Generated.cs">
       <DependentUpon>LeveledNpc.xml</DependentUpon>
     </Compile>
-    <Compile Include="Records\Major Records\FilterKeywordChance_Generated.cs">
-      <DependentUpon>LeveledNpc.xml</DependentUpon>
-    </Compile>
     <Compile Include="Interfaces\INpcSpawn_Generated.cs" />
     <Compile Include="Records\Common Subrecords\FilterKeywordChance_Generated.cs">
       <DependentUpon>FilterKeywordChance.xml</DependentUpon>
