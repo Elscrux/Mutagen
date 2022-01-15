@@ -22,9 +22,7 @@
     },
     "Trimming": {
       "Enabled": false,
-      "TypesToTrim": [
-        "RACE",
-        "MGEF"
+      "TypesToTrim": [      
       ]
     },
     "DeleteCachesAfter": false,

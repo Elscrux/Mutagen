@@ -95,8 +95,12 @@ namespace Mutagen.Bethesda.Fallout4
                                 objList.Objects.Add(subObj);
                             }
                             break;
-                        case ScriptStructProperty subStruct:
+                        case ScriptVariableProperty varProp:
+                        case ScriptVariableListProperty varPropList:
                             throw new NotImplementedException();
+                        case ScriptStructProperty subStructs:
+                            FillStruct(frame, subStructs, objectFormat);
+                            break;
                         case ScriptStructListProperty structList:
                             var structListCount = frame.ReadUInt32();
                             for (int j = 0; j < structListCount; j++)
@@ -150,9 +154,14 @@ namespace Mutagen.Bethesda.Fallout4
             public static void WriteScripts(
                 MutagenWriter writer,
                 ushort objFormat,
-                IReadOnlyList<IScriptEntryGetter> scripts)
+                IReadOnlyList<IScriptEntryGetter> scripts,
+                bool isStruct = false)
             {
-                writer.Write(checked((ushort)scripts.Count));
+                if (isStruct)
+                    writer.Write(checked((uint)scripts.Count));
+                else
+                    writer.Write(checked((ushort)scripts.Count));
+
                 foreach (var entry in scripts)
                 {
                     writer.Write(entry.Name, StringBinaryType.PrependLengthUShort);
@@ -196,6 +205,20 @@ namespace Mutagen.Bethesda.Fallout4
                                     WriteObject(writer, subObj, objFormat);
                                 }
                                 break;
+                            case ScriptVariableProperty varProp:
+                            case ScriptVariableListProperty varPropList:
+                                throw new NotImplementedException();
+                            case ScriptStructProperty subStructs:
+                                WriteStruct(writer, subStructs, objFormat);
+                                break;
+                            case ScriptStructListProperty structList:
+                                var structsList = structList.Structs;
+                                writer.Write(structList.Structs.Count);
+                                foreach (var subStructs in structsList)
+                                {
+                                    WriteStruct(writer, subStructs, objFormat);
+                                }
+                                break;
                             default:
                                 property.WriteToBinary(writer);
                                 break;
@@ -221,6 +244,11 @@ namespace Mutagen.Bethesda.Fallout4
                     default:
                         throw new NotImplementedException();
                 }
+            }
+
+            public static void WriteStruct(MutagenWriter writer, IScriptStructPropertyGetter subStruct, ushort objFormat)
+            {
+                WriteScripts(writer, objFormat, (IReadOnlyList<IScriptEntryGetter>)subStruct.Members, true);
             }
 
             public static partial void WriteBinaryScriptsCustom(MutagenWriter writer, IAVirtualMachineAdapterGetter item)
