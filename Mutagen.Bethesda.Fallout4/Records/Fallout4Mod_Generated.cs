@@ -71,7 +71,6 @@ namespace Mutagen.Bethesda.Fallout4
             _HeadParts_Object = new Fallout4Group<HeadPart>(this);
             _SoundMarkers_Object = new Fallout4Group<SoundMarker>(this);
             _AcousticSpaces_Object = new Fallout4Group<AcousticSpace>(this);
-            _MagicEffects_Object = new Fallout4Group<MagicEffect>(this);
             _LandscapeTextures_Object = new Fallout4Group<LandscapeTexture>(this);
             _ObjectEffects_Object = new Fallout4Group<ObjectEffect>(this);
             _Spells_Object = new Fallout4Group<Spell>(this);
@@ -84,7 +83,6 @@ namespace Mutagen.Bethesda.Fallout4
             _Ingredients_Object = new Fallout4Group<Ingredient>(this);
             _Lights_Object = new Fallout4Group<Light>(this);
             _MiscItems_Object = new Fallout4Group<MiscItem>(this);
-            _Statics_Object = new Fallout4Group<Static>(this);
             _StaticCollections_Object = new Fallout4Group<StaticCollection>(this);
             _MoveableStatics_Object = new Fallout4Group<MoveableStatic>(this);
             _Grasses_Object = new Fallout4Group<Grass>(this);
@@ -95,8 +93,8 @@ namespace Mutagen.Bethesda.Fallout4
             _Keys_Object = new Fallout4Group<Key>(this);
             _Ingestibles_Object = new Fallout4Group<Ingestible>(this);
             _LeveledItems_Object = new Fallout4Group<LeveledItem>(this);
+            _Regions_Object = new Fallout4Group<Region>(this);
             _VoiceTypes_Object = new Fallout4Group<VoiceType>(this);
-            _Quests_Object = new Fallout4Group<Quest>(this);
             _MaterialTypes_Object = new Fallout4Group<MaterialType>(this);
             _ArmorAddons_Object = new Fallout4Group<ArmorAddon>(this);
             _Messages_Object = new Fallout4Group<Message>(this);
@@ -212,13 +210,6 @@ namespace Mutagen.Bethesda.Fallout4
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IFallout4GroupGetter<IAcousticSpaceGetter> IFallout4ModGetter.AcousticSpaces => _AcousticSpaces_Object;
         #endregion
-        #region MagicEffects
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private Fallout4Group<MagicEffect> _MagicEffects_Object;
-        public Fallout4Group<MagicEffect> MagicEffects => _MagicEffects_Object;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IFallout4GroupGetter<IMagicEffectGetter> IFallout4ModGetter.MagicEffects => _MagicEffects_Object;
-        #endregion
         #region LandscapeTextures
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private Fallout4Group<LandscapeTexture> _LandscapeTextures_Object;
@@ -303,13 +294,6 @@ namespace Mutagen.Bethesda.Fallout4
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IFallout4GroupGetter<IMiscItemGetter> IFallout4ModGetter.MiscItems => _MiscItems_Object;
         #endregion
-        #region Statics
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private Fallout4Group<Static> _Statics_Object;
-        public Fallout4Group<Static> Statics => _Statics_Object;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IFallout4GroupGetter<IStaticGetter> IFallout4ModGetter.Statics => _Statics_Object;
-        #endregion
         #region StaticCollections
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private Fallout4Group<StaticCollection> _StaticCollections_Object;
@@ -380,19 +364,19 @@ namespace Mutagen.Bethesda.Fallout4
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IFallout4GroupGetter<ILeveledItemGetter> IFallout4ModGetter.LeveledItems => _LeveledItems_Object;
         #endregion
+        #region Regions
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Fallout4Group<Region> _Regions_Object;
+        public Fallout4Group<Region> Regions => _Regions_Object;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFallout4GroupGetter<IRegionGetter> IFallout4ModGetter.Regions => _Regions_Object;
+        #endregion
         #region VoiceTypes
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private Fallout4Group<VoiceType> _VoiceTypes_Object;
         public Fallout4Group<VoiceType> VoiceTypes => _VoiceTypes_Object;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IFallout4GroupGetter<IVoiceTypeGetter> IFallout4ModGetter.VoiceTypes => _VoiceTypes_Object;
-        #endregion
-        #region Quests
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private Fallout4Group<Quest> _Quests_Object;
-        public Fallout4Group<Quest> Quests => _Quests_Object;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IFallout4GroupGetter<IQuestGetter> IFallout4ModGetter.Quests => _Quests_Object;
         #endregion
         #region MaterialTypes
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -482,7 +466,6 @@ namespace Mutagen.Bethesda.Fallout4
                 this.HeadParts = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.SoundMarkers = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.AcousticSpaces = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
-                this.MagicEffects = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.LandscapeTextures = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.ObjectEffects = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Spells = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
@@ -495,7 +478,6 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Ingredients = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Lights = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.MiscItems = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
-                this.Statics = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.StaticCollections = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.MoveableStatics = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Grasses = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
@@ -506,8 +488,8 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Keys = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Ingestibles = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.LeveledItems = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
+                this.Regions = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.VoiceTypes = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
-                this.Quests = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.MaterialTypes = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.ArmorAddons = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Messages = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
@@ -531,7 +513,6 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem HeadParts,
                 TItem SoundMarkers,
                 TItem AcousticSpaces,
-                TItem MagicEffects,
                 TItem LandscapeTextures,
                 TItem ObjectEffects,
                 TItem Spells,
@@ -544,7 +525,6 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem Ingredients,
                 TItem Lights,
                 TItem MiscItems,
-                TItem Statics,
                 TItem StaticCollections,
                 TItem MoveableStatics,
                 TItem Grasses,
@@ -555,8 +535,8 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem Keys,
                 TItem Ingestibles,
                 TItem LeveledItems,
+                TItem Regions,
                 TItem VoiceTypes,
-                TItem Quests,
                 TItem MaterialTypes,
                 TItem ArmorAddons,
                 TItem Messages,
@@ -578,7 +558,6 @@ namespace Mutagen.Bethesda.Fallout4
                 this.HeadParts = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(HeadParts, new Fallout4Group.Mask<TItem>(HeadParts));
                 this.SoundMarkers = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(SoundMarkers, new Fallout4Group.Mask<TItem>(SoundMarkers));
                 this.AcousticSpaces = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(AcousticSpaces, new Fallout4Group.Mask<TItem>(AcousticSpaces));
-                this.MagicEffects = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(MagicEffects, new Fallout4Group.Mask<TItem>(MagicEffects));
                 this.LandscapeTextures = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(LandscapeTextures, new Fallout4Group.Mask<TItem>(LandscapeTextures));
                 this.ObjectEffects = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(ObjectEffects, new Fallout4Group.Mask<TItem>(ObjectEffects));
                 this.Spells = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Spells, new Fallout4Group.Mask<TItem>(Spells));
@@ -591,7 +570,6 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Ingredients = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Ingredients, new Fallout4Group.Mask<TItem>(Ingredients));
                 this.Lights = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Lights, new Fallout4Group.Mask<TItem>(Lights));
                 this.MiscItems = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(MiscItems, new Fallout4Group.Mask<TItem>(MiscItems));
-                this.Statics = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Statics, new Fallout4Group.Mask<TItem>(Statics));
                 this.StaticCollections = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(StaticCollections, new Fallout4Group.Mask<TItem>(StaticCollections));
                 this.MoveableStatics = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(MoveableStatics, new Fallout4Group.Mask<TItem>(MoveableStatics));
                 this.Grasses = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Grasses, new Fallout4Group.Mask<TItem>(Grasses));
@@ -602,8 +580,8 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Keys = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Keys, new Fallout4Group.Mask<TItem>(Keys));
                 this.Ingestibles = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Ingestibles, new Fallout4Group.Mask<TItem>(Ingestibles));
                 this.LeveledItems = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(LeveledItems, new Fallout4Group.Mask<TItem>(LeveledItems));
+                this.Regions = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Regions, new Fallout4Group.Mask<TItem>(Regions));
                 this.VoiceTypes = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(VoiceTypes, new Fallout4Group.Mask<TItem>(VoiceTypes));
-                this.Quests = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Quests, new Fallout4Group.Mask<TItem>(Quests));
                 this.MaterialTypes = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(MaterialTypes, new Fallout4Group.Mask<TItem>(MaterialTypes));
                 this.ArmorAddons = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(ArmorAddons, new Fallout4Group.Mask<TItem>(ArmorAddons));
                 this.Messages = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Messages, new Fallout4Group.Mask<TItem>(Messages));
@@ -635,7 +613,6 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? HeadParts { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? SoundMarkers { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? AcousticSpaces { get; set; }
-            public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? MagicEffects { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? LandscapeTextures { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? ObjectEffects { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Spells { get; set; }
@@ -648,7 +625,6 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Ingredients { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Lights { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? MiscItems { get; set; }
-            public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Statics { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? StaticCollections { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? MoveableStatics { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Grasses { get; set; }
@@ -659,8 +635,8 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Keys { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Ingestibles { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? LeveledItems { get; set; }
+            public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Regions { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? VoiceTypes { get; set; }
-            public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Quests { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? MaterialTypes { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? ArmorAddons { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Messages { get; set; }
@@ -693,7 +669,6 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!object.Equals(this.HeadParts, rhs.HeadParts)) return false;
                 if (!object.Equals(this.SoundMarkers, rhs.SoundMarkers)) return false;
                 if (!object.Equals(this.AcousticSpaces, rhs.AcousticSpaces)) return false;
-                if (!object.Equals(this.MagicEffects, rhs.MagicEffects)) return false;
                 if (!object.Equals(this.LandscapeTextures, rhs.LandscapeTextures)) return false;
                 if (!object.Equals(this.ObjectEffects, rhs.ObjectEffects)) return false;
                 if (!object.Equals(this.Spells, rhs.Spells)) return false;
@@ -706,7 +681,6 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!object.Equals(this.Ingredients, rhs.Ingredients)) return false;
                 if (!object.Equals(this.Lights, rhs.Lights)) return false;
                 if (!object.Equals(this.MiscItems, rhs.MiscItems)) return false;
-                if (!object.Equals(this.Statics, rhs.Statics)) return false;
                 if (!object.Equals(this.StaticCollections, rhs.StaticCollections)) return false;
                 if (!object.Equals(this.MoveableStatics, rhs.MoveableStatics)) return false;
                 if (!object.Equals(this.Grasses, rhs.Grasses)) return false;
@@ -717,8 +691,8 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!object.Equals(this.Keys, rhs.Keys)) return false;
                 if (!object.Equals(this.Ingestibles, rhs.Ingestibles)) return false;
                 if (!object.Equals(this.LeveledItems, rhs.LeveledItems)) return false;
+                if (!object.Equals(this.Regions, rhs.Regions)) return false;
                 if (!object.Equals(this.VoiceTypes, rhs.VoiceTypes)) return false;
-                if (!object.Equals(this.Quests, rhs.Quests)) return false;
                 if (!object.Equals(this.MaterialTypes, rhs.MaterialTypes)) return false;
                 if (!object.Equals(this.ArmorAddons, rhs.ArmorAddons)) return false;
                 if (!object.Equals(this.Messages, rhs.Messages)) return false;
@@ -744,7 +718,6 @@ namespace Mutagen.Bethesda.Fallout4
                 hash.Add(this.HeadParts);
                 hash.Add(this.SoundMarkers);
                 hash.Add(this.AcousticSpaces);
-                hash.Add(this.MagicEffects);
                 hash.Add(this.LandscapeTextures);
                 hash.Add(this.ObjectEffects);
                 hash.Add(this.Spells);
@@ -757,7 +730,6 @@ namespace Mutagen.Bethesda.Fallout4
                 hash.Add(this.Ingredients);
                 hash.Add(this.Lights);
                 hash.Add(this.MiscItems);
-                hash.Add(this.Statics);
                 hash.Add(this.StaticCollections);
                 hash.Add(this.MoveableStatics);
                 hash.Add(this.Grasses);
@@ -768,8 +740,8 @@ namespace Mutagen.Bethesda.Fallout4
                 hash.Add(this.Keys);
                 hash.Add(this.Ingestibles);
                 hash.Add(this.LeveledItems);
+                hash.Add(this.Regions);
                 hash.Add(this.VoiceTypes);
-                hash.Add(this.Quests);
                 hash.Add(this.MaterialTypes);
                 hash.Add(this.ArmorAddons);
                 hash.Add(this.Messages);
@@ -858,11 +830,6 @@ namespace Mutagen.Bethesda.Fallout4
                     if (!eval(this.AcousticSpaces.Overall)) return false;
                     if (this.AcousticSpaces.Specific != null && !this.AcousticSpaces.Specific.All(eval)) return false;
                 }
-                if (MagicEffects != null)
-                {
-                    if (!eval(this.MagicEffects.Overall)) return false;
-                    if (this.MagicEffects.Specific != null && !this.MagicEffects.Specific.All(eval)) return false;
-                }
                 if (LandscapeTextures != null)
                 {
                     if (!eval(this.LandscapeTextures.Overall)) return false;
@@ -923,11 +890,6 @@ namespace Mutagen.Bethesda.Fallout4
                     if (!eval(this.MiscItems.Overall)) return false;
                     if (this.MiscItems.Specific != null && !this.MiscItems.Specific.All(eval)) return false;
                 }
-                if (Statics != null)
-                {
-                    if (!eval(this.Statics.Overall)) return false;
-                    if (this.Statics.Specific != null && !this.Statics.Specific.All(eval)) return false;
-                }
                 if (StaticCollections != null)
                 {
                     if (!eval(this.StaticCollections.Overall)) return false;
@@ -978,15 +940,15 @@ namespace Mutagen.Bethesda.Fallout4
                     if (!eval(this.LeveledItems.Overall)) return false;
                     if (this.LeveledItems.Specific != null && !this.LeveledItems.Specific.All(eval)) return false;
                 }
+                if (Regions != null)
+                {
+                    if (!eval(this.Regions.Overall)) return false;
+                    if (this.Regions.Specific != null && !this.Regions.Specific.All(eval)) return false;
+                }
                 if (VoiceTypes != null)
                 {
                     if (!eval(this.VoiceTypes.Overall)) return false;
                     if (this.VoiceTypes.Specific != null && !this.VoiceTypes.Specific.All(eval)) return false;
-                }
-                if (Quests != null)
-                {
-                    if (!eval(this.Quests.Overall)) return false;
-                    if (this.Quests.Specific != null && !this.Quests.Specific.All(eval)) return false;
                 }
                 if (MaterialTypes != null)
                 {
@@ -1095,11 +1057,6 @@ namespace Mutagen.Bethesda.Fallout4
                     if (eval(this.AcousticSpaces.Overall)) return true;
                     if (this.AcousticSpaces.Specific != null && this.AcousticSpaces.Specific.Any(eval)) return true;
                 }
-                if (MagicEffects != null)
-                {
-                    if (eval(this.MagicEffects.Overall)) return true;
-                    if (this.MagicEffects.Specific != null && this.MagicEffects.Specific.Any(eval)) return true;
-                }
                 if (LandscapeTextures != null)
                 {
                     if (eval(this.LandscapeTextures.Overall)) return true;
@@ -1160,11 +1117,6 @@ namespace Mutagen.Bethesda.Fallout4
                     if (eval(this.MiscItems.Overall)) return true;
                     if (this.MiscItems.Specific != null && this.MiscItems.Specific.Any(eval)) return true;
                 }
-                if (Statics != null)
-                {
-                    if (eval(this.Statics.Overall)) return true;
-                    if (this.Statics.Specific != null && this.Statics.Specific.Any(eval)) return true;
-                }
                 if (StaticCollections != null)
                 {
                     if (eval(this.StaticCollections.Overall)) return true;
@@ -1215,15 +1167,15 @@ namespace Mutagen.Bethesda.Fallout4
                     if (eval(this.LeveledItems.Overall)) return true;
                     if (this.LeveledItems.Specific != null && this.LeveledItems.Specific.Any(eval)) return true;
                 }
+                if (Regions != null)
+                {
+                    if (eval(this.Regions.Overall)) return true;
+                    if (this.Regions.Specific != null && this.Regions.Specific.Any(eval)) return true;
+                }
                 if (VoiceTypes != null)
                 {
                     if (eval(this.VoiceTypes.Overall)) return true;
                     if (this.VoiceTypes.Specific != null && this.VoiceTypes.Specific.Any(eval)) return true;
-                }
-                if (Quests != null)
-                {
-                    if (eval(this.Quests.Overall)) return true;
-                    if (this.Quests.Specific != null && this.Quests.Specific.Any(eval)) return true;
                 }
                 if (MaterialTypes != null)
                 {
@@ -1279,7 +1231,6 @@ namespace Mutagen.Bethesda.Fallout4
                 obj.HeadParts = this.HeadParts == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.HeadParts.Overall), this.HeadParts.Specific?.Translate(eval));
                 obj.SoundMarkers = this.SoundMarkers == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.SoundMarkers.Overall), this.SoundMarkers.Specific?.Translate(eval));
                 obj.AcousticSpaces = this.AcousticSpaces == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.AcousticSpaces.Overall), this.AcousticSpaces.Specific?.Translate(eval));
-                obj.MagicEffects = this.MagicEffects == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.MagicEffects.Overall), this.MagicEffects.Specific?.Translate(eval));
                 obj.LandscapeTextures = this.LandscapeTextures == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.LandscapeTextures.Overall), this.LandscapeTextures.Specific?.Translate(eval));
                 obj.ObjectEffects = this.ObjectEffects == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.ObjectEffects.Overall), this.ObjectEffects.Specific?.Translate(eval));
                 obj.Spells = this.Spells == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Spells.Overall), this.Spells.Specific?.Translate(eval));
@@ -1292,7 +1243,6 @@ namespace Mutagen.Bethesda.Fallout4
                 obj.Ingredients = this.Ingredients == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Ingredients.Overall), this.Ingredients.Specific?.Translate(eval));
                 obj.Lights = this.Lights == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Lights.Overall), this.Lights.Specific?.Translate(eval));
                 obj.MiscItems = this.MiscItems == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.MiscItems.Overall), this.MiscItems.Specific?.Translate(eval));
-                obj.Statics = this.Statics == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Statics.Overall), this.Statics.Specific?.Translate(eval));
                 obj.StaticCollections = this.StaticCollections == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.StaticCollections.Overall), this.StaticCollections.Specific?.Translate(eval));
                 obj.MoveableStatics = this.MoveableStatics == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.MoveableStatics.Overall), this.MoveableStatics.Specific?.Translate(eval));
                 obj.Grasses = this.Grasses == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Grasses.Overall), this.Grasses.Specific?.Translate(eval));
@@ -1303,8 +1253,8 @@ namespace Mutagen.Bethesda.Fallout4
                 obj.Keys = this.Keys == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Keys.Overall), this.Keys.Specific?.Translate(eval));
                 obj.Ingestibles = this.Ingestibles == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Ingestibles.Overall), this.Ingestibles.Specific?.Translate(eval));
                 obj.LeveledItems = this.LeveledItems == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.LeveledItems.Overall), this.LeveledItems.Specific?.Translate(eval));
+                obj.Regions = this.Regions == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Regions.Overall), this.Regions.Specific?.Translate(eval));
                 obj.VoiceTypes = this.VoiceTypes == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.VoiceTypes.Overall), this.VoiceTypes.Specific?.Translate(eval));
-                obj.Quests = this.Quests == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Quests.Overall), this.Quests.Specific?.Translate(eval));
                 obj.MaterialTypes = this.MaterialTypes == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.MaterialTypes.Overall), this.MaterialTypes.Specific?.Translate(eval));
                 obj.ArmorAddons = this.ArmorAddons == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.ArmorAddons.Overall), this.ArmorAddons.Specific?.Translate(eval));
                 obj.Messages = this.Messages == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Messages.Overall), this.Messages.Specific?.Translate(eval));
@@ -1392,10 +1342,6 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         AcousticSpaces?.ToString(fg);
                     }
-                    if (printMask?.MagicEffects?.Overall ?? true)
-                    {
-                        MagicEffects?.ToString(fg);
-                    }
                     if (printMask?.LandscapeTextures?.Overall ?? true)
                     {
                         LandscapeTextures?.ToString(fg);
@@ -1444,10 +1390,6 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         MiscItems?.ToString(fg);
                     }
-                    if (printMask?.Statics?.Overall ?? true)
-                    {
-                        Statics?.ToString(fg);
-                    }
                     if (printMask?.StaticCollections?.Overall ?? true)
                     {
                         StaticCollections?.ToString(fg);
@@ -1488,13 +1430,13 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         LeveledItems?.ToString(fg);
                     }
+                    if (printMask?.Regions?.Overall ?? true)
+                    {
+                        Regions?.ToString(fg);
+                    }
                     if (printMask?.VoiceTypes?.Overall ?? true)
                     {
                         VoiceTypes?.ToString(fg);
-                    }
-                    if (printMask?.Quests?.Overall ?? true)
-                    {
-                        Quests?.ToString(fg);
                     }
                     if (printMask?.MaterialTypes?.Overall ?? true)
                     {
@@ -1556,7 +1498,6 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<Exception?, Fallout4Group.ErrorMask<HeadPart.ErrorMask>?>? HeadParts;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<SoundMarker.ErrorMask>?>? SoundMarkers;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<AcousticSpace.ErrorMask>?>? AcousticSpaces;
-            public MaskItem<Exception?, Fallout4Group.ErrorMask<MagicEffect.ErrorMask>?>? MagicEffects;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<LandscapeTexture.ErrorMask>?>? LandscapeTextures;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<ObjectEffect.ErrorMask>?>? ObjectEffects;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Spell.ErrorMask>?>? Spells;
@@ -1569,7 +1510,6 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Ingredient.ErrorMask>?>? Ingredients;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Light.ErrorMask>?>? Lights;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<MiscItem.ErrorMask>?>? MiscItems;
-            public MaskItem<Exception?, Fallout4Group.ErrorMask<Static.ErrorMask>?>? Statics;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<StaticCollection.ErrorMask>?>? StaticCollections;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<MoveableStatic.ErrorMask>?>? MoveableStatics;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Grass.ErrorMask>?>? Grasses;
@@ -1580,8 +1520,8 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Key.ErrorMask>?>? Keys;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Ingestible.ErrorMask>?>? Ingestibles;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<LeveledItem.ErrorMask>?>? LeveledItems;
+            public MaskItem<Exception?, Fallout4Group.ErrorMask<Region.ErrorMask>?>? Regions;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<VoiceType.ErrorMask>?>? VoiceTypes;
-            public MaskItem<Exception?, Fallout4Group.ErrorMask<Quest.ErrorMask>?>? Quests;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<MaterialType.ErrorMask>?>? MaterialTypes;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<ArmorAddon.ErrorMask>?>? ArmorAddons;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Message.ErrorMask>?>? Messages;
@@ -1625,8 +1565,6 @@ namespace Mutagen.Bethesda.Fallout4
                         return SoundMarkers;
                     case Fallout4Mod_FieldIndex.AcousticSpaces:
                         return AcousticSpaces;
-                    case Fallout4Mod_FieldIndex.MagicEffects:
-                        return MagicEffects;
                     case Fallout4Mod_FieldIndex.LandscapeTextures:
                         return LandscapeTextures;
                     case Fallout4Mod_FieldIndex.ObjectEffects:
@@ -1651,8 +1589,6 @@ namespace Mutagen.Bethesda.Fallout4
                         return Lights;
                     case Fallout4Mod_FieldIndex.MiscItems:
                         return MiscItems;
-                    case Fallout4Mod_FieldIndex.Statics:
-                        return Statics;
                     case Fallout4Mod_FieldIndex.StaticCollections:
                         return StaticCollections;
                     case Fallout4Mod_FieldIndex.MoveableStatics:
@@ -1673,10 +1609,10 @@ namespace Mutagen.Bethesda.Fallout4
                         return Ingestibles;
                     case Fallout4Mod_FieldIndex.LeveledItems:
                         return LeveledItems;
+                    case Fallout4Mod_FieldIndex.Regions:
+                        return Regions;
                     case Fallout4Mod_FieldIndex.VoiceTypes:
                         return VoiceTypes;
-                    case Fallout4Mod_FieldIndex.Quests:
-                        return Quests;
                     case Fallout4Mod_FieldIndex.MaterialTypes:
                         return MaterialTypes;
                     case Fallout4Mod_FieldIndex.ArmorAddons:
@@ -1742,9 +1678,6 @@ namespace Mutagen.Bethesda.Fallout4
                     case Fallout4Mod_FieldIndex.AcousticSpaces:
                         this.AcousticSpaces = new MaskItem<Exception?, Fallout4Group.ErrorMask<AcousticSpace.ErrorMask>?>(ex, null);
                         break;
-                    case Fallout4Mod_FieldIndex.MagicEffects:
-                        this.MagicEffects = new MaskItem<Exception?, Fallout4Group.ErrorMask<MagicEffect.ErrorMask>?>(ex, null);
-                        break;
                     case Fallout4Mod_FieldIndex.LandscapeTextures:
                         this.LandscapeTextures = new MaskItem<Exception?, Fallout4Group.ErrorMask<LandscapeTexture.ErrorMask>?>(ex, null);
                         break;
@@ -1781,9 +1714,6 @@ namespace Mutagen.Bethesda.Fallout4
                     case Fallout4Mod_FieldIndex.MiscItems:
                         this.MiscItems = new MaskItem<Exception?, Fallout4Group.ErrorMask<MiscItem.ErrorMask>?>(ex, null);
                         break;
-                    case Fallout4Mod_FieldIndex.Statics:
-                        this.Statics = new MaskItem<Exception?, Fallout4Group.ErrorMask<Static.ErrorMask>?>(ex, null);
-                        break;
                     case Fallout4Mod_FieldIndex.StaticCollections:
                         this.StaticCollections = new MaskItem<Exception?, Fallout4Group.ErrorMask<StaticCollection.ErrorMask>?>(ex, null);
                         break;
@@ -1814,11 +1744,11 @@ namespace Mutagen.Bethesda.Fallout4
                     case Fallout4Mod_FieldIndex.LeveledItems:
                         this.LeveledItems = new MaskItem<Exception?, Fallout4Group.ErrorMask<LeveledItem.ErrorMask>?>(ex, null);
                         break;
+                    case Fallout4Mod_FieldIndex.Regions:
+                        this.Regions = new MaskItem<Exception?, Fallout4Group.ErrorMask<Region.ErrorMask>?>(ex, null);
+                        break;
                     case Fallout4Mod_FieldIndex.VoiceTypes:
                         this.VoiceTypes = new MaskItem<Exception?, Fallout4Group.ErrorMask<VoiceType.ErrorMask>?>(ex, null);
-                        break;
-                    case Fallout4Mod_FieldIndex.Quests:
-                        this.Quests = new MaskItem<Exception?, Fallout4Group.ErrorMask<Quest.ErrorMask>?>(ex, null);
                         break;
                     case Fallout4Mod_FieldIndex.MaterialTypes:
                         this.MaterialTypes = new MaskItem<Exception?, Fallout4Group.ErrorMask<MaterialType.ErrorMask>?>(ex, null);
@@ -1890,9 +1820,6 @@ namespace Mutagen.Bethesda.Fallout4
                     case Fallout4Mod_FieldIndex.AcousticSpaces:
                         this.AcousticSpaces = (MaskItem<Exception?, Fallout4Group.ErrorMask<AcousticSpace.ErrorMask>?>?)obj;
                         break;
-                    case Fallout4Mod_FieldIndex.MagicEffects:
-                        this.MagicEffects = (MaskItem<Exception?, Fallout4Group.ErrorMask<MagicEffect.ErrorMask>?>?)obj;
-                        break;
                     case Fallout4Mod_FieldIndex.LandscapeTextures:
                         this.LandscapeTextures = (MaskItem<Exception?, Fallout4Group.ErrorMask<LandscapeTexture.ErrorMask>?>?)obj;
                         break;
@@ -1929,9 +1856,6 @@ namespace Mutagen.Bethesda.Fallout4
                     case Fallout4Mod_FieldIndex.MiscItems:
                         this.MiscItems = (MaskItem<Exception?, Fallout4Group.ErrorMask<MiscItem.ErrorMask>?>?)obj;
                         break;
-                    case Fallout4Mod_FieldIndex.Statics:
-                        this.Statics = (MaskItem<Exception?, Fallout4Group.ErrorMask<Static.ErrorMask>?>?)obj;
-                        break;
                     case Fallout4Mod_FieldIndex.StaticCollections:
                         this.StaticCollections = (MaskItem<Exception?, Fallout4Group.ErrorMask<StaticCollection.ErrorMask>?>?)obj;
                         break;
@@ -1962,11 +1886,11 @@ namespace Mutagen.Bethesda.Fallout4
                     case Fallout4Mod_FieldIndex.LeveledItems:
                         this.LeveledItems = (MaskItem<Exception?, Fallout4Group.ErrorMask<LeveledItem.ErrorMask>?>?)obj;
                         break;
+                    case Fallout4Mod_FieldIndex.Regions:
+                        this.Regions = (MaskItem<Exception?, Fallout4Group.ErrorMask<Region.ErrorMask>?>?)obj;
+                        break;
                     case Fallout4Mod_FieldIndex.VoiceTypes:
                         this.VoiceTypes = (MaskItem<Exception?, Fallout4Group.ErrorMask<VoiceType.ErrorMask>?>?)obj;
-                        break;
-                    case Fallout4Mod_FieldIndex.Quests:
-                        this.Quests = (MaskItem<Exception?, Fallout4Group.ErrorMask<Quest.ErrorMask>?>?)obj;
                         break;
                     case Fallout4Mod_FieldIndex.MaterialTypes:
                         this.MaterialTypes = (MaskItem<Exception?, Fallout4Group.ErrorMask<MaterialType.ErrorMask>?>?)obj;
@@ -2006,7 +1930,6 @@ namespace Mutagen.Bethesda.Fallout4
                 if (HeadParts != null) return true;
                 if (SoundMarkers != null) return true;
                 if (AcousticSpaces != null) return true;
-                if (MagicEffects != null) return true;
                 if (LandscapeTextures != null) return true;
                 if (ObjectEffects != null) return true;
                 if (Spells != null) return true;
@@ -2019,7 +1942,6 @@ namespace Mutagen.Bethesda.Fallout4
                 if (Ingredients != null) return true;
                 if (Lights != null) return true;
                 if (MiscItems != null) return true;
-                if (Statics != null) return true;
                 if (StaticCollections != null) return true;
                 if (MoveableStatics != null) return true;
                 if (Grasses != null) return true;
@@ -2030,8 +1952,8 @@ namespace Mutagen.Bethesda.Fallout4
                 if (Keys != null) return true;
                 if (Ingestibles != null) return true;
                 if (LeveledItems != null) return true;
+                if (Regions != null) return true;
                 if (VoiceTypes != null) return true;
-                if (Quests != null) return true;
                 if (MaterialTypes != null) return true;
                 if (ArmorAddons != null) return true;
                 if (Messages != null) return true;
@@ -2086,7 +2008,6 @@ namespace Mutagen.Bethesda.Fallout4
                 HeadParts?.ToString(fg);
                 SoundMarkers?.ToString(fg);
                 AcousticSpaces?.ToString(fg);
-                MagicEffects?.ToString(fg);
                 LandscapeTextures?.ToString(fg);
                 ObjectEffects?.ToString(fg);
                 Spells?.ToString(fg);
@@ -2099,7 +2020,6 @@ namespace Mutagen.Bethesda.Fallout4
                 Ingredients?.ToString(fg);
                 Lights?.ToString(fg);
                 MiscItems?.ToString(fg);
-                Statics?.ToString(fg);
                 StaticCollections?.ToString(fg);
                 MoveableStatics?.ToString(fg);
                 Grasses?.ToString(fg);
@@ -2110,8 +2030,8 @@ namespace Mutagen.Bethesda.Fallout4
                 Keys?.ToString(fg);
                 Ingestibles?.ToString(fg);
                 LeveledItems?.ToString(fg);
+                Regions?.ToString(fg);
                 VoiceTypes?.ToString(fg);
-                Quests?.ToString(fg);
                 MaterialTypes?.ToString(fg);
                 ArmorAddons?.ToString(fg);
                 Messages?.ToString(fg);
@@ -2140,7 +2060,6 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.HeadParts = this.HeadParts.Combine(rhs.HeadParts, (l, r) => l.Combine(r));
                 ret.SoundMarkers = this.SoundMarkers.Combine(rhs.SoundMarkers, (l, r) => l.Combine(r));
                 ret.AcousticSpaces = this.AcousticSpaces.Combine(rhs.AcousticSpaces, (l, r) => l.Combine(r));
-                ret.MagicEffects = this.MagicEffects.Combine(rhs.MagicEffects, (l, r) => l.Combine(r));
                 ret.LandscapeTextures = this.LandscapeTextures.Combine(rhs.LandscapeTextures, (l, r) => l.Combine(r));
                 ret.ObjectEffects = this.ObjectEffects.Combine(rhs.ObjectEffects, (l, r) => l.Combine(r));
                 ret.Spells = this.Spells.Combine(rhs.Spells, (l, r) => l.Combine(r));
@@ -2153,7 +2072,6 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Ingredients = this.Ingredients.Combine(rhs.Ingredients, (l, r) => l.Combine(r));
                 ret.Lights = this.Lights.Combine(rhs.Lights, (l, r) => l.Combine(r));
                 ret.MiscItems = this.MiscItems.Combine(rhs.MiscItems, (l, r) => l.Combine(r));
-                ret.Statics = this.Statics.Combine(rhs.Statics, (l, r) => l.Combine(r));
                 ret.StaticCollections = this.StaticCollections.Combine(rhs.StaticCollections, (l, r) => l.Combine(r));
                 ret.MoveableStatics = this.MoveableStatics.Combine(rhs.MoveableStatics, (l, r) => l.Combine(r));
                 ret.Grasses = this.Grasses.Combine(rhs.Grasses, (l, r) => l.Combine(r));
@@ -2164,8 +2082,8 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Keys = this.Keys.Combine(rhs.Keys, (l, r) => l.Combine(r));
                 ret.Ingestibles = this.Ingestibles.Combine(rhs.Ingestibles, (l, r) => l.Combine(r));
                 ret.LeveledItems = this.LeveledItems.Combine(rhs.LeveledItems, (l, r) => l.Combine(r));
+                ret.Regions = this.Regions.Combine(rhs.Regions, (l, r) => l.Combine(r));
                 ret.VoiceTypes = this.VoiceTypes.Combine(rhs.VoiceTypes, (l, r) => l.Combine(r));
-                ret.Quests = this.Quests.Combine(rhs.Quests, (l, r) => l.Combine(r));
                 ret.MaterialTypes = this.MaterialTypes.Combine(rhs.MaterialTypes, (l, r) => l.Combine(r));
                 ret.ArmorAddons = this.ArmorAddons.Combine(rhs.ArmorAddons, (l, r) => l.Combine(r));
                 ret.Messages = this.Messages.Combine(rhs.Messages, (l, r) => l.Combine(r));
@@ -2209,7 +2127,6 @@ namespace Mutagen.Bethesda.Fallout4
             public Fallout4Group.TranslationMask<HeadPart.TranslationMask>? HeadParts;
             public Fallout4Group.TranslationMask<SoundMarker.TranslationMask>? SoundMarkers;
             public Fallout4Group.TranslationMask<AcousticSpace.TranslationMask>? AcousticSpaces;
-            public Fallout4Group.TranslationMask<MagicEffect.TranslationMask>? MagicEffects;
             public Fallout4Group.TranslationMask<LandscapeTexture.TranslationMask>? LandscapeTextures;
             public Fallout4Group.TranslationMask<ObjectEffect.TranslationMask>? ObjectEffects;
             public Fallout4Group.TranslationMask<Spell.TranslationMask>? Spells;
@@ -2222,7 +2139,6 @@ namespace Mutagen.Bethesda.Fallout4
             public Fallout4Group.TranslationMask<Ingredient.TranslationMask>? Ingredients;
             public Fallout4Group.TranslationMask<Light.TranslationMask>? Lights;
             public Fallout4Group.TranslationMask<MiscItem.TranslationMask>? MiscItems;
-            public Fallout4Group.TranslationMask<Static.TranslationMask>? Statics;
             public Fallout4Group.TranslationMask<StaticCollection.TranslationMask>? StaticCollections;
             public Fallout4Group.TranslationMask<MoveableStatic.TranslationMask>? MoveableStatics;
             public Fallout4Group.TranslationMask<Grass.TranslationMask>? Grasses;
@@ -2233,8 +2149,8 @@ namespace Mutagen.Bethesda.Fallout4
             public Fallout4Group.TranslationMask<Key.TranslationMask>? Keys;
             public Fallout4Group.TranslationMask<Ingestible.TranslationMask>? Ingestibles;
             public Fallout4Group.TranslationMask<LeveledItem.TranslationMask>? LeveledItems;
+            public Fallout4Group.TranslationMask<Region.TranslationMask>? Regions;
             public Fallout4Group.TranslationMask<VoiceType.TranslationMask>? VoiceTypes;
-            public Fallout4Group.TranslationMask<Quest.TranslationMask>? Quests;
             public Fallout4Group.TranslationMask<MaterialType.TranslationMask>? MaterialTypes;
             public Fallout4Group.TranslationMask<ArmorAddon.TranslationMask>? ArmorAddons;
             public Fallout4Group.TranslationMask<Message.TranslationMask>? Messages;
@@ -2279,7 +2195,6 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((HeadParts != null ? HeadParts.OnOverall : DefaultOn, HeadParts?.GetCrystal()));
                 ret.Add((SoundMarkers != null ? SoundMarkers.OnOverall : DefaultOn, SoundMarkers?.GetCrystal()));
                 ret.Add((AcousticSpaces != null ? AcousticSpaces.OnOverall : DefaultOn, AcousticSpaces?.GetCrystal()));
-                ret.Add((MagicEffects != null ? MagicEffects.OnOverall : DefaultOn, MagicEffects?.GetCrystal()));
                 ret.Add((LandscapeTextures != null ? LandscapeTextures.OnOverall : DefaultOn, LandscapeTextures?.GetCrystal()));
                 ret.Add((ObjectEffects != null ? ObjectEffects.OnOverall : DefaultOn, ObjectEffects?.GetCrystal()));
                 ret.Add((Spells != null ? Spells.OnOverall : DefaultOn, Spells?.GetCrystal()));
@@ -2292,7 +2207,6 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((Ingredients != null ? Ingredients.OnOverall : DefaultOn, Ingredients?.GetCrystal()));
                 ret.Add((Lights != null ? Lights.OnOverall : DefaultOn, Lights?.GetCrystal()));
                 ret.Add((MiscItems != null ? MiscItems.OnOverall : DefaultOn, MiscItems?.GetCrystal()));
-                ret.Add((Statics != null ? Statics.OnOverall : DefaultOn, Statics?.GetCrystal()));
                 ret.Add((StaticCollections != null ? StaticCollections.OnOverall : DefaultOn, StaticCollections?.GetCrystal()));
                 ret.Add((MoveableStatics != null ? MoveableStatics.OnOverall : DefaultOn, MoveableStatics?.GetCrystal()));
                 ret.Add((Grasses != null ? Grasses.OnOverall : DefaultOn, Grasses?.GetCrystal()));
@@ -2303,8 +2217,8 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((Keys != null ? Keys.OnOverall : DefaultOn, Keys?.GetCrystal()));
                 ret.Add((Ingestibles != null ? Ingestibles.OnOverall : DefaultOn, Ingestibles?.GetCrystal()));
                 ret.Add((LeveledItems != null ? LeveledItems.OnOverall : DefaultOn, LeveledItems?.GetCrystal()));
+                ret.Add((Regions != null ? Regions.OnOverall : DefaultOn, Regions?.GetCrystal()));
                 ret.Add((VoiceTypes != null ? VoiceTypes.OnOverall : DefaultOn, VoiceTypes?.GetCrystal()));
-                ret.Add((Quests != null ? Quests.OnOverall : DefaultOn, Quests?.GetCrystal()));
                 ret.Add((MaterialTypes != null ? MaterialTypes.OnOverall : DefaultOn, MaterialTypes?.GetCrystal()));
                 ret.Add((ArmorAddons != null ? ArmorAddons.OnOverall : DefaultOn, ArmorAddons?.GetCrystal()));
                 ret.Add((Messages != null ? Messages.OnOverall : DefaultOn, Messages?.GetCrystal()));
@@ -2366,7 +2280,6 @@ namespace Mutagen.Bethesda.Fallout4
             _HeadParts_Object = new Fallout4Group<HeadPart>(this);
             _SoundMarkers_Object = new Fallout4Group<SoundMarker>(this);
             _AcousticSpaces_Object = new Fallout4Group<AcousticSpace>(this);
-            _MagicEffects_Object = new Fallout4Group<MagicEffect>(this);
             _LandscapeTextures_Object = new Fallout4Group<LandscapeTexture>(this);
             _ObjectEffects_Object = new Fallout4Group<ObjectEffect>(this);
             _Spells_Object = new Fallout4Group<Spell>(this);
@@ -2379,7 +2292,6 @@ namespace Mutagen.Bethesda.Fallout4
             _Ingredients_Object = new Fallout4Group<Ingredient>(this);
             _Lights_Object = new Fallout4Group<Light>(this);
             _MiscItems_Object = new Fallout4Group<MiscItem>(this);
-            _Statics_Object = new Fallout4Group<Static>(this);
             _StaticCollections_Object = new Fallout4Group<StaticCollection>(this);
             _MoveableStatics_Object = new Fallout4Group<MoveableStatic>(this);
             _Grasses_Object = new Fallout4Group<Grass>(this);
@@ -2390,8 +2302,8 @@ namespace Mutagen.Bethesda.Fallout4
             _Keys_Object = new Fallout4Group<Key>(this);
             _Ingestibles_Object = new Fallout4Group<Ingestible>(this);
             _LeveledItems_Object = new Fallout4Group<LeveledItem>(this);
+            _Regions_Object = new Fallout4Group<Region>(this);
             _VoiceTypes_Object = new Fallout4Group<VoiceType>(this);
-            _Quests_Object = new Fallout4Group<Quest>(this);
             _MaterialTypes_Object = new Fallout4Group<MaterialType>(this);
             _ArmorAddons_Object = new Fallout4Group<ArmorAddon>(this);
             _Messages_Object = new Fallout4Group<Message>(this);
@@ -2459,10 +2371,6 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 this.AcousticSpaces.RecordCache.Set(rhsMod.AcousticSpaces.RecordCache.Items);
             }
-            if (mask?.MagicEffects ?? true)
-            {
-                this.MagicEffects.RecordCache.Set(rhsMod.MagicEffects.RecordCache.Items);
-            }
             if (mask?.LandscapeTextures ?? true)
             {
                 this.LandscapeTextures.RecordCache.Set(rhsMod.LandscapeTextures.RecordCache.Items);
@@ -2511,10 +2419,6 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 this.MiscItems.RecordCache.Set(rhsMod.MiscItems.RecordCache.Items);
             }
-            if (mask?.Statics ?? true)
-            {
-                this.Statics.RecordCache.Set(rhsMod.Statics.RecordCache.Items);
-            }
             if (mask?.StaticCollections ?? true)
             {
                 this.StaticCollections.RecordCache.Set(rhsMod.StaticCollections.RecordCache.Items);
@@ -2555,13 +2459,13 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 this.LeveledItems.RecordCache.Set(rhsMod.LeveledItems.RecordCache.Items);
             }
+            if (mask?.Regions ?? true)
+            {
+                this.Regions.RecordCache.Set(rhsMod.Regions.RecordCache.Items);
+            }
             if (mask?.VoiceTypes ?? true)
             {
                 this.VoiceTypes.RecordCache.Set(rhsMod.VoiceTypes.RecordCache.Items);
-            }
-            if (mask?.Quests ?? true)
-            {
-                this.Quests.RecordCache.Set(rhsMod.Quests.RecordCache.Items);
             }
             if (mask?.MaterialTypes ?? true)
             {
@@ -2607,7 +2511,6 @@ namespace Mutagen.Bethesda.Fallout4
             count += HeadParts.RecordCache.Count > 0 ? 1 : default(uint);
             count += SoundMarkers.RecordCache.Count > 0 ? 1 : default(uint);
             count += AcousticSpaces.RecordCache.Count > 0 ? 1 : default(uint);
-            count += MagicEffects.RecordCache.Count > 0 ? 1 : default(uint);
             count += LandscapeTextures.RecordCache.Count > 0 ? 1 : default(uint);
             count += ObjectEffects.RecordCache.Count > 0 ? 1 : default(uint);
             count += Spells.RecordCache.Count > 0 ? 1 : default(uint);
@@ -2620,7 +2523,6 @@ namespace Mutagen.Bethesda.Fallout4
             count += Ingredients.RecordCache.Count > 0 ? 1 : default(uint);
             count += Lights.RecordCache.Count > 0 ? 1 : default(uint);
             count += MiscItems.RecordCache.Count > 0 ? 1 : default(uint);
-            count += Statics.RecordCache.Count > 0 ? 1 : default(uint);
             count += StaticCollections.RecordCache.Count > 0 ? 1 : default(uint);
             count += MoveableStatics.RecordCache.Count > 0 ? 1 : default(uint);
             count += Grasses.RecordCache.Count > 0 ? 1 : default(uint);
@@ -2631,8 +2533,8 @@ namespace Mutagen.Bethesda.Fallout4
             count += Keys.RecordCache.Count > 0 ? 1 : default(uint);
             count += Ingestibles.RecordCache.Count > 0 ? 1 : default(uint);
             count += LeveledItems.RecordCache.Count > 0 ? 1 : default(uint);
+            count += Regions.RecordCache.Count > 0 ? 1 : default(uint);
             count += VoiceTypes.RecordCache.Count > 0 ? 1 : default(uint);
-            count += Quests.RecordCache.Count > 0 ? 1 : default(uint);
             count += MaterialTypes.RecordCache.Count > 0 ? 1 : default(uint);
             count += ArmorAddons.RecordCache.Count > 0 ? 1 : default(uint);
             count += Messages.RecordCache.Count > 0 ? 1 : default(uint);
@@ -2899,7 +2801,6 @@ namespace Mutagen.Bethesda.Fallout4
         new Fallout4Group<HeadPart> HeadParts { get; }
         new Fallout4Group<SoundMarker> SoundMarkers { get; }
         new Fallout4Group<AcousticSpace> AcousticSpaces { get; }
-        new Fallout4Group<MagicEffect> MagicEffects { get; }
         new Fallout4Group<LandscapeTexture> LandscapeTextures { get; }
         new Fallout4Group<ObjectEffect> ObjectEffects { get; }
         new Fallout4Group<Spell> Spells { get; }
@@ -2912,7 +2813,6 @@ namespace Mutagen.Bethesda.Fallout4
         new Fallout4Group<Ingredient> Ingredients { get; }
         new Fallout4Group<Light> Lights { get; }
         new Fallout4Group<MiscItem> MiscItems { get; }
-        new Fallout4Group<Static> Statics { get; }
         new Fallout4Group<StaticCollection> StaticCollections { get; }
         new Fallout4Group<MoveableStatic> MoveableStatics { get; }
         new Fallout4Group<Grass> Grasses { get; }
@@ -2923,8 +2823,8 @@ namespace Mutagen.Bethesda.Fallout4
         new Fallout4Group<Key> Keys { get; }
         new Fallout4Group<Ingestible> Ingestibles { get; }
         new Fallout4Group<LeveledItem> LeveledItems { get; }
+        new Fallout4Group<Region> Regions { get; }
         new Fallout4Group<VoiceType> VoiceTypes { get; }
-        new Fallout4Group<Quest> Quests { get; }
         new Fallout4Group<MaterialType> MaterialTypes { get; }
         new Fallout4Group<ArmorAddon> ArmorAddons { get; }
         new Fallout4Group<Message> Messages { get; }
@@ -2963,7 +2863,6 @@ namespace Mutagen.Bethesda.Fallout4
         IFallout4GroupGetter<IHeadPartGetter> HeadParts { get; }
         IFallout4GroupGetter<ISoundMarkerGetter> SoundMarkers { get; }
         IFallout4GroupGetter<IAcousticSpaceGetter> AcousticSpaces { get; }
-        IFallout4GroupGetter<IMagicEffectGetter> MagicEffects { get; }
         IFallout4GroupGetter<ILandscapeTextureGetter> LandscapeTextures { get; }
         IFallout4GroupGetter<IObjectEffectGetter> ObjectEffects { get; }
         IFallout4GroupGetter<ISpellGetter> Spells { get; }
@@ -2976,7 +2875,6 @@ namespace Mutagen.Bethesda.Fallout4
         IFallout4GroupGetter<IIngredientGetter> Ingredients { get; }
         IFallout4GroupGetter<ILightGetter> Lights { get; }
         IFallout4GroupGetter<IMiscItemGetter> MiscItems { get; }
-        IFallout4GroupGetter<IStaticGetter> Statics { get; }
         IFallout4GroupGetter<IStaticCollectionGetter> StaticCollections { get; }
         IFallout4GroupGetter<IMoveableStaticGetter> MoveableStatics { get; }
         IFallout4GroupGetter<IGrassGetter> Grasses { get; }
@@ -2987,8 +2885,8 @@ namespace Mutagen.Bethesda.Fallout4
         IFallout4GroupGetter<IKeyGetter> Keys { get; }
         IFallout4GroupGetter<IIngestibleGetter> Ingestibles { get; }
         IFallout4GroupGetter<ILeveledItemGetter> LeveledItems { get; }
+        IFallout4GroupGetter<IRegionGetter> Regions { get; }
         IFallout4GroupGetter<IVoiceTypeGetter> VoiceTypes { get; }
-        IFallout4GroupGetter<IQuestGetter> Quests { get; }
         IFallout4GroupGetter<IMaterialTypeGetter> MaterialTypes { get; }
         IFallout4GroupGetter<IArmorAddonGetter> ArmorAddons { get; }
         IFallout4GroupGetter<IMessageGetter> Messages { get; }
@@ -3565,37 +3463,35 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         HeadParts = 12,
         SoundMarkers = 13,
         AcousticSpaces = 14,
-        MagicEffects = 15,
-        LandscapeTextures = 16,
-        ObjectEffects = 17,
-        Spells = 18,
-        Activators = 19,
-        TalkingActivators = 20,
-        Armors = 21,
-        Books = 22,
-        Containers = 23,
-        Doors = 24,
-        Ingredients = 25,
-        Lights = 26,
-        MiscItems = 27,
-        Statics = 28,
-        StaticCollections = 29,
-        MoveableStatics = 30,
-        Grasses = 31,
-        Trees = 32,
-        Florae = 33,
-        Furniture = 34,
-        LeveledNpcs = 35,
-        Keys = 36,
-        Ingestibles = 37,
-        LeveledItems = 38,
-        VoiceTypes = 39,
-        Quests = 40,
-        MaterialTypes = 41,
-        ArmorAddons = 42,
-        Messages = 43,
-        MusicTypes = 44,
-        MusicTracks = 45,
+        LandscapeTextures = 15,
+        ObjectEffects = 16,
+        Spells = 17,
+        Activators = 18,
+        TalkingActivators = 19,
+        Armors = 20,
+        Books = 21,
+        Containers = 22,
+        Doors = 23,
+        Ingredients = 24,
+        Lights = 25,
+        MiscItems = 26,
+        StaticCollections = 27,
+        MoveableStatics = 28,
+        Grasses = 29,
+        Trees = 30,
+        Florae = 31,
+        Furniture = 32,
+        LeveledNpcs = 33,
+        Keys = 34,
+        Ingestibles = 35,
+        LeveledItems = 36,
+        Regions = 37,
+        VoiceTypes = 38,
+        MaterialTypes = 39,
+        ArmorAddons = 40,
+        Messages = 41,
+        MusicTypes = 42,
+        MusicTracks = 43,
     }
     #endregion
 
@@ -3613,9 +3509,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public const string GUID = "9cae6baa-1084-4862-ae0a-07c79b9f2a3a";
 
-        public const ushort AdditionalFieldCount = 46;
+        public const ushort AdditionalFieldCount = 44;
 
-        public const ushort FieldCount = 46;
+        public const ushort FieldCount = 44;
 
         public static readonly Type MaskType = typeof(Fallout4Mod.Mask<>);
 
@@ -3698,7 +3594,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.HeadParts.Clear();
             item.SoundMarkers.Clear();
             item.AcousticSpaces.Clear();
-            item.MagicEffects.Clear();
             item.LandscapeTextures.Clear();
             item.ObjectEffects.Clear();
             item.Spells.Clear();
@@ -3711,7 +3606,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.Ingredients.Clear();
             item.Lights.Clear();
             item.MiscItems.Clear();
-            item.Statics.Clear();
             item.StaticCollections.Clear();
             item.MoveableStatics.Clear();
             item.Grasses.Clear();
@@ -3722,8 +3616,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.Keys.Clear();
             item.Ingestibles.Clear();
             item.LeveledItems.Clear();
+            item.Regions.Clear();
             item.VoiceTypes.Clear();
-            item.Quests.Clear();
             item.MaterialTypes.Clear();
             item.ArmorAddons.Clear();
             item.Messages.Clear();
@@ -3749,7 +3643,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.HeadParts.RemapLinks(mapping);
             obj.SoundMarkers.RemapLinks(mapping);
             obj.AcousticSpaces.RemapLinks(mapping);
-            obj.MagicEffects.RemapLinks(mapping);
             obj.LandscapeTextures.RemapLinks(mapping);
             obj.ObjectEffects.RemapLinks(mapping);
             obj.Spells.RemapLinks(mapping);
@@ -3762,7 +3655,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.Ingredients.RemapLinks(mapping);
             obj.Lights.RemapLinks(mapping);
             obj.MiscItems.RemapLinks(mapping);
-            obj.Statics.RemapLinks(mapping);
             obj.StaticCollections.RemapLinks(mapping);
             obj.MoveableStatics.RemapLinks(mapping);
             obj.Grasses.RemapLinks(mapping);
@@ -3773,8 +3665,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.Keys.RemapLinks(mapping);
             obj.Ingestibles.RemapLinks(mapping);
             obj.LeveledItems.RemapLinks(mapping);
+            obj.Regions.RemapLinks(mapping);
             obj.VoiceTypes.RemapLinks(mapping);
-            obj.Quests.RemapLinks(mapping);
             obj.MaterialTypes.RemapLinks(mapping);
             obj.ArmorAddons.RemapLinks(mapping);
             obj.Messages.RemapLinks(mapping);
@@ -3828,7 +3720,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.HeadParts.Remove(keys);
             obj.SoundMarkers.Remove(keys);
             obj.AcousticSpaces.Remove(keys);
-            obj.MagicEffects.Remove(keys);
             obj.LandscapeTextures.Remove(keys);
             obj.ObjectEffects.Remove(keys);
             obj.Spells.Remove(keys);
@@ -3841,7 +3732,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.Ingredients.Remove(keys);
             obj.Lights.Remove(keys);
             obj.MiscItems.Remove(keys);
-            obj.Statics.Remove(keys);
             obj.StaticCollections.Remove(keys);
             obj.MoveableStatics.Remove(keys);
             obj.Grasses.Remove(keys);
@@ -3852,8 +3742,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.Keys.Remove(keys);
             obj.Ingestibles.Remove(keys);
             obj.LeveledItems.Remove(keys);
+            obj.Regions.Remove(keys);
             obj.VoiceTypes.Remove(keys);
-            obj.Quests.Remove(keys);
             obj.MaterialTypes.Remove(keys);
             obj.ArmorAddons.Remove(keys);
             obj.Messages.Remove(keys);
@@ -3990,14 +3880,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         type: type,
                         keys: keys);
                     break;
-                case "MagicEffect":
-                case "IMagicEffectGetter":
-                case "IMagicEffect":
-                case "IMagicEffectInternal":
-                    obj.MagicEffects.Remove(
-                        type: type,
-                        keys: keys);
-                    break;
                 case "LandscapeTexture":
                 case "ILandscapeTextureGetter":
                 case "ILandscapeTexture":
@@ -4094,14 +3976,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         type: type,
                         keys: keys);
                     break;
-                case "Static":
-                case "IStaticGetter":
-                case "IStatic":
-                case "IStaticInternal":
-                    obj.Statics.Remove(
-                        type: type,
-                        keys: keys);
-                    break;
                 case "StaticCollection":
                 case "IStaticCollectionGetter":
                 case "IStaticCollection":
@@ -4182,19 +4056,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         type: type,
                         keys: keys);
                     break;
+                case "Region":
+                case "IRegionGetter":
+                case "IRegion":
+                case "IRegionInternal":
+                    obj.Regions.Remove(
+                        type: type,
+                        keys: keys);
+                    break;
                 case "VoiceType":
                 case "IVoiceTypeGetter":
                 case "IVoiceType":
                 case "IVoiceTypeInternal":
                     obj.VoiceTypes.Remove(
-                        type: type,
-                        keys: keys);
-                    break;
-                case "Quest":
-                case "IQuestGetter":
-                case "IQuest":
-                case "IQuestInternal":
-                    obj.Quests.Remove(
                         type: type,
                         keys: keys);
                     break;
@@ -4335,6 +4209,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IEmittance":
                 case "IEmittanceGetter":
                     Remove(obj, keys, typeof(ILightGetter), throwIfUnknown: throwIfUnknown);
+                    Remove(obj, keys, typeof(IRegionGetter), throwIfUnknown: throwIfUnknown);
                     break;
                 case "ILocationRecord":
                 case "ILocationRecordGetter":
@@ -4416,7 +4291,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ret.HeadParts = MaskItemExt.Factory(item.HeadParts.GetEqualsMask(rhs.HeadParts, include), include);
             ret.SoundMarkers = MaskItemExt.Factory(item.SoundMarkers.GetEqualsMask(rhs.SoundMarkers, include), include);
             ret.AcousticSpaces = MaskItemExt.Factory(item.AcousticSpaces.GetEqualsMask(rhs.AcousticSpaces, include), include);
-            ret.MagicEffects = MaskItemExt.Factory(item.MagicEffects.GetEqualsMask(rhs.MagicEffects, include), include);
             ret.LandscapeTextures = MaskItemExt.Factory(item.LandscapeTextures.GetEqualsMask(rhs.LandscapeTextures, include), include);
             ret.ObjectEffects = MaskItemExt.Factory(item.ObjectEffects.GetEqualsMask(rhs.ObjectEffects, include), include);
             ret.Spells = MaskItemExt.Factory(item.Spells.GetEqualsMask(rhs.Spells, include), include);
@@ -4429,7 +4303,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ret.Ingredients = MaskItemExt.Factory(item.Ingredients.GetEqualsMask(rhs.Ingredients, include), include);
             ret.Lights = MaskItemExt.Factory(item.Lights.GetEqualsMask(rhs.Lights, include), include);
             ret.MiscItems = MaskItemExt.Factory(item.MiscItems.GetEqualsMask(rhs.MiscItems, include), include);
-            ret.Statics = MaskItemExt.Factory(item.Statics.GetEqualsMask(rhs.Statics, include), include);
             ret.StaticCollections = MaskItemExt.Factory(item.StaticCollections.GetEqualsMask(rhs.StaticCollections, include), include);
             ret.MoveableStatics = MaskItemExt.Factory(item.MoveableStatics.GetEqualsMask(rhs.MoveableStatics, include), include);
             ret.Grasses = MaskItemExt.Factory(item.Grasses.GetEqualsMask(rhs.Grasses, include), include);
@@ -4440,8 +4313,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ret.Keys = MaskItemExt.Factory(item.Keys.GetEqualsMask(rhs.Keys, include), include);
             ret.Ingestibles = MaskItemExt.Factory(item.Ingestibles.GetEqualsMask(rhs.Ingestibles, include), include);
             ret.LeveledItems = MaskItemExt.Factory(item.LeveledItems.GetEqualsMask(rhs.LeveledItems, include), include);
+            ret.Regions = MaskItemExt.Factory(item.Regions.GetEqualsMask(rhs.Regions, include), include);
             ret.VoiceTypes = MaskItemExt.Factory(item.VoiceTypes.GetEqualsMask(rhs.VoiceTypes, include), include);
-            ret.Quests = MaskItemExt.Factory(item.Quests.GetEqualsMask(rhs.Quests, include), include);
             ret.MaterialTypes = MaskItemExt.Factory(item.MaterialTypes.GetEqualsMask(rhs.MaterialTypes, include), include);
             ret.ArmorAddons = MaskItemExt.Factory(item.ArmorAddons.GetEqualsMask(rhs.ArmorAddons, include), include);
             ret.Messages = MaskItemExt.Factory(item.Messages.GetEqualsMask(rhs.Messages, include), include);
@@ -4553,10 +4426,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 item.AcousticSpaces?.ToString(fg, "AcousticSpaces");
             }
-            if (printMask?.MagicEffects?.Overall ?? true)
-            {
-                item.MagicEffects?.ToString(fg, "MagicEffects");
-            }
             if (printMask?.LandscapeTextures?.Overall ?? true)
             {
                 item.LandscapeTextures?.ToString(fg, "LandscapeTextures");
@@ -4605,10 +4474,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 item.MiscItems?.ToString(fg, "MiscItems");
             }
-            if (printMask?.Statics?.Overall ?? true)
-            {
-                item.Statics?.ToString(fg, "Statics");
-            }
             if (printMask?.StaticCollections?.Overall ?? true)
             {
                 item.StaticCollections?.ToString(fg, "StaticCollections");
@@ -4649,13 +4514,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 item.LeveledItems?.ToString(fg, "LeveledItems");
             }
+            if (printMask?.Regions?.Overall ?? true)
+            {
+                item.Regions?.ToString(fg, "Regions");
+            }
             if (printMask?.VoiceTypes?.Overall ?? true)
             {
                 item.VoiceTypes?.ToString(fg, "VoiceTypes");
-            }
-            if (printMask?.Quests?.Overall ?? true)
-            {
-                item.Quests?.ToString(fg, "Quests");
             }
             if (printMask?.MaterialTypes?.Overall ?? true)
             {
@@ -4806,14 +4671,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 else if (!isAcousticSpacesEqual) return false;
             }
-            if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.MagicEffects) ?? true))
-            {
-                if (EqualsMaskHelper.RefEquality(lhs.MagicEffects, rhs.MagicEffects, out var lhsMagicEffects, out var rhsMagicEffects, out var isMagicEffectsEqual))
-                {
-                    if (!object.Equals(lhsMagicEffects, rhsMagicEffects)) return false;
-                }
-                else if (!isMagicEffectsEqual) return false;
-            }
             if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.LandscapeTextures) ?? true))
             {
                 if (EqualsMaskHelper.RefEquality(lhs.LandscapeTextures, rhs.LandscapeTextures, out var lhsLandscapeTextures, out var rhsLandscapeTextures, out var isLandscapeTexturesEqual))
@@ -4910,14 +4767,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 else if (!isMiscItemsEqual) return false;
             }
-            if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.Statics) ?? true))
-            {
-                if (EqualsMaskHelper.RefEquality(lhs.Statics, rhs.Statics, out var lhsStatics, out var rhsStatics, out var isStaticsEqual))
-                {
-                    if (!object.Equals(lhsStatics, rhsStatics)) return false;
-                }
-                else if (!isStaticsEqual) return false;
-            }
             if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.StaticCollections) ?? true))
             {
                 if (EqualsMaskHelper.RefEquality(lhs.StaticCollections, rhs.StaticCollections, out var lhsStaticCollections, out var rhsStaticCollections, out var isStaticCollectionsEqual))
@@ -4998,6 +4847,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 else if (!isLeveledItemsEqual) return false;
             }
+            if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.Regions) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.Regions, rhs.Regions, out var lhsRegions, out var rhsRegions, out var isRegionsEqual))
+                {
+                    if (!object.Equals(lhsRegions, rhsRegions)) return false;
+                }
+                else if (!isRegionsEqual) return false;
+            }
             if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.VoiceTypes) ?? true))
             {
                 if (EqualsMaskHelper.RefEquality(lhs.VoiceTypes, rhs.VoiceTypes, out var lhsVoiceTypes, out var rhsVoiceTypes, out var isVoiceTypesEqual))
@@ -5005,14 +4862,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     if (!object.Equals(lhsVoiceTypes, rhsVoiceTypes)) return false;
                 }
                 else if (!isVoiceTypesEqual) return false;
-            }
-            if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.Quests) ?? true))
-            {
-                if (EqualsMaskHelper.RefEquality(lhs.Quests, rhs.Quests, out var lhsQuests, out var rhsQuests, out var isQuestsEqual))
-                {
-                    if (!object.Equals(lhsQuests, rhsQuests)) return false;
-                }
-                else if (!isQuestsEqual) return false;
             }
             if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.MaterialTypes) ?? true))
             {
@@ -5075,7 +4924,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             hash.Add(item.HeadParts);
             hash.Add(item.SoundMarkers);
             hash.Add(item.AcousticSpaces);
-            hash.Add(item.MagicEffects);
             hash.Add(item.LandscapeTextures);
             hash.Add(item.ObjectEffects);
             hash.Add(item.Spells);
@@ -5088,7 +4936,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             hash.Add(item.Ingredients);
             hash.Add(item.Lights);
             hash.Add(item.MiscItems);
-            hash.Add(item.Statics);
             hash.Add(item.StaticCollections);
             hash.Add(item.MoveableStatics);
             hash.Add(item.Grasses);
@@ -5099,8 +4946,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             hash.Add(item.Keys);
             hash.Add(item.Ingestibles);
             hash.Add(item.LeveledItems);
+            hash.Add(item.Regions);
             hash.Add(item.VoiceTypes);
-            hash.Add(item.Quests);
             hash.Add(item.MaterialTypes);
             hash.Add(item.ArmorAddons);
             hash.Add(item.Messages);
@@ -5194,11 +5041,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IAcousticSpace":
                 case "IAcousticSpaceInternal":
                     return obj.AcousticSpaces;
-                case "MagicEffect":
-                case "IMagicEffectGetter":
-                case "IMagicEffect":
-                case "IMagicEffectInternal":
-                    return obj.MagicEffects;
                 case "LandscapeTexture":
                 case "ILandscapeTextureGetter":
                 case "ILandscapeTexture":
@@ -5259,11 +5101,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IMiscItem":
                 case "IMiscItemInternal":
                     return obj.MiscItems;
-                case "Static":
-                case "IStaticGetter":
-                case "IStatic":
-                case "IStaticInternal":
-                    return obj.Statics;
                 case "StaticCollection":
                 case "IStaticCollectionGetter":
                 case "IStaticCollection":
@@ -5314,16 +5151,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "ILeveledItem":
                 case "ILeveledItemInternal":
                     return obj.LeveledItems;
+                case "Region":
+                case "IRegionGetter":
+                case "IRegion":
+                case "IRegionInternal":
+                    return obj.Regions;
                 case "VoiceType":
                 case "IVoiceTypeGetter":
                 case "IVoiceType":
                 case "IVoiceTypeInternal":
                     return obj.VoiceTypes;
-                case "Quest":
-                case "IQuestGetter":
-                case "IQuest":
-                case "IQuestInternal":
-                    return obj.Quests;
                 case "MaterialType":
                 case "IMaterialTypeGetter":
                 case "IMaterialType":
@@ -5369,7 +5206,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 mod: item,
                 modHeader: item.ModHeader.DeepCopy(),
                 modKey: modKey);
-            Stream[] outputStreams = new Stream[45];
+            Stream[] outputStreams = new Stream[43];
             List<Action> toDo = new List<Action>();
             toDo.Add(() => WriteGroupParallel(item.GameSettings, writer.MetaData.MasterReferences!, 0, outputStreams, param.StringsWriter));
             toDo.Add(() => WriteGroupParallel(item.Keywords, writer.MetaData.MasterReferences!, 1, outputStreams, param.StringsWriter));
@@ -5385,37 +5222,35 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             toDo.Add(() => WriteGroupParallel(item.HeadParts, writer.MetaData.MasterReferences!, 11, outputStreams, param.StringsWriter));
             toDo.Add(() => WriteGroupParallel(item.SoundMarkers, writer.MetaData.MasterReferences!, 12, outputStreams, param.StringsWriter));
             toDo.Add(() => WriteGroupParallel(item.AcousticSpaces, writer.MetaData.MasterReferences!, 13, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.MagicEffects, writer.MetaData.MasterReferences!, 14, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.LandscapeTextures, writer.MetaData.MasterReferences!, 15, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.ObjectEffects, writer.MetaData.MasterReferences!, 16, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Spells, writer.MetaData.MasterReferences!, 17, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Activators, writer.MetaData.MasterReferences!, 18, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.TalkingActivators, writer.MetaData.MasterReferences!, 19, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Armors, writer.MetaData.MasterReferences!, 20, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Books, writer.MetaData.MasterReferences!, 21, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Containers, writer.MetaData.MasterReferences!, 22, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Doors, writer.MetaData.MasterReferences!, 23, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Ingredients, writer.MetaData.MasterReferences!, 24, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Lights, writer.MetaData.MasterReferences!, 25, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.MiscItems, writer.MetaData.MasterReferences!, 26, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Statics, writer.MetaData.MasterReferences!, 27, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.StaticCollections, writer.MetaData.MasterReferences!, 28, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.MoveableStatics, writer.MetaData.MasterReferences!, 29, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Grasses, writer.MetaData.MasterReferences!, 30, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Trees, writer.MetaData.MasterReferences!, 31, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Florae, writer.MetaData.MasterReferences!, 32, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Furniture, writer.MetaData.MasterReferences!, 33, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.LeveledNpcs, writer.MetaData.MasterReferences!, 34, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Keys, writer.MetaData.MasterReferences!, 35, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Ingestibles, writer.MetaData.MasterReferences!, 36, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.LeveledItems, writer.MetaData.MasterReferences!, 37, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.VoiceTypes, writer.MetaData.MasterReferences!, 38, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Quests, writer.MetaData.MasterReferences!, 39, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.MaterialTypes, writer.MetaData.MasterReferences!, 40, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.ArmorAddons, writer.MetaData.MasterReferences!, 41, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Messages, writer.MetaData.MasterReferences!, 42, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.MusicTypes, writer.MetaData.MasterReferences!, 43, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.MusicTracks, writer.MetaData.MasterReferences!, 44, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.LandscapeTextures, writer.MetaData.MasterReferences!, 14, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.ObjectEffects, writer.MetaData.MasterReferences!, 15, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Spells, writer.MetaData.MasterReferences!, 16, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Activators, writer.MetaData.MasterReferences!, 17, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.TalkingActivators, writer.MetaData.MasterReferences!, 18, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Armors, writer.MetaData.MasterReferences!, 19, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Books, writer.MetaData.MasterReferences!, 20, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Containers, writer.MetaData.MasterReferences!, 21, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Doors, writer.MetaData.MasterReferences!, 22, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Ingredients, writer.MetaData.MasterReferences!, 23, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Lights, writer.MetaData.MasterReferences!, 24, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.MiscItems, writer.MetaData.MasterReferences!, 25, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.StaticCollections, writer.MetaData.MasterReferences!, 26, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.MoveableStatics, writer.MetaData.MasterReferences!, 27, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Grasses, writer.MetaData.MasterReferences!, 28, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Trees, writer.MetaData.MasterReferences!, 29, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Florae, writer.MetaData.MasterReferences!, 30, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Furniture, writer.MetaData.MasterReferences!, 31, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.LeveledNpcs, writer.MetaData.MasterReferences!, 32, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Keys, writer.MetaData.MasterReferences!, 33, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Ingestibles, writer.MetaData.MasterReferences!, 34, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.LeveledItems, writer.MetaData.MasterReferences!, 35, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Regions, writer.MetaData.MasterReferences!, 36, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.VoiceTypes, writer.MetaData.MasterReferences!, 37, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.MaterialTypes, writer.MetaData.MasterReferences!, 38, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.ArmorAddons, writer.MetaData.MasterReferences!, 39, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Messages, writer.MetaData.MasterReferences!, 40, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.MusicTypes, writer.MetaData.MasterReferences!, 41, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.MusicTracks, writer.MetaData.MasterReferences!, 42, outputStreams, param.StringsWriter));
             Parallel.Invoke(toDo.ToArray());
             PluginUtilityTranslation.CompileStreamsInto(
                 outputStreams.NotNull(),
@@ -5567,13 +5402,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     yield return item;
                 }
             }
-            if (obj.MagicEffects is IFormLinkContainerGetter MagicEffectslinkCont)
-            {
-                foreach (var item in MagicEffectslinkCont.ContainedFormLinks)
-                {
-                    yield return item;
-                }
-            }
             if (obj.LandscapeTextures is IFormLinkContainerGetter LandscapeTextureslinkCont)
             {
                 foreach (var item in LandscapeTextureslinkCont.ContainedFormLinks)
@@ -5658,13 +5486,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     yield return item;
                 }
             }
-            if (obj.Statics is IFormLinkContainerGetter StaticslinkCont)
-            {
-                foreach (var item in StaticslinkCont.ContainedFormLinks)
-                {
-                    yield return item;
-                }
-            }
             if (obj.StaticCollections is IFormLinkContainerGetter StaticCollectionslinkCont)
             {
                 foreach (var item in StaticCollectionslinkCont.ContainedFormLinks)
@@ -5735,16 +5556,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     yield return item;
                 }
             }
-            if (obj.VoiceTypes is IFormLinkContainerGetter VoiceTypeslinkCont)
+            if (obj.Regions is IFormLinkContainerGetter RegionslinkCont)
             {
-                foreach (var item in VoiceTypeslinkCont.ContainedFormLinks)
+                foreach (var item in RegionslinkCont.ContainedFormLinks)
                 {
                     yield return item;
                 }
             }
-            if (obj.Quests is IFormLinkContainerGetter QuestslinkCont)
+            if (obj.VoiceTypes is IFormLinkContainerGetter VoiceTypeslinkCont)
             {
-                foreach (var item in QuestslinkCont.ContainedFormLinks)
+                foreach (var item in VoiceTypeslinkCont.ContainedFormLinks)
                 {
                     yield return item;
                 }
@@ -5845,10 +5666,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 yield return item;
             }
-            foreach (var item in obj.MagicEffects.EnumerateMajorRecords())
-            {
-                yield return item;
-            }
             foreach (var item in obj.LandscapeTextures.EnumerateMajorRecords())
             {
                 yield return item;
@@ -5897,10 +5714,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 yield return item;
             }
-            foreach (var item in obj.Statics.EnumerateMajorRecords())
-            {
-                yield return item;
-            }
             foreach (var item in obj.StaticCollections.EnumerateMajorRecords())
             {
                 yield return item;
@@ -5941,11 +5754,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 yield return item;
             }
-            foreach (var item in obj.VoiceTypes.EnumerateMajorRecords())
+            foreach (var item in obj.Regions.EnumerateMajorRecords())
             {
                 yield return item;
             }
-            foreach (var item in obj.Quests.EnumerateMajorRecords())
+            foreach (var item in obj.VoiceTypes.EnumerateMajorRecords())
             {
                 yield return item;
             }
@@ -6130,15 +5943,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         yield return item;
                     }
                     yield break;
-                case "MagicEffect":
-                case "IMagicEffectGetter":
-                case "IMagicEffect":
-                case "IMagicEffectInternal":
-                    foreach (var item in obj.MagicEffects.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
-                    {
-                        yield return item;
-                    }
-                    yield break;
                 case "LandscapeTexture":
                 case "ILandscapeTextureGetter":
                 case "ILandscapeTexture":
@@ -6247,15 +6051,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         yield return item;
                     }
                     yield break;
-                case "Static":
-                case "IStaticGetter":
-                case "IStatic":
-                case "IStaticInternal":
-                    foreach (var item in obj.Statics.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
-                    {
-                        yield return item;
-                    }
-                    yield break;
                 case "StaticCollection":
                 case "IStaticCollectionGetter":
                 case "IStaticCollection":
@@ -6346,20 +6141,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         yield return item;
                     }
                     yield break;
+                case "Region":
+                case "IRegionGetter":
+                case "IRegion":
+                case "IRegionInternal":
+                    foreach (var item in obj.Regions.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
                 case "VoiceType":
                 case "IVoiceTypeGetter":
                 case "IVoiceType":
                 case "IVoiceTypeInternal":
                     foreach (var item in obj.VoiceTypes.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
-                    {
-                        yield return item;
-                    }
-                    yield break;
-                case "Quest":
-                case "IQuestGetter":
-                case "IQuest":
-                case "IQuestInternal":
-                    foreach (var item in obj.Quests.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -6943,11 +6738,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IRegionGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     yield break;
                 }
                 case "IEmittanceGetter":
                 {
                     foreach (var item in EnumerateMajorRecords(obj, typeof(ILightGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IRegionGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -7123,14 +6926,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     group: (m) => m.AcousticSpaces,
                     groupGetter: (m) => m.AcousticSpaces);
             }
-            foreach (var item in obj.MagicEffects)
-            {
-                yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, MagicEffect, IMagicEffectGetter>(
-                    modKey: obj.ModKey,
-                    record: item,
-                    group: (m) => m.MagicEffects,
-                    groupGetter: (m) => m.MagicEffects);
-            }
             foreach (var item in obj.LandscapeTextures)
             {
                 yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, LandscapeTexture, ILandscapeTextureGetter>(
@@ -7227,14 +7022,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     group: (m) => m.MiscItems,
                     groupGetter: (m) => m.MiscItems);
             }
-            foreach (var item in obj.Statics)
-            {
-                yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, Static, IStaticGetter>(
-                    modKey: obj.ModKey,
-                    record: item,
-                    group: (m) => m.Statics,
-                    groupGetter: (m) => m.Statics);
-            }
             foreach (var item in obj.StaticCollections)
             {
                 yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, StaticCollection, IStaticCollectionGetter>(
@@ -7315,6 +7102,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     group: (m) => m.LeveledItems,
                     groupGetter: (m) => m.LeveledItems);
             }
+            foreach (var item in obj.Regions)
+            {
+                yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, Region, IRegionGetter>(
+                    modKey: obj.ModKey,
+                    record: item,
+                    group: (m) => m.Regions,
+                    groupGetter: (m) => m.Regions);
+            }
             foreach (var item in obj.VoiceTypes)
             {
                 yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, VoiceType, IVoiceTypeGetter>(
@@ -7322,14 +7117,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     record: item,
                     group: (m) => m.VoiceTypes,
                     groupGetter: (m) => m.VoiceTypes);
-            }
-            foreach (var item in obj.Quests)
-            {
-                yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, Quest, IQuestGetter>(
-                    modKey: obj.ModKey,
-                    record: item,
-                    group: (m) => m.Quests,
-                    groupGetter: (m) => m.Quests);
             }
             foreach (var item in obj.MaterialTypes)
             {
@@ -7584,19 +7371,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                             groupGetter: (m) => m.AcousticSpaces);
                     }
                     yield break;
-                case "MagicEffect":
-                case "IMagicEffectGetter":
-                case "IMagicEffect":
-                case "IMagicEffectInternal":
-                    foreach (var item in obj.MagicEffects)
-                    {
-                        yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, MagicEffect, IMagicEffectGetter>(
-                            modKey: obj.ModKey,
-                            record: item,
-                            group: (m) => m.MagicEffects,
-                            groupGetter: (m) => m.MagicEffects);
-                    }
-                    yield break;
                 case "LandscapeTexture":
                 case "ILandscapeTextureGetter":
                 case "ILandscapeTexture":
@@ -7753,19 +7527,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                             groupGetter: (m) => m.MiscItems);
                     }
                     yield break;
-                case "Static":
-                case "IStaticGetter":
-                case "IStatic":
-                case "IStaticInternal":
-                    foreach (var item in obj.Statics)
-                    {
-                        yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, Static, IStaticGetter>(
-                            modKey: obj.ModKey,
-                            record: item,
-                            group: (m) => m.Statics,
-                            groupGetter: (m) => m.Statics);
-                    }
-                    yield break;
                 case "StaticCollection":
                 case "IStaticCollectionGetter":
                 case "IStaticCollection":
@@ -7896,6 +7657,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                             groupGetter: (m) => m.LeveledItems);
                     }
                     yield break;
+                case "Region":
+                case "IRegionGetter":
+                case "IRegion":
+                case "IRegionInternal":
+                    foreach (var item in obj.Regions)
+                    {
+                        yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, Region, IRegionGetter>(
+                            modKey: obj.ModKey,
+                            record: item,
+                            group: (m) => m.Regions,
+                            groupGetter: (m) => m.Regions);
+                    }
+                    yield break;
                 case "VoiceType":
                 case "IVoiceTypeGetter":
                 case "IVoiceType":
@@ -7907,19 +7681,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                             record: item,
                             group: (m) => m.VoiceTypes,
                             groupGetter: (m) => m.VoiceTypes);
-                    }
-                    yield break;
-                case "Quest":
-                case "IQuestGetter":
-                case "IQuest":
-                case "IQuestInternal":
-                    foreach (var item in obj.Quests)
-                    {
-                        yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, Quest, IQuestGetter>(
-                            modKey: obj.ModKey,
-                            record: item,
-                            group: (m) => m.Quests,
-                            groupGetter: (m) => m.Quests);
                     }
                     yield break;
                 case "MaterialType":
@@ -8465,6 +8226,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
+                        type: typeof(IRegionGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     yield break;
                 }
                 case "ILocationRecord":
@@ -8828,26 +8597,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     errorMask?.PopIndex();
                 }
             }
-            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.MagicEffects) ?? true))
-            {
-                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.MagicEffects);
-                try
-                {
-                    item.MagicEffects.DeepCopyIn(
-                        rhs: rhs.MagicEffects,
-                        errorMask: errorMask,
-                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.MagicEffects));
-                }
-                catch (Exception ex)
-                when (errorMask != null)
-                {
-                    errorMask.ReportException(ex);
-                }
-                finally
-                {
-                    errorMask?.PopIndex();
-                }
-            }
             if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.LandscapeTextures) ?? true))
             {
                 errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.LandscapeTextures);
@@ -9088,26 +8837,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     errorMask?.PopIndex();
                 }
             }
-            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.Statics) ?? true))
-            {
-                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.Statics);
-                try
-                {
-                    item.Statics.DeepCopyIn(
-                        rhs: rhs.Statics,
-                        errorMask: errorMask,
-                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.Statics));
-                }
-                catch (Exception ex)
-                when (errorMask != null)
-                {
-                    errorMask.ReportException(ex);
-                }
-                finally
-                {
-                    errorMask?.PopIndex();
-                }
-            }
             if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.StaticCollections) ?? true))
             {
                 errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.StaticCollections);
@@ -9308,15 +9037,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     errorMask?.PopIndex();
                 }
             }
-            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.VoiceTypes) ?? true))
+            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.Regions) ?? true))
             {
-                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.VoiceTypes);
+                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.Regions);
                 try
                 {
-                    item.VoiceTypes.DeepCopyIn(
-                        rhs: rhs.VoiceTypes,
+                    item.Regions.DeepCopyIn(
+                        rhs: rhs.Regions,
                         errorMask: errorMask,
-                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.VoiceTypes));
+                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.Regions));
                 }
                 catch (Exception ex)
                 when (errorMask != null)
@@ -9328,15 +9057,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     errorMask?.PopIndex();
                 }
             }
-            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.Quests) ?? true))
+            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.VoiceTypes) ?? true))
             {
-                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.Quests);
+                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.VoiceTypes);
                 try
                 {
-                    item.Quests.DeepCopyIn(
-                        rhs: rhs.Quests,
+                    item.VoiceTypes.DeepCopyIn(
+                        rhs: rhs.VoiceTypes,
                         errorMask: errorMask,
-                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.Quests));
+                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.VoiceTypes));
                 }
                 catch (Exception ex)
                 when (errorMask != null)
@@ -9552,7 +9281,6 @@ namespace Mutagen.Bethesda.Fallout4
         public bool HeadParts;
         public bool SoundMarkers;
         public bool AcousticSpaces;
-        public bool MagicEffects;
         public bool LandscapeTextures;
         public bool ObjectEffects;
         public bool Spells;
@@ -9565,7 +9293,6 @@ namespace Mutagen.Bethesda.Fallout4
         public bool Ingredients;
         public bool Lights;
         public bool MiscItems;
-        public bool Statics;
         public bool StaticCollections;
         public bool MoveableStatics;
         public bool Grasses;
@@ -9576,8 +9303,8 @@ namespace Mutagen.Bethesda.Fallout4
         public bool Keys;
         public bool Ingestibles;
         public bool LeveledItems;
+        public bool Regions;
         public bool VoiceTypes;
-        public bool Quests;
         public bool MaterialTypes;
         public bool ArmorAddons;
         public bool Messages;
@@ -9602,7 +9329,6 @@ namespace Mutagen.Bethesda.Fallout4
             HeadParts = defaultValue;
             SoundMarkers = defaultValue;
             AcousticSpaces = defaultValue;
-            MagicEffects = defaultValue;
             LandscapeTextures = defaultValue;
             ObjectEffects = defaultValue;
             Spells = defaultValue;
@@ -9615,7 +9341,6 @@ namespace Mutagen.Bethesda.Fallout4
             Ingredients = defaultValue;
             Lights = defaultValue;
             MiscItems = defaultValue;
-            Statics = defaultValue;
             StaticCollections = defaultValue;
             MoveableStatics = defaultValue;
             Grasses = defaultValue;
@@ -9626,8 +9351,8 @@ namespace Mutagen.Bethesda.Fallout4
             Keys = defaultValue;
             Ingestibles = defaultValue;
             LeveledItems = defaultValue;
+            Regions = defaultValue;
             VoiceTypes = defaultValue;
-            Quests = defaultValue;
             MaterialTypes = defaultValue;
             ArmorAddons = defaultValue;
             Messages = defaultValue;
@@ -9818,17 +9543,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         translationParams: translationParams);
                 }
             }
-            if (importMask?.MagicEffects ?? true)
-            {
-                var MagicEffectsItem = item.MagicEffects;
-                if (MagicEffectsItem.RecordCache.Count > 0)
-                {
-                    ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)MagicEffectsItem).BinaryWriteTranslator).Write<IMagicEffectGetter>(
-                        item: MagicEffectsItem,
-                        writer: writer,
-                        translationParams: translationParams);
-                }
-            }
             if (importMask?.LandscapeTextures ?? true)
             {
                 var LandscapeTexturesItem = item.LandscapeTextures;
@@ -9961,17 +9675,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         translationParams: translationParams);
                 }
             }
-            if (importMask?.Statics ?? true)
-            {
-                var StaticsItem = item.Statics;
-                if (StaticsItem.RecordCache.Count > 0)
-                {
-                    ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)StaticsItem).BinaryWriteTranslator).Write<IStaticGetter>(
-                        item: StaticsItem,
-                        writer: writer,
-                        translationParams: translationParams);
-                }
-            }
             if (importMask?.StaticCollections ?? true)
             {
                 var StaticCollectionsItem = item.StaticCollections;
@@ -10082,6 +9785,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         translationParams: translationParams);
                 }
             }
+            if (importMask?.Regions ?? true)
+            {
+                var RegionsItem = item.Regions;
+                if (RegionsItem.RecordCache.Count > 0)
+                {
+                    ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)RegionsItem).BinaryWriteTranslator).Write<IRegionGetter>(
+                        item: RegionsItem,
+                        writer: writer,
+                        translationParams: translationParams);
+                }
+            }
             if (importMask?.VoiceTypes ?? true)
             {
                 var VoiceTypesItem = item.VoiceTypes;
@@ -10089,17 +9803,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 {
                     ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)VoiceTypesItem).BinaryWriteTranslator).Write<IVoiceTypeGetter>(
                         item: VoiceTypesItem,
-                        writer: writer,
-                        translationParams: translationParams);
-                }
-            }
-            if (importMask?.Quests ?? true)
-            {
-                var QuestsItem = item.Quests;
-                if (QuestsItem.RecordCache.Count > 0)
-                {
-                    ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)QuestsItem).BinaryWriteTranslator).Write<IQuestGetter>(
-                        item: QuestsItem,
                         writer: writer,
                         translationParams: translationParams);
                 }
@@ -10421,20 +10124,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     }
                     return (int)Fallout4Mod_FieldIndex.AcousticSpaces;
                 }
-                case RecordTypeInts.MGEF:
-                {
-                    if (importMask?.MagicEffects ?? true)
-                    {
-                        item.MagicEffects.CopyInFromBinary(
-                            frame: frame,
-                            translationParams: null);
-                    }
-                    else
-                    {
-                        frame.Position += contentLength;
-                    }
-                    return (int)Fallout4Mod_FieldIndex.MagicEffects;
-                }
                 case RecordTypeInts.LTEX:
                 {
                     if (importMask?.LandscapeTextures ?? true)
@@ -10603,20 +10292,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     }
                     return (int)Fallout4Mod_FieldIndex.MiscItems;
                 }
-                case RecordTypeInts.STAT:
-                {
-                    if (importMask?.Statics ?? true)
-                    {
-                        item.Statics.CopyInFromBinary(
-                            frame: frame,
-                            translationParams: null);
-                    }
-                    else
-                    {
-                        frame.Position += contentLength;
-                    }
-                    return (int)Fallout4Mod_FieldIndex.Statics;
-                }
                 case RecordTypeInts.SCOL:
                 {
                     if (importMask?.StaticCollections ?? true)
@@ -10757,6 +10432,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     }
                     return (int)Fallout4Mod_FieldIndex.LeveledItems;
                 }
+                case RecordTypeInts.REGN:
+                {
+                    if (importMask?.Regions ?? true)
+                    {
+                        item.Regions.CopyInFromBinary(
+                            frame: frame,
+                            translationParams: null);
+                    }
+                    else
+                    {
+                        frame.Position += contentLength;
+                    }
+                    return (int)Fallout4Mod_FieldIndex.Regions;
+                }
                 case RecordTypeInts.VTYP:
                 {
                     if (importMask?.VoiceTypes ?? true)
@@ -10770,20 +10459,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         frame.Position += contentLength;
                     }
                     return (int)Fallout4Mod_FieldIndex.VoiceTypes;
-                }
-                case RecordTypeInts.QUST:
-                {
-                    if (importMask?.Quests ?? true)
-                    {
-                        item.Quests.CopyInFromBinary(
-                            frame: frame,
-                            translationParams: null);
-                    }
-                    else
-                    {
-                        frame.Position += contentLength;
-                    }
-                    return (int)Fallout4Mod_FieldIndex.Quests;
                 }
                 case RecordTypeInts.MATT:
                 {
@@ -11085,11 +10760,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private IFallout4GroupGetter<IAcousticSpaceGetter>? _AcousticSpaces => _AcousticSpacesLocations != null ? Fallout4GroupBinaryOverlay<IAcousticSpaceGetter>.Fallout4GroupFactory(_data, _AcousticSpacesLocations, _package) : default;
         public IFallout4GroupGetter<IAcousticSpaceGetter> AcousticSpaces => _AcousticSpaces ?? new Fallout4Group<AcousticSpace>(this);
         #endregion
-        #region MagicEffects
-        private List<RangeInt64>? _MagicEffectsLocations;
-        private IFallout4GroupGetter<IMagicEffectGetter>? _MagicEffects => _MagicEffectsLocations != null ? Fallout4GroupBinaryOverlay<IMagicEffectGetter>.Fallout4GroupFactory(_data, _MagicEffectsLocations, _package) : default;
-        public IFallout4GroupGetter<IMagicEffectGetter> MagicEffects => _MagicEffects ?? new Fallout4Group<MagicEffect>(this);
-        #endregion
         #region LandscapeTextures
         private List<RangeInt64>? _LandscapeTexturesLocations;
         private IFallout4GroupGetter<ILandscapeTextureGetter>? _LandscapeTextures => _LandscapeTexturesLocations != null ? Fallout4GroupBinaryOverlay<ILandscapeTextureGetter>.Fallout4GroupFactory(_data, _LandscapeTexturesLocations, _package) : default;
@@ -11150,11 +10820,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private IFallout4GroupGetter<IMiscItemGetter>? _MiscItems => _MiscItemsLocations != null ? Fallout4GroupBinaryOverlay<IMiscItemGetter>.Fallout4GroupFactory(_data, _MiscItemsLocations, _package) : default;
         public IFallout4GroupGetter<IMiscItemGetter> MiscItems => _MiscItems ?? new Fallout4Group<MiscItem>(this);
         #endregion
-        #region Statics
-        private List<RangeInt64>? _StaticsLocations;
-        private IFallout4GroupGetter<IStaticGetter>? _Statics => _StaticsLocations != null ? Fallout4GroupBinaryOverlay<IStaticGetter>.Fallout4GroupFactory(_data, _StaticsLocations, _package) : default;
-        public IFallout4GroupGetter<IStaticGetter> Statics => _Statics ?? new Fallout4Group<Static>(this);
-        #endregion
         #region StaticCollections
         private List<RangeInt64>? _StaticCollectionsLocations;
         private IFallout4GroupGetter<IStaticCollectionGetter>? _StaticCollections => _StaticCollectionsLocations != null ? Fallout4GroupBinaryOverlay<IStaticCollectionGetter>.Fallout4GroupFactory(_data, _StaticCollectionsLocations, _package) : default;
@@ -11205,15 +10870,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private IFallout4GroupGetter<ILeveledItemGetter>? _LeveledItems => _LeveledItemsLocations != null ? Fallout4GroupBinaryOverlay<ILeveledItemGetter>.Fallout4GroupFactory(_data, _LeveledItemsLocations, _package) : default;
         public IFallout4GroupGetter<ILeveledItemGetter> LeveledItems => _LeveledItems ?? new Fallout4Group<LeveledItem>(this);
         #endregion
+        #region Regions
+        private List<RangeInt64>? _RegionsLocations;
+        private IFallout4GroupGetter<IRegionGetter>? _Regions => _RegionsLocations != null ? Fallout4GroupBinaryOverlay<IRegionGetter>.Fallout4GroupFactory(_data, _RegionsLocations, _package) : default;
+        public IFallout4GroupGetter<IRegionGetter> Regions => _Regions ?? new Fallout4Group<Region>(this);
+        #endregion
         #region VoiceTypes
         private List<RangeInt64>? _VoiceTypesLocations;
         private IFallout4GroupGetter<IVoiceTypeGetter>? _VoiceTypes => _VoiceTypesLocations != null ? Fallout4GroupBinaryOverlay<IVoiceTypeGetter>.Fallout4GroupFactory(_data, _VoiceTypesLocations, _package) : default;
         public IFallout4GroupGetter<IVoiceTypeGetter> VoiceTypes => _VoiceTypes ?? new Fallout4Group<VoiceType>(this);
-        #endregion
-        #region Quests
-        private List<RangeInt64>? _QuestsLocations;
-        private IFallout4GroupGetter<IQuestGetter>? _Quests => _QuestsLocations != null ? Fallout4GroupBinaryOverlay<IQuestGetter>.Fallout4GroupFactory(_data, _QuestsLocations, _package) : default;
-        public IFallout4GroupGetter<IQuestGetter> Quests => _Quests ?? new Fallout4Group<Quest>(this);
         #endregion
         #region MaterialTypes
         private List<RangeInt64>? _MaterialTypesLocations;
@@ -11411,12 +11076,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     _AcousticSpacesLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.AcousticSpaces;
                 }
-                case RecordTypeInts.MGEF:
-                {
-                    _MagicEffectsLocations ??= new();
-                    _MagicEffectsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
-                    return (int)Fallout4Mod_FieldIndex.MagicEffects;
-                }
                 case RecordTypeInts.LTEX:
                 {
                     _LandscapeTexturesLocations ??= new();
@@ -11489,12 +11148,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     _MiscItemsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.MiscItems;
                 }
-                case RecordTypeInts.STAT:
-                {
-                    _StaticsLocations ??= new();
-                    _StaticsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
-                    return (int)Fallout4Mod_FieldIndex.Statics;
-                }
                 case RecordTypeInts.SCOL:
                 {
                     _StaticCollectionsLocations ??= new();
@@ -11555,17 +11208,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     _LeveledItemsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.LeveledItems;
                 }
+                case RecordTypeInts.REGN:
+                {
+                    _RegionsLocations ??= new();
+                    _RegionsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
+                    return (int)Fallout4Mod_FieldIndex.Regions;
+                }
                 case RecordTypeInts.VTYP:
                 {
                     _VoiceTypesLocations ??= new();
                     _VoiceTypesLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.VoiceTypes;
-                }
-                case RecordTypeInts.QUST:
-                {
-                    _QuestsLocations ??= new();
-                    _QuestsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
-                    return (int)Fallout4Mod_FieldIndex.Quests;
                 }
                 case RecordTypeInts.MATT:
                 {

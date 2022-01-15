@@ -21,8 +21,14 @@
       "ReuseTrimming": false
     },
     "Trimming": {
-      "Enabled": false,
-      "TypesToTrim": [      
+      "Enabled": true,
+      "TypesToTrim": [
+        "RACE",
+        "MGEF",
+        "STAT",
+        "WEAP",
+        "AMMO",
+        "NPC_"
       ]
     },
     "DeleteCachesAfter": false,
