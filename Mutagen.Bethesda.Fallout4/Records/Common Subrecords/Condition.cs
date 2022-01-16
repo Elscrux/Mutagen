@@ -1163,13 +1163,11 @@ namespace Mutagen.Bethesda.Fallout4
                 {
                     case Condition.ParameterCategory.None:
                     case Condition.ParameterCategory.Number:
+                    case Condition.ParameterCategory.String: //writer.Write(item.ParameterOneString);
                         writer.Write(item.ParameterOneNumber);
                         break;
                     case Condition.ParameterCategory.Form:
                         FormKeyBinaryTranslation.Instance.Write(writer, item.ParameterOneRecord.FormKey);
-                        break;
-                    case Condition.ParameterCategory.String:
-                        writer.Write(item.ParameterOneString);
                         break;
                     default:
                         throw new NotImplementedException();
@@ -1178,13 +1176,11 @@ namespace Mutagen.Bethesda.Fallout4
                 {
                     case Condition.ParameterCategory.None:
                     case Condition.ParameterCategory.Number:
+                    case Condition.ParameterCategory.String: //writer.Write(item.ParameterTwoString);
                         writer.Write(item.ParameterTwoNumber);
                         break;
                     case Condition.ParameterCategory.Form:
                         FormKeyBinaryTranslation.Instance.Write(writer, item.ParameterTwoRecord.FormKey);
-                        break;
-                    case Condition.ParameterCategory.String:
-                        writer.Write(item.ParameterTwoString);
                         break;
                     default:
                         throw new NotImplementedException();
