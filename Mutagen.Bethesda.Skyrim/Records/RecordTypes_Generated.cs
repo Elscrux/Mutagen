@@ -2,7 +2,7 @@ using Mutagen.Bethesda.Plugins;
 
 namespace Mutagen.Bethesda.Skyrim.Internals
 {
-    public class RecordTypes
+    public partial class RecordTypes
     {
         public static readonly RecordType _9_IAD = new(0x44414909);
         public static readonly RecordType _A_IAD = new(0x4441490A);

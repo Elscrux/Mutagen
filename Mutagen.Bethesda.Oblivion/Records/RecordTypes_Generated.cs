@@ -2,7 +2,7 @@ using Mutagen.Bethesda.Plugins;
 
 namespace Mutagen.Bethesda.Oblivion.Internals
 {
-    public class RecordTypes
+    public partial class RecordTypes
     {
         public static readonly RecordType ACBS = new(0x53424341);
         public static readonly RecordType ACHR = new(0x52484341);

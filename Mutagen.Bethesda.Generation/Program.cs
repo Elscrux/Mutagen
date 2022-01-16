@@ -17,7 +17,7 @@ namespace Mutagen.Bethesda.Generation
 
         static void AttachDebugInspector()
         {
-            string testString = nameof(IFormLinkContainerGetter);
+            string testString = "List<Bone?>?> BoneData { get; set; } = new GenderedItem<ExtendedList<Bone?>>(default, d";
             FileGeneration.LineAppended
                 .Where(i => i.Contains(testString))
                 .Subscribe(s =>
