@@ -281,27 +281,16 @@ namespace Mutagen.Bethesda.Fallout4
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IFormLinkNullableGetter<IKeywordGetter> IActivatorGetter.InteractionKeyword => this.InteractionKeyword;
         #endregion
-        #region SoundModel
-        private readonly IFormLink<ISoundOutputModelGetter> _SoundModel = new FormLink<ISoundOutputModelGetter>();
-        public IFormLink<ISoundOutputModelGetter> SoundModel
+        #region RadioReceiver
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private RadioReceiver? _RadioReceiver;
+        public RadioReceiver? RadioReceiver
         {
-            get => _SoundModel;
-            set => _SoundModel.SetTo(value);
+            get => _RadioReceiver;
+            set => _RadioReceiver = value;
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IFormLinkGetter<ISoundOutputModelGetter> IActivatorGetter.SoundModel => this.SoundModel;
-        #endregion
-        #region Frequency
-        public Single Frequency { get; set; } = default;
-        #endregion
-        #region Volume
-        public Single Volume { get; set; } = default;
-        #endregion
-        #region StartsActive
-        public Boolean StartsActive { get; set; } = default;
-        #endregion
-        #region NoSignalStatic
-        public Boolean NoSignalStatic { get; set; } = default;
+        IRadioReceiverGetter? IActivatorGetter.RadioReceiver => this.RadioReceiver;
         #endregion
         #region Conditions
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -316,9 +305,6 @@ namespace Mutagen.Bethesda.Fallout4
         IReadOnlyList<IConditionGetter>? IActivatorGetter.Conditions => _Conditions;
         #endregion
 
-        #endregion
-        #region RADRDataTypeState
-        public Activator.RADRDataType RADRDataTypeState { get; set; } = default;
         #endregion
 
         #region To String
@@ -362,13 +348,8 @@ namespace Mutagen.Bethesda.Fallout4
                 this.ActivateTextOverride = initialValue;
                 this.Flags = initialValue;
                 this.InteractionKeyword = initialValue;
-                this.SoundModel = initialValue;
-                this.Frequency = initialValue;
-                this.Volume = initialValue;
-                this.StartsActive = initialValue;
-                this.NoSignalStatic = initialValue;
+                this.RadioReceiver = new MaskItem<TItem, RadioReceiver.Mask<TItem>?>(initialValue, new RadioReceiver.Mask<TItem>(initialValue));
                 this.Conditions = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, Condition.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, Condition.Mask<TItem>?>>());
-                this.RADRDataTypeState = initialValue;
             }
 
             public Mask(
@@ -396,13 +377,8 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem ActivateTextOverride,
                 TItem Flags,
                 TItem InteractionKeyword,
-                TItem SoundModel,
-                TItem Frequency,
-                TItem Volume,
-                TItem StartsActive,
-                TItem NoSignalStatic,
-                TItem Conditions,
-                TItem RADRDataTypeState)
+                TItem RadioReceiver,
+                TItem Conditions)
             : base(
                 MajorRecordFlagsRaw: MajorRecordFlagsRaw,
                 FormKey: FormKey,
@@ -429,13 +405,8 @@ namespace Mutagen.Bethesda.Fallout4
                 this.ActivateTextOverride = ActivateTextOverride;
                 this.Flags = Flags;
                 this.InteractionKeyword = InteractionKeyword;
-                this.SoundModel = SoundModel;
-                this.Frequency = Frequency;
-                this.Volume = Volume;
-                this.StartsActive = StartsActive;
-                this.NoSignalStatic = NoSignalStatic;
+                this.RadioReceiver = new MaskItem<TItem, RadioReceiver.Mask<TItem>?>(RadioReceiver, new RadioReceiver.Mask<TItem>(RadioReceiver));
                 this.Conditions = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, Condition.Mask<TItem>?>>?>(Conditions, Enumerable.Empty<MaskItemIndexed<TItem, Condition.Mask<TItem>?>>());
-                this.RADRDataTypeState = RADRDataTypeState;
             }
 
             #pragma warning disable CS8618
@@ -465,13 +436,8 @@ namespace Mutagen.Bethesda.Fallout4
             public TItem ActivateTextOverride;
             public TItem Flags;
             public TItem InteractionKeyword;
-            public TItem SoundModel;
-            public TItem Frequency;
-            public TItem Volume;
-            public TItem StartsActive;
-            public TItem NoSignalStatic;
+            public MaskItem<TItem, RadioReceiver.Mask<TItem>?>? RadioReceiver { get; set; }
             public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, Condition.Mask<TItem>?>>?>? Conditions;
-            public TItem RADRDataTypeState;
             #endregion
 
             #region Equals
@@ -503,13 +469,8 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!object.Equals(this.ActivateTextOverride, rhs.ActivateTextOverride)) return false;
                 if (!object.Equals(this.Flags, rhs.Flags)) return false;
                 if (!object.Equals(this.InteractionKeyword, rhs.InteractionKeyword)) return false;
-                if (!object.Equals(this.SoundModel, rhs.SoundModel)) return false;
-                if (!object.Equals(this.Frequency, rhs.Frequency)) return false;
-                if (!object.Equals(this.Volume, rhs.Volume)) return false;
-                if (!object.Equals(this.StartsActive, rhs.StartsActive)) return false;
-                if (!object.Equals(this.NoSignalStatic, rhs.NoSignalStatic)) return false;
+                if (!object.Equals(this.RadioReceiver, rhs.RadioReceiver)) return false;
                 if (!object.Equals(this.Conditions, rhs.Conditions)) return false;
-                if (!object.Equals(this.RADRDataTypeState, rhs.RADRDataTypeState)) return false;
                 return true;
             }
             public override int GetHashCode()
@@ -533,13 +494,8 @@ namespace Mutagen.Bethesda.Fallout4
                 hash.Add(this.ActivateTextOverride);
                 hash.Add(this.Flags);
                 hash.Add(this.InteractionKeyword);
-                hash.Add(this.SoundModel);
-                hash.Add(this.Frequency);
-                hash.Add(this.Volume);
-                hash.Add(this.StartsActive);
-                hash.Add(this.NoSignalStatic);
+                hash.Add(this.RadioReceiver);
                 hash.Add(this.Conditions);
-                hash.Add(this.RADRDataTypeState);
                 hash.Add(base.GetHashCode());
                 return hash.ToHashCode();
             }
@@ -602,11 +558,11 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!eval(this.ActivateTextOverride)) return false;
                 if (!eval(this.Flags)) return false;
                 if (!eval(this.InteractionKeyword)) return false;
-                if (!eval(this.SoundModel)) return false;
-                if (!eval(this.Frequency)) return false;
-                if (!eval(this.Volume)) return false;
-                if (!eval(this.StartsActive)) return false;
-                if (!eval(this.NoSignalStatic)) return false;
+                if (RadioReceiver != null)
+                {
+                    if (!eval(this.RadioReceiver.Overall)) return false;
+                    if (this.RadioReceiver.Specific != null && !this.RadioReceiver.Specific.All(eval)) return false;
+                }
                 if (this.Conditions != null)
                 {
                     if (!eval(this.Conditions.Overall)) return false;
@@ -619,7 +575,6 @@ namespace Mutagen.Bethesda.Fallout4
                         }
                     }
                 }
-                if (!eval(this.RADRDataTypeState)) return false;
                 return true;
             }
             #endregion
@@ -680,11 +635,11 @@ namespace Mutagen.Bethesda.Fallout4
                 if (eval(this.ActivateTextOverride)) return true;
                 if (eval(this.Flags)) return true;
                 if (eval(this.InteractionKeyword)) return true;
-                if (eval(this.SoundModel)) return true;
-                if (eval(this.Frequency)) return true;
-                if (eval(this.Volume)) return true;
-                if (eval(this.StartsActive)) return true;
-                if (eval(this.NoSignalStatic)) return true;
+                if (RadioReceiver != null)
+                {
+                    if (eval(this.RadioReceiver.Overall)) return true;
+                    if (this.RadioReceiver.Specific != null && this.RadioReceiver.Specific.Any(eval)) return true;
+                }
                 if (this.Conditions != null)
                 {
                     if (eval(this.Conditions.Overall)) return true;
@@ -697,7 +652,6 @@ namespace Mutagen.Bethesda.Fallout4
                         }
                     }
                 }
-                if (eval(this.RADRDataTypeState)) return true;
                 return false;
             }
             #endregion
@@ -744,11 +698,7 @@ namespace Mutagen.Bethesda.Fallout4
                 obj.ActivateTextOverride = eval(this.ActivateTextOverride);
                 obj.Flags = eval(this.Flags);
                 obj.InteractionKeyword = eval(this.InteractionKeyword);
-                obj.SoundModel = eval(this.SoundModel);
-                obj.Frequency = eval(this.Frequency);
-                obj.Volume = eval(this.Volume);
-                obj.StartsActive = eval(this.StartsActive);
-                obj.NoSignalStatic = eval(this.NoSignalStatic);
+                obj.RadioReceiver = this.RadioReceiver == null ? null : new MaskItem<R, RadioReceiver.Mask<R>?>(eval(this.RadioReceiver.Overall), this.RadioReceiver.Specific?.Translate(eval));
                 if (Conditions != null)
                 {
                     obj.Conditions = new MaskItem<R, IEnumerable<MaskItemIndexed<R, Condition.Mask<R>?>>?>(eval(this.Conditions.Overall), Enumerable.Empty<MaskItemIndexed<R, Condition.Mask<R>?>>());
@@ -764,7 +714,6 @@ namespace Mutagen.Bethesda.Fallout4
                         }
                     }
                 }
-                obj.RADRDataTypeState = eval(this.RADRDataTypeState);
             }
             #endregion
 
@@ -878,25 +827,9 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         fg.AppendItem(InteractionKeyword, "InteractionKeyword");
                     }
-                    if (printMask?.SoundModel ?? true)
+                    if (printMask?.RadioReceiver?.Overall ?? true)
                     {
-                        fg.AppendItem(SoundModel, "SoundModel");
-                    }
-                    if (printMask?.Frequency ?? true)
-                    {
-                        fg.AppendItem(Frequency, "Frequency");
-                    }
-                    if (printMask?.Volume ?? true)
-                    {
-                        fg.AppendItem(Volume, "Volume");
-                    }
-                    if (printMask?.StartsActive ?? true)
-                    {
-                        fg.AppendItem(StartsActive, "StartsActive");
-                    }
-                    if (printMask?.NoSignalStatic ?? true)
-                    {
-                        fg.AppendItem(NoSignalStatic, "NoSignalStatic");
+                        RadioReceiver?.ToString(fg);
                     }
                     if ((printMask?.Conditions?.Overall ?? true)
                         && Conditions is {} ConditionsItem)
@@ -920,10 +853,6 @@ namespace Mutagen.Bethesda.Fallout4
                             }
                         }
                         fg.AppendLine("]");
-                    }
-                    if (printMask?.RADRDataTypeState ?? true)
-                    {
-                        fg.AppendItem(RADRDataTypeState, "RADRDataTypeState");
                     }
                 }
                 fg.AppendLine("]");
@@ -955,13 +884,8 @@ namespace Mutagen.Bethesda.Fallout4
             public Exception? ActivateTextOverride;
             public Exception? Flags;
             public Exception? InteractionKeyword;
-            public Exception? SoundModel;
-            public Exception? Frequency;
-            public Exception? Volume;
-            public Exception? StartsActive;
-            public Exception? NoSignalStatic;
+            public MaskItem<Exception?, RadioReceiver.ErrorMask?>? RadioReceiver;
             public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, Condition.ErrorMask?>>?>? Conditions;
-            public Exception? RADRDataTypeState;
             #endregion
 
             #region IErrorMask
@@ -1006,20 +930,10 @@ namespace Mutagen.Bethesda.Fallout4
                         return Flags;
                     case Activator_FieldIndex.InteractionKeyword:
                         return InteractionKeyword;
-                    case Activator_FieldIndex.SoundModel:
-                        return SoundModel;
-                    case Activator_FieldIndex.Frequency:
-                        return Frequency;
-                    case Activator_FieldIndex.Volume:
-                        return Volume;
-                    case Activator_FieldIndex.StartsActive:
-                        return StartsActive;
-                    case Activator_FieldIndex.NoSignalStatic:
-                        return NoSignalStatic;
+                    case Activator_FieldIndex.RadioReceiver:
+                        return RadioReceiver;
                     case Activator_FieldIndex.Conditions:
                         return Conditions;
-                    case Activator_FieldIndex.RADRDataTypeState:
-                        return RADRDataTypeState;
                     default:
                         return base.GetNthMask(index);
                 }
@@ -1084,26 +998,11 @@ namespace Mutagen.Bethesda.Fallout4
                     case Activator_FieldIndex.InteractionKeyword:
                         this.InteractionKeyword = ex;
                         break;
-                    case Activator_FieldIndex.SoundModel:
-                        this.SoundModel = ex;
-                        break;
-                    case Activator_FieldIndex.Frequency:
-                        this.Frequency = ex;
-                        break;
-                    case Activator_FieldIndex.Volume:
-                        this.Volume = ex;
-                        break;
-                    case Activator_FieldIndex.StartsActive:
-                        this.StartsActive = ex;
-                        break;
-                    case Activator_FieldIndex.NoSignalStatic:
-                        this.NoSignalStatic = ex;
+                    case Activator_FieldIndex.RadioReceiver:
+                        this.RadioReceiver = new MaskItem<Exception?, RadioReceiver.ErrorMask?>(ex, null);
                         break;
                     case Activator_FieldIndex.Conditions:
                         this.Conditions = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, Condition.ErrorMask?>>?>(ex, null);
-                        break;
-                    case Activator_FieldIndex.RADRDataTypeState:
-                        this.RADRDataTypeState = ex;
                         break;
                     default:
                         base.SetNthException(index, ex);
@@ -1170,26 +1069,11 @@ namespace Mutagen.Bethesda.Fallout4
                     case Activator_FieldIndex.InteractionKeyword:
                         this.InteractionKeyword = (Exception?)obj;
                         break;
-                    case Activator_FieldIndex.SoundModel:
-                        this.SoundModel = (Exception?)obj;
-                        break;
-                    case Activator_FieldIndex.Frequency:
-                        this.Frequency = (Exception?)obj;
-                        break;
-                    case Activator_FieldIndex.Volume:
-                        this.Volume = (Exception?)obj;
-                        break;
-                    case Activator_FieldIndex.StartsActive:
-                        this.StartsActive = (Exception?)obj;
-                        break;
-                    case Activator_FieldIndex.NoSignalStatic:
-                        this.NoSignalStatic = (Exception?)obj;
+                    case Activator_FieldIndex.RadioReceiver:
+                        this.RadioReceiver = (MaskItem<Exception?, RadioReceiver.ErrorMask?>?)obj;
                         break;
                     case Activator_FieldIndex.Conditions:
                         this.Conditions = (MaskItem<Exception?, IEnumerable<MaskItem<Exception?, Condition.ErrorMask?>>?>)obj;
-                        break;
-                    case Activator_FieldIndex.RADRDataTypeState:
-                        this.RADRDataTypeState = (Exception?)obj;
                         break;
                     default:
                         base.SetNthMask(index, obj);
@@ -1218,13 +1102,8 @@ namespace Mutagen.Bethesda.Fallout4
                 if (ActivateTextOverride != null) return true;
                 if (Flags != null) return true;
                 if (InteractionKeyword != null) return true;
-                if (SoundModel != null) return true;
-                if (Frequency != null) return true;
-                if (Volume != null) return true;
-                if (StartsActive != null) return true;
-                if (NoSignalStatic != null) return true;
+                if (RadioReceiver != null) return true;
                 if (Conditions != null) return true;
-                if (RADRDataTypeState != null) return true;
                 return false;
             }
             #endregion
@@ -1299,11 +1178,7 @@ namespace Mutagen.Bethesda.Fallout4
                 fg.AppendItem(ActivateTextOverride, "ActivateTextOverride");
                 fg.AppendItem(Flags, "Flags");
                 fg.AppendItem(InteractionKeyword, "InteractionKeyword");
-                fg.AppendItem(SoundModel, "SoundModel");
-                fg.AppendItem(Frequency, "Frequency");
-                fg.AppendItem(Volume, "Volume");
-                fg.AppendItem(StartsActive, "StartsActive");
-                fg.AppendItem(NoSignalStatic, "NoSignalStatic");
+                RadioReceiver?.ToString(fg);
                 if (Conditions is {} ConditionsItem)
                 {
                     fg.AppendLine("Conditions =>");
@@ -1326,7 +1201,6 @@ namespace Mutagen.Bethesda.Fallout4
                     }
                     fg.AppendLine("]");
                 }
-                fg.AppendItem(RADRDataTypeState, "RADRDataTypeState");
             }
             #endregion
 
@@ -1353,13 +1227,8 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.ActivateTextOverride = this.ActivateTextOverride.Combine(rhs.ActivateTextOverride);
                 ret.Flags = this.Flags.Combine(rhs.Flags);
                 ret.InteractionKeyword = this.InteractionKeyword.Combine(rhs.InteractionKeyword);
-                ret.SoundModel = this.SoundModel.Combine(rhs.SoundModel);
-                ret.Frequency = this.Frequency.Combine(rhs.Frequency);
-                ret.Volume = this.Volume.Combine(rhs.Volume);
-                ret.StartsActive = this.StartsActive.Combine(rhs.StartsActive);
-                ret.NoSignalStatic = this.NoSignalStatic.Combine(rhs.NoSignalStatic);
+                ret.RadioReceiver = this.RadioReceiver.Combine(rhs.RadioReceiver, (l, r) => l.Combine(r));
                 ret.Conditions = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, Condition.ErrorMask?>>?>(ExceptionExt.Combine(this.Conditions?.Overall, rhs.Conditions?.Overall), ExceptionExt.Combine(this.Conditions?.Specific, rhs.Conditions?.Specific));
-                ret.RADRDataTypeState = this.RADRDataTypeState.Combine(rhs.RADRDataTypeState);
                 return ret;
             }
             public static ErrorMask? Combine(ErrorMask? lhs, ErrorMask? rhs)
@@ -1400,13 +1269,8 @@ namespace Mutagen.Bethesda.Fallout4
             public bool ActivateTextOverride;
             public bool Flags;
             public bool InteractionKeyword;
-            public bool SoundModel;
-            public bool Frequency;
-            public bool Volume;
-            public bool StartsActive;
-            public bool NoSignalStatic;
+            public RadioReceiver.TranslationMask? RadioReceiver;
             public Condition.TranslationMask? Conditions;
-            public bool RADRDataTypeState;
             #endregion
 
             #region Ctors
@@ -1427,12 +1291,6 @@ namespace Mutagen.Bethesda.Fallout4
                 this.ActivateTextOverride = defaultOn;
                 this.Flags = defaultOn;
                 this.InteractionKeyword = defaultOn;
-                this.SoundModel = defaultOn;
-                this.Frequency = defaultOn;
-                this.Volume = defaultOn;
-                this.StartsActive = defaultOn;
-                this.NoSignalStatic = defaultOn;
-                this.RADRDataTypeState = defaultOn;
             }
 
             #endregion
@@ -1458,13 +1316,8 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((ActivateTextOverride, null));
                 ret.Add((Flags, null));
                 ret.Add((InteractionKeyword, null));
-                ret.Add((SoundModel, null));
-                ret.Add((Frequency, null));
-                ret.Add((Volume, null));
-                ret.Add((StartsActive, null));
-                ret.Add((NoSignalStatic, null));
+                ret.Add((RadioReceiver != null ? RadioReceiver.OnOverall : DefaultOn, RadioReceiver?.GetCrystal()));
                 ret.Add((Conditions == null ? DefaultOn : !Conditions.GetCrystal().CopyNothing, Conditions?.GetCrystal()));
-                ret.Add((RADRDataTypeState, null));
             }
 
             public static implicit operator TranslationMask(bool defaultOn)
@@ -1525,10 +1378,6 @@ namespace Mutagen.Bethesda.Fallout4
         {
             get => (MajorFlag)this.MajorRecordFlagsRaw;
             set => this.MajorRecordFlagsRaw = (int)value;
-        }
-        [Flags]
-        public enum RADRDataType
-        {
         }
         #region Equals and Hash
         public override bool Equals(object? obj)
@@ -1657,13 +1506,8 @@ namespace Mutagen.Bethesda.Fallout4
         new TranslatedString? ActivateTextOverride { get; set; }
         new Activator.Flag? Flags { get; set; }
         new IFormLinkNullable<IKeywordGetter> InteractionKeyword { get; set; }
-        new IFormLink<ISoundOutputModelGetter> SoundModel { get; set; }
-        new Single Frequency { get; set; }
-        new Single Volume { get; set; }
-        new Boolean StartsActive { get; set; }
-        new Boolean NoSignalStatic { get; set; }
+        new RadioReceiver? RadioReceiver { get; set; }
         new ExtendedList<Condition>? Conditions { get; set; }
-        new Activator.RADRDataType RADRDataTypeState { get; set; }
         #region Mutagen
         new Activator.MajorFlag MajorFlags { get; set; }
         #endregion
@@ -1739,13 +1583,8 @@ namespace Mutagen.Bethesda.Fallout4
         ITranslatedStringGetter? ActivateTextOverride { get; }
         Activator.Flag? Flags { get; }
         IFormLinkNullableGetter<IKeywordGetter> InteractionKeyword { get; }
-        IFormLinkGetter<ISoundOutputModelGetter> SoundModel { get; }
-        Single Frequency { get; }
-        Single Volume { get; }
-        Boolean StartsActive { get; }
-        Boolean NoSignalStatic { get; }
+        IRadioReceiverGetter? RadioReceiver { get; }
         IReadOnlyList<IConditionGetter>? Conditions { get; }
-        Activator.RADRDataType RADRDataTypeState { get; }
 
         #region Mutagen
         Activator.MajorFlag MajorFlags { get; }
@@ -1932,13 +1771,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         ActivateTextOverride = 21,
         Flags = 22,
         InteractionKeyword = 23,
-        SoundModel = 24,
-        Frequency = 25,
-        Volume = 26,
-        StartsActive = 27,
-        NoSignalStatic = 28,
-        Conditions = 29,
-        RADRDataTypeState = 30,
+        RadioReceiver = 24,
+        Conditions = 25,
     }
     #endregion
 
@@ -1956,9 +1790,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public const string GUID = "e5dd8417-9b46-4754-bfe1-1db51332bfa4";
 
-        public const ushort AdditionalFieldCount = 25;
+        public const ushort AdditionalFieldCount = 20;
 
-        public const ushort FieldCount = 31;
+        public const ushort FieldCount = 26;
 
         public static readonly Type MaskType = typeof(Activator.Mask<>);
 
@@ -2045,13 +1879,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.ActivateTextOverride = default;
             item.Flags = default;
             item.InteractionKeyword.Clear();
-            item.SoundModel.Clear();
-            item.Frequency = default;
-            item.Volume = default;
-            item.StartsActive = default;
-            item.NoSignalStatic = default;
+            item.RadioReceiver = null;
             item.Conditions = null;
-            item.RADRDataTypeState = default;
             base.Clear(item);
         }
         
@@ -2081,7 +1910,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.ActivationSound.Relink(mapping);
             obj.WaterType.Relink(mapping);
             obj.InteractionKeyword.Relink(mapping);
-            obj.SoundModel.Relink(mapping);
+            obj.RadioReceiver?.RemapLinks(mapping);
             obj.Conditions?.RemapLinks(mapping);
         }
         
@@ -2188,16 +2017,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ret.ActivateTextOverride = object.Equals(item.ActivateTextOverride, rhs.ActivateTextOverride);
             ret.Flags = item.Flags == rhs.Flags;
             ret.InteractionKeyword = item.InteractionKeyword.Equals(rhs.InteractionKeyword);
-            ret.SoundModel = item.SoundModel.Equals(rhs.SoundModel);
-            ret.Frequency = item.Frequency.EqualsWithin(rhs.Frequency);
-            ret.Volume = item.Volume.EqualsWithin(rhs.Volume);
-            ret.StartsActive = item.StartsActive == rhs.StartsActive;
-            ret.NoSignalStatic = item.NoSignalStatic == rhs.NoSignalStatic;
+            ret.RadioReceiver = EqualsMaskHelper.EqualsHelper(
+                item.RadioReceiver,
+                rhs.RadioReceiver,
+                (loqLhs, loqRhs, incl) => loqLhs.GetEqualsMask(loqRhs, incl),
+                include);
             ret.Conditions = item.Conditions.CollectionEqualsHelper(
                 rhs.Conditions,
                 (loqLhs, loqRhs) => loqLhs.GetEqualsMask(loqRhs, include),
                 include);
-            ret.RADRDataTypeState = item.RADRDataTypeState == rhs.RADRDataTypeState;
             base.FillEqualsMask(item, rhs, ret, include);
         }
         
@@ -2344,25 +2172,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 fg.AppendItem(item.InteractionKeyword.FormKeyNullable, "InteractionKeyword");
             }
-            if (printMask?.SoundModel ?? true)
+            if ((printMask?.RadioReceiver?.Overall ?? true)
+                && item.RadioReceiver is {} RadioReceiverItem)
             {
-                fg.AppendItem(item.SoundModel.FormKey, "SoundModel");
-            }
-            if (printMask?.Frequency ?? true)
-            {
-                fg.AppendItem(item.Frequency, "Frequency");
-            }
-            if (printMask?.Volume ?? true)
-            {
-                fg.AppendItem(item.Volume, "Volume");
-            }
-            if (printMask?.StartsActive ?? true)
-            {
-                fg.AppendItem(item.StartsActive, "StartsActive");
-            }
-            if (printMask?.NoSignalStatic ?? true)
-            {
-                fg.AppendItem(item.NoSignalStatic, "NoSignalStatic");
+                RadioReceiverItem?.ToString(fg, "RadioReceiver");
             }
             if ((printMask?.Conditions?.Overall ?? true)
                 && item.Conditions is {} ConditionsItem)
@@ -2382,10 +2195,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     }
                 }
                 fg.AppendLine("]");
-            }
-            if (printMask?.RADRDataTypeState ?? true)
-            {
-                fg.AppendItem(item.RADRDataTypeState, "RADRDataTypeState");
             }
         }
         
@@ -2531,33 +2340,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 if (!lhs.InteractionKeyword.Equals(rhs.InteractionKeyword)) return false;
             }
-            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.SoundModel) ?? true))
+            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.RadioReceiver) ?? true))
             {
-                if (!lhs.SoundModel.Equals(rhs.SoundModel)) return false;
-            }
-            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.Frequency) ?? true))
-            {
-                if (!lhs.Frequency.EqualsWithin(rhs.Frequency)) return false;
-            }
-            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.Volume) ?? true))
-            {
-                if (!lhs.Volume.EqualsWithin(rhs.Volume)) return false;
-            }
-            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.StartsActive) ?? true))
-            {
-                if (lhs.StartsActive != rhs.StartsActive) return false;
-            }
-            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.NoSignalStatic) ?? true))
-            {
-                if (lhs.NoSignalStatic != rhs.NoSignalStatic) return false;
+                if (EqualsMaskHelper.RefEquality(lhs.RadioReceiver, rhs.RadioReceiver, out var lhsRadioReceiver, out var rhsRadioReceiver, out var isRadioReceiverEqual))
+                {
+                    if (!((RadioReceiverCommon)((IRadioReceiverGetter)lhsRadioReceiver).CommonInstance()!).Equals(lhsRadioReceiver, rhsRadioReceiver, crystal?.GetSubCrystal((int)Activator_FieldIndex.RadioReceiver))) return false;
+                }
+                else if (!isRadioReceiverEqual) return false;
             }
             if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.Conditions) ?? true))
             {
                 if (!lhs.Conditions.SequenceEqualNullable(rhs.Conditions)) return false;
-            }
-            if ((crystal?.GetShouldTranslate((int)Activator_FieldIndex.RADRDataTypeState) ?? true))
-            {
-                if (lhs.RADRDataTypeState != rhs.RADRDataTypeState) return false;
             }
             return true;
         }
@@ -2629,13 +2422,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 hash.Add(Flagsitem);
             }
             hash.Add(item.InteractionKeyword);
-            hash.Add(item.SoundModel);
-            hash.Add(item.Frequency);
-            hash.Add(item.Volume);
-            hash.Add(item.StartsActive);
-            hash.Add(item.NoSignalStatic);
+            if (item.RadioReceiver is {} RadioReceiveritem)
+            {
+                hash.Add(RadioReceiveritem);
+            }
             hash.Add(item.Conditions);
-            hash.Add(item.RADRDataTypeState);
             hash.Add(base.GetHashCode());
             return hash.ToHashCode();
         }
@@ -2725,7 +2516,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 yield return FormLinkInformation.Factory(obj.InteractionKeyword);
             }
-            yield return FormLinkInformation.Factory(obj.SoundModel);
+            if (obj.RadioReceiver is {} RadioReceiverItems)
+            {
+                foreach (var item in RadioReceiverItems.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
             if (obj.Conditions is {} ConditionsItem)
             {
                 foreach (var item in ConditionsItem.WhereCastable<IConditionGetter, IFormLinkContainerGetter>()
@@ -3027,25 +2824,31 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 item.InteractionKeyword.SetTo(rhs.InteractionKeyword.FormKeyNullable);
             }
-            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.SoundModel) ?? true))
+            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.RadioReceiver) ?? true))
             {
-                item.SoundModel.SetTo(rhs.SoundModel.FormKey);
-            }
-            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.Frequency) ?? true))
-            {
-                item.Frequency = rhs.Frequency;
-            }
-            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.Volume) ?? true))
-            {
-                item.Volume = rhs.Volume;
-            }
-            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.StartsActive) ?? true))
-            {
-                item.StartsActive = rhs.StartsActive;
-            }
-            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.NoSignalStatic) ?? true))
-            {
-                item.NoSignalStatic = rhs.NoSignalStatic;
+                errorMask?.PushIndex((int)Activator_FieldIndex.RadioReceiver);
+                try
+                {
+                    if(rhs.RadioReceiver is {} rhsRadioReceiver)
+                    {
+                        item.RadioReceiver = rhsRadioReceiver.DeepCopy(
+                            errorMask: errorMask,
+                            copyMask?.GetSubCrystal((int)Activator_FieldIndex.RadioReceiver));
+                    }
+                    else
+                    {
+                        item.RadioReceiver = default;
+                    }
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
             }
             if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.Conditions) ?? true))
             {
@@ -3078,10 +2881,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 {
                     errorMask?.PopIndex();
                 }
-            }
-            if ((copyMask?.GetShouldTranslate((int)Activator_FieldIndex.RADRDataTypeState) ?? true))
-            {
-                item.RADRDataTypeState = rhs.RADRDataTypeState;
             }
         }
         
@@ -3231,15 +3030,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
     {
         public new readonly static ActivatorBinaryWriteTranslation Instance = new ActivatorBinaryWriteTranslation();
 
-        public static void WriteEmbedded(
-            IActivatorGetter item,
-            MutagenWriter writer)
-        {
-            Fallout4MajorRecordBinaryWriteTranslation.WriteEmbedded(
-                item: item,
-                writer: writer);
-        }
-
         public static void WriteRecordTypes(
             IActivatorGetter item,
             MutagenWriter writer,
@@ -3336,7 +3126,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             StringBinaryTranslation.Instance.WriteNullable(
                 writer: writer,
                 item: item.ActivateTextOverride,
-                header: translationParams.ConvertToCustom(RecordTypes.RNAM),
+                header: translationParams.ConvertToCustom(RecordTypes.ATTX),
                 binaryType: StringBinaryType.NullTerminate,
                 source: StringsSource.Normal);
             EnumBinaryTranslation<Activator.Flag, MutagenFrame, MutagenWriter>.Instance.WriteNullable(
@@ -3348,19 +3138,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 writer: writer,
                 item: item.InteractionKeyword,
                 header: translationParams.ConvertToCustom(RecordTypes.KNAM));
-            using (HeaderExport.Subrecord(writer, translationParams.ConvertToCustom(RecordTypes.RADR)))
+            if (item.RadioReceiver is {} RadioReceiverItem)
             {
-                FormLinkBinaryTranslation.Instance.Write(
+                ((RadioReceiverBinaryWriteTranslation)((IBinaryItem)RadioReceiverItem).BinaryWriteTranslator).Write(
+                    item: RadioReceiverItem,
                     writer: writer,
-                    item: item.SoundModel);
-                FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
-                    writer: writer,
-                    item: item.Frequency);
-                FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
-                    writer: writer,
-                    item: item.Volume);
-                writer.Write(item.StartsActive);
-                writer.Write(item.NoSignalStatic);
+                    translationParams: translationParams);
             }
             Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IConditionGetter>.Instance.WriteWithCounter(
                 writer: writer,
@@ -3388,7 +3171,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 try
                 {
-                    WriteEmbedded(
+                    Fallout4MajorRecordBinaryWriteTranslation.WriteEmbedded(
                         item: item,
                         writer: writer);
                     writer.MetaData.FormVersion = item.FormVersion;
@@ -3568,7 +3351,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     item.WaterType.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
                     return (int)Activator_FieldIndex.WaterType;
                 }
-                case RecordTypeInts.RNAM:
+                case RecordTypeInts.ATTX:
                 {
                     frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
                     item.ActivateTextOverride = StringBinaryTranslation.Instance.Parse(
@@ -3593,14 +3376,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.RADR:
                 {
-                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
-                    var dataFrame = frame.SpawnWithLength(contentLength);
-                    item.SoundModel.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
-                    item.Frequency = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
-                    item.Volume = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
-                    item.StartsActive = dataFrame.ReadBoolean();
-                    item.NoSignalStatic = dataFrame.ReadBoolean();
-                    return (int)Activator_FieldIndex.NoSignalStatic;
+                    item.RadioReceiver = Mutagen.Bethesda.Fallout4.RadioReceiver.CreateFromBinary(frame: frame);
+                    return (int)Activator_FieldIndex.RadioReceiver;
                 }
                 case RecordTypeInts.CTDA:
                 case RecordTypeInts.CITC:
@@ -3751,32 +3528,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private int? _InteractionKeywordLocation;
         public IFormLinkNullableGetter<IKeywordGetter> InteractionKeyword => _InteractionKeywordLocation.HasValue ? new FormLinkNullable<IKeywordGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _InteractionKeywordLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<IKeywordGetter>.Null;
         #endregion
-        private int? _RADRLocation;
-        public Activator.RADRDataType RADRDataTypeState { get; private set; }
-        #region SoundModel
-        private int _SoundModelLocation => _RADRLocation!.Value;
-        private bool _SoundModel_IsSet => _RADRLocation.HasValue;
-        public IFormLinkGetter<ISoundOutputModelGetter> SoundModel => _SoundModel_IsSet ? new FormLink<ISoundOutputModelGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(_data.Span.Slice(_SoundModelLocation, 0x4)))) : FormLink<ISoundOutputModelGetter>.Null;
-        #endregion
-        #region Frequency
-        private int _FrequencyLocation => _RADRLocation!.Value + 0x4;
-        private bool _Frequency_IsSet => _RADRLocation.HasValue;
-        public Single Frequency => _Frequency_IsSet ? _data.Slice(_FrequencyLocation, 4).Float() : default;
-        #endregion
-        #region Volume
-        private int _VolumeLocation => _RADRLocation!.Value + 0x8;
-        private bool _Volume_IsSet => _RADRLocation.HasValue;
-        public Single Volume => _Volume_IsSet ? _data.Slice(_VolumeLocation, 4).Float() : default;
-        #endregion
-        #region StartsActive
-        private int _StartsActiveLocation => _RADRLocation!.Value + 0xC;
-        private bool _StartsActive_IsSet => _RADRLocation.HasValue;
-        public Boolean StartsActive => _StartsActive_IsSet ? _data.Slice(_StartsActiveLocation, 1)[0] == 1 : default;
-        #endregion
-        #region NoSignalStatic
-        private int _NoSignalStaticLocation => _RADRLocation!.Value + 0xD;
-        private bool _NoSignalStatic_IsSet => _RADRLocation.HasValue;
-        public Boolean NoSignalStatic => _NoSignalStatic_IsSet ? _data.Slice(_NoSignalStaticLocation, 1)[0] == 1 : default;
+        #region RadioReceiver
+        private RangeInt32? _RadioReceiverLocation;
+        public IRadioReceiverGetter? RadioReceiver => _RadioReceiverLocation.HasValue ? RadioReceiverBinaryOverlay.RadioReceiverFactory(new OverlayStream(_data.Slice(_RadioReceiverLocation!.Value.Min), _package), _package) : default;
         #endregion
         #region Conditions
         partial void ConditionsCustomParse(
@@ -3945,7 +3699,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     _WaterTypeLocation = (stream.Position - offset);
                     return (int)Activator_FieldIndex.WaterType;
                 }
-                case RecordTypeInts.RNAM:
+                case RecordTypeInts.ATTX:
                 {
                     _ActivateTextOverrideLocation = (stream.Position - offset);
                     return (int)Activator_FieldIndex.ActivateTextOverride;
@@ -3962,8 +3716,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.RADR:
                 {
-                    _RADRLocation = (stream.Position - offset) + _package.MetaData.Constants.SubConstants.TypeAndLengthLength;
-                    return (int)Activator_FieldIndex.NoSignalStatic;
+                    _RadioReceiverLocation = new RangeInt32((stream.Position - offset), finalPos - offset);
+                    return (int)Activator_FieldIndex.RadioReceiver;
                 }
                 case RecordTypeInts.CTDA:
                 case RecordTypeInts.CITC:

@@ -877,6 +877,9 @@
     <Compile Include="Records\Major Records\Ingestible_Generated.cs">
       <DependentUpon>Ingestible.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Major Records\RadioReceiver_Generated.cs">
+      <DependentUpon>Activator.xml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="GitInfo" Version="2.2.0">
