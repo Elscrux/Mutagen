@@ -155,18 +155,9 @@ namespace Mutagen.Bethesda.Fallout4
                 MutagenWriter writer,
                 ushort objFormat,
                 IReadOnlyList<IScriptEntryGetter> scripts,
-                bool isStruct = false,
-                bool isStructLoop = false)
+                bool isStruct = false)
             {
-                if (isStruct)
-                {
-                    if (!isStructLoop)
-                    {
-                        writer.Write(checked((uint)scripts.Count));
-                        isStructLoop = true;
-                    }
-                }
-                else if (!isStructLoop)
+                if (!isStruct)
                     writer.Write(checked((ushort)scripts.Count));
 
                 foreach (var entry in scripts)
@@ -227,13 +218,12 @@ namespace Mutagen.Bethesda.Fallout4
                                 WriteScripts(writer, objFormat, (IReadOnlyList<IScriptEntryGetter>)subStructs.Members, true);
                                 break;
                             case ScriptStructListProperty structList:
-                                bool isLoop = false;
                                 var structsList = structList.Structs;
+                                writer.Write(checked((uint)structsList.Count));
                                 for (int i = 0; i < structsList.Count; ++i)
                                 {
                                     var subStructs = structsList[i];
-                                    WriteScripts(writer, objFormat, (IReadOnlyList<IScriptEntryGetter>)subStructs.Members, true, isLoop);
-                                    isLoop = true;
+                                    WriteScripts(writer, objFormat, (IReadOnlyList<IScriptEntryGetter>)subStructs.Members, true);
                                 }
 
                                 break;
