@@ -4,7 +4,7 @@
     <Fields>
       <RefDirect name="VirtualMachineAdapter" refName="VirtualMachineAdapter" />
       <RefDirect name="ObjectBounds" refName="ObjectBounds" nullable="False" />
-      <RefDirect name="PreviewTransform" refName="PreviewTransform" nullable="False" />
+      <RefDirect name="PreviewTransform" refName="PreviewTransform" />
       <RefDirect name="Model" refName="Model" />
       <List name="Keywords" counterRecType="KSIZ" recordType="KWDA">
         <FormLink refName="Keyword" />

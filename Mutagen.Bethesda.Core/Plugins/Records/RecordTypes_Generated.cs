@@ -2,7 +2,7 @@ using Mutagen.Bethesda.Plugins;
 
 namespace Mutagen.Bethesda.Plugins.Records.Internals
 {
-    public class RecordTypes
+    public partial class RecordTypes
     {
         public static readonly RecordType AACT = new(0x54434141);
         public static readonly RecordType ACHR = new(0x52484341);

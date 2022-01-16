@@ -68,6 +68,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int EFID = 0x44494645;
         public const int EFIT = 0x54494645;
         public const int EITM = 0x4D544945;
+        public const int ENAM = 0x4D414E45;
         public const int ENCH = 0x48434E45;
         public const int ENIT = 0x54494E45;
         public const int EQUP = 0x50555145;
@@ -82,6 +83,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int FMRI = 0x49524D46;
         public const int FMRN = 0x4E524D46;
         public const int FNAM = 0x4D414E46;
+        public const int FNPR = 0x52504E46;
         public const int FSTP = 0x50545346;
         public const int FSTS = 0x53545346;
         public const int FTSM = 0x4D535446;
@@ -120,8 +122,18 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int LCRT = 0x5452434C;
         public const int LENS = 0x534E454C;
         public const int LIGH = 0x4847494C;
+        public const int LLCT = 0x54434C4C;
+        public const int LLKC = 0x434B4C4C;
         public const int LNAM = 0x4D414E4C;
         public const int LTEX = 0x5845544C;
+        public const int LVLD = 0x444C564C;
+        public const int LVLF = 0x464C564C;
+        public const int LVLG = 0x474C564C;
+        public const int LVLI = 0x494C564C;
+        public const int LVLM = 0x4D4C564C;
+        public const int LVLN = 0x4E4C564C;
+        public const int LVLO = 0x4F4C564C;
+        public const int LVSG = 0x4753564C;
         public const int LVSP = 0x5053564C;
         public const int MAST = 0x5453414D;
         public const int MATT = 0x5454414D;
@@ -274,6 +286,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int VTYP = 0x50595456;
         public const int WAIT = 0x54494157;
         public const int WATR = 0x52544157;
+        public const int WBDT = 0x54444257;
         public const int WEAP = 0x50414557;
         public const int WGDR = 0x52444757;
         public const int WKMV = 0x564D4B57;
@@ -282,6 +295,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int WRLD = 0x444C5257;
         public const int WTHR = 0x52485457;
         public const int XCNT = 0x544E4358;
+        public const int XMRK = 0x4B524D58;
         public const int XNAM = 0x4D414E58;
         public const int XTRI = 0x49525458;
         public const int XXXX = 0x58585858;

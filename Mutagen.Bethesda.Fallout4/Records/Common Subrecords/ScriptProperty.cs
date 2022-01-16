@@ -20,11 +20,15 @@ namespace Mutagen.Bethesda.Fallout4
             Int = 3,
             Float = 4,
             Bool = 5,
+            Variable = 6,
+            Struct = 7,
             ArrayOfObject = 11,
             ArrayOfString = 12,
             ArrayOfInt = 13,
             ArrayOfFloat = 14,
             ArrayOfBool = 15,
+            ArrayOfVariable = 16,
+            ArrayOfStruct = 17
         }
     }
 

@@ -884,20 +884,22 @@ namespace Mutagen.Bethesda.Skyrim
 
             public static void CustomStringImports(MutagenFrame frame, IConditionData item)
             {
-                if (!frame.Reader.TryGetSubrecordFrame(out var subMeta)) return;
                 if (!(item is IFunctionConditionData funcData)) return;
-                switch (subMeta.RecordType.TypeInt)
+                while (frame.Reader.TryGetSubrecordFrame(out var subMeta))
                 {
-                    case 0x31534943: // CIS1
-                        funcData.ParameterOneString = BinaryStringUtility.ProcessWholeToZString(subMeta.Content);
-                        break;
-                    case 0x32534943: // CIS2
-                        funcData.ParameterTwoString = BinaryStringUtility.ProcessWholeToZString(subMeta.Content);
-                        break;
-                    default:
-                        return;
+                    switch (subMeta.RecordType.TypeInt)
+                    {
+                        case 0x31534943: // CIS1
+                            funcData.ParameterOneString = BinaryStringUtility.ProcessWholeToZString(subMeta.Content);
+                            break;
+                        case 0x32534943: // CIS2
+                            funcData.ParameterTwoString = BinaryStringUtility.ProcessWholeToZString(subMeta.Content);
+                            break;
+                        default:
+                            return;
+                    }
+                    frame.Position += subMeta.TotalLength;
                 }
-                frame.Position += subMeta.TotalLength;
             }
         }
 

@@ -11,14 +11,18 @@ using Mutagen.Bethesda.Fallout4;
 using Mutagen.Bethesda.Fallout4.Internals;
 using Mutagen.Bethesda.Internals;
 using Mutagen.Bethesda.Plugins;
+using Mutagen.Bethesda.Plugins.Aspects;
 using Mutagen.Bethesda.Plugins.Binary.Overlay;
 using Mutagen.Bethesda.Plugins.Binary.Streams;
 using Mutagen.Bethesda.Plugins.Binary.Translations;
+using Mutagen.Bethesda.Plugins.Cache;
 using Mutagen.Bethesda.Plugins.Exceptions;
+using Mutagen.Bethesda.Plugins.Internals;
 using Mutagen.Bethesda.Plugins.Records;
 using Mutagen.Bethesda.Plugins.Records.Internals;
 using Mutagen.Bethesda.Plugins.RecordTypeMapping;
 using Mutagen.Bethesda.Plugins.Utility;
+using Mutagen.Bethesda.Strings;
 using Mutagen.Bethesda.Translations.Binary;
 using Noggog;
 using System;
@@ -51,6 +55,271 @@ namespace Mutagen.Bethesda.Fallout4
         partial void CustomCtor();
         #endregion
 
+        #region VirtualMachineAdapter
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private VirtualMachineAdapter? _VirtualMachineAdapter;
+        /// <summary>
+        /// Aspects: IScripted
+        /// </summary>
+        public VirtualMachineAdapter? VirtualMachineAdapter
+        {
+            get => _VirtualMachineAdapter;
+            set => _VirtualMachineAdapter = value;
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IVirtualMachineAdapterGetter? IFurnitureGetter.VirtualMachineAdapter => this.VirtualMachineAdapter;
+        #region Aspects
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IVirtualMachineAdapterGetter? IScriptedGetter.VirtualMachineAdapter => this.VirtualMachineAdapter;
+        #endregion
+        #endregion
+        #region ObjectBounds
+        /// <summary>
+        /// Aspects: IObjectBounded, IObjectBoundedOptional
+        /// </summary>
+        public ObjectBounds ObjectBounds { get; set; } = new ObjectBounds();
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IObjectBoundsGetter IFurnitureGetter.ObjectBounds => ObjectBounds;
+        #region Aspects
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        ObjectBounds? IObjectBoundedOptional.ObjectBounds
+        {
+            get => this.ObjectBounds;
+            set => this.ObjectBounds = value ?? new ObjectBounds();
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IObjectBoundsGetter IObjectBoundedGetter.ObjectBounds => this.ObjectBounds;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IObjectBoundsGetter? IObjectBoundedOptionalGetter.ObjectBounds => this.ObjectBounds;
+        #endregion
+        #endregion
+        #region PreviewTransform
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private PreviewTransform? _PreviewTransform;
+        public PreviewTransform? PreviewTransform
+        {
+            get => _PreviewTransform;
+            set => _PreviewTransform = value;
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IPreviewTransformGetter? IFurnitureGetter.PreviewTransform => this.PreviewTransform;
+        #endregion
+        #region Name
+        /// <summary>
+        /// Aspects: INamed, INamedRequired, ITranslatedNamed, ITranslatedNamedRequired
+        /// </summary>
+        public TranslatedString? Name { get; set; }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        ITranslatedStringGetter? IFurnitureGetter.Name => this.Name;
+        #region Aspects
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        string INamedRequiredGetter.Name => this.Name?.String ?? string.Empty;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        string? INamedGetter.Name => this.Name?.String;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        ITranslatedStringGetter? ITranslatedNamedGetter.Name => this.Name;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        ITranslatedStringGetter ITranslatedNamedRequiredGetter.Name => this.Name ?? string.Empty;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        string? INamed.Name
+        {
+            get => this.Name?.String;
+            set => this.Name = value;
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        string INamedRequired.Name
+        {
+            get => this.Name?.String ?? string.Empty;
+            set => this.Name = value;
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        TranslatedString ITranslatedNamedRequired.Name
+        {
+            get => this.Name ?? string.Empty;
+            set => this.Name = value;
+        }
+        #endregion
+        #endregion
+        #region Model
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Model? _Model;
+        /// <summary>
+        /// Aspects: IModeled
+        /// </summary>
+        public Model? Model
+        {
+            get => _Model;
+            set => _Model = value;
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IModelGetter? IFurnitureGetter.Model => this.Model;
+        #region Aspects
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IModelGetter? IModeledGetter.Model => this.Model;
+        #endregion
+        #endregion
+        #region Destructible
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Destructible? _Destructible;
+        public Destructible? Destructible
+        {
+            get => _Destructible;
+            set => _Destructible = value;
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IDestructibleGetter? IFurnitureGetter.Destructible => this.Destructible;
+        #endregion
+        #region Keywords
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ExtendedList<IFormLinkGetter<IKeywordGetter>>? _Keywords;
+        /// <summary>
+        /// Aspects: IKeyworded&lt;IKeywordGetter&gt;
+        /// </summary>
+        public ExtendedList<IFormLinkGetter<IKeywordGetter>>? Keywords
+        {
+            get => this._Keywords;
+            set => this._Keywords = value;
+        }
+        #region Interface Members
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? IFurnitureGetter.Keywords => _Keywords;
+        #endregion
+
+        #region Aspects
+        IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? IKeywordedGetter<IKeywordGetter>.Keywords => this.Keywords;
+        IReadOnlyList<IFormLinkGetter<IKeywordCommonGetter>>? IKeywordedGetter.Keywords => this.Keywords;
+        #endregion
+        #endregion
+        #region Properties
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Properties? _Properties;
+        public Properties? Properties
+        {
+            get => _Properties;
+            set => _Properties = value;
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IPropertiesGetter? IFurnitureGetter.Properties => this.Properties;
+        #endregion
+        #region NativeTerminal
+        private readonly IFormLinkNullable<ITerminalGetter> _NativeTerminal = new FormLinkNullable<ITerminalGetter>();
+        public IFormLinkNullable<ITerminalGetter> NativeTerminal
+        {
+            get => _NativeTerminal;
+            set => _NativeTerminal.SetTo(value);
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFormLinkNullableGetter<ITerminalGetter> IFurnitureGetter.NativeTerminal => this.NativeTerminal;
+        #endregion
+        #region ForcedLocRefType
+        private readonly IFormLinkNullable<ILocationReferenceTypeGetter> _ForcedLocRefType = new FormLinkNullable<ILocationReferenceTypeGetter>();
+        public IFormLinkNullable<ILocationReferenceTypeGetter> ForcedLocRefType
+        {
+            get => _ForcedLocRefType;
+            set => _ForcedLocRefType.SetTo(value);
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFormLinkNullableGetter<ILocationReferenceTypeGetter> IFurnitureGetter.ForcedLocRefType => this.ForcedLocRefType;
+        #endregion
+        #region PNAM
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected MemorySlice<Byte>? _PNAM;
+        public MemorySlice<Byte>? PNAM
+        {
+            get => this._PNAM;
+            set => this._PNAM = value;
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        ReadOnlyMemorySlice<Byte>? IFurnitureGetter.PNAM => this.PNAM;
+        #endregion
+        #region WaterType
+        private readonly IFormLinkNullable<IWaterGetter> _WaterType = new FormLinkNullable<IWaterGetter>();
+        public IFormLinkNullable<IWaterGetter> WaterType
+        {
+            get => _WaterType;
+            set => _WaterType.SetTo(value);
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFormLinkNullableGetter<IWaterGetter> IFurnitureGetter.WaterType => this.WaterType;
+        #endregion
+        #region ATTXActivateTextOverride
+        public TranslatedString? ATTXActivateTextOverride { get; set; }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        ITranslatedStringGetter? IFurnitureGetter.ATTXActivateTextOverride => this.ATTXActivateTextOverride;
+        #endregion
+        #region Flags
+        public Furniture.Flag? Flags { get; set; }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        Furniture.Flag? IFurnitureGetter.Flags => this.Flags;
+        #endregion
+        #region Conditions
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ExtendedList<Condition>? _Conditions;
+        public ExtendedList<Condition>? Conditions
+        {
+            get => this._Conditions;
+            set => this._Conditions = value;
+        }
+        #region Interface Members
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IReadOnlyList<IConditionGetter>? IFurnitureGetter.Conditions => _Conditions;
+        #endregion
+
+        #endregion
+        #region Items
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ExtendedList<ContainerEntry>? _Items;
+        public ExtendedList<ContainerEntry>? Items
+        {
+            get => this._Items;
+            set => this._Items = value;
+        }
+        #region Interface Members
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IReadOnlyList<IContainerEntryGetter>? IFurnitureGetter.Items => _Items;
+        #endregion
+
+        #endregion
+        #region WorkbenchData
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private WorkbenchData? _WorkbenchData;
+        public WorkbenchData? WorkbenchData
+        {
+            get => _WorkbenchData;
+            set => _WorkbenchData = value;
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IWorkbenchDataGetter? IFurnitureGetter.WorkbenchData => this.WorkbenchData;
+        #endregion
+        #region AssociatedForm
+        private readonly IFormLinkNullable<IFurnitureAssociationGetter> _AssociatedForm = new FormLinkNullable<IFurnitureAssociationGetter>();
+        public IFormLinkNullable<IFurnitureAssociationGetter> AssociatedForm
+        {
+            get => _AssociatedForm;
+            set => _AssociatedForm.SetTo(value);
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFormLinkNullableGetter<IFurnitureAssociationGetter> IFurnitureGetter.AssociatedForm => this.AssociatedForm;
+        #endregion
+        #region Markers
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ExtendedList<FurnitureMarker>? _Markers;
+        public ExtendedList<FurnitureMarker>? Markers
+        {
+            get => this._Markers;
+            set => this._Markers = value;
+        }
+        #region Interface Members
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IReadOnlyList<IFurnitureMarkerGetter>? IFurnitureGetter.Markers => _Markers;
+        #endregion
+
+        #endregion
+        #region ModelFilename
+        public String? ModelFilename { get; set; }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        String? IFurnitureGetter.ModelFilename => this.ModelFilename;
+        #endregion
 
         #region To String
 
@@ -75,6 +344,26 @@ namespace Mutagen.Bethesda.Fallout4
             public Mask(TItem initialValue)
             : base(initialValue)
             {
+                this.VirtualMachineAdapter = new MaskItem<TItem, VirtualMachineAdapter.Mask<TItem>?>(initialValue, new VirtualMachineAdapter.Mask<TItem>(initialValue));
+                this.ObjectBounds = new MaskItem<TItem, ObjectBounds.Mask<TItem>?>(initialValue, new ObjectBounds.Mask<TItem>(initialValue));
+                this.PreviewTransform = new MaskItem<TItem, PreviewTransform.Mask<TItem>?>(initialValue, new PreviewTransform.Mask<TItem>(initialValue));
+                this.Name = initialValue;
+                this.Model = new MaskItem<TItem, Model.Mask<TItem>?>(initialValue, new Model.Mask<TItem>(initialValue));
+                this.Destructible = new MaskItem<TItem, Destructible.Mask<TItem>?>(initialValue, new Destructible.Mask<TItem>(initialValue));
+                this.Keywords = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(initialValue, Enumerable.Empty<(int Index, TItem Value)>());
+                this.Properties = new MaskItem<TItem, Properties.Mask<TItem>?>(initialValue, new Properties.Mask<TItem>(initialValue));
+                this.NativeTerminal = initialValue;
+                this.ForcedLocRefType = initialValue;
+                this.PNAM = initialValue;
+                this.WaterType = initialValue;
+                this.ATTXActivateTextOverride = initialValue;
+                this.Flags = initialValue;
+                this.Conditions = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, Condition.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, Condition.Mask<TItem>?>>());
+                this.Items = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ContainerEntry.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, ContainerEntry.Mask<TItem>?>>());
+                this.WorkbenchData = new MaskItem<TItem, WorkbenchData.Mask<TItem>?>(initialValue, new WorkbenchData.Mask<TItem>(initialValue));
+                this.AssociatedForm = initialValue;
+                this.Markers = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, FurnitureMarker.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, FurnitureMarker.Mask<TItem>?>>());
+                this.ModelFilename = initialValue;
             }
 
             public Mask(
@@ -83,7 +372,27 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem VersionControl,
                 TItem EditorID,
                 TItem FormVersion,
-                TItem Version2)
+                TItem Version2,
+                TItem VirtualMachineAdapter,
+                TItem ObjectBounds,
+                TItem PreviewTransform,
+                TItem Name,
+                TItem Model,
+                TItem Destructible,
+                TItem Keywords,
+                TItem Properties,
+                TItem NativeTerminal,
+                TItem ForcedLocRefType,
+                TItem PNAM,
+                TItem WaterType,
+                TItem ATTXActivateTextOverride,
+                TItem Flags,
+                TItem Conditions,
+                TItem Items,
+                TItem WorkbenchData,
+                TItem AssociatedForm,
+                TItem Markers,
+                TItem ModelFilename)
             : base(
                 MajorRecordFlagsRaw: MajorRecordFlagsRaw,
                 FormKey: FormKey,
@@ -92,6 +401,26 @@ namespace Mutagen.Bethesda.Fallout4
                 FormVersion: FormVersion,
                 Version2: Version2)
             {
+                this.VirtualMachineAdapter = new MaskItem<TItem, VirtualMachineAdapter.Mask<TItem>?>(VirtualMachineAdapter, new VirtualMachineAdapter.Mask<TItem>(VirtualMachineAdapter));
+                this.ObjectBounds = new MaskItem<TItem, ObjectBounds.Mask<TItem>?>(ObjectBounds, new ObjectBounds.Mask<TItem>(ObjectBounds));
+                this.PreviewTransform = new MaskItem<TItem, PreviewTransform.Mask<TItem>?>(PreviewTransform, new PreviewTransform.Mask<TItem>(PreviewTransform));
+                this.Name = Name;
+                this.Model = new MaskItem<TItem, Model.Mask<TItem>?>(Model, new Model.Mask<TItem>(Model));
+                this.Destructible = new MaskItem<TItem, Destructible.Mask<TItem>?>(Destructible, new Destructible.Mask<TItem>(Destructible));
+                this.Keywords = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(Keywords, Enumerable.Empty<(int Index, TItem Value)>());
+                this.Properties = new MaskItem<TItem, Properties.Mask<TItem>?>(Properties, new Properties.Mask<TItem>(Properties));
+                this.NativeTerminal = NativeTerminal;
+                this.ForcedLocRefType = ForcedLocRefType;
+                this.PNAM = PNAM;
+                this.WaterType = WaterType;
+                this.ATTXActivateTextOverride = ATTXActivateTextOverride;
+                this.Flags = Flags;
+                this.Conditions = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, Condition.Mask<TItem>?>>?>(Conditions, Enumerable.Empty<MaskItemIndexed<TItem, Condition.Mask<TItem>?>>());
+                this.Items = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ContainerEntry.Mask<TItem>?>>?>(Items, Enumerable.Empty<MaskItemIndexed<TItem, ContainerEntry.Mask<TItem>?>>());
+                this.WorkbenchData = new MaskItem<TItem, WorkbenchData.Mask<TItem>?>(WorkbenchData, new WorkbenchData.Mask<TItem>(WorkbenchData));
+                this.AssociatedForm = AssociatedForm;
+                this.Markers = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, FurnitureMarker.Mask<TItem>?>>?>(Markers, Enumerable.Empty<MaskItemIndexed<TItem, FurnitureMarker.Mask<TItem>?>>());
+                this.ModelFilename = ModelFilename;
             }
 
             #pragma warning disable CS8618
@@ -100,6 +429,29 @@ namespace Mutagen.Bethesda.Fallout4
             }
             #pragma warning restore CS8618
 
+            #endregion
+
+            #region Members
+            public MaskItem<TItem, VirtualMachineAdapter.Mask<TItem>?>? VirtualMachineAdapter { get; set; }
+            public MaskItem<TItem, ObjectBounds.Mask<TItem>?>? ObjectBounds { get; set; }
+            public MaskItem<TItem, PreviewTransform.Mask<TItem>?>? PreviewTransform { get; set; }
+            public TItem Name;
+            public MaskItem<TItem, Model.Mask<TItem>?>? Model { get; set; }
+            public MaskItem<TItem, Destructible.Mask<TItem>?>? Destructible { get; set; }
+            public MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>? Keywords;
+            public MaskItem<TItem, Properties.Mask<TItem>?>? Properties { get; set; }
+            public TItem NativeTerminal;
+            public TItem ForcedLocRefType;
+            public TItem PNAM;
+            public TItem WaterType;
+            public TItem ATTXActivateTextOverride;
+            public TItem Flags;
+            public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, Condition.Mask<TItem>?>>?>? Conditions;
+            public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ContainerEntry.Mask<TItem>?>>?>? Items;
+            public MaskItem<TItem, WorkbenchData.Mask<TItem>?>? WorkbenchData { get; set; }
+            public TItem AssociatedForm;
+            public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, FurnitureMarker.Mask<TItem>?>>?>? Markers;
+            public TItem ModelFilename;
             #endregion
 
             #region Equals
@@ -113,11 +465,51 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 if (rhs == null) return false;
                 if (!base.Equals(rhs)) return false;
+                if (!object.Equals(this.VirtualMachineAdapter, rhs.VirtualMachineAdapter)) return false;
+                if (!object.Equals(this.ObjectBounds, rhs.ObjectBounds)) return false;
+                if (!object.Equals(this.PreviewTransform, rhs.PreviewTransform)) return false;
+                if (!object.Equals(this.Name, rhs.Name)) return false;
+                if (!object.Equals(this.Model, rhs.Model)) return false;
+                if (!object.Equals(this.Destructible, rhs.Destructible)) return false;
+                if (!object.Equals(this.Keywords, rhs.Keywords)) return false;
+                if (!object.Equals(this.Properties, rhs.Properties)) return false;
+                if (!object.Equals(this.NativeTerminal, rhs.NativeTerminal)) return false;
+                if (!object.Equals(this.ForcedLocRefType, rhs.ForcedLocRefType)) return false;
+                if (!object.Equals(this.PNAM, rhs.PNAM)) return false;
+                if (!object.Equals(this.WaterType, rhs.WaterType)) return false;
+                if (!object.Equals(this.ATTXActivateTextOverride, rhs.ATTXActivateTextOverride)) return false;
+                if (!object.Equals(this.Flags, rhs.Flags)) return false;
+                if (!object.Equals(this.Conditions, rhs.Conditions)) return false;
+                if (!object.Equals(this.Items, rhs.Items)) return false;
+                if (!object.Equals(this.WorkbenchData, rhs.WorkbenchData)) return false;
+                if (!object.Equals(this.AssociatedForm, rhs.AssociatedForm)) return false;
+                if (!object.Equals(this.Markers, rhs.Markers)) return false;
+                if (!object.Equals(this.ModelFilename, rhs.ModelFilename)) return false;
                 return true;
             }
             public override int GetHashCode()
             {
                 var hash = new HashCode();
+                hash.Add(this.VirtualMachineAdapter);
+                hash.Add(this.ObjectBounds);
+                hash.Add(this.PreviewTransform);
+                hash.Add(this.Name);
+                hash.Add(this.Model);
+                hash.Add(this.Destructible);
+                hash.Add(this.Keywords);
+                hash.Add(this.Properties);
+                hash.Add(this.NativeTerminal);
+                hash.Add(this.ForcedLocRefType);
+                hash.Add(this.PNAM);
+                hash.Add(this.WaterType);
+                hash.Add(this.ATTXActivateTextOverride);
+                hash.Add(this.Flags);
+                hash.Add(this.Conditions);
+                hash.Add(this.Items);
+                hash.Add(this.WorkbenchData);
+                hash.Add(this.AssociatedForm);
+                hash.Add(this.Markers);
+                hash.Add(this.ModelFilename);
                 hash.Add(base.GetHashCode());
                 return hash.ToHashCode();
             }
@@ -128,6 +520,97 @@ namespace Mutagen.Bethesda.Fallout4
             public override bool All(Func<TItem, bool> eval)
             {
                 if (!base.All(eval)) return false;
+                if (VirtualMachineAdapter != null)
+                {
+                    if (!eval(this.VirtualMachineAdapter.Overall)) return false;
+                    if (this.VirtualMachineAdapter.Specific != null && !this.VirtualMachineAdapter.Specific.All(eval)) return false;
+                }
+                if (ObjectBounds != null)
+                {
+                    if (!eval(this.ObjectBounds.Overall)) return false;
+                    if (this.ObjectBounds.Specific != null && !this.ObjectBounds.Specific.All(eval)) return false;
+                }
+                if (PreviewTransform != null)
+                {
+                    if (!eval(this.PreviewTransform.Overall)) return false;
+                    if (this.PreviewTransform.Specific != null && !this.PreviewTransform.Specific.All(eval)) return false;
+                }
+                if (!eval(this.Name)) return false;
+                if (Model != null)
+                {
+                    if (!eval(this.Model.Overall)) return false;
+                    if (this.Model.Specific != null && !this.Model.Specific.All(eval)) return false;
+                }
+                if (Destructible != null)
+                {
+                    if (!eval(this.Destructible.Overall)) return false;
+                    if (this.Destructible.Specific != null && !this.Destructible.Specific.All(eval)) return false;
+                }
+                if (this.Keywords != null)
+                {
+                    if (!eval(this.Keywords.Overall)) return false;
+                    if (this.Keywords.Specific != null)
+                    {
+                        foreach (var item in this.Keywords.Specific)
+                        {
+                            if (!eval(item.Value)) return false;
+                        }
+                    }
+                }
+                if (Properties != null)
+                {
+                    if (!eval(this.Properties.Overall)) return false;
+                    if (this.Properties.Specific != null && !this.Properties.Specific.All(eval)) return false;
+                }
+                if (!eval(this.NativeTerminal)) return false;
+                if (!eval(this.ForcedLocRefType)) return false;
+                if (!eval(this.PNAM)) return false;
+                if (!eval(this.WaterType)) return false;
+                if (!eval(this.ATTXActivateTextOverride)) return false;
+                if (!eval(this.Flags)) return false;
+                if (this.Conditions != null)
+                {
+                    if (!eval(this.Conditions.Overall)) return false;
+                    if (this.Conditions.Specific != null)
+                    {
+                        foreach (var item in this.Conditions.Specific)
+                        {
+                            if (!eval(item.Overall)) return false;
+                            if (item.Specific != null && !item.Specific.All(eval)) return false;
+                        }
+                    }
+                }
+                if (this.Items != null)
+                {
+                    if (!eval(this.Items.Overall)) return false;
+                    if (this.Items.Specific != null)
+                    {
+                        foreach (var item in this.Items.Specific)
+                        {
+                            if (!eval(item.Overall)) return false;
+                            if (item.Specific != null && !item.Specific.All(eval)) return false;
+                        }
+                    }
+                }
+                if (WorkbenchData != null)
+                {
+                    if (!eval(this.WorkbenchData.Overall)) return false;
+                    if (this.WorkbenchData.Specific != null && !this.WorkbenchData.Specific.All(eval)) return false;
+                }
+                if (!eval(this.AssociatedForm)) return false;
+                if (this.Markers != null)
+                {
+                    if (!eval(this.Markers.Overall)) return false;
+                    if (this.Markers.Specific != null)
+                    {
+                        foreach (var item in this.Markers.Specific)
+                        {
+                            if (!eval(item.Overall)) return false;
+                            if (item.Specific != null && !item.Specific.All(eval)) return false;
+                        }
+                    }
+                }
+                if (!eval(this.ModelFilename)) return false;
                 return true;
             }
             #endregion
@@ -136,6 +619,97 @@ namespace Mutagen.Bethesda.Fallout4
             public override bool Any(Func<TItem, bool> eval)
             {
                 if (base.Any(eval)) return true;
+                if (VirtualMachineAdapter != null)
+                {
+                    if (eval(this.VirtualMachineAdapter.Overall)) return true;
+                    if (this.VirtualMachineAdapter.Specific != null && this.VirtualMachineAdapter.Specific.Any(eval)) return true;
+                }
+                if (ObjectBounds != null)
+                {
+                    if (eval(this.ObjectBounds.Overall)) return true;
+                    if (this.ObjectBounds.Specific != null && this.ObjectBounds.Specific.Any(eval)) return true;
+                }
+                if (PreviewTransform != null)
+                {
+                    if (eval(this.PreviewTransform.Overall)) return true;
+                    if (this.PreviewTransform.Specific != null && this.PreviewTransform.Specific.Any(eval)) return true;
+                }
+                if (eval(this.Name)) return true;
+                if (Model != null)
+                {
+                    if (eval(this.Model.Overall)) return true;
+                    if (this.Model.Specific != null && this.Model.Specific.Any(eval)) return true;
+                }
+                if (Destructible != null)
+                {
+                    if (eval(this.Destructible.Overall)) return true;
+                    if (this.Destructible.Specific != null && this.Destructible.Specific.Any(eval)) return true;
+                }
+                if (this.Keywords != null)
+                {
+                    if (eval(this.Keywords.Overall)) return true;
+                    if (this.Keywords.Specific != null)
+                    {
+                        foreach (var item in this.Keywords.Specific)
+                        {
+                            if (!eval(item.Value)) return false;
+                        }
+                    }
+                }
+                if (Properties != null)
+                {
+                    if (eval(this.Properties.Overall)) return true;
+                    if (this.Properties.Specific != null && this.Properties.Specific.Any(eval)) return true;
+                }
+                if (eval(this.NativeTerminal)) return true;
+                if (eval(this.ForcedLocRefType)) return true;
+                if (eval(this.PNAM)) return true;
+                if (eval(this.WaterType)) return true;
+                if (eval(this.ATTXActivateTextOverride)) return true;
+                if (eval(this.Flags)) return true;
+                if (this.Conditions != null)
+                {
+                    if (eval(this.Conditions.Overall)) return true;
+                    if (this.Conditions.Specific != null)
+                    {
+                        foreach (var item in this.Conditions.Specific)
+                        {
+                            if (!eval(item.Overall)) return false;
+                            if (item.Specific != null && !item.Specific.All(eval)) return false;
+                        }
+                    }
+                }
+                if (this.Items != null)
+                {
+                    if (eval(this.Items.Overall)) return true;
+                    if (this.Items.Specific != null)
+                    {
+                        foreach (var item in this.Items.Specific)
+                        {
+                            if (!eval(item.Overall)) return false;
+                            if (item.Specific != null && !item.Specific.All(eval)) return false;
+                        }
+                    }
+                }
+                if (WorkbenchData != null)
+                {
+                    if (eval(this.WorkbenchData.Overall)) return true;
+                    if (this.WorkbenchData.Specific != null && this.WorkbenchData.Specific.Any(eval)) return true;
+                }
+                if (eval(this.AssociatedForm)) return true;
+                if (this.Markers != null)
+                {
+                    if (eval(this.Markers.Overall)) return true;
+                    if (this.Markers.Specific != null)
+                    {
+                        foreach (var item in this.Markers.Specific)
+                        {
+                            if (!eval(item.Overall)) return false;
+                            if (item.Specific != null && !item.Specific.All(eval)) return false;
+                        }
+                    }
+                }
+                if (eval(this.ModelFilename)) return true;
                 return false;
             }
             #endregion
@@ -151,6 +725,81 @@ namespace Mutagen.Bethesda.Fallout4
             protected void Translate_InternalFill<R>(Mask<R> obj, Func<TItem, R> eval)
             {
                 base.Translate_InternalFill(obj, eval);
+                obj.VirtualMachineAdapter = this.VirtualMachineAdapter == null ? null : new MaskItem<R, VirtualMachineAdapter.Mask<R>?>(eval(this.VirtualMachineAdapter.Overall), this.VirtualMachineAdapter.Specific?.Translate(eval));
+                obj.ObjectBounds = this.ObjectBounds == null ? null : new MaskItem<R, ObjectBounds.Mask<R>?>(eval(this.ObjectBounds.Overall), this.ObjectBounds.Specific?.Translate(eval));
+                obj.PreviewTransform = this.PreviewTransform == null ? null : new MaskItem<R, PreviewTransform.Mask<R>?>(eval(this.PreviewTransform.Overall), this.PreviewTransform.Specific?.Translate(eval));
+                obj.Name = eval(this.Name);
+                obj.Model = this.Model == null ? null : new MaskItem<R, Model.Mask<R>?>(eval(this.Model.Overall), this.Model.Specific?.Translate(eval));
+                obj.Destructible = this.Destructible == null ? null : new MaskItem<R, Destructible.Mask<R>?>(eval(this.Destructible.Overall), this.Destructible.Specific?.Translate(eval));
+                if (Keywords != null)
+                {
+                    obj.Keywords = new MaskItem<R, IEnumerable<(int Index, R Value)>?>(eval(this.Keywords.Overall), Enumerable.Empty<(int Index, R Value)>());
+                    if (Keywords.Specific != null)
+                    {
+                        var l = new List<(int Index, R Item)>();
+                        obj.Keywords.Specific = l;
+                        foreach (var item in Keywords.Specific.WithIndex())
+                        {
+                            R mask = eval(item.Item.Value);
+                            l.Add((item.Index, mask));
+                        }
+                    }
+                }
+                obj.Properties = this.Properties == null ? null : new MaskItem<R, Properties.Mask<R>?>(eval(this.Properties.Overall), this.Properties.Specific?.Translate(eval));
+                obj.NativeTerminal = eval(this.NativeTerminal);
+                obj.ForcedLocRefType = eval(this.ForcedLocRefType);
+                obj.PNAM = eval(this.PNAM);
+                obj.WaterType = eval(this.WaterType);
+                obj.ATTXActivateTextOverride = eval(this.ATTXActivateTextOverride);
+                obj.Flags = eval(this.Flags);
+                if (Conditions != null)
+                {
+                    obj.Conditions = new MaskItem<R, IEnumerable<MaskItemIndexed<R, Condition.Mask<R>?>>?>(eval(this.Conditions.Overall), Enumerable.Empty<MaskItemIndexed<R, Condition.Mask<R>?>>());
+                    if (Conditions.Specific != null)
+                    {
+                        var l = new List<MaskItemIndexed<R, Condition.Mask<R>?>>();
+                        obj.Conditions.Specific = l;
+                        foreach (var item in Conditions.Specific.WithIndex())
+                        {
+                            MaskItemIndexed<R, Condition.Mask<R>?>? mask = item.Item == null ? null : new MaskItemIndexed<R, Condition.Mask<R>?>(item.Item.Index, eval(item.Item.Overall), item.Item.Specific?.Translate(eval));
+                            if (mask == null) continue;
+                            l.Add(mask);
+                        }
+                    }
+                }
+                if (Items != null)
+                {
+                    obj.Items = new MaskItem<R, IEnumerable<MaskItemIndexed<R, ContainerEntry.Mask<R>?>>?>(eval(this.Items.Overall), Enumerable.Empty<MaskItemIndexed<R, ContainerEntry.Mask<R>?>>());
+                    if (Items.Specific != null)
+                    {
+                        var l = new List<MaskItemIndexed<R, ContainerEntry.Mask<R>?>>();
+                        obj.Items.Specific = l;
+                        foreach (var item in Items.Specific.WithIndex())
+                        {
+                            MaskItemIndexed<R, ContainerEntry.Mask<R>?>? mask = item.Item == null ? null : new MaskItemIndexed<R, ContainerEntry.Mask<R>?>(item.Item.Index, eval(item.Item.Overall), item.Item.Specific?.Translate(eval));
+                            if (mask == null) continue;
+                            l.Add(mask);
+                        }
+                    }
+                }
+                obj.WorkbenchData = this.WorkbenchData == null ? null : new MaskItem<R, WorkbenchData.Mask<R>?>(eval(this.WorkbenchData.Overall), this.WorkbenchData.Specific?.Translate(eval));
+                obj.AssociatedForm = eval(this.AssociatedForm);
+                if (Markers != null)
+                {
+                    obj.Markers = new MaskItem<R, IEnumerable<MaskItemIndexed<R, FurnitureMarker.Mask<R>?>>?>(eval(this.Markers.Overall), Enumerable.Empty<MaskItemIndexed<R, FurnitureMarker.Mask<R>?>>());
+                    if (Markers.Specific != null)
+                    {
+                        var l = new List<MaskItemIndexed<R, FurnitureMarker.Mask<R>?>>();
+                        obj.Markers.Specific = l;
+                        foreach (var item in Markers.Specific.WithIndex())
+                        {
+                            MaskItemIndexed<R, FurnitureMarker.Mask<R>?>? mask = item.Item == null ? null : new MaskItemIndexed<R, FurnitureMarker.Mask<R>?>(item.Item.Index, eval(item.Item.Overall), item.Item.Specific?.Translate(eval));
+                            if (mask == null) continue;
+                            l.Add(mask);
+                        }
+                    }
+                }
+                obj.ModelFilename = eval(this.ModelFilename);
             }
             #endregion
 
@@ -173,6 +822,162 @@ namespace Mutagen.Bethesda.Fallout4
                 fg.AppendLine("[");
                 using (new DepthWrapper(fg))
                 {
+                    if (printMask?.VirtualMachineAdapter?.Overall ?? true)
+                    {
+                        VirtualMachineAdapter?.ToString(fg);
+                    }
+                    if (printMask?.ObjectBounds?.Overall ?? true)
+                    {
+                        ObjectBounds?.ToString(fg);
+                    }
+                    if (printMask?.PreviewTransform?.Overall ?? true)
+                    {
+                        PreviewTransform?.ToString(fg);
+                    }
+                    if (printMask?.Name ?? true)
+                    {
+                        fg.AppendItem(Name, "Name");
+                    }
+                    if (printMask?.Model?.Overall ?? true)
+                    {
+                        Model?.ToString(fg);
+                    }
+                    if (printMask?.Destructible?.Overall ?? true)
+                    {
+                        Destructible?.ToString(fg);
+                    }
+                    if ((printMask?.Keywords?.Overall ?? true)
+                        && Keywords is {} KeywordsItem)
+                    {
+                        fg.AppendLine("Keywords =>");
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            fg.AppendItem(KeywordsItem.Overall);
+                            if (KeywordsItem.Specific != null)
+                            {
+                                foreach (var subItem in KeywordsItem.Specific)
+                                {
+                                    fg.AppendLine("[");
+                                    using (new DepthWrapper(fg))
+                                    {
+                                        fg.AppendItem(subItem);
+                                    }
+                                    fg.AppendLine("]");
+                                }
+                            }
+                        }
+                        fg.AppendLine("]");
+                    }
+                    if (printMask?.Properties?.Overall ?? true)
+                    {
+                        Properties?.ToString(fg);
+                    }
+                    if (printMask?.NativeTerminal ?? true)
+                    {
+                        fg.AppendItem(NativeTerminal, "NativeTerminal");
+                    }
+                    if (printMask?.ForcedLocRefType ?? true)
+                    {
+                        fg.AppendItem(ForcedLocRefType, "ForcedLocRefType");
+                    }
+                    if (printMask?.PNAM ?? true)
+                    {
+                        fg.AppendItem(PNAM, "PNAM");
+                    }
+                    if (printMask?.WaterType ?? true)
+                    {
+                        fg.AppendItem(WaterType, "WaterType");
+                    }
+                    if (printMask?.ATTXActivateTextOverride ?? true)
+                    {
+                        fg.AppendItem(ATTXActivateTextOverride, "ATTXActivateTextOverride");
+                    }
+                    if (printMask?.Flags ?? true)
+                    {
+                        fg.AppendItem(Flags, "Flags");
+                    }
+                    if ((printMask?.Conditions?.Overall ?? true)
+                        && Conditions is {} ConditionsItem)
+                    {
+                        fg.AppendLine("Conditions =>");
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            fg.AppendItem(ConditionsItem.Overall);
+                            if (ConditionsItem.Specific != null)
+                            {
+                                foreach (var subItem in ConditionsItem.Specific)
+                                {
+                                    fg.AppendLine("[");
+                                    using (new DepthWrapper(fg))
+                                    {
+                                        subItem?.ToString(fg);
+                                    }
+                                    fg.AppendLine("]");
+                                }
+                            }
+                        }
+                        fg.AppendLine("]");
+                    }
+                    if ((printMask?.Items?.Overall ?? true)
+                        && Items is {} ItemsItem)
+                    {
+                        fg.AppendLine("Items =>");
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            fg.AppendItem(ItemsItem.Overall);
+                            if (ItemsItem.Specific != null)
+                            {
+                                foreach (var subItem in ItemsItem.Specific)
+                                {
+                                    fg.AppendLine("[");
+                                    using (new DepthWrapper(fg))
+                                    {
+                                        subItem?.ToString(fg);
+                                    }
+                                    fg.AppendLine("]");
+                                }
+                            }
+                        }
+                        fg.AppendLine("]");
+                    }
+                    if (printMask?.WorkbenchData?.Overall ?? true)
+                    {
+                        WorkbenchData?.ToString(fg);
+                    }
+                    if (printMask?.AssociatedForm ?? true)
+                    {
+                        fg.AppendItem(AssociatedForm, "AssociatedForm");
+                    }
+                    if ((printMask?.Markers?.Overall ?? true)
+                        && Markers is {} MarkersItem)
+                    {
+                        fg.AppendLine("Markers =>");
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            fg.AppendItem(MarkersItem.Overall);
+                            if (MarkersItem.Specific != null)
+                            {
+                                foreach (var subItem in MarkersItem.Specific)
+                                {
+                                    fg.AppendLine("[");
+                                    using (new DepthWrapper(fg))
+                                    {
+                                        subItem?.ToString(fg);
+                                    }
+                                    fg.AppendLine("]");
+                                }
+                            }
+                        }
+                        fg.AppendLine("]");
+                    }
+                    if (printMask?.ModelFilename ?? true)
+                    {
+                        fg.AppendItem(ModelFilename, "ModelFilename");
+                    }
                 }
                 fg.AppendLine("]");
             }
@@ -184,12 +989,75 @@ namespace Mutagen.Bethesda.Fallout4
             Fallout4MajorRecord.ErrorMask,
             IErrorMask<ErrorMask>
         {
+            #region Members
+            public MaskItem<Exception?, VirtualMachineAdapter.ErrorMask?>? VirtualMachineAdapter;
+            public MaskItem<Exception?, ObjectBounds.ErrorMask?>? ObjectBounds;
+            public MaskItem<Exception?, PreviewTransform.ErrorMask?>? PreviewTransform;
+            public Exception? Name;
+            public MaskItem<Exception?, Model.ErrorMask?>? Model;
+            public MaskItem<Exception?, Destructible.ErrorMask?>? Destructible;
+            public MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>? Keywords;
+            public MaskItem<Exception?, Properties.ErrorMask?>? Properties;
+            public Exception? NativeTerminal;
+            public Exception? ForcedLocRefType;
+            public Exception? PNAM;
+            public Exception? WaterType;
+            public Exception? ATTXActivateTextOverride;
+            public Exception? Flags;
+            public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, Condition.ErrorMask?>>?>? Conditions;
+            public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ContainerEntry.ErrorMask?>>?>? Items;
+            public MaskItem<Exception?, WorkbenchData.ErrorMask?>? WorkbenchData;
+            public Exception? AssociatedForm;
+            public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, FurnitureMarker.ErrorMask?>>?>? Markers;
+            public Exception? ModelFilename;
+            #endregion
+
             #region IErrorMask
             public override object? GetNthMask(int index)
             {
                 Furniture_FieldIndex enu = (Furniture_FieldIndex)index;
                 switch (enu)
                 {
+                    case Furniture_FieldIndex.VirtualMachineAdapter:
+                        return VirtualMachineAdapter;
+                    case Furniture_FieldIndex.ObjectBounds:
+                        return ObjectBounds;
+                    case Furniture_FieldIndex.PreviewTransform:
+                        return PreviewTransform;
+                    case Furniture_FieldIndex.Name:
+                        return Name;
+                    case Furniture_FieldIndex.Model:
+                        return Model;
+                    case Furniture_FieldIndex.Destructible:
+                        return Destructible;
+                    case Furniture_FieldIndex.Keywords:
+                        return Keywords;
+                    case Furniture_FieldIndex.Properties:
+                        return Properties;
+                    case Furniture_FieldIndex.NativeTerminal:
+                        return NativeTerminal;
+                    case Furniture_FieldIndex.ForcedLocRefType:
+                        return ForcedLocRefType;
+                    case Furniture_FieldIndex.PNAM:
+                        return PNAM;
+                    case Furniture_FieldIndex.WaterType:
+                        return WaterType;
+                    case Furniture_FieldIndex.ATTXActivateTextOverride:
+                        return ATTXActivateTextOverride;
+                    case Furniture_FieldIndex.Flags:
+                        return Flags;
+                    case Furniture_FieldIndex.Conditions:
+                        return Conditions;
+                    case Furniture_FieldIndex.Items:
+                        return Items;
+                    case Furniture_FieldIndex.WorkbenchData:
+                        return WorkbenchData;
+                    case Furniture_FieldIndex.AssociatedForm:
+                        return AssociatedForm;
+                    case Furniture_FieldIndex.Markers:
+                        return Markers;
+                    case Furniture_FieldIndex.ModelFilename:
+                        return ModelFilename;
                     default:
                         return base.GetNthMask(index);
                 }
@@ -200,6 +1068,66 @@ namespace Mutagen.Bethesda.Fallout4
                 Furniture_FieldIndex enu = (Furniture_FieldIndex)index;
                 switch (enu)
                 {
+                    case Furniture_FieldIndex.VirtualMachineAdapter:
+                        this.VirtualMachineAdapter = new MaskItem<Exception?, VirtualMachineAdapter.ErrorMask?>(ex, null);
+                        break;
+                    case Furniture_FieldIndex.ObjectBounds:
+                        this.ObjectBounds = new MaskItem<Exception?, ObjectBounds.ErrorMask?>(ex, null);
+                        break;
+                    case Furniture_FieldIndex.PreviewTransform:
+                        this.PreviewTransform = new MaskItem<Exception?, PreviewTransform.ErrorMask?>(ex, null);
+                        break;
+                    case Furniture_FieldIndex.Name:
+                        this.Name = ex;
+                        break;
+                    case Furniture_FieldIndex.Model:
+                        this.Model = new MaskItem<Exception?, Model.ErrorMask?>(ex, null);
+                        break;
+                    case Furniture_FieldIndex.Destructible:
+                        this.Destructible = new MaskItem<Exception?, Destructible.ErrorMask?>(ex, null);
+                        break;
+                    case Furniture_FieldIndex.Keywords:
+                        this.Keywords = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ex, null);
+                        break;
+                    case Furniture_FieldIndex.Properties:
+                        this.Properties = new MaskItem<Exception?, Properties.ErrorMask?>(ex, null);
+                        break;
+                    case Furniture_FieldIndex.NativeTerminal:
+                        this.NativeTerminal = ex;
+                        break;
+                    case Furniture_FieldIndex.ForcedLocRefType:
+                        this.ForcedLocRefType = ex;
+                        break;
+                    case Furniture_FieldIndex.PNAM:
+                        this.PNAM = ex;
+                        break;
+                    case Furniture_FieldIndex.WaterType:
+                        this.WaterType = ex;
+                        break;
+                    case Furniture_FieldIndex.ATTXActivateTextOverride:
+                        this.ATTXActivateTextOverride = ex;
+                        break;
+                    case Furniture_FieldIndex.Flags:
+                        this.Flags = ex;
+                        break;
+                    case Furniture_FieldIndex.Conditions:
+                        this.Conditions = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, Condition.ErrorMask?>>?>(ex, null);
+                        break;
+                    case Furniture_FieldIndex.Items:
+                        this.Items = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ContainerEntry.ErrorMask?>>?>(ex, null);
+                        break;
+                    case Furniture_FieldIndex.WorkbenchData:
+                        this.WorkbenchData = new MaskItem<Exception?, WorkbenchData.ErrorMask?>(ex, null);
+                        break;
+                    case Furniture_FieldIndex.AssociatedForm:
+                        this.AssociatedForm = ex;
+                        break;
+                    case Furniture_FieldIndex.Markers:
+                        this.Markers = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, FurnitureMarker.ErrorMask?>>?>(ex, null);
+                        break;
+                    case Furniture_FieldIndex.ModelFilename:
+                        this.ModelFilename = ex;
+                        break;
                     default:
                         base.SetNthException(index, ex);
                         break;
@@ -211,6 +1139,66 @@ namespace Mutagen.Bethesda.Fallout4
                 Furniture_FieldIndex enu = (Furniture_FieldIndex)index;
                 switch (enu)
                 {
+                    case Furniture_FieldIndex.VirtualMachineAdapter:
+                        this.VirtualMachineAdapter = (MaskItem<Exception?, VirtualMachineAdapter.ErrorMask?>?)obj;
+                        break;
+                    case Furniture_FieldIndex.ObjectBounds:
+                        this.ObjectBounds = (MaskItem<Exception?, ObjectBounds.ErrorMask?>?)obj;
+                        break;
+                    case Furniture_FieldIndex.PreviewTransform:
+                        this.PreviewTransform = (MaskItem<Exception?, PreviewTransform.ErrorMask?>?)obj;
+                        break;
+                    case Furniture_FieldIndex.Name:
+                        this.Name = (Exception?)obj;
+                        break;
+                    case Furniture_FieldIndex.Model:
+                        this.Model = (MaskItem<Exception?, Model.ErrorMask?>?)obj;
+                        break;
+                    case Furniture_FieldIndex.Destructible:
+                        this.Destructible = (MaskItem<Exception?, Destructible.ErrorMask?>?)obj;
+                        break;
+                    case Furniture_FieldIndex.Keywords:
+                        this.Keywords = (MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>)obj;
+                        break;
+                    case Furniture_FieldIndex.Properties:
+                        this.Properties = (MaskItem<Exception?, Properties.ErrorMask?>?)obj;
+                        break;
+                    case Furniture_FieldIndex.NativeTerminal:
+                        this.NativeTerminal = (Exception?)obj;
+                        break;
+                    case Furniture_FieldIndex.ForcedLocRefType:
+                        this.ForcedLocRefType = (Exception?)obj;
+                        break;
+                    case Furniture_FieldIndex.PNAM:
+                        this.PNAM = (Exception?)obj;
+                        break;
+                    case Furniture_FieldIndex.WaterType:
+                        this.WaterType = (Exception?)obj;
+                        break;
+                    case Furniture_FieldIndex.ATTXActivateTextOverride:
+                        this.ATTXActivateTextOverride = (Exception?)obj;
+                        break;
+                    case Furniture_FieldIndex.Flags:
+                        this.Flags = (Exception?)obj;
+                        break;
+                    case Furniture_FieldIndex.Conditions:
+                        this.Conditions = (MaskItem<Exception?, IEnumerable<MaskItem<Exception?, Condition.ErrorMask?>>?>)obj;
+                        break;
+                    case Furniture_FieldIndex.Items:
+                        this.Items = (MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ContainerEntry.ErrorMask?>>?>)obj;
+                        break;
+                    case Furniture_FieldIndex.WorkbenchData:
+                        this.WorkbenchData = (MaskItem<Exception?, WorkbenchData.ErrorMask?>?)obj;
+                        break;
+                    case Furniture_FieldIndex.AssociatedForm:
+                        this.AssociatedForm = (Exception?)obj;
+                        break;
+                    case Furniture_FieldIndex.Markers:
+                        this.Markers = (MaskItem<Exception?, IEnumerable<MaskItem<Exception?, FurnitureMarker.ErrorMask?>>?>)obj;
+                        break;
+                    case Furniture_FieldIndex.ModelFilename:
+                        this.ModelFilename = (Exception?)obj;
+                        break;
                     default:
                         base.SetNthMask(index, obj);
                         break;
@@ -220,6 +1208,26 @@ namespace Mutagen.Bethesda.Fallout4
             public override bool IsInError()
             {
                 if (Overall != null) return true;
+                if (VirtualMachineAdapter != null) return true;
+                if (ObjectBounds != null) return true;
+                if (PreviewTransform != null) return true;
+                if (Name != null) return true;
+                if (Model != null) return true;
+                if (Destructible != null) return true;
+                if (Keywords != null) return true;
+                if (Properties != null) return true;
+                if (NativeTerminal != null) return true;
+                if (ForcedLocRefType != null) return true;
+                if (PNAM != null) return true;
+                if (WaterType != null) return true;
+                if (ATTXActivateTextOverride != null) return true;
+                if (Flags != null) return true;
+                if (Conditions != null) return true;
+                if (Items != null) return true;
+                if (WorkbenchData != null) return true;
+                if (AssociatedForm != null) return true;
+                if (Markers != null) return true;
+                if (ModelFilename != null) return true;
                 return false;
             }
             #endregion
@@ -255,6 +1263,110 @@ namespace Mutagen.Bethesda.Fallout4
             protected override void ToString_FillInternal(FileGeneration fg)
             {
                 base.ToString_FillInternal(fg);
+                VirtualMachineAdapter?.ToString(fg);
+                ObjectBounds?.ToString(fg);
+                PreviewTransform?.ToString(fg);
+                fg.AppendItem(Name, "Name");
+                Model?.ToString(fg);
+                Destructible?.ToString(fg);
+                if (Keywords is {} KeywordsItem)
+                {
+                    fg.AppendLine("Keywords =>");
+                    fg.AppendLine("[");
+                    using (new DepthWrapper(fg))
+                    {
+                        fg.AppendItem(KeywordsItem.Overall);
+                        if (KeywordsItem.Specific != null)
+                        {
+                            foreach (var subItem in KeywordsItem.Specific)
+                            {
+                                fg.AppendLine("[");
+                                using (new DepthWrapper(fg))
+                                {
+                                    fg.AppendItem(subItem);
+                                }
+                                fg.AppendLine("]");
+                            }
+                        }
+                    }
+                    fg.AppendLine("]");
+                }
+                Properties?.ToString(fg);
+                fg.AppendItem(NativeTerminal, "NativeTerminal");
+                fg.AppendItem(ForcedLocRefType, "ForcedLocRefType");
+                fg.AppendItem(PNAM, "PNAM");
+                fg.AppendItem(WaterType, "WaterType");
+                fg.AppendItem(ATTXActivateTextOverride, "ATTXActivateTextOverride");
+                fg.AppendItem(Flags, "Flags");
+                if (Conditions is {} ConditionsItem)
+                {
+                    fg.AppendLine("Conditions =>");
+                    fg.AppendLine("[");
+                    using (new DepthWrapper(fg))
+                    {
+                        fg.AppendItem(ConditionsItem.Overall);
+                        if (ConditionsItem.Specific != null)
+                        {
+                            foreach (var subItem in ConditionsItem.Specific)
+                            {
+                                fg.AppendLine("[");
+                                using (new DepthWrapper(fg))
+                                {
+                                    subItem?.ToString(fg);
+                                }
+                                fg.AppendLine("]");
+                            }
+                        }
+                    }
+                    fg.AppendLine("]");
+                }
+                if (Items is {} ItemsItem)
+                {
+                    fg.AppendLine("Items =>");
+                    fg.AppendLine("[");
+                    using (new DepthWrapper(fg))
+                    {
+                        fg.AppendItem(ItemsItem.Overall);
+                        if (ItemsItem.Specific != null)
+                        {
+                            foreach (var subItem in ItemsItem.Specific)
+                            {
+                                fg.AppendLine("[");
+                                using (new DepthWrapper(fg))
+                                {
+                                    subItem?.ToString(fg);
+                                }
+                                fg.AppendLine("]");
+                            }
+                        }
+                    }
+                    fg.AppendLine("]");
+                }
+                WorkbenchData?.ToString(fg);
+                fg.AppendItem(AssociatedForm, "AssociatedForm");
+                if (Markers is {} MarkersItem)
+                {
+                    fg.AppendLine("Markers =>");
+                    fg.AppendLine("[");
+                    using (new DepthWrapper(fg))
+                    {
+                        fg.AppendItem(MarkersItem.Overall);
+                        if (MarkersItem.Specific != null)
+                        {
+                            foreach (var subItem in MarkersItem.Specific)
+                            {
+                                fg.AppendLine("[");
+                                using (new DepthWrapper(fg))
+                                {
+                                    subItem?.ToString(fg);
+                                }
+                                fg.AppendLine("]");
+                            }
+                        }
+                    }
+                    fg.AppendLine("]");
+                }
+                fg.AppendItem(ModelFilename, "ModelFilename");
             }
             #endregion
 
@@ -263,6 +1375,26 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 if (rhs == null) return this;
                 var ret = new ErrorMask();
+                ret.VirtualMachineAdapter = this.VirtualMachineAdapter.Combine(rhs.VirtualMachineAdapter, (l, r) => l.Combine(r));
+                ret.ObjectBounds = this.ObjectBounds.Combine(rhs.ObjectBounds, (l, r) => l.Combine(r));
+                ret.PreviewTransform = this.PreviewTransform.Combine(rhs.PreviewTransform, (l, r) => l.Combine(r));
+                ret.Name = this.Name.Combine(rhs.Name);
+                ret.Model = this.Model.Combine(rhs.Model, (l, r) => l.Combine(r));
+                ret.Destructible = this.Destructible.Combine(rhs.Destructible, (l, r) => l.Combine(r));
+                ret.Keywords = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ExceptionExt.Combine(this.Keywords?.Overall, rhs.Keywords?.Overall), ExceptionExt.Combine(this.Keywords?.Specific, rhs.Keywords?.Specific));
+                ret.Properties = this.Properties.Combine(rhs.Properties, (l, r) => l.Combine(r));
+                ret.NativeTerminal = this.NativeTerminal.Combine(rhs.NativeTerminal);
+                ret.ForcedLocRefType = this.ForcedLocRefType.Combine(rhs.ForcedLocRefType);
+                ret.PNAM = this.PNAM.Combine(rhs.PNAM);
+                ret.WaterType = this.WaterType.Combine(rhs.WaterType);
+                ret.ATTXActivateTextOverride = this.ATTXActivateTextOverride.Combine(rhs.ATTXActivateTextOverride);
+                ret.Flags = this.Flags.Combine(rhs.Flags);
+                ret.Conditions = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, Condition.ErrorMask?>>?>(ExceptionExt.Combine(this.Conditions?.Overall, rhs.Conditions?.Overall), ExceptionExt.Combine(this.Conditions?.Specific, rhs.Conditions?.Specific));
+                ret.Items = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ContainerEntry.ErrorMask?>>?>(ExceptionExt.Combine(this.Items?.Overall, rhs.Items?.Overall), ExceptionExt.Combine(this.Items?.Specific, rhs.Items?.Specific));
+                ret.WorkbenchData = this.WorkbenchData.Combine(rhs.WorkbenchData, (l, r) => l.Combine(r));
+                ret.AssociatedForm = this.AssociatedForm.Combine(rhs.AssociatedForm);
+                ret.Markers = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, FurnitureMarker.ErrorMask?>>?>(ExceptionExt.Combine(this.Markers?.Overall, rhs.Markers?.Overall), ExceptionExt.Combine(this.Markers?.Specific, rhs.Markers?.Specific));
+                ret.ModelFilename = this.ModelFilename.Combine(rhs.ModelFilename);
                 return ret;
             }
             public static ErrorMask? Combine(ErrorMask? lhs, ErrorMask? rhs)
@@ -284,15 +1416,73 @@ namespace Mutagen.Bethesda.Fallout4
             Fallout4MajorRecord.TranslationMask,
             ITranslationMask
         {
+            #region Members
+            public VirtualMachineAdapter.TranslationMask? VirtualMachineAdapter;
+            public ObjectBounds.TranslationMask? ObjectBounds;
+            public PreviewTransform.TranslationMask? PreviewTransform;
+            public bool Name;
+            public Model.TranslationMask? Model;
+            public Destructible.TranslationMask? Destructible;
+            public bool Keywords;
+            public Properties.TranslationMask? Properties;
+            public bool NativeTerminal;
+            public bool ForcedLocRefType;
+            public bool PNAM;
+            public bool WaterType;
+            public bool ATTXActivateTextOverride;
+            public bool Flags;
+            public Condition.TranslationMask? Conditions;
+            public ContainerEntry.TranslationMask? Items;
+            public WorkbenchData.TranslationMask? WorkbenchData;
+            public bool AssociatedForm;
+            public FurnitureMarker.TranslationMask? Markers;
+            public bool ModelFilename;
+            #endregion
+
             #region Ctors
             public TranslationMask(
                 bool defaultOn,
                 bool onOverall = true)
                 : base(defaultOn, onOverall)
             {
+                this.Name = defaultOn;
+                this.Keywords = defaultOn;
+                this.NativeTerminal = defaultOn;
+                this.ForcedLocRefType = defaultOn;
+                this.PNAM = defaultOn;
+                this.WaterType = defaultOn;
+                this.ATTXActivateTextOverride = defaultOn;
+                this.Flags = defaultOn;
+                this.AssociatedForm = defaultOn;
+                this.ModelFilename = defaultOn;
             }
 
             #endregion
+
+            protected override void GetCrystal(List<(bool On, TranslationCrystal? SubCrystal)> ret)
+            {
+                base.GetCrystal(ret);
+                ret.Add((VirtualMachineAdapter != null ? VirtualMachineAdapter.OnOverall : DefaultOn, VirtualMachineAdapter?.GetCrystal()));
+                ret.Add((ObjectBounds != null ? ObjectBounds.OnOverall : DefaultOn, ObjectBounds?.GetCrystal()));
+                ret.Add((PreviewTransform != null ? PreviewTransform.OnOverall : DefaultOn, PreviewTransform?.GetCrystal()));
+                ret.Add((Name, null));
+                ret.Add((Model != null ? Model.OnOverall : DefaultOn, Model?.GetCrystal()));
+                ret.Add((Destructible != null ? Destructible.OnOverall : DefaultOn, Destructible?.GetCrystal()));
+                ret.Add((Keywords, null));
+                ret.Add((Properties != null ? Properties.OnOverall : DefaultOn, Properties?.GetCrystal()));
+                ret.Add((NativeTerminal, null));
+                ret.Add((ForcedLocRefType, null));
+                ret.Add((PNAM, null));
+                ret.Add((WaterType, null));
+                ret.Add((ATTXActivateTextOverride, null));
+                ret.Add((Flags, null));
+                ret.Add((Conditions == null ? DefaultOn : !Conditions.GetCrystal().CopyNothing, Conditions?.GetCrystal()));
+                ret.Add((Items == null ? DefaultOn : !Items.GetCrystal().CopyNothing, Items?.GetCrystal()));
+                ret.Add((WorkbenchData != null ? WorkbenchData.OnOverall : DefaultOn, WorkbenchData?.GetCrystal()));
+                ret.Add((AssociatedForm, null));
+                ret.Add((Markers == null ? DefaultOn : !Markers.GetCrystal().CopyNothing, Markers?.GetCrystal()));
+                ret.Add((ModelFilename, null));
+            }
 
             public static implicit operator TranslationMask(bool defaultOn)
             {
@@ -304,6 +1494,8 @@ namespace Mutagen.Bethesda.Fallout4
 
         #region Mutagen
         public static readonly RecordType GrupRecordType = Furniture_Registration.TriggeringRecordType;
+        public override IEnumerable<IFormLinkGetter> ContainedFormLinks => FurnitureCommon.Instance.GetContainedFormLinks(this);
+        public override void RemapLinks(IReadOnlyDictionary<FormKey, FormKey> mapping) => FurnitureSetterCommon.Instance.RemapLinks(this, mapping);
         public Furniture(FormKey formKey)
         {
             this.FormKey = formKey;
@@ -346,6 +1538,11 @@ namespace Mutagen.Bethesda.Fallout4
 
         protected override Type LinkType => typeof(IFurniture);
 
+        public MajorFlag MajorFlags
+        {
+            get => (MajorFlag)this.MajorRecordFlagsRaw;
+            set => this.MajorRecordFlagsRaw = (int)value;
+        }
         #region Equals and Hash
         public override bool Equals(object? obj)
         {
@@ -425,11 +1622,61 @@ namespace Mutagen.Bethesda.Fallout4
 
     #region Interface
     public partial interface IFurniture :
+        IConstructible,
         IFallout4MajorRecordInternal,
+        IFormLinkContainer,
         IFurnitureGetter,
+        IKeyworded<IKeywordGetter>,
         ILoquiObjectSetter<IFurnitureInternal>,
-        IObjectId
+        IModeled,
+        INamed,
+        INamedRequired,
+        IObjectBounded,
+        IObjectBoundedOptional,
+        IObjectId,
+        IScripted,
+        ITranslatedNamed,
+        ITranslatedNamedRequired
     {
+        /// <summary>
+        /// Aspects: IScripted
+        /// </summary>
+        new VirtualMachineAdapter? VirtualMachineAdapter { get; set; }
+        /// <summary>
+        /// Aspects: IObjectBounded, IObjectBoundedOptional
+        /// </summary>
+        new ObjectBounds ObjectBounds { get; set; }
+        new PreviewTransform? PreviewTransform { get; set; }
+        /// <summary>
+        /// Aspects: INamed, INamedRequired, ITranslatedNamed, ITranslatedNamedRequired
+        /// </summary>
+        new TranslatedString? Name { get; set; }
+        /// <summary>
+        /// Aspects: IModeled
+        /// </summary>
+        new Model? Model { get; set; }
+        new Destructible? Destructible { get; set; }
+        /// <summary>
+        /// Aspects: IKeyworded&lt;IKeywordGetter&gt;
+        /// </summary>
+        new ExtendedList<IFormLinkGetter<IKeywordGetter>>? Keywords { get; set; }
+        new Properties? Properties { get; set; }
+        new IFormLinkNullable<ITerminalGetter> NativeTerminal { get; set; }
+        new IFormLinkNullable<ILocationReferenceTypeGetter> ForcedLocRefType { get; set; }
+        new MemorySlice<Byte>? PNAM { get; set; }
+        new IFormLinkNullable<IWaterGetter> WaterType { get; set; }
+        new TranslatedString? ATTXActivateTextOverride { get; set; }
+        new Furniture.Flag? Flags { get; set; }
+        new ExtendedList<Condition>? Conditions { get; set; }
+        new ExtendedList<ContainerEntry>? Items { get; set; }
+        new WorkbenchData? WorkbenchData { get; set; }
+        new IFormLinkNullable<IFurnitureAssociationGetter> AssociatedForm { get; set; }
+        new ExtendedList<FurnitureMarker>? Markers { get; set; }
+        new String? ModelFilename { get; set; }
+        #region Mutagen
+        new Furniture.MajorFlag MajorFlags { get; set; }
+        #endregion
+
     }
 
     public partial interface IFurnitureInternal :
@@ -443,11 +1690,71 @@ namespace Mutagen.Bethesda.Fallout4
     public partial interface IFurnitureGetter :
         IFallout4MajorRecordGetter,
         IBinaryItem,
+        IConstructibleGetter,
+        IFormLinkContainerGetter,
+        IKeywordedGetter<IKeywordGetter>,
         ILoquiObject<IFurnitureGetter>,
         IMapsToGetter<IFurnitureGetter>,
-        IObjectIdGetter
+        IModeledGetter,
+        INamedGetter,
+        INamedRequiredGetter,
+        IObjectBoundedGetter,
+        IObjectBoundedOptionalGetter,
+        IObjectIdGetter,
+        IScriptedGetter,
+        ITranslatedNamedGetter,
+        ITranslatedNamedRequiredGetter
     {
         static new ILoquiRegistration StaticRegistration => Furniture_Registration.Instance;
+        #region VirtualMachineAdapter
+        /// <summary>
+        /// Aspects: IScriptedGetter
+        /// </summary>
+        IVirtualMachineAdapterGetter? VirtualMachineAdapter { get; }
+        #endregion
+        #region ObjectBounds
+        /// <summary>
+        /// Aspects: IObjectBoundedGetter, IObjectBoundedOptionalGetter
+        /// </summary>
+        IObjectBoundsGetter ObjectBounds { get; }
+        #endregion
+        IPreviewTransformGetter? PreviewTransform { get; }
+        #region Name
+        /// <summary>
+        /// Aspects: INamedGetter, INamedRequiredGetter, ITranslatedNamedGetter, ITranslatedNamedRequiredGetter
+        /// </summary>
+        ITranslatedStringGetter? Name { get; }
+        #endregion
+        #region Model
+        /// <summary>
+        /// Aspects: IModeledGetter
+        /// </summary>
+        IModelGetter? Model { get; }
+        #endregion
+        IDestructibleGetter? Destructible { get; }
+        #region Keywords
+        /// <summary>
+        /// Aspects: IKeywordedGetter&lt;IKeywordGetter&gt;
+        /// </summary>
+        IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? Keywords { get; }
+        #endregion
+        IPropertiesGetter? Properties { get; }
+        IFormLinkNullableGetter<ITerminalGetter> NativeTerminal { get; }
+        IFormLinkNullableGetter<ILocationReferenceTypeGetter> ForcedLocRefType { get; }
+        ReadOnlyMemorySlice<Byte>? PNAM { get; }
+        IFormLinkNullableGetter<IWaterGetter> WaterType { get; }
+        ITranslatedStringGetter? ATTXActivateTextOverride { get; }
+        Furniture.Flag? Flags { get; }
+        IReadOnlyList<IConditionGetter>? Conditions { get; }
+        IReadOnlyList<IContainerEntryGetter>? Items { get; }
+        IWorkbenchDataGetter? WorkbenchData { get; }
+        IFormLinkNullableGetter<IFurnitureAssociationGetter> AssociatedForm { get; }
+        IReadOnlyList<IFurnitureMarkerGetter>? Markers { get; }
+        String? ModelFilename { get; }
+
+        #region Mutagen
+        Furniture.MajorFlag MajorFlags { get; }
+        #endregion
 
     }
 
@@ -612,6 +1919,26 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         EditorID = 3,
         FormVersion = 4,
         Version2 = 5,
+        VirtualMachineAdapter = 6,
+        ObjectBounds = 7,
+        PreviewTransform = 8,
+        Name = 9,
+        Model = 10,
+        Destructible = 11,
+        Keywords = 12,
+        Properties = 13,
+        NativeTerminal = 14,
+        ForcedLocRefType = 15,
+        PNAM = 16,
+        WaterType = 17,
+        ATTXActivateTextOverride = 18,
+        Flags = 19,
+        Conditions = 20,
+        Items = 21,
+        WorkbenchData = 22,
+        AssociatedForm = 23,
+        Markers = 24,
+        ModelFilename = 25,
     }
     #endregion
 
@@ -624,14 +1951,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public static readonly ObjectKey ObjectKey = new ObjectKey(
             protocolKey: ProtocolDefinition_Fallout4.ProtocolKey,
-            msgID: 231,
+            msgID: 204,
             version: 0);
 
-        public const string GUID = "b0359dc1-e50e-4400-a1b9-e620e78763a1";
+        public const string GUID = "37ea297d-9233-4548-b692-fe2d298b35c4";
 
-        public const ushort AdditionalFieldCount = 0;
+        public const ushort AdditionalFieldCount = 20;
 
-        public const ushort FieldCount = 6;
+        public const ushort FieldCount = 26;
 
         public static readonly Type MaskType = typeof(Furniture.Mask<>);
 
@@ -700,6 +2027,26 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public void Clear(IFurnitureInternal item)
         {
             ClearPartial();
+            item.VirtualMachineAdapter = null;
+            item.ObjectBounds.Clear();
+            item.PreviewTransform = null;
+            item.Name = default;
+            item.Model = null;
+            item.Destructible = null;
+            item.Keywords = null;
+            item.Properties = null;
+            item.NativeTerminal.Clear();
+            item.ForcedLocRefType.Clear();
+            item.PNAM = default;
+            item.WaterType.Clear();
+            item.ATTXActivateTextOverride = default;
+            item.Flags = default;
+            item.Conditions = null;
+            item.Items = null;
+            item.WorkbenchData = null;
+            item.AssociatedForm.Clear();
+            item.Markers = null;
+            item.ModelFilename = default;
             base.Clear(item);
         }
         
@@ -717,6 +2064,18 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public void RemapLinks(IFurniture obj, IReadOnlyDictionary<FormKey, FormKey> mapping)
         {
             base.RemapLinks(obj, mapping);
+            obj.VirtualMachineAdapter?.RemapLinks(mapping);
+            obj.PreviewTransform?.RemapLinks(mapping);
+            obj.Model?.RemapLinks(mapping);
+            obj.Destructible?.RemapLinks(mapping);
+            obj.Keywords?.RemapLinks(mapping);
+            obj.NativeTerminal.Relink(mapping);
+            obj.ForcedLocRefType.Relink(mapping);
+            obj.WaterType.Relink(mapping);
+            obj.Conditions?.RemapLinks(mapping);
+            obj.Items?.RemapLinks(mapping);
+            obj.AssociatedForm.Relink(mapping);
+            obj.Markers?.RemapLinks(mapping);
         }
         
         #endregion
@@ -785,6 +2144,62 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             EqualsMaskHelper.Include include = EqualsMaskHelper.Include.All)
         {
             if (rhs == null) return;
+            ret.VirtualMachineAdapter = EqualsMaskHelper.EqualsHelper(
+                item.VirtualMachineAdapter,
+                rhs.VirtualMachineAdapter,
+                (loqLhs, loqRhs, incl) => loqLhs.GetEqualsMask(loqRhs, incl),
+                include);
+            ret.ObjectBounds = MaskItemExt.Factory(item.ObjectBounds.GetEqualsMask(rhs.ObjectBounds, include), include);
+            ret.PreviewTransform = EqualsMaskHelper.EqualsHelper(
+                item.PreviewTransform,
+                rhs.PreviewTransform,
+                (loqLhs, loqRhs, incl) => loqLhs.GetEqualsMask(loqRhs, incl),
+                include);
+            ret.Name = object.Equals(item.Name, rhs.Name);
+            ret.Model = EqualsMaskHelper.EqualsHelper(
+                item.Model,
+                rhs.Model,
+                (loqLhs, loqRhs, incl) => loqLhs.GetEqualsMask(loqRhs, incl),
+                include);
+            ret.Destructible = EqualsMaskHelper.EqualsHelper(
+                item.Destructible,
+                rhs.Destructible,
+                (loqLhs, loqRhs, incl) => loqLhs.GetEqualsMask(loqRhs, incl),
+                include);
+            ret.Keywords = item.Keywords.CollectionEqualsHelper(
+                rhs.Keywords,
+                (l, r) => object.Equals(l, r),
+                include);
+            ret.Properties = EqualsMaskHelper.EqualsHelper(
+                item.Properties,
+                rhs.Properties,
+                (loqLhs, loqRhs, incl) => loqLhs.GetEqualsMask(loqRhs, incl),
+                include);
+            ret.NativeTerminal = item.NativeTerminal.Equals(rhs.NativeTerminal);
+            ret.ForcedLocRefType = item.ForcedLocRefType.Equals(rhs.ForcedLocRefType);
+            ret.PNAM = MemorySliceExt.Equal(item.PNAM, rhs.PNAM);
+            ret.WaterType = item.WaterType.Equals(rhs.WaterType);
+            ret.ATTXActivateTextOverride = object.Equals(item.ATTXActivateTextOverride, rhs.ATTXActivateTextOverride);
+            ret.Flags = item.Flags == rhs.Flags;
+            ret.Conditions = item.Conditions.CollectionEqualsHelper(
+                rhs.Conditions,
+                (loqLhs, loqRhs) => loqLhs.GetEqualsMask(loqRhs, include),
+                include);
+            ret.Items = item.Items.CollectionEqualsHelper(
+                rhs.Items,
+                (loqLhs, loqRhs) => loqLhs.GetEqualsMask(loqRhs, include),
+                include);
+            ret.WorkbenchData = EqualsMaskHelper.EqualsHelper(
+                item.WorkbenchData,
+                rhs.WorkbenchData,
+                (loqLhs, loqRhs, incl) => loqLhs.GetEqualsMask(loqRhs, incl),
+                include);
+            ret.AssociatedForm = item.AssociatedForm.Equals(rhs.AssociatedForm);
+            ret.Markers = item.Markers.CollectionEqualsHelper(
+                rhs.Markers,
+                (loqLhs, loqRhs) => loqLhs.GetEqualsMask(loqRhs, include),
+                include);
+            ret.ModelFilename = string.Equals(item.ModelFilename, rhs.ModelFilename);
             base.FillEqualsMask(item, rhs, ret, include);
         }
         
@@ -836,6 +2251,157 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 item: item,
                 fg: fg,
                 printMask: printMask);
+            if ((printMask?.VirtualMachineAdapter?.Overall ?? true)
+                && item.VirtualMachineAdapter is {} VirtualMachineAdapterItem)
+            {
+                VirtualMachineAdapterItem?.ToString(fg, "VirtualMachineAdapter");
+            }
+            if (printMask?.ObjectBounds?.Overall ?? true)
+            {
+                item.ObjectBounds?.ToString(fg, "ObjectBounds");
+            }
+            if ((printMask?.PreviewTransform?.Overall ?? true)
+                && item.PreviewTransform is {} PreviewTransformItem)
+            {
+                PreviewTransformItem?.ToString(fg, "PreviewTransform");
+            }
+            if ((printMask?.Name ?? true)
+                && item.Name is {} NameItem)
+            {
+                fg.AppendItem(NameItem, "Name");
+            }
+            if ((printMask?.Model?.Overall ?? true)
+                && item.Model is {} ModelItem)
+            {
+                ModelItem?.ToString(fg, "Model");
+            }
+            if ((printMask?.Destructible?.Overall ?? true)
+                && item.Destructible is {} DestructibleItem)
+            {
+                DestructibleItem?.ToString(fg, "Destructible");
+            }
+            if ((printMask?.Keywords?.Overall ?? true)
+                && item.Keywords is {} KeywordsItem)
+            {
+                fg.AppendLine("Keywords =>");
+                fg.AppendLine("[");
+                using (new DepthWrapper(fg))
+                {
+                    foreach (var subItem in KeywordsItem)
+                    {
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            fg.AppendItem(subItem.FormKey);
+                        }
+                        fg.AppendLine("]");
+                    }
+                }
+                fg.AppendLine("]");
+            }
+            if ((printMask?.Properties?.Overall ?? true)
+                && item.Properties is {} PropertiesItem)
+            {
+                PropertiesItem?.ToString(fg, "Properties");
+            }
+            if (printMask?.NativeTerminal ?? true)
+            {
+                fg.AppendItem(item.NativeTerminal.FormKeyNullable, "NativeTerminal");
+            }
+            if (printMask?.ForcedLocRefType ?? true)
+            {
+                fg.AppendItem(item.ForcedLocRefType.FormKeyNullable, "ForcedLocRefType");
+            }
+            if ((printMask?.PNAM ?? true)
+                && item.PNAM is {} PNAMItem)
+            {
+                fg.AppendLine($"PNAM => {SpanExt.ToHexString(PNAMItem)}");
+            }
+            if (printMask?.WaterType ?? true)
+            {
+                fg.AppendItem(item.WaterType.FormKeyNullable, "WaterType");
+            }
+            if ((printMask?.ATTXActivateTextOverride ?? true)
+                && item.ATTXActivateTextOverride is {} ATTXActivateTextOverrideItem)
+            {
+                fg.AppendItem(ATTXActivateTextOverrideItem, "ATTXActivateTextOverride");
+            }
+            if ((printMask?.Flags ?? true)
+                && item.Flags is {} FlagsItem)
+            {
+                fg.AppendItem(FlagsItem, "Flags");
+            }
+            if ((printMask?.Conditions?.Overall ?? true)
+                && item.Conditions is {} ConditionsItem)
+            {
+                fg.AppendLine("Conditions =>");
+                fg.AppendLine("[");
+                using (new DepthWrapper(fg))
+                {
+                    foreach (var subItem in ConditionsItem)
+                    {
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            subItem?.ToString(fg, "Item");
+                        }
+                        fg.AppendLine("]");
+                    }
+                }
+                fg.AppendLine("]");
+            }
+            if ((printMask?.Items?.Overall ?? true)
+                && item.Items is {} ItemsItem)
+            {
+                fg.AppendLine("Items =>");
+                fg.AppendLine("[");
+                using (new DepthWrapper(fg))
+                {
+                    foreach (var subItem in ItemsItem)
+                    {
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            subItem?.ToString(fg, "Item");
+                        }
+                        fg.AppendLine("]");
+                    }
+                }
+                fg.AppendLine("]");
+            }
+            if ((printMask?.WorkbenchData?.Overall ?? true)
+                && item.WorkbenchData is {} WorkbenchDataItem)
+            {
+                WorkbenchDataItem?.ToString(fg, "WorkbenchData");
+            }
+            if (printMask?.AssociatedForm ?? true)
+            {
+                fg.AppendItem(item.AssociatedForm.FormKeyNullable, "AssociatedForm");
+            }
+            if ((printMask?.Markers?.Overall ?? true)
+                && item.Markers is {} MarkersItem)
+            {
+                fg.AppendLine("Markers =>");
+                fg.AppendLine("[");
+                using (new DepthWrapper(fg))
+                {
+                    foreach (var subItem in MarkersItem)
+                    {
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            subItem?.ToString(fg, "Item");
+                        }
+                        fg.AppendLine("]");
+                    }
+                }
+                fg.AppendLine("]");
+            }
+            if ((printMask?.ModelFilename ?? true)
+                && item.ModelFilename is {} ModelFilenameItem)
+            {
+                fg.AppendItem(ModelFilenameItem, "ModelFilename");
+            }
         }
         
         public static Furniture_FieldIndex ConvertFieldIndex(Fallout4MajorRecord_FieldIndex index)
@@ -884,6 +2450,114 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         {
             if (!EqualsMaskHelper.RefEquality(lhs, rhs, out var isEqual)) return isEqual;
             if (!base.Equals((IFallout4MajorRecordGetter)lhs, (IFallout4MajorRecordGetter)rhs, crystal)) return false;
+            if ((crystal?.GetShouldTranslate((int)Furniture_FieldIndex.VirtualMachineAdapter) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.VirtualMachineAdapter, rhs.VirtualMachineAdapter, out var lhsVirtualMachineAdapter, out var rhsVirtualMachineAdapter, out var isVirtualMachineAdapterEqual))
+                {
+                    if (!((VirtualMachineAdapterCommon)((IVirtualMachineAdapterGetter)lhsVirtualMachineAdapter).CommonInstance()!).Equals(lhsVirtualMachineAdapter, rhsVirtualMachineAdapter, crystal?.GetSubCrystal((int)Furniture_FieldIndex.VirtualMachineAdapter))) return false;
+                }
+                else if (!isVirtualMachineAdapterEqual) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Furniture_FieldIndex.ObjectBounds) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.ObjectBounds, rhs.ObjectBounds, out var lhsObjectBounds, out var rhsObjectBounds, out var isObjectBoundsEqual))
+                {
+                    if (!((ObjectBoundsCommon)((IObjectBoundsGetter)lhsObjectBounds).CommonInstance()!).Equals(lhsObjectBounds, rhsObjectBounds, crystal?.GetSubCrystal((int)Furniture_FieldIndex.ObjectBounds))) return false;
+                }
+                else if (!isObjectBoundsEqual) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Furniture_FieldIndex.PreviewTransform) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.PreviewTransform, rhs.PreviewTransform, out var lhsPreviewTransform, out var rhsPreviewTransform, out var isPreviewTransformEqual))
+                {
+                    if (!((PreviewTransformCommon)((IPreviewTransformGetter)lhsPreviewTransform).CommonInstance()!).Equals(lhsPreviewTransform, rhsPreviewTransform, crystal?.GetSubCrystal((int)Furniture_FieldIndex.PreviewTransform))) return false;
+                }
+                else if (!isPreviewTransformEqual) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Furniture_FieldIndex.Name) ?? true))
+            {
+                if (!object.Equals(lhs.Name, rhs.Name)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Furniture_FieldIndex.Model) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.Model, rhs.Model, out var lhsModel, out var rhsModel, out var isModelEqual))
+                {
+                    if (!((ModelCommon)((IModelGetter)lhsModel).CommonInstance()!).Equals(lhsModel, rhsModel, crystal?.GetSubCrystal((int)Furniture_FieldIndex.Model))) return false;
+                }
+                else if (!isModelEqual) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Furniture_FieldIndex.Destructible) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.Destructible, rhs.Destructible, out var lhsDestructible, out var rhsDestructible, out var isDestructibleEqual))
+                {
+                    if (!((DestructibleCommon)((IDestructibleGetter)lhsDestructible).CommonInstance()!).Equals(lhsDestructible, rhsDestructible, crystal?.GetSubCrystal((int)Furniture_FieldIndex.Destructible))) return false;
+                }
+                else if (!isDestructibleEqual) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Furniture_FieldIndex.Keywords) ?? true))
+            {
+                if (!lhs.Keywords.SequenceEqualNullable(rhs.Keywords)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Furniture_FieldIndex.Properties) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.Properties, rhs.Properties, out var lhsProperties, out var rhsProperties, out var isPropertiesEqual))
+                {
+                    if (!((PropertiesCommon)((IPropertiesGetter)lhsProperties).CommonInstance()!).Equals(lhsProperties, rhsProperties, crystal?.GetSubCrystal((int)Furniture_FieldIndex.Properties))) return false;
+                }
+                else if (!isPropertiesEqual) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Furniture_FieldIndex.NativeTerminal) ?? true))
+            {
+                if (!lhs.NativeTerminal.Equals(rhs.NativeTerminal)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Furniture_FieldIndex.ForcedLocRefType) ?? true))
+            {
+                if (!lhs.ForcedLocRefType.Equals(rhs.ForcedLocRefType)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Furniture_FieldIndex.PNAM) ?? true))
+            {
+                if (!MemorySliceExt.Equal(lhs.PNAM, rhs.PNAM)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Furniture_FieldIndex.WaterType) ?? true))
+            {
+                if (!lhs.WaterType.Equals(rhs.WaterType)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Furniture_FieldIndex.ATTXActivateTextOverride) ?? true))
+            {
+                if (!object.Equals(lhs.ATTXActivateTextOverride, rhs.ATTXActivateTextOverride)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Furniture_FieldIndex.Flags) ?? true))
+            {
+                if (lhs.Flags != rhs.Flags) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Furniture_FieldIndex.Conditions) ?? true))
+            {
+                if (!lhs.Conditions.SequenceEqualNullable(rhs.Conditions)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Furniture_FieldIndex.Items) ?? true))
+            {
+                if (!lhs.Items.SequenceEqualNullable(rhs.Items)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Furniture_FieldIndex.WorkbenchData) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.WorkbenchData, rhs.WorkbenchData, out var lhsWorkbenchData, out var rhsWorkbenchData, out var isWorkbenchDataEqual))
+                {
+                    if (!((WorkbenchDataCommon)((IWorkbenchDataGetter)lhsWorkbenchData).CommonInstance()!).Equals(lhsWorkbenchData, rhsWorkbenchData, crystal?.GetSubCrystal((int)Furniture_FieldIndex.WorkbenchData))) return false;
+                }
+                else if (!isWorkbenchDataEqual) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Furniture_FieldIndex.AssociatedForm) ?? true))
+            {
+                if (!lhs.AssociatedForm.Equals(rhs.AssociatedForm)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Furniture_FieldIndex.Markers) ?? true))
+            {
+                if (!lhs.Markers.SequenceEqualNullable(rhs.Markers)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Furniture_FieldIndex.ModelFilename) ?? true))
+            {
+                if (!string.Equals(lhs.ModelFilename, rhs.ModelFilename)) return false;
+            }
             return true;
         }
         
@@ -912,6 +2586,59 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public virtual int GetHashCode(IFurnitureGetter item)
         {
             var hash = new HashCode();
+            if (item.VirtualMachineAdapter is {} VirtualMachineAdapteritem)
+            {
+                hash.Add(VirtualMachineAdapteritem);
+            }
+            hash.Add(item.ObjectBounds);
+            if (item.PreviewTransform is {} PreviewTransformitem)
+            {
+                hash.Add(PreviewTransformitem);
+            }
+            if (item.Name is {} Nameitem)
+            {
+                hash.Add(Nameitem);
+            }
+            if (item.Model is {} Modelitem)
+            {
+                hash.Add(Modelitem);
+            }
+            if (item.Destructible is {} Destructibleitem)
+            {
+                hash.Add(Destructibleitem);
+            }
+            hash.Add(item.Keywords);
+            if (item.Properties is {} Propertiesitem)
+            {
+                hash.Add(Propertiesitem);
+            }
+            hash.Add(item.NativeTerminal);
+            hash.Add(item.ForcedLocRefType);
+            if (item.PNAM is {} PNAMItem)
+            {
+                hash.Add(PNAMItem);
+            }
+            hash.Add(item.WaterType);
+            if (item.ATTXActivateTextOverride is {} ATTXActivateTextOverrideitem)
+            {
+                hash.Add(ATTXActivateTextOverrideitem);
+            }
+            if (item.Flags is {} Flagsitem)
+            {
+                hash.Add(Flagsitem);
+            }
+            hash.Add(item.Conditions);
+            hash.Add(item.Items);
+            if (item.WorkbenchData is {} WorkbenchDataitem)
+            {
+                hash.Add(WorkbenchDataitem);
+            }
+            hash.Add(item.AssociatedForm);
+            hash.Add(item.Markers);
+            if (item.ModelFilename is {} ModelFilenameitem)
+            {
+                hash.Add(ModelFilenameitem);
+            }
             hash.Add(base.GetHashCode());
             return hash.ToHashCode();
         }
@@ -940,6 +2667,80 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             foreach (var item in base.GetContainedFormLinks(obj))
             {
                 yield return item;
+            }
+            if (obj.VirtualMachineAdapter is IFormLinkContainerGetter VirtualMachineAdapterlinkCont)
+            {
+                foreach (var item in VirtualMachineAdapterlinkCont.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
+            if (obj.PreviewTransform is {} PreviewTransformItems)
+            {
+                foreach (var item in PreviewTransformItems.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
+            if (obj.Model is {} ModelItems)
+            {
+                foreach (var item in ModelItems.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
+            if (obj.Destructible is {} DestructibleItems)
+            {
+                foreach (var item in DestructibleItems.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
+            if (obj.Keywords is {} KeywordsItem)
+            {
+                foreach (var item in KeywordsItem)
+                {
+                    yield return FormLinkInformation.Factory(item);
+                }
+            }
+            if (obj.NativeTerminal.FormKeyNullable.HasValue)
+            {
+                yield return FormLinkInformation.Factory(obj.NativeTerminal);
+            }
+            if (obj.ForcedLocRefType.FormKeyNullable.HasValue)
+            {
+                yield return FormLinkInformation.Factory(obj.ForcedLocRefType);
+            }
+            if (obj.WaterType.FormKeyNullable.HasValue)
+            {
+                yield return FormLinkInformation.Factory(obj.WaterType);
+            }
+            if (obj.Conditions is {} ConditionsItem)
+            {
+                foreach (var item in ConditionsItem.WhereCastable<IConditionGetter, IFormLinkContainerGetter>()
+                    .SelectMany((f) => f.ContainedFormLinks))
+                {
+                    yield return FormLinkInformation.Factory(item);
+                }
+            }
+            if (obj.Items is {} ItemsItem)
+            {
+                foreach (var item in ItemsItem.WhereCastable<IContainerEntryGetter, IFormLinkContainerGetter>()
+                    .SelectMany((f) => f.ContainedFormLinks))
+                {
+                    yield return FormLinkInformation.Factory(item);
+                }
+            }
+            if (obj.AssociatedForm.FormKeyNullable.HasValue)
+            {
+                yield return FormLinkInformation.Factory(obj.AssociatedForm);
+            }
+            if (obj.Markers is {} MarkersItem)
+            {
+                foreach (var item in MarkersItem.SelectMany(f => f.ContainedFormLinks))
+                {
+                    yield return FormLinkInformation.Factory(item);
+                }
             }
             yield break;
         }
@@ -1015,6 +2816,350 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 errorMask,
                 copyMask,
                 deepCopy: deepCopy);
+            if ((copyMask?.GetShouldTranslate((int)Furniture_FieldIndex.VirtualMachineAdapter) ?? true))
+            {
+                errorMask?.PushIndex((int)Furniture_FieldIndex.VirtualMachineAdapter);
+                try
+                {
+                    if(rhs.VirtualMachineAdapter is {} rhsVirtualMachineAdapter)
+                    {
+                        item.VirtualMachineAdapter = rhsVirtualMachineAdapter.DeepCopy(
+                            errorMask: errorMask,
+                            copyMask?.GetSubCrystal((int)Furniture_FieldIndex.VirtualMachineAdapter));
+                    }
+                    else
+                    {
+                        item.VirtualMachineAdapter = default;
+                    }
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Furniture_FieldIndex.ObjectBounds) ?? true))
+            {
+                errorMask?.PushIndex((int)Furniture_FieldIndex.ObjectBounds);
+                try
+                {
+                    if ((copyMask?.GetShouldTranslate((int)Furniture_FieldIndex.ObjectBounds) ?? true))
+                    {
+                        item.ObjectBounds = rhs.ObjectBounds.DeepCopy(
+                            copyMask: copyMask?.GetSubCrystal((int)Furniture_FieldIndex.ObjectBounds),
+                            errorMask: errorMask);
+                    }
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Furniture_FieldIndex.PreviewTransform) ?? true))
+            {
+                errorMask?.PushIndex((int)Furniture_FieldIndex.PreviewTransform);
+                try
+                {
+                    if(rhs.PreviewTransform is {} rhsPreviewTransform)
+                    {
+                        item.PreviewTransform = rhsPreviewTransform.DeepCopy(
+                            errorMask: errorMask,
+                            copyMask?.GetSubCrystal((int)Furniture_FieldIndex.PreviewTransform));
+                    }
+                    else
+                    {
+                        item.PreviewTransform = default;
+                    }
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Furniture_FieldIndex.Name) ?? true))
+            {
+                item.Name = rhs.Name?.DeepCopy();
+            }
+            if ((copyMask?.GetShouldTranslate((int)Furniture_FieldIndex.Model) ?? true))
+            {
+                errorMask?.PushIndex((int)Furniture_FieldIndex.Model);
+                try
+                {
+                    if(rhs.Model is {} rhsModel)
+                    {
+                        item.Model = rhsModel.DeepCopy(
+                            errorMask: errorMask,
+                            copyMask?.GetSubCrystal((int)Furniture_FieldIndex.Model));
+                    }
+                    else
+                    {
+                        item.Model = default;
+                    }
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Furniture_FieldIndex.Destructible) ?? true))
+            {
+                errorMask?.PushIndex((int)Furniture_FieldIndex.Destructible);
+                try
+                {
+                    if(rhs.Destructible is {} rhsDestructible)
+                    {
+                        item.Destructible = rhsDestructible.DeepCopy(
+                            errorMask: errorMask,
+                            copyMask?.GetSubCrystal((int)Furniture_FieldIndex.Destructible));
+                    }
+                    else
+                    {
+                        item.Destructible = default;
+                    }
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Furniture_FieldIndex.Keywords) ?? true))
+            {
+                errorMask?.PushIndex((int)Furniture_FieldIndex.Keywords);
+                try
+                {
+                    if ((rhs.Keywords != null))
+                    {
+                        item.Keywords = 
+                            rhs.Keywords
+                            .Select(r => (IFormLinkGetter<IKeywordGetter>)new FormLink<IKeywordGetter>(r.FormKey))
+                            .ToExtendedList<IFormLinkGetter<IKeywordGetter>>();
+                    }
+                    else
+                    {
+                        item.Keywords = null;
+                    }
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Furniture_FieldIndex.Properties) ?? true))
+            {
+                errorMask?.PushIndex((int)Furniture_FieldIndex.Properties);
+                try
+                {
+                    if(rhs.Properties is {} rhsProperties)
+                    {
+                        item.Properties = rhsProperties.DeepCopy(
+                            errorMask: errorMask,
+                            copyMask?.GetSubCrystal((int)Furniture_FieldIndex.Properties));
+                    }
+                    else
+                    {
+                        item.Properties = default;
+                    }
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Furniture_FieldIndex.NativeTerminal) ?? true))
+            {
+                item.NativeTerminal.SetTo(rhs.NativeTerminal.FormKeyNullable);
+            }
+            if ((copyMask?.GetShouldTranslate((int)Furniture_FieldIndex.ForcedLocRefType) ?? true))
+            {
+                item.ForcedLocRefType.SetTo(rhs.ForcedLocRefType.FormKeyNullable);
+            }
+            if ((copyMask?.GetShouldTranslate((int)Furniture_FieldIndex.PNAM) ?? true))
+            {
+                if(rhs.PNAM is {} PNAMrhs)
+                {
+                    item.PNAM = PNAMrhs.ToArray();
+                }
+                else
+                {
+                    item.PNAM = default;
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Furniture_FieldIndex.WaterType) ?? true))
+            {
+                item.WaterType.SetTo(rhs.WaterType.FormKeyNullable);
+            }
+            if ((copyMask?.GetShouldTranslate((int)Furniture_FieldIndex.ATTXActivateTextOverride) ?? true))
+            {
+                item.ATTXActivateTextOverride = rhs.ATTXActivateTextOverride?.DeepCopy();
+            }
+            if ((copyMask?.GetShouldTranslate((int)Furniture_FieldIndex.Flags) ?? true))
+            {
+                item.Flags = rhs.Flags;
+            }
+            if ((copyMask?.GetShouldTranslate((int)Furniture_FieldIndex.Conditions) ?? true))
+            {
+                errorMask?.PushIndex((int)Furniture_FieldIndex.Conditions);
+                try
+                {
+                    if ((rhs.Conditions != null))
+                    {
+                        item.Conditions = 
+                            rhs.Conditions
+                            .Select(r =>
+                            {
+                                return r.DeepCopy(
+                                    errorMask: errorMask,
+                                    default(TranslationCrystal));
+                            })
+                            .ToExtendedList<Condition>();
+                    }
+                    else
+                    {
+                        item.Conditions = null;
+                    }
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Furniture_FieldIndex.Items) ?? true))
+            {
+                errorMask?.PushIndex((int)Furniture_FieldIndex.Items);
+                try
+                {
+                    if ((rhs.Items != null))
+                    {
+                        item.Items = 
+                            rhs.Items
+                            .Select(r =>
+                            {
+                                return r.DeepCopy(
+                                    errorMask: errorMask,
+                                    default(TranslationCrystal));
+                            })
+                            .ToExtendedList<ContainerEntry>();
+                    }
+                    else
+                    {
+                        item.Items = null;
+                    }
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Furniture_FieldIndex.WorkbenchData) ?? true))
+            {
+                errorMask?.PushIndex((int)Furniture_FieldIndex.WorkbenchData);
+                try
+                {
+                    if(rhs.WorkbenchData is {} rhsWorkbenchData)
+                    {
+                        item.WorkbenchData = rhsWorkbenchData.DeepCopy(
+                            errorMask: errorMask,
+                            copyMask?.GetSubCrystal((int)Furniture_FieldIndex.WorkbenchData));
+                    }
+                    else
+                    {
+                        item.WorkbenchData = default;
+                    }
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Furniture_FieldIndex.AssociatedForm) ?? true))
+            {
+                item.AssociatedForm.SetTo(rhs.AssociatedForm.FormKeyNullable);
+            }
+            if ((copyMask?.GetShouldTranslate((int)Furniture_FieldIndex.Markers) ?? true))
+            {
+                errorMask?.PushIndex((int)Furniture_FieldIndex.Markers);
+                try
+                {
+                    if ((rhs.Markers != null))
+                    {
+                        item.Markers = 
+                            rhs.Markers
+                            .Select(r =>
+                            {
+                                return r.DeepCopy(
+                                    errorMask: errorMask,
+                                    default(TranslationCrystal));
+                            })
+                            .ToExtendedList<FurnitureMarker>();
+                    }
+                    else
+                    {
+                        item.Markers = null;
+                    }
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Furniture_FieldIndex.ModelFilename) ?? true))
+            {
+                item.ModelFilename = rhs.ModelFilename;
+            }
         }
         
         public override void DeepCopyIn(
@@ -1163,6 +3308,203 @@ namespace Mutagen.Bethesda.Fallout4.Internals
     {
         public new readonly static FurnitureBinaryWriteTranslation Instance = new FurnitureBinaryWriteTranslation();
 
+        public static void WriteRecordTypes(
+            IFurnitureGetter item,
+            MutagenWriter writer,
+            TypedWriteParams? translationParams)
+        {
+            MajorRecordBinaryWriteTranslation.WriteRecordTypes(
+                item: item,
+                writer: writer,
+                translationParams: translationParams);
+            if (item.VirtualMachineAdapter is {} VirtualMachineAdapterItem)
+            {
+                ((VirtualMachineAdapterBinaryWriteTranslation)((IBinaryItem)VirtualMachineAdapterItem).BinaryWriteTranslator).Write(
+                    item: VirtualMachineAdapterItem,
+                    writer: writer,
+                    translationParams: translationParams);
+            }
+            var ObjectBoundsItem = item.ObjectBounds;
+            ((ObjectBoundsBinaryWriteTranslation)((IBinaryItem)ObjectBoundsItem).BinaryWriteTranslator).Write(
+                item: ObjectBoundsItem,
+                writer: writer,
+                translationParams: translationParams);
+            if (item.PreviewTransform is {} PreviewTransformItem)
+            {
+                ((PreviewTransformBinaryWriteTranslation)((IBinaryItem)PreviewTransformItem).BinaryWriteTranslator).Write(
+                    item: PreviewTransformItem,
+                    writer: writer,
+                    translationParams: translationParams);
+            }
+            StringBinaryTranslation.Instance.WriteNullable(
+                writer: writer,
+                item: item.Name,
+                header: translationParams.ConvertToCustom(RecordTypes.FULL),
+                binaryType: StringBinaryType.NullTerminate,
+                source: StringsSource.Normal);
+            if (item.Model is {} ModelItem)
+            {
+                ((ModelBinaryWriteTranslation)((IBinaryItem)ModelItem).BinaryWriteTranslator).Write(
+                    item: ModelItem,
+                    writer: writer,
+                    translationParams: translationParams);
+            }
+            if (item.Destructible is {} DestructibleItem)
+            {
+                ((DestructibleBinaryWriteTranslation)((IBinaryItem)DestructibleItem).BinaryWriteTranslator).Write(
+                    item: DestructibleItem,
+                    writer: writer,
+                    translationParams: translationParams);
+            }
+            Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IFormLinkGetter<IKeywordGetter>>.Instance.WriteWithCounter(
+                writer: writer,
+                items: item.Keywords,
+                counterType: RecordTypes.KSIZ,
+                counterLength: 4,
+                recordType: translationParams.ConvertToCustom(RecordTypes.KWDA),
+                transl: (MutagenWriter subWriter, IFormLinkGetter<IKeywordGetter> subItem, TypedWriteParams? conv) =>
+                {
+                    FormLinkBinaryTranslation.Instance.Write(
+                        writer: subWriter,
+                        item: subItem);
+                });
+            if (item.Properties is {} PropertiesItem)
+            {
+                ((PropertiesBinaryWriteTranslation)((IBinaryItem)PropertiesItem).BinaryWriteTranslator).Write(
+                    item: PropertiesItem,
+                    writer: writer,
+                    translationParams: translationParams);
+            }
+            FormLinkBinaryTranslation.Instance.WriteNullable(
+                writer: writer,
+                item: item.NativeTerminal,
+                header: translationParams.ConvertToCustom(RecordTypes.NTRM));
+            FormLinkBinaryTranslation.Instance.WriteNullable(
+                writer: writer,
+                item: item.ForcedLocRefType,
+                header: translationParams.ConvertToCustom(RecordTypes.FTYP));
+            ByteArrayBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
+                writer: writer,
+                item: item.PNAM,
+                header: translationParams.ConvertToCustom(RecordTypes.PNAM));
+            FormLinkBinaryTranslation.Instance.WriteNullable(
+                writer: writer,
+                item: item.WaterType,
+                header: translationParams.ConvertToCustom(RecordTypes.WNAM));
+            StringBinaryTranslation.Instance.WriteNullable(
+                writer: writer,
+                item: item.ATTXActivateTextOverride,
+                header: translationParams.ConvertToCustom(RecordTypes.RNAM),
+                binaryType: StringBinaryType.NullTerminate,
+                source: StringsSource.Normal);
+            FurnitureBinaryWriteTranslation.WriteBinaryFlags(
+                writer: writer,
+                item: item);
+            Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IConditionGetter>.Instance.WriteWithCounter(
+                writer: writer,
+                items: item.Conditions,
+                counterType: RecordTypes.CITC,
+                counterLength: 4,
+                transl: (MutagenWriter subWriter, IConditionGetter subItem, TypedWriteParams? conv) =>
+                {
+                    var Item = subItem;
+                    ((ConditionBinaryWriteTranslation)((IBinaryItem)Item).BinaryWriteTranslator).Write(
+                        item: Item,
+                        writer: subWriter,
+                        translationParams: conv);
+                });
+            Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IContainerEntryGetter>.Instance.WriteWithCounter(
+                writer: writer,
+                items: item.Items,
+                counterType: RecordTypes.COCT,
+                counterLength: 4,
+                transl: (MutagenWriter subWriter, IContainerEntryGetter subItem, TypedWriteParams? conv) =>
+                {
+                    var Item = subItem;
+                    ((ContainerEntryBinaryWriteTranslation)((IBinaryItem)Item).BinaryWriteTranslator).Write(
+                        item: Item,
+                        writer: subWriter,
+                        translationParams: conv);
+                });
+            FurnitureBinaryWriteTranslation.WriteBinaryFlags2(
+                writer: writer,
+                item: item);
+            if (item.WorkbenchData is {} WorkbenchDataItem)
+            {
+                ((WorkbenchDataBinaryWriteTranslation)((IBinaryItem)WorkbenchDataItem).BinaryWriteTranslator).Write(
+                    item: WorkbenchDataItem,
+                    writer: writer,
+                    translationParams: translationParams);
+            }
+            FormLinkBinaryTranslation.Instance.WriteNullable(
+                writer: writer,
+                item: item.AssociatedForm,
+                header: translationParams.ConvertToCustom(RecordTypes.NAM1));
+            FurnitureBinaryWriteTranslation.WriteBinaryDisabledMarkers(
+                writer: writer,
+                item: item);
+            FurnitureBinaryWriteTranslation.WriteBinaryMarkers(
+                writer: writer,
+                item: item);
+            StringBinaryTranslation.Instance.WriteNullable(
+                writer: writer,
+                item: item.ModelFilename,
+                header: translationParams.ConvertToCustom(RecordTypes.XMRK),
+                binaryType: StringBinaryType.NullTerminate);
+        }
+
+        public static partial void WriteBinaryFlagsCustom(
+            MutagenWriter writer,
+            IFurnitureGetter item);
+
+        public static void WriteBinaryFlags(
+            MutagenWriter writer,
+            IFurnitureGetter item)
+        {
+            WriteBinaryFlagsCustom(
+                writer: writer,
+                item: item);
+        }
+
+        public static partial void WriteBinaryFlags2Custom(
+            MutagenWriter writer,
+            IFurnitureGetter item);
+
+        public static void WriteBinaryFlags2(
+            MutagenWriter writer,
+            IFurnitureGetter item)
+        {
+            WriteBinaryFlags2Custom(
+                writer: writer,
+                item: item);
+        }
+
+        public static partial void WriteBinaryDisabledMarkersCustom(
+            MutagenWriter writer,
+            IFurnitureGetter item);
+
+        public static void WriteBinaryDisabledMarkers(
+            MutagenWriter writer,
+            IFurnitureGetter item)
+        {
+            WriteBinaryDisabledMarkersCustom(
+                writer: writer,
+                item: item);
+        }
+
+        public static partial void WriteBinaryMarkersCustom(
+            MutagenWriter writer,
+            IFurnitureGetter item);
+
+        public static void WriteBinaryMarkers(
+            MutagenWriter writer,
+            IFurnitureGetter item)
+        {
+            WriteBinaryMarkersCustom(
+                writer: writer,
+                item: item);
+        }
+
         public void Write(
             MutagenWriter writer,
             IFurnitureGetter item,
@@ -1177,10 +3519,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     Fallout4MajorRecordBinaryWriteTranslation.WriteEmbedded(
                         item: item,
                         writer: writer);
-                    MajorRecordBinaryWriteTranslation.WriteRecordTypes(
+                    writer.MetaData.FormVersion = item.FormVersion;
+                    WriteRecordTypes(
                         item: item,
                         writer: writer,
                         translationParams: translationParams);
+                    writer.MetaData.FormVersion = null;
                 }
                 catch (Exception ex)
                 {
@@ -1238,6 +3582,211 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 frame: frame);
         }
 
+        public static ParseResult FillBinaryRecordTypes(
+            IFurnitureInternal item,
+            MutagenFrame frame,
+            PreviousParse lastParsed,
+            Dictionary<RecordType, int>? recordParseCount,
+            RecordType nextRecordType,
+            int contentLength,
+            TypedParseParams? translationParams = null)
+        {
+            nextRecordType = translationParams.ConvertToStandard(nextRecordType);
+            switch (nextRecordType.TypeInt)
+            {
+                case RecordTypeInts.VMAD:
+                {
+                    item.VirtualMachineAdapter = Mutagen.Bethesda.Fallout4.VirtualMachineAdapter.CreateFromBinary(frame: frame);
+                    return (int)Furniture_FieldIndex.VirtualMachineAdapter;
+                }
+                case RecordTypeInts.OBND:
+                {
+                    item.ObjectBounds = Mutagen.Bethesda.Fallout4.ObjectBounds.CreateFromBinary(frame: frame);
+                    return (int)Furniture_FieldIndex.ObjectBounds;
+                }
+                case RecordTypeInts.PTRN:
+                {
+                    item.PreviewTransform = Mutagen.Bethesda.Fallout4.PreviewTransform.CreateFromBinary(frame: frame);
+                    return (int)Furniture_FieldIndex.PreviewTransform;
+                }
+                case RecordTypeInts.FULL:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.Name = StringBinaryTranslation.Instance.Parse(
+                        reader: frame.SpawnWithLength(contentLength),
+                        source: StringsSource.Normal,
+                        stringBinaryType: StringBinaryType.NullTerminate);
+                    return (int)Furniture_FieldIndex.Name;
+                }
+                case RecordTypeInts.MODL:
+                {
+                    item.Model = Mutagen.Bethesda.Fallout4.Model.CreateFromBinary(
+                        frame: frame,
+                        translationParams: translationParams);
+                    return (int)Furniture_FieldIndex.Model;
+                }
+                case RecordTypeInts.DEST:
+                case RecordTypeInts.DAMC:
+                case RecordTypeInts.DSTD:
+                case RecordTypeInts.DSTA:
+                case RecordTypeInts.DMDL:
+                {
+                    item.Destructible = Mutagen.Bethesda.Fallout4.Destructible.CreateFromBinary(
+                        frame: frame,
+                        translationParams: translationParams);
+                    return (int)Furniture_FieldIndex.Destructible;
+                }
+                case RecordTypeInts.KWDA:
+                case RecordTypeInts.KSIZ:
+                {
+                    item.Keywords = 
+                        Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IFormLinkGetter<IKeywordGetter>>.Instance.Parse(
+                            reader: frame,
+                            countLengthLength: 4,
+                            countRecord: translationParams.ConvertToCustom(RecordTypes.KSIZ),
+                            triggeringRecord: translationParams.ConvertToCustom(RecordTypes.KWDA),
+                            transl: FormLinkBinaryTranslation.Instance.Parse)
+                        .CastExtendedList<IFormLinkGetter<IKeywordGetter>>();
+                    return (int)Furniture_FieldIndex.Keywords;
+                }
+                case RecordTypeInts.PRPS:
+                {
+                    item.Properties = Mutagen.Bethesda.Fallout4.Properties.CreateFromBinary(frame: frame);
+                    return (int)Furniture_FieldIndex.Properties;
+                }
+                case RecordTypeInts.NTRM:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.NativeTerminal.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    return (int)Furniture_FieldIndex.NativeTerminal;
+                }
+                case RecordTypeInts.FTYP:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.ForcedLocRefType.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    return (int)Furniture_FieldIndex.ForcedLocRefType;
+                }
+                case RecordTypeInts.PNAM:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.PNAM = ByteArrayBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: frame.SpawnWithLength(contentLength));
+                    return (int)Furniture_FieldIndex.PNAM;
+                }
+                case RecordTypeInts.WNAM:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.WaterType.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    return (int)Furniture_FieldIndex.WaterType;
+                }
+                case RecordTypeInts.RNAM:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.ATTXActivateTextOverride = StringBinaryTranslation.Instance.Parse(
+                        reader: frame.SpawnWithLength(contentLength),
+                        source: StringsSource.Normal,
+                        stringBinaryType: StringBinaryType.NullTerminate);
+                    return (int)Furniture_FieldIndex.ATTXActivateTextOverride;
+                }
+                case RecordTypeInts.FNAM:
+                {
+                    FurnitureBinaryCreateTranslation.FillBinaryFlagsCustom(
+                        frame: frame.SpawnWithLength(frame.MetaData.Constants.SubConstants.HeaderLength + contentLength),
+                        item: item);
+                    return (int)Furniture_FieldIndex.Flags;
+                }
+                case RecordTypeInts.CTDA:
+                case RecordTypeInts.CITC:
+                {
+                    item.Conditions = 
+                        Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<Condition>.Instance.ParsePerItem(
+                            reader: frame,
+                            countLengthLength: 4,
+                            countRecord: RecordTypes.CITC,
+                            triggeringRecord: Condition_Registration.TriggeringRecordTypes,
+                            translationParams: translationParams,
+                            transl: Condition.TryCreateFromBinary)
+                        .CastExtendedList<Condition>();
+                    return (int)Furniture_FieldIndex.Conditions;
+                }
+                case RecordTypeInts.CNTO:
+                case RecordTypeInts.COCT:
+                {
+                    item.Items = 
+                        Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<ContainerEntry>.Instance.ParsePerItem(
+                            reader: frame,
+                            countLengthLength: 4,
+                            countRecord: RecordTypes.COCT,
+                            triggeringRecord: RecordTypes.CNTO,
+                            translationParams: translationParams,
+                            transl: ContainerEntry.TryCreateFromBinary)
+                        .CastExtendedList<ContainerEntry>();
+                    return (int)Furniture_FieldIndex.Items;
+                }
+                case RecordTypeInts.MNAM:
+                {
+                    return FurnitureBinaryCreateTranslation.FillBinaryFlags2Custom(
+                        frame: frame.SpawnWithLength(frame.MetaData.Constants.SubConstants.HeaderLength + contentLength),
+                        item: item);
+                }
+                case RecordTypeInts.WBDT:
+                {
+                    item.WorkbenchData = Mutagen.Bethesda.Fallout4.WorkbenchData.CreateFromBinary(frame: frame);
+                    return (int)Furniture_FieldIndex.WorkbenchData;
+                }
+                case RecordTypeInts.NAM1:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.AssociatedForm.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    return (int)Furniture_FieldIndex.AssociatedForm;
+                }
+                case RecordTypeInts.ENAM:
+                {
+                    return FurnitureBinaryCreateTranslation.FillBinaryDisabledMarkersCustom(
+                        frame: frame.SpawnWithLength(frame.MetaData.Constants.SubConstants.HeaderLength + contentLength),
+                        item: item);
+                }
+                case RecordTypeInts.FNPR:
+                {
+                    FurnitureBinaryCreateTranslation.FillBinaryMarkersCustom(
+                        frame: frame.SpawnWithLength(frame.MetaData.Constants.SubConstants.HeaderLength + contentLength),
+                        item: item);
+                    return (int)Furniture_FieldIndex.Markers;
+                }
+                case RecordTypeInts.XMRK:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.ModelFilename = StringBinaryTranslation.Instance.Parse(
+                        reader: frame.SpawnWithLength(contentLength),
+                        stringBinaryType: StringBinaryType.NullTerminate);
+                    return (int)Furniture_FieldIndex.ModelFilename;
+                }
+                default:
+                    return Fallout4MajorRecordBinaryCreateTranslation.FillBinaryRecordTypes(
+                        item: item,
+                        frame: frame,
+                        lastParsed: lastParsed,
+                        recordParseCount: recordParseCount,
+                        nextRecordType: nextRecordType,
+                        contentLength: contentLength);
+            }
+        }
+
+        public static partial void FillBinaryFlagsCustom(
+            MutagenFrame frame,
+            IFurnitureInternal item);
+
+        public static partial ParseResult FillBinaryFlags2Custom(
+            MutagenFrame frame,
+            IFurnitureInternal item);
+
+        public static partial ParseResult FillBinaryDisabledMarkersCustom(
+            MutagenFrame frame,
+            IFurnitureInternal item);
+
+        public static partial void FillBinaryMarkersCustom(
+            MutagenFrame frame,
+            IFurnitureInternal item);
+
     }
 
 }
@@ -1270,6 +3819,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         void IPrintable.ToString(FileGeneration fg, string? name) => this.ToString(fg, name);
 
+        public override IEnumerable<IFormLinkGetter> ContainedFormLinks => FurnitureCommon.Instance.GetContainedFormLinks(this);
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override object BinaryWriteTranslator => FurnitureBinaryWriteTranslation.Instance;
         void IBinaryItem.WriteToBinary(
@@ -1283,7 +3833,109 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         protected override Type LinkType => typeof(IFurniture);
 
+        public Furniture.MajorFlag MajorFlags => (Furniture.MajorFlag)this.MajorRecordFlagsRaw;
 
+        #region VirtualMachineAdapter
+        private RangeInt32? _VirtualMachineAdapterLocation;
+        public IVirtualMachineAdapterGetter? VirtualMachineAdapter => _VirtualMachineAdapterLocation.HasValue ? VirtualMachineAdapterBinaryOverlay.VirtualMachineAdapterFactory(new OverlayStream(_data.Slice(_VirtualMachineAdapterLocation!.Value.Min), _package), _package) : default;
+        #endregion
+        #region ObjectBounds
+        private RangeInt32? _ObjectBoundsLocation;
+        private IObjectBoundsGetter? _ObjectBounds => _ObjectBoundsLocation.HasValue ? ObjectBoundsBinaryOverlay.ObjectBoundsFactory(new OverlayStream(_data.Slice(_ObjectBoundsLocation!.Value.Min), _package), _package) : default;
+        public IObjectBoundsGetter ObjectBounds => _ObjectBounds ?? new ObjectBounds();
+        #endregion
+        #region PreviewTransform
+        private RangeInt32? _PreviewTransformLocation;
+        public IPreviewTransformGetter? PreviewTransform => _PreviewTransformLocation.HasValue ? PreviewTransformBinaryOverlay.PreviewTransformFactory(new OverlayStream(_data.Slice(_PreviewTransformLocation!.Value.Min), _package), _package) : default;
+        #endregion
+        #region Name
+        private int? _NameLocation;
+        public ITranslatedStringGetter? Name => _NameLocation.HasValue ? StringBinaryTranslation.Instance.Parse(HeaderTranslation.ExtractSubrecordMemory(_data, _NameLocation.Value, _package.MetaData.Constants), StringsSource.Normal, _package.MetaData.StringsLookup) : default(TranslatedString?);
+        #region Aspects
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        string INamedRequiredGetter.Name => this.Name?.String ?? string.Empty;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        string? INamedGetter.Name => this.Name?.String;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        ITranslatedStringGetter ITranslatedNamedRequiredGetter.Name => this.Name ?? TranslatedString.Empty;
+        #endregion
+        #endregion
+        public IModelGetter? Model { get; private set; }
+        public IDestructibleGetter? Destructible { get; private set; }
+        #region Keywords
+        public IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? Keywords { get; private set; }
+        IReadOnlyList<IFormLinkGetter<IKeywordCommonGetter>>? IKeywordedGetter.Keywords => this.Keywords;
+        #endregion
+        #region Properties
+        private RangeInt32? _PropertiesLocation;
+        public IPropertiesGetter? Properties => _PropertiesLocation.HasValue ? PropertiesBinaryOverlay.PropertiesFactory(new OverlayStream(_data.Slice(_PropertiesLocation!.Value.Min), _package), _package) : default;
+        #endregion
+        #region NativeTerminal
+        private int? _NativeTerminalLocation;
+        public IFormLinkNullableGetter<ITerminalGetter> NativeTerminal => _NativeTerminalLocation.HasValue ? new FormLinkNullable<ITerminalGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _NativeTerminalLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<ITerminalGetter>.Null;
+        #endregion
+        #region ForcedLocRefType
+        private int? _ForcedLocRefTypeLocation;
+        public IFormLinkNullableGetter<ILocationReferenceTypeGetter> ForcedLocRefType => _ForcedLocRefTypeLocation.HasValue ? new FormLinkNullable<ILocationReferenceTypeGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _ForcedLocRefTypeLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<ILocationReferenceTypeGetter>.Null;
+        #endregion
+        #region PNAM
+        private int? _PNAMLocation;
+        public ReadOnlyMemorySlice<Byte>? PNAM => _PNAMLocation.HasValue ? HeaderTranslation.ExtractSubrecordMemory(_data, _PNAMLocation.Value, _package.MetaData.Constants) : default(ReadOnlyMemorySlice<byte>?);
+        #endregion
+        #region WaterType
+        private int? _WaterTypeLocation;
+        public IFormLinkNullableGetter<IWaterGetter> WaterType => _WaterTypeLocation.HasValue ? new FormLinkNullable<IWaterGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _WaterTypeLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<IWaterGetter>.Null;
+        #endregion
+        #region ATTXActivateTextOverride
+        private int? _ATTXActivateTextOverrideLocation;
+        public ITranslatedStringGetter? ATTXActivateTextOverride => _ATTXActivateTextOverrideLocation.HasValue ? StringBinaryTranslation.Instance.Parse(HeaderTranslation.ExtractSubrecordMemory(_data, _ATTXActivateTextOverrideLocation.Value, _package.MetaData.Constants), StringsSource.Normal, _package.MetaData.StringsLookup) : default(TranslatedString?);
+        #endregion
+        #region Flags
+        partial void FlagsCustomParse(
+            OverlayStream stream,
+            long finalPos,
+            int offset);
+        public Furniture.Flag? Flags => GetFlagsCustom();
+        #endregion
+        #region Conditions
+        partial void ConditionsCustomParse(
+            OverlayStream stream,
+            long finalPos,
+            int offset,
+            RecordType type,
+            PreviousParse lastParsed);
+        #endregion
+        public IReadOnlyList<IContainerEntryGetter>? Items { get; private set; }
+        #region Flags2
+        public partial ParseResult Flags2CustomParse(
+            OverlayStream stream,
+            int offset);
+        #endregion
+        #region WorkbenchData
+        private RangeInt32? _WorkbenchDataLocation;
+        public IWorkbenchDataGetter? WorkbenchData => _WorkbenchDataLocation.HasValue ? WorkbenchDataBinaryOverlay.WorkbenchDataFactory(new OverlayStream(_data.Slice(_WorkbenchDataLocation!.Value.Min), _package), _package) : default;
+        #endregion
+        #region AssociatedForm
+        private int? _AssociatedFormLocation;
+        public IFormLinkNullableGetter<IFurnitureAssociationGetter> AssociatedForm => _AssociatedFormLocation.HasValue ? new FormLinkNullable<IFurnitureAssociationGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _AssociatedFormLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<IFurnitureAssociationGetter>.Null;
+        #endregion
+        #region DisabledMarkers
+        public partial ParseResult DisabledMarkersCustomParse(
+            OverlayStream stream,
+            int offset);
+        #endregion
+        #region Markers
+        partial void MarkersCustomParse(
+            OverlayStream stream,
+            long finalPos,
+            int offset,
+            RecordType type,
+            PreviousParse lastParsed);
+        #endregion
+        #region ModelFilename
+        private int? _ModelFilenameLocation;
+        public String? ModelFilename => _ModelFilenameLocation.HasValue ? BinaryStringUtility.ProcessWholeToZString(HeaderTranslation.ExtractSubrecordMemory(_data, _ModelFilenameLocation.Value, _package.MetaData.Constants)) : default(string?);
+        #endregion
         partial void CustomFactoryEnd(
             OverlayStream stream,
             int finalPos,
@@ -1338,6 +3990,181 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 parseParams: parseParams);
         }
 
+        public override ParseResult FillRecordType(
+            OverlayStream stream,
+            int finalPos,
+            int offset,
+            RecordType type,
+            PreviousParse lastParsed,
+            Dictionary<RecordType, int>? recordParseCount,
+            TypedParseParams? parseParams = null)
+        {
+            type = parseParams.ConvertToStandard(type);
+            switch (type.TypeInt)
+            {
+                case RecordTypeInts.VMAD:
+                {
+                    _VirtualMachineAdapterLocation = new RangeInt32((stream.Position - offset), finalPos - offset);
+                    return (int)Furniture_FieldIndex.VirtualMachineAdapter;
+                }
+                case RecordTypeInts.OBND:
+                {
+                    _ObjectBoundsLocation = new RangeInt32((stream.Position - offset), finalPos - offset);
+                    return (int)Furniture_FieldIndex.ObjectBounds;
+                }
+                case RecordTypeInts.PTRN:
+                {
+                    _PreviewTransformLocation = new RangeInt32((stream.Position - offset), finalPos - offset);
+                    return (int)Furniture_FieldIndex.PreviewTransform;
+                }
+                case RecordTypeInts.FULL:
+                {
+                    _NameLocation = (stream.Position - offset);
+                    return (int)Furniture_FieldIndex.Name;
+                }
+                case RecordTypeInts.MODL:
+                {
+                    this.Model = ModelBinaryOverlay.ModelFactory(
+                        stream: stream,
+                        package: _package,
+                        parseParams: parseParams);
+                    return (int)Furniture_FieldIndex.Model;
+                }
+                case RecordTypeInts.DEST:
+                case RecordTypeInts.DAMC:
+                case RecordTypeInts.DSTD:
+                case RecordTypeInts.DSTA:
+                case RecordTypeInts.DMDL:
+                {
+                    this.Destructible = DestructibleBinaryOverlay.DestructibleFactory(
+                        stream: stream,
+                        package: _package,
+                        parseParams: parseParams);
+                    return (int)Furniture_FieldIndex.Destructible;
+                }
+                case RecordTypeInts.KWDA:
+                case RecordTypeInts.KSIZ:
+                {
+                    this.Keywords = BinaryOverlayList.FactoryByCount<IFormLinkGetter<IKeywordGetter>>(
+                        stream: stream,
+                        package: _package,
+                        itemLength: 0x4,
+                        countLength: 4,
+                        countType: RecordTypes.KSIZ,
+                        subrecordType: RecordTypes.KWDA,
+                        getter: (s, p) => new FormLink<IKeywordGetter>(FormKey.Factory(p.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(s))));
+                    return (int)Furniture_FieldIndex.Keywords;
+                }
+                case RecordTypeInts.PRPS:
+                {
+                    _PropertiesLocation = new RangeInt32((stream.Position - offset), finalPos - offset);
+                    return (int)Furniture_FieldIndex.Properties;
+                }
+                case RecordTypeInts.NTRM:
+                {
+                    _NativeTerminalLocation = (stream.Position - offset);
+                    return (int)Furniture_FieldIndex.NativeTerminal;
+                }
+                case RecordTypeInts.FTYP:
+                {
+                    _ForcedLocRefTypeLocation = (stream.Position - offset);
+                    return (int)Furniture_FieldIndex.ForcedLocRefType;
+                }
+                case RecordTypeInts.PNAM:
+                {
+                    _PNAMLocation = (stream.Position - offset);
+                    return (int)Furniture_FieldIndex.PNAM;
+                }
+                case RecordTypeInts.WNAM:
+                {
+                    _WaterTypeLocation = (stream.Position - offset);
+                    return (int)Furniture_FieldIndex.WaterType;
+                }
+                case RecordTypeInts.RNAM:
+                {
+                    _ATTXActivateTextOverrideLocation = (stream.Position - offset);
+                    return (int)Furniture_FieldIndex.ATTXActivateTextOverride;
+                }
+                case RecordTypeInts.FNAM:
+                {
+                    FlagsCustomParse(
+                        stream: stream,
+                        finalPos: finalPos,
+                        offset: offset);
+                    return (int)Furniture_FieldIndex.Flags;
+                }
+                case RecordTypeInts.CTDA:
+                case RecordTypeInts.CITC:
+                {
+                    ConditionsCustomParse(
+                        stream: stream,
+                        finalPos: finalPos,
+                        offset: offset,
+                        type: type,
+                        lastParsed: lastParsed);
+                    return (int)Furniture_FieldIndex.Conditions;
+                }
+                case RecordTypeInts.CNTO:
+                case RecordTypeInts.COCT:
+                {
+                    this.Items = BinaryOverlayList.FactoryByCountPerItem<ContainerEntryBinaryOverlay>(
+                        stream: stream,
+                        package: _package,
+                        countLength: 4,
+                        subrecordType: RecordTypes.CNTO,
+                        countType: RecordTypes.COCT,
+                        parseParams: parseParams,
+                        getter: (s, p, recConv) => ContainerEntryBinaryOverlay.ContainerEntryFactory(new OverlayStream(s, p), p, recConv),
+                        skipHeader: false);
+                    return (int)Furniture_FieldIndex.Items;
+                }
+                case RecordTypeInts.MNAM:
+                {
+                    return Flags2CustomParse(
+                        stream,
+                        offset);
+                }
+                case RecordTypeInts.WBDT:
+                {
+                    _WorkbenchDataLocation = new RangeInt32((stream.Position - offset), finalPos - offset);
+                    return (int)Furniture_FieldIndex.WorkbenchData;
+                }
+                case RecordTypeInts.NAM1:
+                {
+                    _AssociatedFormLocation = (stream.Position - offset);
+                    return (int)Furniture_FieldIndex.AssociatedForm;
+                }
+                case RecordTypeInts.ENAM:
+                {
+                    return DisabledMarkersCustomParse(
+                        stream,
+                        offset);
+                }
+                case RecordTypeInts.FNPR:
+                {
+                    MarkersCustomParse(
+                        stream: stream,
+                        finalPos: finalPos,
+                        offset: offset,
+                        type: type,
+                        lastParsed: lastParsed);
+                    return (int)Furniture_FieldIndex.Markers;
+                }
+                case RecordTypeInts.XMRK:
+                {
+                    _ModelFilenameLocation = (stream.Position - offset);
+                    return (int)Furniture_FieldIndex.ModelFilename;
+                }
+                default:
+                    return base.FillRecordType(
+                        stream: stream,
+                        finalPos: finalPos,
+                        offset: offset,
+                        type: type,
+                        lastParsed: lastParsed,
+                        recordParseCount: recordParseCount);
+            }
+        }
         #region To String
 
         public override void ToString(

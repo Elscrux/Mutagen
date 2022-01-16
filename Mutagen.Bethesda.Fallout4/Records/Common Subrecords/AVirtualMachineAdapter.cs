@@ -52,9 +52,9 @@ namespace Mutagen.Bethesda.Fallout4
                 item.Scripts.AddRange(ReadEntries(frame, item.ObjectFormat));
             }
 
-            static void FillProperties(MutagenFrame frame, ushort objectFormat, IScriptEntry item)
+            static void FillProperties(MutagenFrame frame, ushort objectFormat, IScriptEntry item, bool isStruct = false)
             {
-                var count = frame.ReadUInt16();
+                var count = isStruct ? frame.ReadUInt32() : frame.ReadUInt16();
                 for (int i = 0; i < count; i++)
                 {
                     var name = StringBinaryTranslation.Instance.Parse(frame, stringBinaryType: StringBinaryType.PrependLengthUShort);
@@ -68,11 +68,15 @@ namespace Mutagen.Bethesda.Fallout4
                         ScriptProperty.Type.Int => new ScriptIntProperty(),
                         ScriptProperty.Type.Float => new ScriptFloatProperty(),
                         ScriptProperty.Type.Bool => new ScriptBoolProperty(),
+                        ScriptProperty.Type.Variable => new ScriptVariableProperty(),
+                        ScriptProperty.Type.Struct => new ScriptStructProperty(),
                         ScriptProperty.Type.ArrayOfObject => new ScriptObjectListProperty(),
                         ScriptProperty.Type.ArrayOfString => new ScriptStringListProperty(),
                         ScriptProperty.Type.ArrayOfInt => new ScriptIntListProperty(),
                         ScriptProperty.Type.ArrayOfFloat => new ScriptFloatListProperty(),
                         ScriptProperty.Type.ArrayOfBool => new ScriptBoolListProperty(),
+                        ScriptProperty.Type.ArrayOfVariable => new ScriptVariableListProperty(),
+                        ScriptProperty.Type.ArrayOfStruct => new ScriptStructListProperty(),
                         _ => throw new NotImplementedException(),
                     };
                     prop.Name = name;
@@ -89,6 +93,21 @@ namespace Mutagen.Bethesda.Fallout4
                                 var subObj = new ScriptObjectProperty();
                                 FillObject(frame, subObj, objectFormat);
                                 objList.Objects.Add(subObj);
+                            }
+                            break;
+                        case ScriptVariableProperty varProp:
+                        case ScriptVariableListProperty varPropList:
+                            throw new NotImplementedException();
+                        case ScriptStructProperty subStructs:
+                            FillStruct(frame, subStructs, objectFormat);
+                            break;
+                        case ScriptStructListProperty structList:
+                            var structListCount = frame.ReadUInt32();
+                            for (int j = 0; j < structListCount; j++)
+                            {
+                                var subStructs = new ScriptStructProperty();
+                                FillStruct(frame, subStructs, objectFormat);
+                                structList.Structs.Add(subStructs);
                             }
                             break;
                         default:
@@ -121,6 +140,13 @@ namespace Mutagen.Bethesda.Fallout4
                         throw new NotImplementedException();
                 }
             }
+
+            public static void FillStruct(MutagenFrame frame, IScriptStructProperty subStructs, ushort objectFormat)
+            {
+                var member = new ScriptEntryStruct();
+                FillProperties(frame, objectFormat, member, true);
+                subStructs.Members.Add(member);
+            }
         }
 
         public partial class AVirtualMachineAdapterBinaryWriteTranslation
@@ -128,9 +154,14 @@ namespace Mutagen.Bethesda.Fallout4
             public static void WriteScripts(
                 MutagenWriter writer,
                 ushort objFormat,
-                IReadOnlyList<IScriptEntryGetter> scripts)
+                IReadOnlyList<IScriptEntryGetter> scripts,
+                bool isStruct = false)
             {
-                writer.Write(checked((ushort)scripts.Count));
+                if (isStruct)
+                    writer.Write(checked((uint)scripts.Count));
+                else
+                    writer.Write(checked((ushort)scripts.Count));
+
                 foreach (var entry in scripts)
                 {
                     writer.Write(entry.Name, StringBinaryType.PrependLengthUShort);
@@ -147,11 +178,15 @@ namespace Mutagen.Bethesda.Fallout4
                             ScriptIntProperty _ => ScriptProperty.Type.Int,
                             ScriptFloatProperty _ => ScriptProperty.Type.Float,
                             ScriptBoolProperty _ => ScriptProperty.Type.Bool,
+                            ScriptVariableProperty _ => ScriptProperty.Type.Variable,
+                            ScriptStructProperty _ => ScriptProperty.Type.Struct,
                             ScriptObjectListProperty _ => ScriptProperty.Type.ArrayOfObject,
                             ScriptStringListProperty _ => ScriptProperty.Type.ArrayOfString,
                             ScriptIntListProperty _ => ScriptProperty.Type.ArrayOfInt,
                             ScriptFloatListProperty _ => ScriptProperty.Type.ArrayOfFloat,
                             ScriptBoolListProperty _ => ScriptProperty.Type.ArrayOfBool,
+                            ScriptVariableListProperty _ => ScriptProperty.Type.ArrayOfVariable,
+                            ScriptStructListProperty _ => ScriptProperty.Type.ArrayOfStruct,
                             ScriptProperty _ => ScriptProperty.Type.None,
                             _ => throw new NotImplementedException(),
                         };
@@ -168,6 +203,20 @@ namespace Mutagen.Bethesda.Fallout4
                                 foreach (var subObj in objsList)
                                 {
                                     WriteObject(writer, subObj, objFormat);
+                                }
+                                break;
+                            case ScriptVariableProperty varProp:
+                            case ScriptVariableListProperty varPropList:
+                                throw new NotImplementedException();
+                            case ScriptStructProperty subStructs:
+                                WriteStruct(writer, subStructs, objFormat);
+                                break;
+                            case ScriptStructListProperty structList:
+                                var structsList = structList.Structs;
+                                writer.Write(structList.Structs.Count);
+                                foreach (var subStructs in structsList)
+                                {
+                                    WriteStruct(writer, subStructs, objFormat);
                                 }
                                 break;
                             default:
@@ -195,6 +244,11 @@ namespace Mutagen.Bethesda.Fallout4
                     default:
                         throw new NotImplementedException();
                 }
+            }
+
+            public static void WriteStruct(MutagenWriter writer, IScriptStructPropertyGetter subStruct, ushort objFormat)
+            {
+                WriteScripts(writer, objFormat, (IReadOnlyList<IScriptEntryGetter>)subStruct.Members, true);
             }
 
             public static partial void WriteBinaryScriptsCustom(MutagenWriter writer, IAVirtualMachineAdapterGetter item)

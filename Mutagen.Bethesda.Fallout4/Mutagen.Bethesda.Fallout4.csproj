@@ -35,6 +35,7 @@
     <Compile Include="Enums\GroupTypeEnum.cs" />
     <Compile Include="Enums\Perspective.cs" />
     <Compile Include="Enums\Size.cs" />
+    <Compile Include="Enums\Skill.cs" />
     <Compile Include="Enums\SpellDataFlag.cs" />
     <Compile Include="Enums\SpellType.cs" />
     <Compile Include="Enums\TargetObjectType.cs" />
@@ -81,10 +82,16 @@
     <Compile Include="Records\Common Subrecords\ScriptEntry.cs">
       <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Common Subrecords\ScriptEntryStruct.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
     <Compile Include="Records\Common Subrecords\ScriptFragments.cs">
       <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
     </Compile>
     <Compile Include="Records\Common Subrecords\ScriptProperty.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ScriptPropertyStruct.cs">
       <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
     </Compile>
     <Compile Include="Records\Fallout4Group.cs">
@@ -135,6 +142,9 @@
     <Compile Include="Records\Major Records\FootstepSet.cs">
       <DependentUpon>FootstepSet.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Major Records\Furniture.cs">
+      <DependentUpon>Furniture.xml</DependentUpon>
+    </Compile>
     <Compile Include="Records\Major Records\GameSetting.cs">
       <DependentUpon>GameSetting.xml</DependentUpon>
     </Compile>
@@ -177,11 +187,23 @@
     <Compile Include="Records\Major Records\HeadPart.cs">
       <DependentUpon>HeadPart.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Major Records\Ingestible.cs">
+      <DependentUpon>Ingestible.xml</DependentUpon>
+    </Compile>
     <Compile Include="Records\Major Records\Ingredient.cs">
       <DependentUpon>Ingredient.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Major Records\Key.cs">
+      <DependentUpon>Key.xml</DependentUpon>
+    </Compile>
     <Compile Include="Records\Major Records\Keyword.cs">
       <DependentUpon>Keyword.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\LeveledItem.cs">
+      <DependentUpon>LeveledItem.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\LeveledNpc.cs">
+      <DependentUpon>LeveledNpc.xml</DependentUpon>
     </Compile>
     <Compile Include="Records\Major Records\Light.cs">
       <DependentUpon>Light.xml</DependentUpon>
@@ -260,6 +282,9 @@
     </Compile>
     <Compile Include="Records\Major Records\VoiceType.cs">
       <DependentUpon>VoiceType.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\WorkbenchData.cs">
+      <DependentUpon>Furniture.xml</DependentUpon>
     </Compile>
     <Compile Include="Records\ProtocolDefinition_Fallout4.cs" />
     <Compile Include="Records\Fallout4MajorRecord.cs">
@@ -924,6 +949,68 @@
     </Compile>
     <Compile Include="Records\Major Records\Projectile_Generated.cs">
       <DependentUpon>Projectile.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Furniture_Generated.cs">
+      <DependentUpon>Furniture.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\WorkbenchData_Generated.cs">
+      <DependentUpon>Furniture.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\FurnitureMarker_Generated.cs">
+      <DependentUpon>Furniture.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\EntryPoints_Generated.cs">
+      <DependentUpon>Furniture.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Interfaces\IFurnitureAssociation_Generated.cs" />
+    <Compile Include="Records\Common Subrecords\ScriptVariableProperty_Generated.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ScriptStructProperty_Generated.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ScriptVariableListProperty_Generated.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ScriptStructListProperty_Generated.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ScriptEntryStruct_Generated.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ScriptPropertyStruct_Generated.cs">
+      <DependentUpon>VirtualMachineAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\LeveledNpc_Generated.cs">
+      <DependentUpon>LeveledNpc.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\LeveledNpcEntry_Generated.cs">
+      <DependentUpon>LeveledNpc.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\LeveledNpcEntryData_Generated.cs">
+      <DependentUpon>LeveledNpc.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Interfaces\INpcSpawn_Generated.cs" />
+    <Compile Include="Records\Common Subrecords\FilterKeywordChance_Generated.cs">
+      <DependentUpon>FilterKeywordChance.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\LeveledItem_Generated.cs">
+      <DependentUpon>LeveledItem.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\LeveledItemEntry_Generated.cs">
+      <DependentUpon>LeveledItem.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\LeveledItemEntryData_Generated.cs">
+      <DependentUpon>LeveledItem.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Key_Generated.cs">
+      <DependentUpon>Key.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Ingestible_Generated.cs">
+      <DependentUpon>Ingestible.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\RadioReceiver_Generated.cs">
+      <DependentUpon>Activator.xml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

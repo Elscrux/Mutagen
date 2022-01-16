@@ -70,6 +70,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType EFID = new(0x44494645);
         public static readonly RecordType EFIT = new(0x54494645);
         public static readonly RecordType EITM = new(0x4D544945);
+        public static readonly RecordType ENAM = new(0x4D414E45);
         public static readonly RecordType ENCH = new(0x48434E45);
         public static readonly RecordType ENIT = new(0x54494E45);
         public static readonly RecordType EQUP = new(0x50555145);
@@ -84,6 +85,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType FMRI = new(0x49524D46);
         public static readonly RecordType FMRN = new(0x4E524D46);
         public static readonly RecordType FNAM = new(0x4D414E46);
+        public static readonly RecordType FNPR = new(0x52504E46);
         public static readonly RecordType FSTP = new(0x50545346);
         public static readonly RecordType FSTS = new(0x53545346);
         public static readonly RecordType FTSM = new(0x4D535446);
@@ -122,8 +124,18 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType LCRT = new(0x5452434C);
         public static readonly RecordType LENS = new(0x534E454C);
         public static readonly RecordType LIGH = new(0x4847494C);
+        public static readonly RecordType LLCT = new(0x54434C4C);
+        public static readonly RecordType LLKC = new(0x434B4C4C);
         public static readonly RecordType LNAM = new(0x4D414E4C);
         public static readonly RecordType LTEX = new(0x5845544C);
+        public static readonly RecordType LVLD = new(0x444C564C);
+        public static readonly RecordType LVLF = new(0x464C564C);
+        public static readonly RecordType LVLG = new(0x474C564C);
+        public static readonly RecordType LVLI = new(0x494C564C);
+        public static readonly RecordType LVLM = new(0x4D4C564C);
+        public static readonly RecordType LVLN = new(0x4E4C564C);
+        public static readonly RecordType LVLO = new(0x4F4C564C);
+        public static readonly RecordType LVSG = new(0x4753564C);
         public static readonly RecordType LVSP = new(0x5053564C);
         public static readonly RecordType MAST = new(0x5453414D);
         public static readonly RecordType MATT = new(0x5454414D);
@@ -276,6 +288,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType VTYP = new(0x50595456);
         public static readonly RecordType WAIT = new(0x54494157);
         public static readonly RecordType WATR = new(0x52544157);
+        public static readonly RecordType WBDT = new(0x54444257);
         public static readonly RecordType WEAP = new(0x50414557);
         public static readonly RecordType WGDR = new(0x52444757);
         public static readonly RecordType WKMV = new(0x564D4B57);
@@ -284,6 +297,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType WRLD = new(0x444C5257);
         public static readonly RecordType WTHR = new(0x52485457);
         public static readonly RecordType XCNT = new(0x544E4358);
+        public static readonly RecordType XMRK = new(0x4B524D58);
         public static readonly RecordType XNAM = new(0x4D414E58);
         public static readonly RecordType XTRI = new(0x49525458);
         public static readonly RecordType XXXX = new(0x58585858);

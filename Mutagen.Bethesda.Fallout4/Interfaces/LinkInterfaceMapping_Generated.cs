@@ -60,7 +60,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 typeof(Armor),
                 typeof(Book),
+                typeof(Ingestible),
                 typeof(Ingredient),
+                typeof(Key),
+                typeof(LeveledItem),
                 typeof(Light),
                 typeof(MiscItem),
             };
@@ -68,13 +71,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             dict[typeof(IOutfitTarget)] = new Type[]
             {
                 typeof(Armor),
+                typeof(LeveledItem),
             };
             dict[typeof(IOutfitTargetGetter)] = dict[typeof(IOutfitTarget)];
             dict[typeof(IConstructible)] = new Type[]
             {
                 typeof(Armor),
                 typeof(Book),
+                typeof(Furniture),
+                typeof(Ingestible),
                 typeof(Ingredient),
+                typeof(Key),
                 typeof(Light),
                 typeof(MiscItem),
             };
@@ -84,6 +91,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Armor),
             };
             dict[typeof(IBindableEquipmentGetter)] = dict[typeof(IBindableEquipment)];
+            dict[typeof(IFurnitureAssociation)] = new Type[]
+            {
+                typeof(Armor),
+            };
+            dict[typeof(IFurnitureAssociationGetter)] = dict[typeof(IFurnitureAssociation)];
             dict[typeof(IOwner)] = new Type[]
             {
                 typeof(Faction),
@@ -105,7 +117,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             dict[typeof(IRegionTargetGetter)] = dict[typeof(IRegionTarget)];
             dict[typeof(IHarvestTarget)] = new Type[]
             {
+                typeof(Ingestible),
                 typeof(Ingredient),
+                typeof(LeveledItem),
                 typeof(MiscItem),
             };
             dict[typeof(IHarvestTargetGetter)] = dict[typeof(IHarvestTarget)];
@@ -114,6 +128,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Keyword),
             };
             dict[typeof(IKeywordLinkedReferenceGetter)] = dict[typeof(IKeywordLinkedReference)];
+            dict[typeof(INpcSpawn)] = new Type[]
+            {
+                typeof(LeveledNpc),
+            };
+            dict[typeof(INpcSpawnGetter)] = dict[typeof(INpcSpawn)];
             dict[typeof(ISpellRecord)] = new Type[]
             {
                 typeof(LeveledSpell),
