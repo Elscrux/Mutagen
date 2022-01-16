@@ -984,19 +984,21 @@ namespace Mutagen.Bethesda.Fallout4
 
             public static void CustomStringImports(MutagenFrame frame, IConditionData item)
             {
-                if (!frame.Reader.TryGetSubrecordFrame(out var subMeta)) return;
-                switch (subMeta.RecordType.TypeInt)
+                while (frame.Reader.TryGetSubrecordFrame(out var subMeta))
                 {
-                    case 0x31534943: // CIS1
-                        item.ParameterOneString = BinaryStringUtility.ProcessWholeToZString(subMeta.Content);
-                        break;
-                    case 0x32534943: // CIS2
-                        item.ParameterTwoString = BinaryStringUtility.ProcessWholeToZString(subMeta.Content);
-                        break;
-                    default:
-                        return;
+                    switch (subMeta.RecordType.TypeInt)
+                    {
+                        case 0x31534943: // CIS1
+                            item.ParameterOneString = BinaryStringUtility.ProcessWholeToZString(subMeta.Content);
+                            break;
+                        case 0x32534943: // CIS2
+                            item.ParameterTwoString = BinaryStringUtility.ProcessWholeToZString(subMeta.Content);
+                            break;
+                        default:
+                            return;
+                    }
+                    frame.Position += subMeta.TotalLength;
                 }
-                frame.Position += subMeta.TotalLength;
             }
         }
 
