@@ -31,7 +31,7 @@ namespace Mutagen.Bethesda.Generation.Modules.Plugin
             fg.AppendLine("using Mutagen.Bethesda.Plugins.Order;");
             fg.AppendLine("using Mutagen.Bethesda.Plugins.Order.Internals;");
             fg.AppendLine();
-            using (var n = new NamespaceWrapper(fg, proto.DefaultNamespace))
+            using (var n = new NamespaceWrapper(fg, proto.DefaultNamespace, fileScoped: false))
             {
                 using (var c = new ClassWrapper(fg, "TypeOptionSolidifierMixIns"))
                 {
