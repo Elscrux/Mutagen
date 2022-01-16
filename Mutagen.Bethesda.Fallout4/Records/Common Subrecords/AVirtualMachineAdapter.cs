@@ -151,13 +151,12 @@ namespace Mutagen.Bethesda.Fallout4
 
         public partial class AVirtualMachineAdapterBinaryWriteTranslation
         {
-            static bool isStructLoop = false;
-
             public static void WriteScripts(
                 MutagenWriter writer,
                 ushort objFormat,
                 IReadOnlyList<IScriptEntryGetter> scripts,
-                bool isStruct = false)
+                bool isStruct = false,
+                bool isStructLoop = false)
             {
                 if (isStruct)
                 {
@@ -228,14 +227,14 @@ namespace Mutagen.Bethesda.Fallout4
                                 WriteScripts(writer, objFormat, (IReadOnlyList<IScriptEntryGetter>)subStructs.Members, true);
                                 break;
                             case ScriptStructListProperty structList:
+                                bool isLoop = false;
                                 var structsList = structList.Structs;
-                                foreach (var subStructs in structsList)
+                                for (int i = 0; i < structsList.Count; ++i)
                                 {
-                                    WriteScripts(writer, objFormat, (IReadOnlyList<IScriptEntryGetter>)subStructs.Members, true);
+                                    var subStructs = structsList[i];
+                                    WriteScripts(writer, objFormat, (IReadOnlyList<IScriptEntryGetter>)subStructs.Members, true, isLoop);
+                                    isLoop = true;
                                 }
-
-                                if (isStructLoop)
-                                    isStructLoop = false;
 
                                 break;
                             default:
