@@ -4,7 +4,7 @@
 		<Fields>
 			<RefDirect name="VirtualMachineAdapter" refName="VirtualMachineAdapter" />
 			<RefDirect name="ObjectBounds" refName="ObjectBounds" nullable="False" />
-			<RefDirect name="PreviewTransform" refName="PreviewTransform" nullable="False" />
+			<RefDirect name="PreviewTransform" refName="PreviewTransform" />
 			<String name="Name" recordType="FULL" translated="Normal" />
 			<FormLink name="ObjectEffect" recordType="EITM">
 				<Interface>IEffectRecord</Interface>

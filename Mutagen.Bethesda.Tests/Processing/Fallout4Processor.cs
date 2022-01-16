@@ -121,7 +121,7 @@ public class Fallout4Processor : Processor
                         new RecordType[] { "KYWD", "FULL" },
                         new RecordType[] { "ENCH", "FULL" },
                         new RecordType[] { "SPEL", "FULL" },
-                        new RecordType[] { "ACTI", "FULL" }
+                        new RecordType[] { "ACTI", "FULL", "ATTX" }
                     ));
                 break;
             //case StringsSource.DL:

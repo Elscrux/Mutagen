@@ -4,7 +4,7 @@
     <Fields>
       <RefDirect name="VirtualMachineAdapter" refName="VirtualMachineAdapter" />
       <RefDirect name="ObjectBounds" refName="ObjectBounds" nullable="False" />
-      <RefDirect name="PreviewTransform" refName="PreviewTransform" nullable="False" />
+      <RefDirect name="PreviewTransform" refName="PreviewTransform" />
       <FormLink name="AnimationSound" refName="AnimationSoundTagSet" recordType="STCP" />
       <String name="Name" recordType="FULL" translated="Normal" />
       <RefDirect name="Model" refName="Model" />

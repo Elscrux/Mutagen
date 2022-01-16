@@ -95,9 +95,15 @@ namespace Mutagen.Bethesda.Fallout4
         #endregion
         #endregion
         #region PreviewTransform
-        public PreviewTransform PreviewTransform { get; set; } = new PreviewTransform();
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IPreviewTransformGetter ILightGetter.PreviewTransform => PreviewTransform;
+        private PreviewTransform? _PreviewTransform;
+        public PreviewTransform? PreviewTransform
+        {
+            get => _PreviewTransform;
+            set => _PreviewTransform = value;
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IPreviewTransformGetter? ILightGetter.PreviewTransform => this.PreviewTransform;
         #endregion
         #region Model
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -1732,7 +1738,7 @@ namespace Mutagen.Bethesda.Fallout4
         /// Aspects: IObjectBounded, IObjectBoundedOptional
         /// </summary>
         new ObjectBounds ObjectBounds { get; set; }
-        new PreviewTransform PreviewTransform { get; set; }
+        new PreviewTransform? PreviewTransform { get; set; }
         /// <summary>
         /// Aspects: IModeled
         /// </summary>
@@ -1819,7 +1825,7 @@ namespace Mutagen.Bethesda.Fallout4
         /// </summary>
         IObjectBoundsGetter ObjectBounds { get; }
         #endregion
-        IPreviewTransformGetter PreviewTransform { get; }
+        IPreviewTransformGetter? PreviewTransform { get; }
         #region Model
         /// <summary>
         /// Aspects: IModeledGetter
@@ -2154,7 +2160,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ClearPartial();
             item.VirtualMachineAdapter = null;
             item.ObjectBounds.Clear();
-            item.PreviewTransform.Clear();
+            item.PreviewTransform = null;
             item.Model = null;
             item.Keywords = null;
             item.Destructible = null;
@@ -2202,7 +2208,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         {
             base.RemapLinks(obj, mapping);
             obj.VirtualMachineAdapter?.RemapLinks(mapping);
-            obj.PreviewTransform.RemapLinks(mapping);
+            obj.PreviewTransform?.RemapLinks(mapping);
             obj.Model?.RemapLinks(mapping);
             obj.Keywords?.RemapLinks(mapping);
             obj.Destructible?.RemapLinks(mapping);
@@ -2283,7 +2289,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 (loqLhs, loqRhs, incl) => loqLhs.GetEqualsMask(loqRhs, incl),
                 include);
             ret.ObjectBounds = MaskItemExt.Factory(item.ObjectBounds.GetEqualsMask(rhs.ObjectBounds, include), include);
-            ret.PreviewTransform = MaskItemExt.Factory(item.PreviewTransform.GetEqualsMask(rhs.PreviewTransform, include), include);
+            ret.PreviewTransform = EqualsMaskHelper.EqualsHelper(
+                item.PreviewTransform,
+                rhs.PreviewTransform,
+                (loqLhs, loqRhs, incl) => loqLhs.GetEqualsMask(loqRhs, incl),
+                include);
             ret.Model = EqualsMaskHelper.EqualsHelper(
                 item.Model,
                 rhs.Model,
@@ -2388,9 +2398,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 item.ObjectBounds?.ToString(fg, "ObjectBounds");
             }
-            if (printMask?.PreviewTransform?.Overall ?? true)
+            if ((printMask?.PreviewTransform?.Overall ?? true)
+                && item.PreviewTransform is {} PreviewTransformItem)
             {
-                item.PreviewTransform?.ToString(fg, "PreviewTransform");
+                PreviewTransformItem?.ToString(fg, "PreviewTransform");
             }
             if ((printMask?.Model?.Overall ?? true)
                 && item.Model is {} ModelItem)
@@ -2763,7 +2774,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 hash.Add(VirtualMachineAdapteritem);
             }
             hash.Add(item.ObjectBounds);
-            hash.Add(item.PreviewTransform);
+            if (item.PreviewTransform is {} PreviewTransformitem)
+            {
+                hash.Add(PreviewTransformitem);
+            }
             if (item.Model is {} Modelitem)
             {
                 hash.Add(Modelitem);
@@ -2850,9 +2864,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     yield return item;
                 }
             }
-            foreach (var item in obj.PreviewTransform.ContainedFormLinks)
+            if (obj.PreviewTransform is {} PreviewTransformItems)
             {
-                yield return item;
+                foreach (var item in PreviewTransformItems.ContainedFormLinks)
+                {
+                    yield return item;
+                }
             }
             if (obj.Model is {} ModelItems)
             {
@@ -3014,11 +3031,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 errorMask?.PushIndex((int)Light_FieldIndex.PreviewTransform);
                 try
                 {
-                    if ((copyMask?.GetShouldTranslate((int)Light_FieldIndex.PreviewTransform) ?? true))
+                    if(rhs.PreviewTransform is {} rhsPreviewTransform)
                     {
-                        item.PreviewTransform = rhs.PreviewTransform.DeepCopy(
-                            copyMask: copyMask?.GetSubCrystal((int)Light_FieldIndex.PreviewTransform),
-                            errorMask: errorMask);
+                        item.PreviewTransform = rhsPreviewTransform.DeepCopy(
+                            errorMask: errorMask,
+                            copyMask?.GetSubCrystal((int)Light_FieldIndex.PreviewTransform));
+                    }
+                    else
+                    {
+                        item.PreviewTransform = default;
                     }
                 }
                 catch (Exception ex)
@@ -3414,11 +3435,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 item: ObjectBoundsItem,
                 writer: writer,
                 translationParams: translationParams);
-            var PreviewTransformItem = item.PreviewTransform;
-            ((PreviewTransformBinaryWriteTranslation)((IBinaryItem)PreviewTransformItem).BinaryWriteTranslator).Write(
-                item: PreviewTransformItem,
-                writer: writer,
-                translationParams: translationParams);
+            if (item.PreviewTransform is {} PreviewTransformItem)
+            {
+                ((PreviewTransformBinaryWriteTranslation)((IBinaryItem)PreviewTransformItem).BinaryWriteTranslator).Write(
+                    item: PreviewTransformItem,
+                    writer: writer,
+                    translationParams: translationParams);
+            }
             if (item.Model is {} ModelItem)
             {
                 ((ModelBinaryWriteTranslation)((IBinaryItem)ModelItem).BinaryWriteTranslator).Write(
@@ -3832,8 +3855,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         #endregion
         #region PreviewTransform
         private RangeInt32? _PreviewTransformLocation;
-        private IPreviewTransformGetter? _PreviewTransform => _PreviewTransformLocation.HasValue ? PreviewTransformBinaryOverlay.PreviewTransformFactory(new OverlayStream(_data.Slice(_PreviewTransformLocation!.Value.Min), _package), _package) : default;
-        public IPreviewTransformGetter PreviewTransform => _PreviewTransform ?? new PreviewTransform();
+        public IPreviewTransformGetter? PreviewTransform => _PreviewTransformLocation.HasValue ? PreviewTransformBinaryOverlay.PreviewTransformFactory(new OverlayStream(_data.Slice(_PreviewTransformLocation!.Value.Min), _package), _package) : default;
         #endregion
         public IModelGetter? Model { get; private set; }
         #region Keywords
