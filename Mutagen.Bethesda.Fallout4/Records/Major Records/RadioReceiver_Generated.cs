@@ -49,6 +49,9 @@ namespace Mutagen.Bethesda.Fallout4
         partial void CustomCtor();
         #endregion
 
+        #region Versioning
+        public RadioReceiver.VersioningBreaks Versioning { get; set; } = default;
+        #endregion
         #region SoundModel
         private readonly IFormLink<ISoundOutputModelGetter> _SoundModel = new FormLink<ISoundOutputModelGetter>();
         public IFormLink<ISoundOutputModelGetter> SoundModel
@@ -109,6 +112,7 @@ namespace Mutagen.Bethesda.Fallout4
             #region Ctors
             public Mask(TItem initialValue)
             {
+                this.Versioning = initialValue;
                 this.SoundModel = initialValue;
                 this.Frequency = initialValue;
                 this.Volume = initialValue;
@@ -117,12 +121,14 @@ namespace Mutagen.Bethesda.Fallout4
             }
 
             public Mask(
+                TItem Versioning,
                 TItem SoundModel,
                 TItem Frequency,
                 TItem Volume,
                 TItem StartsActive,
                 TItem NoSignalStatic)
             {
+                this.Versioning = Versioning;
                 this.SoundModel = SoundModel;
                 this.Frequency = Frequency;
                 this.Volume = Volume;
@@ -139,6 +145,7 @@ namespace Mutagen.Bethesda.Fallout4
             #endregion
 
             #region Members
+            public TItem Versioning;
             public TItem SoundModel;
             public TItem Frequency;
             public TItem Volume;
@@ -156,6 +163,7 @@ namespace Mutagen.Bethesda.Fallout4
             public bool Equals(Mask<TItem>? rhs)
             {
                 if (rhs == null) return false;
+                if (!object.Equals(this.Versioning, rhs.Versioning)) return false;
                 if (!object.Equals(this.SoundModel, rhs.SoundModel)) return false;
                 if (!object.Equals(this.Frequency, rhs.Frequency)) return false;
                 if (!object.Equals(this.Volume, rhs.Volume)) return false;
@@ -166,6 +174,7 @@ namespace Mutagen.Bethesda.Fallout4
             public override int GetHashCode()
             {
                 var hash = new HashCode();
+                hash.Add(this.Versioning);
                 hash.Add(this.SoundModel);
                 hash.Add(this.Frequency);
                 hash.Add(this.Volume);
@@ -179,6 +188,7 @@ namespace Mutagen.Bethesda.Fallout4
             #region All
             public bool All(Func<TItem, bool> eval)
             {
+                if (!eval(this.Versioning)) return false;
                 if (!eval(this.SoundModel)) return false;
                 if (!eval(this.Frequency)) return false;
                 if (!eval(this.Volume)) return false;
@@ -191,6 +201,7 @@ namespace Mutagen.Bethesda.Fallout4
             #region Any
             public bool Any(Func<TItem, bool> eval)
             {
+                if (eval(this.Versioning)) return true;
                 if (eval(this.SoundModel)) return true;
                 if (eval(this.Frequency)) return true;
                 if (eval(this.Volume)) return true;
@@ -210,6 +221,7 @@ namespace Mutagen.Bethesda.Fallout4
 
             protected void Translate_InternalFill<R>(Mask<R> obj, Func<TItem, R> eval)
             {
+                obj.Versioning = eval(this.Versioning);
                 obj.SoundModel = eval(this.SoundModel);
                 obj.Frequency = eval(this.Frequency);
                 obj.Volume = eval(this.Volume);
@@ -237,6 +249,10 @@ namespace Mutagen.Bethesda.Fallout4
                 fg.AppendLine("[");
                 using (new DepthWrapper(fg))
                 {
+                    if (printMask?.Versioning ?? true)
+                    {
+                        fg.AppendItem(Versioning, "Versioning");
+                    }
                     if (printMask?.SoundModel ?? true)
                     {
                         fg.AppendItem(SoundModel, "SoundModel");
@@ -282,6 +298,7 @@ namespace Mutagen.Bethesda.Fallout4
                     return _warnings;
                 }
             }
+            public Exception? Versioning;
             public Exception? SoundModel;
             public Exception? Frequency;
             public Exception? Volume;
@@ -295,6 +312,8 @@ namespace Mutagen.Bethesda.Fallout4
                 RadioReceiver_FieldIndex enu = (RadioReceiver_FieldIndex)index;
                 switch (enu)
                 {
+                    case RadioReceiver_FieldIndex.Versioning:
+                        return Versioning;
                     case RadioReceiver_FieldIndex.SoundModel:
                         return SoundModel;
                     case RadioReceiver_FieldIndex.Frequency:
@@ -315,6 +334,9 @@ namespace Mutagen.Bethesda.Fallout4
                 RadioReceiver_FieldIndex enu = (RadioReceiver_FieldIndex)index;
                 switch (enu)
                 {
+                    case RadioReceiver_FieldIndex.Versioning:
+                        this.Versioning = ex;
+                        break;
                     case RadioReceiver_FieldIndex.SoundModel:
                         this.SoundModel = ex;
                         break;
@@ -340,6 +362,9 @@ namespace Mutagen.Bethesda.Fallout4
                 RadioReceiver_FieldIndex enu = (RadioReceiver_FieldIndex)index;
                 switch (enu)
                 {
+                    case RadioReceiver_FieldIndex.Versioning:
+                        this.Versioning = (Exception?)obj;
+                        break;
                     case RadioReceiver_FieldIndex.SoundModel:
                         this.SoundModel = (Exception?)obj;
                         break;
@@ -363,6 +388,7 @@ namespace Mutagen.Bethesda.Fallout4
             public bool IsInError()
             {
                 if (Overall != null) return true;
+                if (Versioning != null) return true;
                 if (SoundModel != null) return true;
                 if (Frequency != null) return true;
                 if (Volume != null) return true;
@@ -402,6 +428,7 @@ namespace Mutagen.Bethesda.Fallout4
             }
             protected void ToString_FillInternal(FileGeneration fg)
             {
+                fg.AppendItem(Versioning, "Versioning");
                 fg.AppendItem(SoundModel, "SoundModel");
                 fg.AppendItem(Frequency, "Frequency");
                 fg.AppendItem(Volume, "Volume");
@@ -415,6 +442,7 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 if (rhs == null) return this;
                 var ret = new ErrorMask();
+                ret.Versioning = this.Versioning.Combine(rhs.Versioning);
                 ret.SoundModel = this.SoundModel.Combine(rhs.SoundModel);
                 ret.Frequency = this.Frequency.Combine(rhs.Frequency);
                 ret.Volume = this.Volume.Combine(rhs.Volume);
@@ -443,6 +471,7 @@ namespace Mutagen.Bethesda.Fallout4
             private TranslationCrystal? _crystal;
             public readonly bool DefaultOn;
             public bool OnOverall;
+            public bool Versioning;
             public bool SoundModel;
             public bool Frequency;
             public bool Volume;
@@ -457,6 +486,7 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 this.DefaultOn = defaultOn;
                 this.OnOverall = onOverall;
+                this.Versioning = defaultOn;
                 this.SoundModel = defaultOn;
                 this.Frequency = defaultOn;
                 this.Volume = defaultOn;
@@ -477,6 +507,7 @@ namespace Mutagen.Bethesda.Fallout4
 
             protected void GetCrystal(List<(bool On, TranslationCrystal? SubCrystal)> ret)
             {
+                ret.Add((Versioning, null));
                 ret.Add((SoundModel, null));
                 ret.Add((Frequency, null));
                 ret.Add((Volume, null));
@@ -494,6 +525,11 @@ namespace Mutagen.Bethesda.Fallout4
 
         #region Mutagen
         public static readonly RecordType GrupRecordType = RadioReceiver_Registration.TriggeringRecordType;
+        [Flags]
+        public enum VersioningBreaks
+        {
+            Break0 = 1
+        }
         public IEnumerable<IFormLinkGetter> ContainedFormLinks => RadioReceiverCommon.Instance.GetContainedFormLinks(this);
         public void RemapLinks(IReadOnlyDictionary<FormKey, FormKey> mapping) => RadioReceiverSetterCommon.Instance.RemapLinks(this, mapping);
         #endregion
@@ -561,6 +597,7 @@ namespace Mutagen.Bethesda.Fallout4
         ILoquiObjectSetter<IRadioReceiver>,
         IRadioReceiverGetter
     {
+        new RadioReceiver.VersioningBreaks Versioning { get; set; }
         new IFormLink<ISoundOutputModelGetter> SoundModel { get; set; }
         new Single Frequency { get; set; }
         new Single Volume { get; set; }
@@ -581,6 +618,7 @@ namespace Mutagen.Bethesda.Fallout4
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         object CommonSetterTranslationInstance();
         static ILoquiRegistration StaticRegistration => RadioReceiver_Registration.Instance;
+        RadioReceiver.VersioningBreaks Versioning { get; }
         IFormLinkGetter<ISoundOutputModelGetter> SoundModel { get; }
         Single Frequency { get; }
         Single Volume { get; }
@@ -755,11 +793,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
     #region Field Index
     public enum RadioReceiver_FieldIndex
     {
-        SoundModel = 0,
-        Frequency = 1,
-        Volume = 2,
-        StartsActive = 3,
-        NoSignalStatic = 4,
+        Versioning = 0,
+        SoundModel = 1,
+        Frequency = 2,
+        Volume = 3,
+        StartsActive = 4,
+        NoSignalStatic = 5,
     }
     #endregion
 
@@ -777,9 +816,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public const string GUID = "8be06abd-cae8-4862-a510-a942533bda27";
 
-        public const ushort AdditionalFieldCount = 5;
+        public const ushort AdditionalFieldCount = 6;
 
-        public const ushort FieldCount = 5;
+        public const ushort FieldCount = 6;
 
         public static readonly Type MaskType = typeof(RadioReceiver.Mask<>);
 
@@ -848,6 +887,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public void Clear(IRadioReceiver item)
         {
             ClearPartial();
+            item.Versioning = default;
             item.SoundModel.Clear();
             item.Frequency = default;
             item.Volume = default;
@@ -908,6 +948,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             EqualsMaskHelper.Include include = EqualsMaskHelper.Include.All)
         {
             if (rhs == null) return;
+            ret.Versioning = item.Versioning == rhs.Versioning;
             ret.SoundModel = item.SoundModel.Equals(rhs.SoundModel);
             ret.Frequency = item.Frequency.EqualsWithin(rhs.Frequency);
             ret.Volume = item.Volume.EqualsWithin(rhs.Volume);
@@ -959,6 +1000,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             FileGeneration fg,
             RadioReceiver.Mask<bool>? printMask = null)
         {
+            if (printMask?.Versioning ?? true)
+            {
+                fg.AppendItem(item.Versioning, "Versioning");
+            }
             if (printMask?.SoundModel ?? true)
             {
                 fg.AppendItem(item.SoundModel.FormKey, "SoundModel");
@@ -988,6 +1033,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TranslationCrystal? crystal)
         {
             if (!EqualsMaskHelper.RefEquality(lhs, rhs, out var isEqual)) return isEqual;
+            if ((crystal?.GetShouldTranslate((int)RadioReceiver_FieldIndex.Versioning) ?? true))
+            {
+                if (lhs.Versioning != rhs.Versioning) return false;
+            }
             if ((crystal?.GetShouldTranslate((int)RadioReceiver_FieldIndex.SoundModel) ?? true))
             {
                 if (!lhs.SoundModel.Equals(rhs.SoundModel)) return false;
@@ -1014,6 +1063,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public virtual int GetHashCode(IRadioReceiverGetter item)
         {
             var hash = new HashCode();
+            hash.Add(item.Versioning);
             hash.Add(item.SoundModel);
             hash.Add(item.Frequency);
             hash.Add(item.Volume);
@@ -1052,6 +1102,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TranslationCrystal? copyMask,
             bool deepCopy)
         {
+            if ((copyMask?.GetShouldTranslate((int)RadioReceiver_FieldIndex.Versioning) ?? true))
+            {
+                item.Versioning = rhs.Versioning;
+            }
             if ((copyMask?.GetShouldTranslate((int)RadioReceiver_FieldIndex.SoundModel) ?? true))
             {
                 item.SoundModel.SetTo(rhs.SoundModel.FormKey);
@@ -1068,6 +1122,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 item.StartsActive = rhs.StartsActive;
             }
+            if (rhs.Versioning.HasFlag(RadioReceiver.VersioningBreaks.Break0)) return;
             if ((copyMask?.GetShouldTranslate((int)RadioReceiver_FieldIndex.NoSignalStatic) ?? true))
             {
                 item.NoSignalStatic = rhs.NoSignalStatic;
@@ -1178,7 +1233,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 writer: writer,
                 item: item.Volume);
             writer.Write(item.StartsActive);
-            writer.Write(item.NoSignalStatic);
+            if (!item.Versioning.HasFlag(RadioReceiver.VersioningBreaks.Break0))
+            {
+                writer.Write(item.NoSignalStatic);
+            }
         }
 
         public void Write(
@@ -1223,6 +1281,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.Frequency = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: frame);
             item.Volume = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: frame);
             item.StartsActive = frame.ReadBoolean();
+            if (frame.Complete)
+            {
+                item.Versioning |= RadioReceiver.VersioningBreaks.Break0;
+                return;
+            }
             item.NoSignalStatic = frame.ReadBoolean();
         }
 
@@ -1290,11 +1353,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 translationParams: translationParams);
         }
 
+        public RadioReceiver.VersioningBreaks Versioning { get; private set; }
         public IFormLinkGetter<ISoundOutputModelGetter> SoundModel => new FormLink<ISoundOutputModelGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(_data.Span.Slice(0x0, 0x4))));
         public Single Frequency => _data.Slice(0x4, 0x4).Float();
         public Single Volume => _data.Slice(0x8, 0x4).Float();
         public Boolean StartsActive => _data.Slice(0xC, 0x1)[0] == 1;
-        public Boolean NoSignalStatic => _data.Slice(0xD, 0x1)[0] == 1;
+        public Boolean NoSignalStatic => _data.Length <= 0xD ? default : _data.Slice(0xD, 0x1)[0] == 1;
         partial void CustomFactoryEnd(
             OverlayStream stream,
             int finalPos,
@@ -1321,7 +1385,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 package: package);
             var finalPos = checked((int)(stream.Position + stream.GetSubrecord().TotalLength));
             int offset = stream.Position + package.MetaData.Constants.SubConstants.TypeAndLengthLength;
-            stream.Position += 0xE + package.MetaData.Constants.SubConstants.HeaderLength;
+            if (ret._data.Length <= 0xD)
+            {
+                ret.Versioning |= RadioReceiver.VersioningBreaks.Break0;
+            }
             ret.CustomFactoryEnd(
                 stream: stream,
                 finalPos: stream.Length,
