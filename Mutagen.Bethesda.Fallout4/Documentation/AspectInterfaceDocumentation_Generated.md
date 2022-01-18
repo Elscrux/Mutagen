@@ -76,6 +76,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - MiscItem
 - MoveableStatic
 - ObjectEffect
+- ObjectTemplate
 - Race
 - RegionMap
 - ScriptBoolListProperty
@@ -266,6 +267,8 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 ### ObjectEffect
 - INamed
 - IObjectBounded
+### ObjectTemplate
+- INamed
 ### Race
 - IKeyworded
 - INamed

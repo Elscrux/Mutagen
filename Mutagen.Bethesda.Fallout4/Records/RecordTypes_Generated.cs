@@ -146,7 +146,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType NPC_ = new(0x5F43504E);
         public static readonly RecordType NTRM = new(0x4D52544E);
         public static readonly RecordType OBND = new(0x444E424F);
+        public static readonly RecordType OBTE = new(0x4554424F);
+        public static readonly RecordType OBTF = new(0x4654424F);
+        public static readonly RecordType OBTS = new(0x5354424F);
         public static readonly RecordType OFST = new(0x5453464F);
+        public static readonly RecordType OMOD = new(0x444F4D4F);
         public static readonly RecordType ONAM = new(0x4D414E4F);
         public static readonly RecordType OTFT = new(0x5446544F);
         public static readonly RecordType PERK = new(0x4B524550);
@@ -193,6 +197,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType STAT = new(0x54415453);
         public static readonly RecordType STCP = new(0x50435453);
         public static readonly RecordType STOL = new(0x4C4F5453);
+        public static readonly RecordType STOP = new(0x504F5453);
         public static readonly RecordType TACT = new(0x54434154);
         public static readonly RecordType TERM = new(0x4D524554);
         public static readonly RecordType TES4 = new(0x34534554);

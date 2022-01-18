@@ -1617,6 +1617,30 @@ namespace Mutagen.Bethesda.Fallout4
         }
 
         /// <summary>
+        /// Scope a load order query to ObjectModification
+        /// </summary>
+        /// <param name="listings">ModListings to query</param>
+        /// <returns>A typed object to do further queries on ObjectModification</returns>
+        public static TypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IObjectModification, IObjectModificationGetter> ObjectModification(this IEnumerable<IModListingGetter<IFallout4ModGetter>> listings)
+        {
+            return new TypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IObjectModification, IObjectModificationGetter>(
+                (bool includeDeletedRecords) => listings.WinningOverrides<IObjectModificationGetter>(includeDeletedRecords: includeDeletedRecords),
+                (ILinkCache linkCache, bool includeDeletedRecords) => listings.WinningOverrideContexts<IFallout4Mod, IFallout4ModGetter, IObjectModification, IObjectModificationGetter>(linkCache, includeDeletedRecords: includeDeletedRecords));
+        }
+
+        /// <summary>
+        /// Scope a load order query to ObjectModification
+        /// </summary>
+        /// <param name="mods">Mods to query</param>
+        /// <returns>A typed object to do further queries on ObjectModification</returns>
+        public static TypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IObjectModification, IObjectModificationGetter> ObjectModification(this IEnumerable<IFallout4ModGetter> mods)
+        {
+            return new TypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IObjectModification, IObjectModificationGetter>(
+                (bool includeDeletedRecords) => mods.WinningOverrides<IObjectModificationGetter>(includeDeletedRecords: includeDeletedRecords),
+                (ILinkCache linkCache, bool includeDeletedRecords) => mods.WinningOverrideContexts<IFallout4Mod, IFallout4ModGetter, IObjectModification, IObjectModificationGetter>(linkCache, includeDeletedRecords: includeDeletedRecords));
+        }
+
+        /// <summary>
         /// Scope a load order query to Outfit
         /// </summary>
         /// <param name="listings">ModListings to query</param>

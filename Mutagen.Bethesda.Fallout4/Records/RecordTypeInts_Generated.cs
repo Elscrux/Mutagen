@@ -144,7 +144,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int NPC_ = 0x5F43504E;
         public const int NTRM = 0x4D52544E;
         public const int OBND = 0x444E424F;
+        public const int OBTE = 0x4554424F;
+        public const int OBTF = 0x4654424F;
+        public const int OBTS = 0x5354424F;
         public const int OFST = 0x5453464F;
+        public const int OMOD = 0x444F4D4F;
         public const int ONAM = 0x4D414E4F;
         public const int OTFT = 0x5446544F;
         public const int PERK = 0x4B524550;
@@ -191,6 +195,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public const int STAT = 0x54415453;
         public const int STCP = 0x50435453;
         public const int STOL = 0x4C4F5453;
+        public const int STOP = 0x504F5453;
         public const int TACT = 0x54434154;
         public const int TERM = 0x4D524554;
         public const int TES4 = 0x34534554;

@@ -895,6 +895,18 @@
     <Compile Include="Records\Major Records\RuleName_Generated.cs">
       <DependentUpon>InstanceNamingRule.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Common Subrecords\ObjectTemplate_Generated.cs">
+      <DependentUpon>ObjectTemplate.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ObjectModTemplateItem_Generated.cs">
+      <DependentUpon>ObjectTemplate.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ObjectTemplateInclude_Generated.cs">
+      <DependentUpon>ObjectTemplate.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\ObjectModification_Generated.cs">
+      <DependentUpon>ObjectModification.xml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="GitInfo" Version="2.2.0">

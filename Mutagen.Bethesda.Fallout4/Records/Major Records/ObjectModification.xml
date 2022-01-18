@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="us-ascii"?>
 <Loqui xmlns="http://tempuri.org/LoquiSource.xsd">
-	<Object name="ObjectModification" recordType="OMOD" objType="Record" baseClass="Fallout4MajorRecord">
-	</Object>
+  <Object name="ObjectModification" recordType="OMOD" objType="Record" baseClass="Fallout4MajorRecord" GUID="5e74c96d-1264-4f46-a78a-dcce05296fa3" ID="231">
+  </Object>
 </Loqui>

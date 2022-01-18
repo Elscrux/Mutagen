@@ -104,6 +104,7 @@ namespace Mutagen.Bethesda.Plugins.Records.Internals
         public const int NAVI = 0x4956414E;
         public const int NAVM = 0x4D56414E;
         public const int NPC_ = 0x5F43504E;
+        public const int OMOD = 0x444F4D4F;
         public const int OTFT = 0x5446544F;
         public const int PACK = 0x4B434150;
         public const int PARW = 0x57524150;

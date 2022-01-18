@@ -57,7 +57,9 @@
 			</Data>
 			<RefList name="Resistances" refName="ResistanceArmor" />
 			<FormLink name="TemplateArmor" recordType="TNAM" refName="Armor" />
-			<RefDirect name="AttachParentSlots" refName="AttachParentSlot" />
+			<List name="AttachParentSlots" recordType="APPR">
+				<FormLink refName="Keyword" />
+			</List>
 			<RefList name="ObjectTemplates" counterRecType="OBTE" refName="ObjectTemplate" />
 		</Fields>
 		<LinkInterface>IItem</LinkInterface>
