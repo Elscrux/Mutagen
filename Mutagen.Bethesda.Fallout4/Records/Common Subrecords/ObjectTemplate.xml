@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Loqui xmlns="http://tempuri.org/LoquiSource.xsd">
+	<Object name="ObjectTemplate" objType="Subrecord" endMarkerType="STOP">
+		<Fields>
+			<String name="EditorOnly" recordType="OBTF" nullable="True" />
+			<String name="Name" recordType="FULL" translated="Normal" />
+			<RefDirect name="ObjectModTemplateItem" refName="ObjectModTemplateItem" />
+		</Fields>
+	</Object>
+	<Object name="ObjectModTemplateItem" objType="Subrecord" recordType="OBTS">
+		<Fields>
+			<UInt32 name="IncludeCount" />
+			<UInt32 name="PropertyCount" />
+			<UInt8 name="LevelMin" />
+			<ByteArray name="Unused1" byteLength="1" nullable="False" />
+			<UInt8 name="LevelMax" />
+			<ByteArray name="Unused2" byteLength="1" nullable="False" />
+			<!--TODO wbOBTEAddonIndexToStr-->
+			<Int16 name="AddonIndex"/>
+			<Bool name="Default" byteLength="1" />
+			<RefList name="Keywords" refName="Keyword"/>
+			<UInt8 name="MinLevelForRanks" />
+			<UInt8 name="AltLevelsPerTier" />
+			<RefList name="Includes" refName="ObjectTemplateInclude"/>
+		</Fields>
+	</Object>
+	<Object name="ObjectTemplateInclude" objType="Subrecord">
+		<Fields>
+			<FormLink name="Mod" refName="ObjectModification" />
+			<UInt8 name="AttachPointIndex" />
+			<Bool name="Optional" byteLength="1" />
+			<Bool name="DontUseAll" byteLength="1" />
+		</Fields>
+	</Object>
+</Loqui>

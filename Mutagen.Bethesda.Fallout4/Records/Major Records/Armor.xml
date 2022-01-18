@@ -26,7 +26,7 @@
 					<RefDirect refName="ArmorModel" />
 				</Fields>
 			</Gendered>
-			<RefDirect name="BodyTemplate" refName="BodyTemplate" binary="Custom" />
+			<RefDirect name="BipedBodyTemplate" refName="BipedBodyTemplate" />
 			<RefDirect name="Destructible" refName="Destructible" />
 			<FormLink name="PickUpSound" refName="SoundDescriptor" recordType="YNAM" />
 			<FormLink name="PutDownSound" refName="SoundDescriptor" recordType="ZNAM" />
@@ -37,7 +37,8 @@
 			<List name="Keywords" counterRecType="KSIZ" recordType="KWDA">
 				<FormLink refName="Keyword" />
 			</List>
-			<String name="Description" recordType="DESC" translated="DL" />
+			<String name="Description" recordType="DESC" translated="Normal" />
+			<FormLink name="InstanceNaming" recordType="INRD" refName="InstanceNamingRule" />
 			<RefList name="Armatures" refName="ArmorAddonModel" />
 			<Data>
 				<Fields>
@@ -51,10 +52,13 @@
 					<UInt16 name="ArmorRating" />
 					<UInt16 name="BaseAddonIndex" />
 					<UInt16 name="StaggerRating" />
-					<!--TODO wbUnknown(cpIgnore, False, wbNeverShow, nil)-->
+					<UInt16 name="Unknown" />
 				</Fields>
 			</Data>
 			<RefList name="Resistances" refName="ResistanceArmor" />
+			<FormLink name="TemplateArmor" recordType="TNAM" refName="Armor" />
+			<RefDirect name="AttachParentSlots" refName="AttachParentSlot" />
+			<RefList name="ObjectTemplates" counterRecType="OBTE" refName="ObjectTemplate" />
 		</Fields>
 		<LinkInterface>IItem</LinkInterface>
 		<LinkInterface>IOutfitTarget</LinkInterface>

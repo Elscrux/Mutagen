@@ -29,6 +29,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - MiscItem
 - MoveableStatic
 - Race
+- RuleName
 - Spell
 - TalkingActivator
 ### IModeled
@@ -283,6 +284,8 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - IHasIcons
 ### RegionWeather
 - IHasIcons
+### RuleName
+- IKeyworded
 ### ScriptBoolListProperty
 - INamed
 ### ScriptBoolProperty

@@ -1113,6 +1113,30 @@ namespace Mutagen.Bethesda.Fallout4
         }
 
         /// <summary>
+        /// Scope a load order query to InstanceNamingRule
+        /// </summary>
+        /// <param name="listings">ModListings to query</param>
+        /// <returns>A typed object to do further queries on InstanceNamingRule</returns>
+        public static TypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IInstanceNamingRule, IInstanceNamingRuleGetter> InstanceNamingRule(this IEnumerable<IModListingGetter<IFallout4ModGetter>> listings)
+        {
+            return new TypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IInstanceNamingRule, IInstanceNamingRuleGetter>(
+                (bool includeDeletedRecords) => listings.WinningOverrides<IInstanceNamingRuleGetter>(includeDeletedRecords: includeDeletedRecords),
+                (ILinkCache linkCache, bool includeDeletedRecords) => listings.WinningOverrideContexts<IFallout4Mod, IFallout4ModGetter, IInstanceNamingRule, IInstanceNamingRuleGetter>(linkCache, includeDeletedRecords: includeDeletedRecords));
+        }
+
+        /// <summary>
+        /// Scope a load order query to InstanceNamingRule
+        /// </summary>
+        /// <param name="mods">Mods to query</param>
+        /// <returns>A typed object to do further queries on InstanceNamingRule</returns>
+        public static TypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IInstanceNamingRule, IInstanceNamingRuleGetter> InstanceNamingRule(this IEnumerable<IFallout4ModGetter> mods)
+        {
+            return new TypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IInstanceNamingRule, IInstanceNamingRuleGetter>(
+                (bool includeDeletedRecords) => mods.WinningOverrides<IInstanceNamingRuleGetter>(includeDeletedRecords: includeDeletedRecords),
+                (ILinkCache linkCache, bool includeDeletedRecords) => mods.WinningOverrideContexts<IFallout4Mod, IFallout4ModGetter, IInstanceNamingRule, IInstanceNamingRuleGetter>(linkCache, includeDeletedRecords: includeDeletedRecords));
+        }
+
+        /// <summary>
         /// Scope a load order query to Key
         /// </summary>
         /// <param name="listings">ModListings to query</param>

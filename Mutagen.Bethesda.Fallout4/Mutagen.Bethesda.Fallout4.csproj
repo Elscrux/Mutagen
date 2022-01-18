@@ -178,6 +178,9 @@
     <Compile Include="Records\Major Records\Ingredient.cs">
       <DependentUpon>Ingredient.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Major Records\InstanceNamingRule.cs">
+      <DependentUpon>InstanceNamingRule.xml</DependentUpon>
+    </Compile>
     <Compile Include="Records\Major Records\Key.cs">
       <DependentUpon>Key.xml</DependentUpon>
     </Compile>
@@ -879,6 +882,18 @@
     </Compile>
     <Compile Include="Records\Major Records\RadioReceiver_Generated.cs">
       <DependentUpon>Activator.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\InstanceNaming_Generated.cs">
+      <DependentUpon>InstanceNaming.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\InstanceNamingRule_Generated.cs">
+      <DependentUpon>InstanceNamingRule.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\RuleSet_Generated.cs">
+      <DependentUpon>InstanceNamingRule.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\RuleName_Generated.cs">
+      <DependentUpon>InstanceNamingRule.xml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

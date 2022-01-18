@@ -74,6 +74,7 @@ namespace Mutagen.Bethesda.Plugins.Records.Internals
         public static readonly RecordType IMGS = new(0x53474D49);
         public static readonly RecordType INFO = new(0x4F464E49);
         public static readonly RecordType INGR = new(0x52474E49);
+        public static readonly RecordType INNR = new(0x524E4E49);
         public static readonly RecordType IPCT = new(0x54435049);
         public static readonly RecordType IPDS = new(0x53445049);
         public static readonly RecordType KEYM = new(0x4D59454B);

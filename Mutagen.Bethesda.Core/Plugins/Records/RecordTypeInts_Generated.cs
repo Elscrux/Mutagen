@@ -72,6 +72,7 @@ namespace Mutagen.Bethesda.Plugins.Records.Internals
         public const int IMGS = 0x53474D49;
         public const int INFO = 0x4F464E49;
         public const int INGR = 0x52474E49;
+        public const int INNR = 0x524E4E49;
         public const int IPCT = 0x54435049;
         public const int IPDS = 0x53445049;
         public const int KEYM = 0x4D59454B;

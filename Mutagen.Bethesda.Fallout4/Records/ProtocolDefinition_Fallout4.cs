@@ -204,6 +204,10 @@ namespace Loqui
             LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.Key_Registration.Instance);
             LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.Ingestible_Registration.Instance);
             LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.RadioReceiver_Registration.Instance);
+            LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.InstanceNaming_Registration.Instance);
+            LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.InstanceNamingRule_Registration.Instance);
+            LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.RuleSet_Registration.Instance);
+            LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.RuleName_Registration.Instance);
         }
     }
 }

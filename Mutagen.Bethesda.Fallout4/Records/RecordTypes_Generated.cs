@@ -89,6 +89,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public static readonly RecordType INCC = new(0x43434E49);
         public static readonly RecordType INDX = new(0x58444E49);
         public static readonly RecordType INGR = new(0x52474E49);
+        public static readonly RecordType INNR = new(0x524E4E49);
+        public static readonly RecordType INRD = new(0x44524E49);
         public static readonly RecordType INTV = new(0x56544E49);
         public static readonly RecordType IPDS = new(0x53445049);
         public static readonly RecordType ITXT = new(0x54585449);
