@@ -309,15 +309,15 @@ namespace Mutagen.Bethesda.Fallout4
         #endregion
         #region Resistances
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private ExtendedList<ResistanceArmor> _Resistances = new ExtendedList<ResistanceArmor>();
-        public ExtendedList<ResistanceArmor> Resistances
+        private ExtendedList<ResistanceArmor>? _Resistances;
+        public ExtendedList<ResistanceArmor>? Resistances
         {
             get => this._Resistances;
-            init => this._Resistances = value;
+            set => this._Resistances = value;
         }
         #region Interface Members
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IReadOnlyList<IResistanceArmorGetter> IArmorGetter.Resistances => _Resistances;
+        IReadOnlyList<IResistanceArmorGetter>? IArmorGetter.Resistances => _Resistances;
         #endregion
 
         #endregion
@@ -2108,7 +2108,7 @@ namespace Mutagen.Bethesda.Fallout4
         new UInt16 BaseAddonIndex { get; set; }
         new UInt16 StaggerRating { get; set; }
         new UInt16 Unknown { get; set; }
-        new ExtendedList<ResistanceArmor> Resistances { get; }
+        new ExtendedList<ResistanceArmor>? Resistances { get; set; }
         new IFormLinkNullable<IArmorGetter> TemplateArmor { get; set; }
         new ExtendedList<IFormLinkGetter<IKeywordGetter>>? AttachParentSlots { get; set; }
         new ExtendedList<ObjectTemplate>? ObjectTemplates { get; set; }
@@ -2196,7 +2196,7 @@ namespace Mutagen.Bethesda.Fallout4
         UInt16 BaseAddonIndex { get; }
         UInt16 StaggerRating { get; }
         UInt16 Unknown { get; }
-        IReadOnlyList<IResistanceArmorGetter> Resistances { get; }
+        IReadOnlyList<IResistanceArmorGetter>? Resistances { get; }
         IFormLinkNullableGetter<IArmorGetter> TemplateArmor { get; }
         IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? AttachParentSlots { get; }
         IReadOnlyList<IObjectTemplateGetter>? ObjectTemplates { get; }
@@ -2540,7 +2540,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.BaseAddonIndex = default;
             item.StaggerRating = default;
             item.Unknown = default;
-            item.Resistances.Clear();
+            item.Resistances = null;
             item.TemplateArmor.Clear();
             item.AttachParentSlots = null;
             item.ObjectTemplates = null;
@@ -2577,7 +2577,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.Keywords?.RemapLinks(mapping);
             obj.InstanceNaming.Relink(mapping);
             obj.Armatures.RemapLinks(mapping);
-            obj.Resistances.RemapLinks(mapping);
+            obj.Resistances?.RemapLinks(mapping);
             obj.TemplateArmor.Relink(mapping);
             obj.AttachParentSlots?.RemapLinks(mapping);
             obj.ObjectTemplates?.RemapLinks(mapping);
@@ -2902,13 +2902,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 fg.AppendItem(item.Unknown, "Unknown");
             }
-            if (printMask?.Resistances?.Overall ?? true)
+            if ((printMask?.Resistances?.Overall ?? true)
+                && item.Resistances is {} ResistancesItem)
             {
                 fg.AppendLine("Resistances =>");
                 fg.AppendLine("[");
                 using (new DepthWrapper(fg))
                 {
-                    foreach (var subItem in item.Resistances)
+                    foreach (var subItem in ResistancesItem)
                     {
                         fg.AppendLine("[");
                         using (new DepthWrapper(fg))
@@ -3342,9 +3343,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 yield return FormLinkInformation.Factory(item);
             }
-            foreach (var item in obj.Resistances.SelectMany(f => f.ContainedFormLinks))
+            if (obj.Resistances is {} ResistancesItem)
             {
-                yield return FormLinkInformation.Factory(item);
+                foreach (var item in ResistancesItem.SelectMany(f => f.ContainedFormLinks))
+                {
+                    yield return FormLinkInformation.Factory(item);
+                }
             }
             if (obj.TemplateArmor.FormKeyNullable.HasValue)
             {
@@ -3702,14 +3706,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 errorMask?.PushIndex((int)Armor_FieldIndex.Resistances);
                 try
                 {
-                    item.Resistances.SetTo(
-                        rhs.Resistances
-                        .Select(r =>
-                        {
-                            return r.DeepCopy(
-                                errorMask: errorMask,
-                                default(TranslationCrystal));
-                        }));
+                    if ((rhs.Resistances != null))
+                    {
+                        item.Resistances = 
+                            rhs.Resistances
+                            .Select(r =>
+                            {
+                                return r.DeepCopy(
+                                    errorMask: errorMask,
+                                    default(TranslationCrystal));
+                            })
+                            .ToExtendedList<ResistanceArmor>();
+                    }
+                    else
+                    {
+                        item.Resistances = null;
+                    }
                 }
                 catch (Exception ex)
                 when (errorMask != null)
@@ -4091,6 +4103,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IResistanceArmorGetter>.Instance.Write(
                 writer: writer,
                 items: item.Resistances,
+                recordType: translationParams.ConvertToCustom(RecordTypes.DAMA),
                 transl: (MutagenWriter subWriter, IResistanceArmorGetter subItem, TypedWriteParams? conv) =>
                 {
                     var Item = subItem;
@@ -4372,12 +4385,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.DAMA:
                 {
-                    item.Resistances.SetTo(
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.Resistances = 
                         Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<ResistanceArmor>.Instance.Parse(
-                            reader: frame,
-                            triggeringRecord: RecordTypes.DAMA,
-                            translationParams: translationParams,
-                            transl: ResistanceArmor.TryCreateFromBinary));
+                            reader: frame.SpawnWithLength(contentLength),
+                            transl: ResistanceArmor.TryCreateFromBinary)
+                        .CastExtendedList<ResistanceArmor>();
                     return (int)Armor_FieldIndex.Resistances;
                 }
                 case RecordTypeInts.TNAM:
@@ -4583,7 +4596,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private bool _Unknown_IsSet => _FNAMLocation.HasValue;
         public UInt16 Unknown => _Unknown_IsSet ? BinaryPrimitives.ReadUInt16LittleEndian(_data.Slice(_UnknownLocation, 2)) : default;
         #endregion
-        public IReadOnlyList<IResistanceArmorGetter> Resistances { get; private set; } = ListExt.Empty<ResistanceArmorBinaryOverlay>();
+        public IReadOnlyList<IResistanceArmorGetter>? Resistances { get; private set; }
         #region TemplateArmor
         private int? _TemplateArmorLocation;
         public IFormLinkNullableGetter<IArmorGetter> TemplateArmor => _TemplateArmorLocation.HasValue ? new FormLinkNullable<IArmorGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _TemplateArmorLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<IArmorGetter>.Null;
@@ -4786,16 +4799,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.DAMA:
                 {
-                    this.Resistances = BinaryOverlayList.FactoryByArray<ResistanceArmorBinaryOverlay>(
-                        mem: stream.RemainingMemory,
+                    var subMeta = stream.ReadSubrecord();
+                    var subLen = subMeta.ContentLength;
+                    this.Resistances = BinaryOverlayList.FactoryByStartIndex<ResistanceArmorBinaryOverlay>(
+                        mem: stream.RemainingMemory.Slice(0, subLen),
                         package: _package,
-                        parseParams: parseParams,
-                        getter: (s, p, recConv) => ResistanceArmorBinaryOverlay.ResistanceArmorFactory(new OverlayStream(s, p), p, recConv),
-                        locs: ParseRecordLocations(
-                            stream: stream,
-                            trigger: type,
-                            constants: _package.MetaData.Constants.SubConstants,
-                            skipHeader: false));
+                        itemLength: 8,
+                        getter: (s, p) => ResistanceArmorBinaryOverlay.ResistanceArmorFactory(s, p));
+                    stream.Position += subLen;
                     return (int)Armor_FieldIndex.Resistances;
                 }
                 case RecordTypeInts.TNAM:

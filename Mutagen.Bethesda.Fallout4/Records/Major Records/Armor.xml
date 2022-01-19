@@ -55,7 +55,7 @@
 					<UInt16 name="Unknown" />
 				</Fields>
 			</Data>
-			<RefList name="Resistances" refName="ResistanceArmor" />
+			<RefList name="Resistances" refName="ResistanceArmor" recordType="DAMA" />
 			<FormLink name="TemplateArmor" recordType="TNAM" refName="Armor" />
 			<List name="AttachParentSlots" recordType="APPR">
 				<FormLink refName="Keyword" />
@@ -81,7 +81,7 @@
 			<FormLink name="AddonModel" recordType="MODL" refName="ArmorAddon" />
 		</Fields>
 	</Object>
-	<Object name="ResistanceArmor" objType="Subrecord" recordType="DAMA" GUID="376e43f7-2bef-4600-af06-4464f173d2fb" ID="145">
+	<Object name="ResistanceArmor" objType="Subrecord" GUID="376e43f7-2bef-4600-af06-4464f173d2fb" ID="145">
 		<Fields>
 			<FormLink name="DamageType" refName="DamageType" />
 			<UInt32 name="Value" />
