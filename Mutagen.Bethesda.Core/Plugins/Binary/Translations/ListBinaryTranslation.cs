@@ -16,7 +16,7 @@ namespace Mutagen.Bethesda.Plugins.Binary.Translations
 {
     public class ListBinaryTranslation<T> : ListBinaryTranslation<MutagenWriter, MutagenFrame, T>
     {
-        public static readonly ListBinaryTranslation<T> Instance = new ListBinaryTranslation<T>();
+        public static readonly ListBinaryTranslation<T> Instance = new();
 
         #region Out Parameters
         public ExtendedList<T> Parse(
@@ -617,7 +617,8 @@ namespace Mutagen.Bethesda.Plugins.Binary.Translations
             int countLengthLength,
             BinaryMasterParseDelegate<T> transl,
             ICollectionGetter<RecordType> triggeringRecord,
-            TypedParseParams? translationParams = null)
+            TypedParseParams? translationParams = null,
+            bool nullIfZero = true)
         {
             var subHeader = reader.GetSubrecordFrame();
             var recType = subHeader.RecordType;
@@ -636,7 +637,8 @@ namespace Mutagen.Bethesda.Plugins.Binary.Translations
                     count,
                     transl,
                     triggeringRecord,
-                    translationParams);
+                    translationParams,
+                    nullIfZero: nullIfZero);
             }
             else
             {
@@ -653,9 +655,10 @@ namespace Mutagen.Bethesda.Plugins.Binary.Translations
             int amount,
             BinaryMasterParseDelegate<T> transl,
             ICollectionGetter<RecordType>? triggeringRecord = null,
-            TypedParseParams? translationParams = null)
+            TypedParseParams? translationParams = null,
+            bool nullIfZero = false)
         {
-            if (amount == 0) return Enumerable.Empty<T>();
+            if (amount == 0 && nullIfZero) return Enumerable.Empty<T>();
             var ret = new ExtendedList<T>();
             var startingPos = reader.Position;
             for (int i = 0; i < amount; i++)
@@ -1029,9 +1032,20 @@ namespace Mutagen.Bethesda.Plugins.Binary.Translations
             RecordType counterType,
             BinaryMasterWriteDelegate<T> transl,
             byte counterLength,
+            bool writeCounterIfNull = false,
             RecordTypeConverter? recordTypeConverter = null)
         {
-            if (items == null) return;
+            if (items == null)
+            {
+                if (writeCounterIfNull)
+                {
+                    using (HeaderExport.Header(writer, counterType, ObjectType.Subrecord))
+                    {
+                        writer.Write(0, counterLength);
+                    }
+                }
+                return;
+            }
             try
             {
                 using (HeaderExport.Header(writer, counterType, ObjectType.Subrecord))

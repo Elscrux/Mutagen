@@ -4118,6 +4118,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 items: item.ObjectTemplates,
                 counterType: RecordTypes.OBTE,
                 counterLength: 4,
+                writeCounterIfNull: true,
                 transl: (MutagenWriter subWriter, IObjectTemplateGetter subItem, TypedWriteParams? conv) =>
                 {
                     var Item = subItem;
@@ -4395,9 +4396,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         .CastExtendedList<IFormLinkGetter<IKeywordGetter>>();
                     return (int)Armor_FieldIndex.AttachParentSlots;
                 }
-                case RecordTypeInts.OBTF:
-                case RecordTypeInts.FULL:
-                case RecordTypeInts.OBTS:
                 case RecordTypeInts.OBTE:
                 {
                     item.ObjectTemplates = 
@@ -4406,9 +4404,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                             countLengthLength: 4,
                             countRecord: RecordTypes.OBTE,
                             triggeringRecord: ObjectTemplate_Registration.TriggeringRecordTypes,
+                            nullIfZero: true,
                             translationParams: translationParams,
                             transl: ObjectTemplate.TryCreateFromBinary)
-                        .CastExtendedList<ObjectTemplate>();
+                        .CastExtendedListIfAny<ObjectTemplate>();
                     return (int)Armor_FieldIndex.ObjectTemplates;
                 }
                 default:
@@ -4816,9 +4815,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     stream.Position += subLen;
                     return (int)Armor_FieldIndex.AttachParentSlots;
                 }
-                case RecordTypeInts.OBTF:
-                case RecordTypeInts.FULL:
-                case RecordTypeInts.OBTS:
                 case RecordTypeInts.OBTE:
                 {
                     this.ObjectTemplates = BinaryOverlayList.FactoryByCountPerItem<ObjectTemplateBinaryOverlay>(

@@ -1806,7 +1806,6 @@ namespace Mutagen.Bethesda.Skyrim.Internals
                         stringBinaryType: StringBinaryType.NullTerminate);
                     return (int)CollisionLayer_FieldIndex.Name;
                 }
-                case RecordTypeInts.CNAM:
                 case RecordTypeInts.INTV:
                 {
                     item.CollidesWith = 
@@ -1990,7 +1989,6 @@ namespace Mutagen.Bethesda.Skyrim.Internals
                     _NameLocation = (stream.Position - offset);
                     return (int)CollisionLayer_FieldIndex.Name;
                 }
-                case RecordTypeInts.CNAM:
                 case RecordTypeInts.INTV:
                 {
                     this.CollidesWith = BinaryOverlayList.FactoryByCountNullIfZero<IFormLinkGetter<ICollisionLayerGetter>>(

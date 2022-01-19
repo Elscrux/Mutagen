@@ -406,7 +406,7 @@ namespace Mutagen.Bethesda.Generation.Modules.Plugin
                 }
                 // If has count, mark as has been set
                 var hasCounter = (listType.CustomData.TryGetValue(PluginListBinaryTranslationGeneration.CounterRecordType, out var counter)
-                    && counter != null);
+                                  && counter != null);
                 if (hasCounter 
                     && (previouslyTurnedOff || !listType.NullableProperty.Value.HasBeenSet))
                 {
@@ -671,7 +671,12 @@ namespace Mutagen.Bethesda.Generation.Modules.Plugin
                 if (field.CustomData.TryGetValue(PluginListBinaryTranslationGeneration.CounterRecordType, out var counterObj)
                     && counterObj is string counterTypeStr)
                 {
-                    //data.TriggeringRecordTypes.Clear();
+                    if (field.CustomData.TryGetValue(PluginListBinaryTranslationGeneration.NullIfCounterZero,
+                            out var nullIfZero)
+                        && (bool)nullIfZero)
+                    {
+                        data.TriggeringRecordTypes.Clear();
+                    }
                     data.TriggeringRecordAccessors.Add(obj.RecordTypeHeaderName(new RecordType(counterTypeStr)));
                     data.TriggeringRecordTypes.Add(new RecordType(counterTypeStr));
                 }
