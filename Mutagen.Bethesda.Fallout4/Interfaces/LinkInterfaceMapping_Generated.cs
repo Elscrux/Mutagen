@@ -21,6 +21,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             dict[typeof(IIdleRelation)] = new Type[]
             {
                 typeof(ActionRecord),
+                typeof(IdleAnimation),
             };
             dict[typeof(IIdleRelationGetter)] = dict[typeof(IIdleRelation)];
             dict[typeof(IObjectId)] = new Type[]
@@ -32,6 +33,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Door),
                 typeof(Faction),
                 typeof(Furniture),
+                typeof(IdleMarker),
                 typeof(Ingestible),
                 typeof(Key),
                 typeof(Light),

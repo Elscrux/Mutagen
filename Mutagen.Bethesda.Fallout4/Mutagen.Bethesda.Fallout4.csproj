@@ -172,6 +172,12 @@
     <Compile Include="Records\Major Records\HeadPart.cs">
       <DependentUpon>HeadPart.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Major Records\IdleAnimation.cs">
+      <DependentUpon>IdleAnimation.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\IdleMarker.cs">
+      <DependentUpon>IdleMarker.xml</DependentUpon>
+    </Compile>
     <Compile Include="Records\Major Records\Ingestible.cs">
       <DependentUpon>Ingestible.xml</DependentUpon>
     </Compile>
@@ -906,6 +912,12 @@
     </Compile>
     <Compile Include="Records\Major Records\ObjectModification_Generated.cs">
       <DependentUpon>ObjectModification.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\IdleAnimation_Generated.cs">
+      <DependentUpon>IdleAnimation.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\IdleMarker_Generated.cs">
+      <DependentUpon>IdleMarker.xml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

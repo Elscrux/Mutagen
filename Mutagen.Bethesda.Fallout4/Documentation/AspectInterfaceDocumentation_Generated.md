@@ -22,6 +22,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Door
 - Flora
 - Furniture
+- IdleMarker
 - Ingestible
 - Ingredient
 - Key
@@ -45,6 +46,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Furniture
 - Grass
 - HeadPart
+- IdleMarker
 - Ingestible
 - Ingredient
 - Key
@@ -113,6 +115,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Flora
 - Furniture
 - Grass
+- IdleMarker
 - Ingestible
 - Ingredient
 - Key
@@ -215,6 +218,10 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 ### HeadPart
 - IModeled
 - INamed
+### IdleMarker
+- IKeyworded
+- IModeled
+- IObjectBounded
 ### Ingestible
 - IKeyworded
 - IModeled
