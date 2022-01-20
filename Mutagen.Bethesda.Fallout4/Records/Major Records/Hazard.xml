@@ -20,17 +20,13 @@
           <FormLink name="Light" refName="Light" />
           <FormLink name="ImpactDataSet" refName="ImpactDataSet" />
           <FormLink name="Sound" refName="SoundDescriptor" />
-          <FormLink name="TaperEffectiveness" refName="TaperEffectiveness" />
+		  <!--TaperEffectiveness TODO Ugly :D-->
+		  <Float name="FullEffectRadius" />
+		  <Float name="TaperWeight" />
+		  <Float name="TaperCurse" />
         </Fields>
       </Data>
     </Fields>
     <LinkInterface>IPlacedTrapTarget</LinkInterface>
-  </Object>
-  <Object name="TaperEffectiveness" objType="Subrecord" GUID="41dd1cc5-ce8b-4a71-940d-565dcf46c22a" ID="242">
-    <Fields>
-      <Float name="FullEffectRadius" />
-      <Float name="TaperWeight" />
-      <Float name="TaperCurse" />
-    </Fields>
   </Object>
 </Loqui>

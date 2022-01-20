@@ -475,7 +475,6 @@ namespace Mutagen.Bethesda.Fallout4
         #endregion
 
         #region Mutagen
-        public static readonly RecordType GrupRecordType = ObjectTemplate_Registration.TriggeringRecordType;
         public IEnumerable<IFormLinkGetter> ContainedFormLinks => ObjectTemplateCommon.Instance.GetContainedFormLinks(this);
         public void RemapLinks(IReadOnlyDictionary<FormKey, FormKey> mapping) => ObjectTemplateSetterCommon.Instance.RemapLinks(this, mapping);
         #endregion
@@ -797,7 +796,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public static readonly Type? GenericRegistrationType = null;
 
-        public static readonly RecordType TriggeringRecordType = RecordTypes.OBTF;
+        public static ICollectionGetter<RecordType> TriggeringRecordTypes => _TriggeringRecordTypes.Value;
+        private static readonly Lazy<ICollectionGetter<RecordType>> _TriggeringRecordTypes = new Lazy<ICollectionGetter<RecordType>>(() =>
+        {
+            return new CollectionGetterWrapper<RecordType>(
+                new HashSet<RecordType>(
+                    new RecordType[]
+                    {
+                        RecordTypes.OBTF,
+                        RecordTypes.FULL,
+                        RecordTypes.OBTS
+                    })
+            );
+        });
         public static readonly Type BinaryWriteTranslation = typeof(ObjectTemplateBinaryWriteTranslation);
         #region Interface
         ProtocolKey ILoquiRegistration.ProtocolKey => ProtocolKey;
@@ -1245,6 +1256,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.FULL:
                 {
+                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)ObjectTemplate_FieldIndex.Name) return ParseResult.Stop;
                     frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
                     item.Name = StringBinaryTranslation.Instance.Parse(
                         reader: frame.SpawnWithLength(contentLength),
@@ -1254,6 +1266,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.OBTS:
                 {
+                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)ObjectTemplate_FieldIndex.ObjectModTemplateItem) return ParseResult.Stop;
                     item.ObjectModTemplateItem = Mutagen.Bethesda.Fallout4.ObjectModTemplateItem.CreateFromBinary(frame: frame);
                     return (int)ObjectTemplate_FieldIndex.ObjectModTemplateItem;
                 }
@@ -1411,11 +1424,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.FULL:
                 {
+                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)ObjectTemplate_FieldIndex.Name) return ParseResult.Stop;
                     _NameLocation = (stream.Position - offset);
                     return (int)ObjectTemplate_FieldIndex.Name;
                 }
                 case RecordTypeInts.OBTS:
                 {
+                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)ObjectTemplate_FieldIndex.ObjectModTemplateItem) return ParseResult.Stop;
                     _ObjectModTemplateItemLocation = new RangeInt32((stream.Position - offset), finalPos - offset);
                     return (int)ObjectTemplate_FieldIndex.ObjectModTemplateItem;
                 }

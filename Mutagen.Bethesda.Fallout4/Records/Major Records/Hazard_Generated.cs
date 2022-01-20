@@ -197,15 +197,14 @@ namespace Mutagen.Bethesda.Fallout4
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IFormLinkGetter<ISoundDescriptorGetter> IHazardGetter.Sound => this.Sound;
         #endregion
-        #region TaperEffectiveness
-        private readonly IFormLink<ITaperEffectivenessGetter> _TaperEffectiveness = new FormLink<ITaperEffectivenessGetter>();
-        public IFormLink<ITaperEffectivenessGetter> TaperEffectiveness
-        {
-            get => _TaperEffectiveness;
-            set => _TaperEffectiveness.SetTo(value);
-        }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IFormLinkGetter<ITaperEffectivenessGetter> IHazardGetter.TaperEffectiveness => this.TaperEffectiveness;
+        #region FullEffectRadius
+        public Single FullEffectRadius { get; set; } = default;
+        #endregion
+        #region TaperWeight
+        public Single TaperWeight { get; set; } = default;
+        #endregion
+        #region TaperCurse
+        public Single TaperCurse { get; set; } = default;
         #endregion
         #region DNAMDataTypeState
         public Hazard.DNAMDataType DNAMDataTypeState { get; set; } = default;
@@ -248,7 +247,9 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Light = initialValue;
                 this.ImpactDataSet = initialValue;
                 this.Sound = initialValue;
-                this.TaperEffectiveness = initialValue;
+                this.FullEffectRadius = initialValue;
+                this.TaperWeight = initialValue;
+                this.TaperCurse = initialValue;
                 this.DNAMDataTypeState = initialValue;
             }
 
@@ -273,7 +274,9 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem Light,
                 TItem ImpactDataSet,
                 TItem Sound,
-                TItem TaperEffectiveness,
+                TItem FullEffectRadius,
+                TItem TaperWeight,
+                TItem TaperCurse,
                 TItem DNAMDataTypeState)
             : base(
                 MajorRecordFlagsRaw: MajorRecordFlagsRaw,
@@ -297,7 +300,9 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Light = Light;
                 this.ImpactDataSet = ImpactDataSet;
                 this.Sound = Sound;
-                this.TaperEffectiveness = TaperEffectiveness;
+                this.FullEffectRadius = FullEffectRadius;
+                this.TaperWeight = TaperWeight;
+                this.TaperCurse = TaperCurse;
                 this.DNAMDataTypeState = DNAMDataTypeState;
             }
 
@@ -324,7 +329,9 @@ namespace Mutagen.Bethesda.Fallout4
             public TItem Light;
             public TItem ImpactDataSet;
             public TItem Sound;
-            public TItem TaperEffectiveness;
+            public TItem FullEffectRadius;
+            public TItem TaperWeight;
+            public TItem TaperCurse;
             public TItem DNAMDataTypeState;
             #endregion
 
@@ -353,7 +360,9 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!object.Equals(this.Light, rhs.Light)) return false;
                 if (!object.Equals(this.ImpactDataSet, rhs.ImpactDataSet)) return false;
                 if (!object.Equals(this.Sound, rhs.Sound)) return false;
-                if (!object.Equals(this.TaperEffectiveness, rhs.TaperEffectiveness)) return false;
+                if (!object.Equals(this.FullEffectRadius, rhs.FullEffectRadius)) return false;
+                if (!object.Equals(this.TaperWeight, rhs.TaperWeight)) return false;
+                if (!object.Equals(this.TaperCurse, rhs.TaperCurse)) return false;
                 if (!object.Equals(this.DNAMDataTypeState, rhs.DNAMDataTypeState)) return false;
                 return true;
             }
@@ -374,7 +383,9 @@ namespace Mutagen.Bethesda.Fallout4
                 hash.Add(this.Light);
                 hash.Add(this.ImpactDataSet);
                 hash.Add(this.Sound);
-                hash.Add(this.TaperEffectiveness);
+                hash.Add(this.FullEffectRadius);
+                hash.Add(this.TaperWeight);
+                hash.Add(this.TaperCurse);
                 hash.Add(this.DNAMDataTypeState);
                 hash.Add(base.GetHashCode());
                 return hash.ToHashCode();
@@ -408,7 +419,9 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!eval(this.Light)) return false;
                 if (!eval(this.ImpactDataSet)) return false;
                 if (!eval(this.Sound)) return false;
-                if (!eval(this.TaperEffectiveness)) return false;
+                if (!eval(this.FullEffectRadius)) return false;
+                if (!eval(this.TaperWeight)) return false;
+                if (!eval(this.TaperCurse)) return false;
                 if (!eval(this.DNAMDataTypeState)) return false;
                 return true;
             }
@@ -440,7 +453,9 @@ namespace Mutagen.Bethesda.Fallout4
                 if (eval(this.Light)) return true;
                 if (eval(this.ImpactDataSet)) return true;
                 if (eval(this.Sound)) return true;
-                if (eval(this.TaperEffectiveness)) return true;
+                if (eval(this.FullEffectRadius)) return true;
+                if (eval(this.TaperWeight)) return true;
+                if (eval(this.TaperCurse)) return true;
                 if (eval(this.DNAMDataTypeState)) return true;
                 return false;
             }
@@ -471,7 +486,9 @@ namespace Mutagen.Bethesda.Fallout4
                 obj.Light = eval(this.Light);
                 obj.ImpactDataSet = eval(this.ImpactDataSet);
                 obj.Sound = eval(this.Sound);
-                obj.TaperEffectiveness = eval(this.TaperEffectiveness);
+                obj.FullEffectRadius = eval(this.FullEffectRadius);
+                obj.TaperWeight = eval(this.TaperWeight);
+                obj.TaperCurse = eval(this.TaperCurse);
                 obj.DNAMDataTypeState = eval(this.DNAMDataTypeState);
             }
             #endregion
@@ -551,9 +568,17 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         fg.AppendItem(Sound, "Sound");
                     }
-                    if (printMask?.TaperEffectiveness ?? true)
+                    if (printMask?.FullEffectRadius ?? true)
                     {
-                        fg.AppendItem(TaperEffectiveness, "TaperEffectiveness");
+                        fg.AppendItem(FullEffectRadius, "FullEffectRadius");
+                    }
+                    if (printMask?.TaperWeight ?? true)
+                    {
+                        fg.AppendItem(TaperWeight, "TaperWeight");
+                    }
+                    if (printMask?.TaperCurse ?? true)
+                    {
+                        fg.AppendItem(TaperCurse, "TaperCurse");
                     }
                     if (printMask?.DNAMDataTypeState ?? true)
                     {
@@ -585,7 +610,9 @@ namespace Mutagen.Bethesda.Fallout4
             public Exception? Light;
             public Exception? ImpactDataSet;
             public Exception? Sound;
-            public Exception? TaperEffectiveness;
+            public Exception? FullEffectRadius;
+            public Exception? TaperWeight;
+            public Exception? TaperCurse;
             public Exception? DNAMDataTypeState;
             #endregion
 
@@ -623,8 +650,12 @@ namespace Mutagen.Bethesda.Fallout4
                         return ImpactDataSet;
                     case Hazard_FieldIndex.Sound:
                         return Sound;
-                    case Hazard_FieldIndex.TaperEffectiveness:
-                        return TaperEffectiveness;
+                    case Hazard_FieldIndex.FullEffectRadius:
+                        return FullEffectRadius;
+                    case Hazard_FieldIndex.TaperWeight:
+                        return TaperWeight;
+                    case Hazard_FieldIndex.TaperCurse:
+                        return TaperCurse;
                     case Hazard_FieldIndex.DNAMDataTypeState:
                         return DNAMDataTypeState;
                     default:
@@ -679,8 +710,14 @@ namespace Mutagen.Bethesda.Fallout4
                     case Hazard_FieldIndex.Sound:
                         this.Sound = ex;
                         break;
-                    case Hazard_FieldIndex.TaperEffectiveness:
-                        this.TaperEffectiveness = ex;
+                    case Hazard_FieldIndex.FullEffectRadius:
+                        this.FullEffectRadius = ex;
+                        break;
+                    case Hazard_FieldIndex.TaperWeight:
+                        this.TaperWeight = ex;
+                        break;
+                    case Hazard_FieldIndex.TaperCurse:
+                        this.TaperCurse = ex;
                         break;
                     case Hazard_FieldIndex.DNAMDataTypeState:
                         this.DNAMDataTypeState = ex;
@@ -738,8 +775,14 @@ namespace Mutagen.Bethesda.Fallout4
                     case Hazard_FieldIndex.Sound:
                         this.Sound = (Exception?)obj;
                         break;
-                    case Hazard_FieldIndex.TaperEffectiveness:
-                        this.TaperEffectiveness = (Exception?)obj;
+                    case Hazard_FieldIndex.FullEffectRadius:
+                        this.FullEffectRadius = (Exception?)obj;
+                        break;
+                    case Hazard_FieldIndex.TaperWeight:
+                        this.TaperWeight = (Exception?)obj;
+                        break;
+                    case Hazard_FieldIndex.TaperCurse:
+                        this.TaperCurse = (Exception?)obj;
                         break;
                     case Hazard_FieldIndex.DNAMDataTypeState:
                         this.DNAMDataTypeState = (Exception?)obj;
@@ -767,7 +810,9 @@ namespace Mutagen.Bethesda.Fallout4
                 if (Light != null) return true;
                 if (ImpactDataSet != null) return true;
                 if (Sound != null) return true;
-                if (TaperEffectiveness != null) return true;
+                if (FullEffectRadius != null) return true;
+                if (TaperWeight != null) return true;
+                if (TaperCurse != null) return true;
                 if (DNAMDataTypeState != null) return true;
                 return false;
             }
@@ -818,7 +863,9 @@ namespace Mutagen.Bethesda.Fallout4
                 fg.AppendItem(Light, "Light");
                 fg.AppendItem(ImpactDataSet, "ImpactDataSet");
                 fg.AppendItem(Sound, "Sound");
-                fg.AppendItem(TaperEffectiveness, "TaperEffectiveness");
+                fg.AppendItem(FullEffectRadius, "FullEffectRadius");
+                fg.AppendItem(TaperWeight, "TaperWeight");
+                fg.AppendItem(TaperCurse, "TaperCurse");
                 fg.AppendItem(DNAMDataTypeState, "DNAMDataTypeState");
             }
             #endregion
@@ -842,7 +889,9 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Light = this.Light.Combine(rhs.Light);
                 ret.ImpactDataSet = this.ImpactDataSet.Combine(rhs.ImpactDataSet);
                 ret.Sound = this.Sound.Combine(rhs.Sound);
-                ret.TaperEffectiveness = this.TaperEffectiveness.Combine(rhs.TaperEffectiveness);
+                ret.FullEffectRadius = this.FullEffectRadius.Combine(rhs.FullEffectRadius);
+                ret.TaperWeight = this.TaperWeight.Combine(rhs.TaperWeight);
+                ret.TaperCurse = this.TaperCurse.Combine(rhs.TaperCurse);
                 ret.DNAMDataTypeState = this.DNAMDataTypeState.Combine(rhs.DNAMDataTypeState);
                 return ret;
             }
@@ -880,7 +929,9 @@ namespace Mutagen.Bethesda.Fallout4
             public bool Light;
             public bool ImpactDataSet;
             public bool Sound;
-            public bool TaperEffectiveness;
+            public bool FullEffectRadius;
+            public bool TaperWeight;
+            public bool TaperCurse;
             public bool DNAMDataTypeState;
             #endregion
 
@@ -902,7 +953,9 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Light = defaultOn;
                 this.ImpactDataSet = defaultOn;
                 this.Sound = defaultOn;
-                this.TaperEffectiveness = defaultOn;
+                this.FullEffectRadius = defaultOn;
+                this.TaperWeight = defaultOn;
+                this.TaperCurse = defaultOn;
                 this.DNAMDataTypeState = defaultOn;
             }
 
@@ -925,7 +978,9 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((Light, null));
                 ret.Add((ImpactDataSet, null));
                 ret.Add((Sound, null));
-                ret.Add((TaperEffectiveness, null));
+                ret.Add((FullEffectRadius, null));
+                ret.Add((TaperWeight, null));
+                ret.Add((TaperCurse, null));
                 ret.Add((DNAMDataTypeState, null));
             }
 
@@ -1102,7 +1157,9 @@ namespace Mutagen.Bethesda.Fallout4
         new IFormLink<ILightGetter> Light { get; set; }
         new IFormLink<IImpactDataSetGetter> ImpactDataSet { get; set; }
         new IFormLink<ISoundDescriptorGetter> Sound { get; set; }
-        new IFormLink<ITaperEffectivenessGetter> TaperEffectiveness { get; set; }
+        new Single FullEffectRadius { get; set; }
+        new Single TaperWeight { get; set; }
+        new Single TaperCurse { get; set; }
         new Hazard.DNAMDataType DNAMDataTypeState { get; set; }
     }
 
@@ -1159,7 +1216,9 @@ namespace Mutagen.Bethesda.Fallout4
         IFormLinkGetter<ILightGetter> Light { get; }
         IFormLinkGetter<IImpactDataSetGetter> ImpactDataSet { get; }
         IFormLinkGetter<ISoundDescriptorGetter> Sound { get; }
-        IFormLinkGetter<ITaperEffectivenessGetter> TaperEffectiveness { get; }
+        Single FullEffectRadius { get; }
+        Single TaperWeight { get; }
+        Single TaperCurse { get; }
         Hazard.DNAMDataType DNAMDataTypeState { get; }
 
     }
@@ -1339,8 +1398,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         Light = 17,
         ImpactDataSet = 18,
         Sound = 19,
-        TaperEffectiveness = 20,
-        DNAMDataTypeState = 21,
+        FullEffectRadius = 20,
+        TaperWeight = 21,
+        TaperCurse = 22,
+        DNAMDataTypeState = 23,
     }
     #endregion
 
@@ -1358,9 +1419,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public const string GUID = "d61b1bde-1cf4-40d1-9eec-63626d1f147a";
 
-        public const ushort AdditionalFieldCount = 16;
+        public const ushort AdditionalFieldCount = 18;
 
-        public const ushort FieldCount = 22;
+        public const ushort FieldCount = 24;
 
         public static readonly Type MaskType = typeof(Hazard.Mask<>);
 
@@ -1443,7 +1504,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.Light.Clear();
             item.ImpactDataSet.Clear();
             item.Sound.Clear();
-            item.TaperEffectiveness.Clear();
+            item.FullEffectRadius = default;
+            item.TaperWeight = default;
+            item.TaperCurse = default;
             item.DNAMDataTypeState = default;
             base.Clear(item);
         }
@@ -1468,7 +1531,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.Light.Relink(mapping);
             obj.ImpactDataSet.Relink(mapping);
             obj.Sound.Relink(mapping);
-            obj.TaperEffectiveness.Relink(mapping);
         }
         
         #endregion
@@ -1555,7 +1617,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ret.Light = item.Light.Equals(rhs.Light);
             ret.ImpactDataSet = item.ImpactDataSet.Equals(rhs.ImpactDataSet);
             ret.Sound = item.Sound.Equals(rhs.Sound);
-            ret.TaperEffectiveness = item.TaperEffectiveness.Equals(rhs.TaperEffectiveness);
+            ret.FullEffectRadius = item.FullEffectRadius.EqualsWithin(rhs.FullEffectRadius);
+            ret.TaperWeight = item.TaperWeight.EqualsWithin(rhs.TaperWeight);
+            ret.TaperCurse = item.TaperCurse.EqualsWithin(rhs.TaperCurse);
             ret.DNAMDataTypeState = item.DNAMDataTypeState == rhs.DNAMDataTypeState;
             base.FillEqualsMask(item, rhs, ret, include);
         }
@@ -1666,9 +1730,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 fg.AppendItem(item.Sound.FormKey, "Sound");
             }
-            if (printMask?.TaperEffectiveness ?? true)
+            if (printMask?.FullEffectRadius ?? true)
             {
-                fg.AppendItem(item.TaperEffectiveness.FormKey, "TaperEffectiveness");
+                fg.AppendItem(item.FullEffectRadius, "FullEffectRadius");
+            }
+            if (printMask?.TaperWeight ?? true)
+            {
+                fg.AppendItem(item.TaperWeight, "TaperWeight");
+            }
+            if (printMask?.TaperCurse ?? true)
+            {
+                fg.AppendItem(item.TaperCurse, "TaperCurse");
             }
             if (printMask?.DNAMDataTypeState ?? true)
             {
@@ -1786,9 +1858,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 if (!lhs.Sound.Equals(rhs.Sound)) return false;
             }
-            if ((crystal?.GetShouldTranslate((int)Hazard_FieldIndex.TaperEffectiveness) ?? true))
+            if ((crystal?.GetShouldTranslate((int)Hazard_FieldIndex.FullEffectRadius) ?? true))
             {
-                if (!lhs.TaperEffectiveness.Equals(rhs.TaperEffectiveness)) return false;
+                if (!lhs.FullEffectRadius.EqualsWithin(rhs.FullEffectRadius)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Hazard_FieldIndex.TaperWeight) ?? true))
+            {
+                if (!lhs.TaperWeight.EqualsWithin(rhs.TaperWeight)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Hazard_FieldIndex.TaperCurse) ?? true))
+            {
+                if (!lhs.TaperCurse.EqualsWithin(rhs.TaperCurse)) return false;
             }
             if ((crystal?.GetShouldTranslate((int)Hazard_FieldIndex.DNAMDataTypeState) ?? true))
             {
@@ -1842,7 +1922,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             hash.Add(item.Light);
             hash.Add(item.ImpactDataSet);
             hash.Add(item.Sound);
-            hash.Add(item.TaperEffectiveness);
+            hash.Add(item.FullEffectRadius);
+            hash.Add(item.TaperWeight);
+            hash.Add(item.TaperCurse);
             hash.Add(item.DNAMDataTypeState);
             hash.Add(base.GetHashCode());
             return hash.ToHashCode();
@@ -1888,7 +1970,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             yield return FormLinkInformation.Factory(obj.Light);
             yield return FormLinkInformation.Factory(obj.ImpactDataSet);
             yield return FormLinkInformation.Factory(obj.Sound);
-            yield return FormLinkInformation.Factory(obj.TaperEffectiveness);
             yield break;
         }
         
@@ -2059,9 +2140,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 item.Sound.SetTo(rhs.Sound.FormKey);
             }
-            if ((copyMask?.GetShouldTranslate((int)Hazard_FieldIndex.TaperEffectiveness) ?? true))
+            if ((copyMask?.GetShouldTranslate((int)Hazard_FieldIndex.FullEffectRadius) ?? true))
             {
-                item.TaperEffectiveness.SetTo(rhs.TaperEffectiveness.FormKey);
+                item.FullEffectRadius = rhs.FullEffectRadius;
+            }
+            if ((copyMask?.GetShouldTranslate((int)Hazard_FieldIndex.TaperWeight) ?? true))
+            {
+                item.TaperWeight = rhs.TaperWeight;
+            }
+            if ((copyMask?.GetShouldTranslate((int)Hazard_FieldIndex.TaperCurse) ?? true))
+            {
+                item.TaperCurse = rhs.TaperCurse;
             }
             if ((copyMask?.GetShouldTranslate((int)Hazard_FieldIndex.DNAMDataTypeState) ?? true))
             {
@@ -2286,9 +2375,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 FormLinkBinaryTranslation.Instance.Write(
                     writer: writer,
                     item: item.Sound);
-                FormLinkBinaryTranslation.Instance.Write(
+                FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
                     writer: writer,
-                    item: item.TaperEffectiveness);
+                    item: item.FullEffectRadius);
+                FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
+                    writer: writer,
+                    item: item.TaperWeight);
+                FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
+                    writer: writer,
+                    item: item.TaperCurse);
             }
         }
 
@@ -2424,8 +2519,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     item.Light.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
                     item.ImpactDataSet.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
                     item.Sound.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
-                    item.TaperEffectiveness.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
-                    return (int)Hazard_FieldIndex.TaperEffectiveness;
+                    item.FullEffectRadius = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
+                    item.TaperWeight = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
+                    item.TaperCurse = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
+                    return (int)Hazard_FieldIndex.TaperCurse;
                 }
                 default:
                     return Fallout4MajorRecordBinaryCreateTranslation.FillBinaryRecordTypes(
@@ -2559,10 +2656,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private bool _Sound_IsSet => _DNAMLocation.HasValue;
         public IFormLinkGetter<ISoundDescriptorGetter> Sound => _Sound_IsSet ? new FormLink<ISoundDescriptorGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(_data.Span.Slice(_SoundLocation, 0x4)))) : FormLink<ISoundDescriptorGetter>.Null;
         #endregion
-        #region TaperEffectiveness
-        private int _TaperEffectivenessLocation => _DNAMLocation!.Value + 0x28;
-        private bool _TaperEffectiveness_IsSet => _DNAMLocation.HasValue;
-        public IFormLinkGetter<ITaperEffectivenessGetter> TaperEffectiveness => _TaperEffectiveness_IsSet ? new FormLink<ITaperEffectivenessGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(_data.Span.Slice(_TaperEffectivenessLocation, 0x4)))) : FormLink<ITaperEffectivenessGetter>.Null;
+        #region FullEffectRadius
+        private int _FullEffectRadiusLocation => _DNAMLocation!.Value + 0x28;
+        private bool _FullEffectRadius_IsSet => _DNAMLocation.HasValue;
+        public Single FullEffectRadius => _FullEffectRadius_IsSet ? _data.Slice(_FullEffectRadiusLocation, 4).Float() : default;
+        #endregion
+        #region TaperWeight
+        private int _TaperWeightLocation => _DNAMLocation!.Value + 0x2C;
+        private bool _TaperWeight_IsSet => _DNAMLocation.HasValue;
+        public Single TaperWeight => _TaperWeight_IsSet ? _data.Slice(_TaperWeightLocation, 4).Float() : default;
+        #endregion
+        #region TaperCurse
+        private int _TaperCurseLocation => _DNAMLocation!.Value + 0x30;
+        private bool _TaperCurse_IsSet => _DNAMLocation.HasValue;
+        public Single TaperCurse => _TaperCurse_IsSet ? _data.Slice(_TaperCurseLocation, 4).Float() : default;
         #endregion
         partial void CustomFactoryEnd(
             OverlayStream stream,
@@ -2656,7 +2763,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case RecordTypeInts.DNAM:
                 {
                     _DNAMLocation = (stream.Position - offset) + _package.MetaData.Constants.SubConstants.TypeAndLengthLength;
-                    return (int)Hazard_FieldIndex.TaperEffectiveness;
+                    return (int)Hazard_FieldIndex.TaperCurse;
                 }
                 default:
                     return base.FillRecordType(

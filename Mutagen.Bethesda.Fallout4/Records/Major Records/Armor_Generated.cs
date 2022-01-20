@@ -4488,7 +4488,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                             reader: frame,
                             countLengthLength: 4,
                             countRecord: RecordTypes.OBTE,
-                            triggeringRecord: RecordTypes.OBTF,
+                            triggeringRecord: ObjectTemplate_Registration.TriggeringRecordTypes,
                             nullIfZero: true,
                             translationParams: translationParams,
                             transl: ObjectTemplate.TryCreateFromBinary)
@@ -4914,7 +4914,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         stream: stream,
                         package: _package,
                         countLength: 4,
-                        subrecordType: RecordTypes.OBTF,
+                        subrecordType: ObjectTemplate_Registration.TriggeringRecordTypes,
                         countType: RecordTypes.OBTE,
                         parseParams: parseParams,
                         getter: (s, p, recConv) => ObjectTemplateBinaryOverlay.ObjectTemplateFactory(new OverlayStream(s, p), p, recConv),
