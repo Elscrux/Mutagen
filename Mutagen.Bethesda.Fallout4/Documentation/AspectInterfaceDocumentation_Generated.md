@@ -28,6 +28,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Light
 - MiscItem
 - MoveableStatic
+- ObjectModTemplateItem
 - Race
 - RuleName
 - Spell
@@ -267,6 +268,8 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 ### ObjectEffect
 - INamed
 - IObjectBounded
+### ObjectModTemplateItem
+- IKeyworded
 ### ObjectTemplate
 - INamed
 ### Race

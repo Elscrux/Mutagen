@@ -11,6 +11,7 @@ using Mutagen.Bethesda.Fallout4;
 using Mutagen.Bethesda.Fallout4.Internals;
 using Mutagen.Bethesda.Internals;
 using Mutagen.Bethesda.Plugins;
+using Mutagen.Bethesda.Plugins.Aspects;
 using Mutagen.Bethesda.Plugins.Binary.Overlay;
 using Mutagen.Bethesda.Plugins.Binary.Streams;
 using Mutagen.Bethesda.Plugins.Binary.Translations;
@@ -90,19 +91,31 @@ namespace Mutagen.Bethesda.Fallout4
         #region Default
         public Boolean Default { get; set; } = default;
         #endregion
-        #region OKeywords
+        #region Keywords
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private ExtendedList<IFormLinkGetter<IKeywordGetter>> _OKeywords = new ExtendedList<IFormLinkGetter<IKeywordGetter>>();
-        public ExtendedList<IFormLinkGetter<IKeywordGetter>> OKeywords
+        private ExtendedList<IFormLinkGetter<IKeywordGetter>> _Keywords = new ExtendedList<IFormLinkGetter<IKeywordGetter>>();
+        /// <summary>
+        /// Aspects: IKeyworded&lt;IKeywordGetter&gt;
+        /// </summary>
+        public ExtendedList<IFormLinkGetter<IKeywordGetter>> Keywords
         {
-            get => this._OKeywords;
-            init => this._OKeywords = value;
+            get => this._Keywords;
+            init => this._Keywords = value;
         }
         #region Interface Members
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IReadOnlyList<IFormLinkGetter<IKeywordGetter>> IObjectModTemplateItemGetter.OKeywords => _OKeywords;
+        IReadOnlyList<IFormLinkGetter<IKeywordGetter>> IObjectModTemplateItemGetter.Keywords => _Keywords;
         #endregion
 
+        #region Aspects
+        IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? IKeywordedGetter<IKeywordGetter>.Keywords => this.Keywords;
+        IReadOnlyList<IFormLinkGetter<IKeywordCommonGetter>>? IKeywordedGetter.Keywords => this.Keywords;
+        ExtendedList<IFormLinkGetter<IKeywordGetter>>? IKeyworded<IKeywordGetter>.Keywords
+        {
+            get => this._Keywords;
+            set => this._Keywords = value ?? new();
+        }
+        #endregion
         #endregion
         #region MinLevelForRanks
         public Byte MinLevelForRanks { get; set; } = default;
@@ -170,7 +183,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Unused2 = initialValue;
                 this.AddonIndex = initialValue;
                 this.Default = initialValue;
-                this.OKeywords = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(initialValue, Enumerable.Empty<(int Index, TItem Value)>());
+                this.Keywords = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(initialValue, Enumerable.Empty<(int Index, TItem Value)>());
                 this.MinLevelForRanks = initialValue;
                 this.AltLevelsPerTier = initialValue;
                 this.Includes = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ObjectTemplateInclude.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, ObjectTemplateInclude.Mask<TItem>?>>());
@@ -185,7 +198,7 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem Unused2,
                 TItem AddonIndex,
                 TItem Default,
-                TItem OKeywords,
+                TItem Keywords,
                 TItem MinLevelForRanks,
                 TItem AltLevelsPerTier,
                 TItem Includes)
@@ -198,7 +211,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Unused2 = Unused2;
                 this.AddonIndex = AddonIndex;
                 this.Default = Default;
-                this.OKeywords = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(OKeywords, Enumerable.Empty<(int Index, TItem Value)>());
+                this.Keywords = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(Keywords, Enumerable.Empty<(int Index, TItem Value)>());
                 this.MinLevelForRanks = MinLevelForRanks;
                 this.AltLevelsPerTier = AltLevelsPerTier;
                 this.Includes = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ObjectTemplateInclude.Mask<TItem>?>>?>(Includes, Enumerable.Empty<MaskItemIndexed<TItem, ObjectTemplateInclude.Mask<TItem>?>>());
@@ -221,7 +234,7 @@ namespace Mutagen.Bethesda.Fallout4
             public TItem Unused2;
             public TItem AddonIndex;
             public TItem Default;
-            public MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>? OKeywords;
+            public MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>? Keywords;
             public TItem MinLevelForRanks;
             public TItem AltLevelsPerTier;
             public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ObjectTemplateInclude.Mask<TItem>?>>?>? Includes;
@@ -245,7 +258,7 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!object.Equals(this.Unused2, rhs.Unused2)) return false;
                 if (!object.Equals(this.AddonIndex, rhs.AddonIndex)) return false;
                 if (!object.Equals(this.Default, rhs.Default)) return false;
-                if (!object.Equals(this.OKeywords, rhs.OKeywords)) return false;
+                if (!object.Equals(this.Keywords, rhs.Keywords)) return false;
                 if (!object.Equals(this.MinLevelForRanks, rhs.MinLevelForRanks)) return false;
                 if (!object.Equals(this.AltLevelsPerTier, rhs.AltLevelsPerTier)) return false;
                 if (!object.Equals(this.Includes, rhs.Includes)) return false;
@@ -262,7 +275,7 @@ namespace Mutagen.Bethesda.Fallout4
                 hash.Add(this.Unused2);
                 hash.Add(this.AddonIndex);
                 hash.Add(this.Default);
-                hash.Add(this.OKeywords);
+                hash.Add(this.Keywords);
                 hash.Add(this.MinLevelForRanks);
                 hash.Add(this.AltLevelsPerTier);
                 hash.Add(this.Includes);
@@ -282,12 +295,12 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!eval(this.Unused2)) return false;
                 if (!eval(this.AddonIndex)) return false;
                 if (!eval(this.Default)) return false;
-                if (this.OKeywords != null)
+                if (this.Keywords != null)
                 {
-                    if (!eval(this.OKeywords.Overall)) return false;
-                    if (this.OKeywords.Specific != null)
+                    if (!eval(this.Keywords.Overall)) return false;
+                    if (this.Keywords.Specific != null)
                     {
-                        foreach (var item in this.OKeywords.Specific)
+                        foreach (var item in this.Keywords.Specific)
                         {
                             if (!eval(item.Value)) return false;
                         }
@@ -322,12 +335,12 @@ namespace Mutagen.Bethesda.Fallout4
                 if (eval(this.Unused2)) return true;
                 if (eval(this.AddonIndex)) return true;
                 if (eval(this.Default)) return true;
-                if (this.OKeywords != null)
+                if (this.Keywords != null)
                 {
-                    if (eval(this.OKeywords.Overall)) return true;
-                    if (this.OKeywords.Specific != null)
+                    if (eval(this.Keywords.Overall)) return true;
+                    if (this.Keywords.Specific != null)
                     {
-                        foreach (var item in this.OKeywords.Specific)
+                        foreach (var item in this.Keywords.Specific)
                         {
                             if (!eval(item.Value)) return false;
                         }
@@ -369,14 +382,14 @@ namespace Mutagen.Bethesda.Fallout4
                 obj.Unused2 = eval(this.Unused2);
                 obj.AddonIndex = eval(this.AddonIndex);
                 obj.Default = eval(this.Default);
-                if (OKeywords != null)
+                if (Keywords != null)
                 {
-                    obj.OKeywords = new MaskItem<R, IEnumerable<(int Index, R Value)>?>(eval(this.OKeywords.Overall), Enumerable.Empty<(int Index, R Value)>());
-                    if (OKeywords.Specific != null)
+                    obj.Keywords = new MaskItem<R, IEnumerable<(int Index, R Value)>?>(eval(this.Keywords.Overall), Enumerable.Empty<(int Index, R Value)>());
+                    if (Keywords.Specific != null)
                     {
                         var l = new List<(int Index, R Item)>();
-                        obj.OKeywords.Specific = l;
-                        foreach (var item in OKeywords.Specific.WithIndex())
+                        obj.Keywords.Specific = l;
+                        foreach (var item in Keywords.Specific.WithIndex())
                         {
                             R mask = eval(item.Item.Value);
                             l.Add((item.Index, mask));
@@ -454,17 +467,17 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         fg.AppendItem(Default, "Default");
                     }
-                    if ((printMask?.OKeywords?.Overall ?? true)
-                        && OKeywords is {} OKeywordsItem)
+                    if ((printMask?.Keywords?.Overall ?? true)
+                        && Keywords is {} KeywordsItem)
                     {
-                        fg.AppendLine("OKeywords =>");
+                        fg.AppendLine("Keywords =>");
                         fg.AppendLine("[");
                         using (new DepthWrapper(fg))
                         {
-                            fg.AppendItem(OKeywordsItem.Overall);
-                            if (OKeywordsItem.Specific != null)
+                            fg.AppendItem(KeywordsItem.Overall);
+                            if (KeywordsItem.Specific != null)
                             {
-                                foreach (var subItem in OKeywordsItem.Specific)
+                                foreach (var subItem in KeywordsItem.Specific)
                                 {
                                     fg.AppendLine("[");
                                     using (new DepthWrapper(fg))
@@ -541,7 +554,7 @@ namespace Mutagen.Bethesda.Fallout4
             public Exception? Unused2;
             public Exception? AddonIndex;
             public Exception? Default;
-            public MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>? OKeywords;
+            public MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>? Keywords;
             public Exception? MinLevelForRanks;
             public Exception? AltLevelsPerTier;
             public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ObjectTemplateInclude.ErrorMask?>>?>? Includes;
@@ -569,8 +582,8 @@ namespace Mutagen.Bethesda.Fallout4
                         return AddonIndex;
                     case ObjectModTemplateItem_FieldIndex.Default:
                         return Default;
-                    case ObjectModTemplateItem_FieldIndex.OKeywords:
-                        return OKeywords;
+                    case ObjectModTemplateItem_FieldIndex.Keywords:
+                        return Keywords;
                     case ObjectModTemplateItem_FieldIndex.MinLevelForRanks:
                         return MinLevelForRanks;
                     case ObjectModTemplateItem_FieldIndex.AltLevelsPerTier:
@@ -611,8 +624,8 @@ namespace Mutagen.Bethesda.Fallout4
                     case ObjectModTemplateItem_FieldIndex.Default:
                         this.Default = ex;
                         break;
-                    case ObjectModTemplateItem_FieldIndex.OKeywords:
-                        this.OKeywords = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ex, null);
+                    case ObjectModTemplateItem_FieldIndex.Keywords:
+                        this.Keywords = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ex, null);
                         break;
                     case ObjectModTemplateItem_FieldIndex.MinLevelForRanks:
                         this.MinLevelForRanks = ex;
@@ -657,8 +670,8 @@ namespace Mutagen.Bethesda.Fallout4
                     case ObjectModTemplateItem_FieldIndex.Default:
                         this.Default = (Exception?)obj;
                         break;
-                    case ObjectModTemplateItem_FieldIndex.OKeywords:
-                        this.OKeywords = (MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>)obj;
+                    case ObjectModTemplateItem_FieldIndex.Keywords:
+                        this.Keywords = (MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>)obj;
                         break;
                     case ObjectModTemplateItem_FieldIndex.MinLevelForRanks:
                         this.MinLevelForRanks = (Exception?)obj;
@@ -685,7 +698,7 @@ namespace Mutagen.Bethesda.Fallout4
                 if (Unused2 != null) return true;
                 if (AddonIndex != null) return true;
                 if (Default != null) return true;
-                if (OKeywords != null) return true;
+                if (Keywords != null) return true;
                 if (MinLevelForRanks != null) return true;
                 if (AltLevelsPerTier != null) return true;
                 if (Includes != null) return true;
@@ -731,16 +744,16 @@ namespace Mutagen.Bethesda.Fallout4
                 fg.AppendItem(Unused2, "Unused2");
                 fg.AppendItem(AddonIndex, "AddonIndex");
                 fg.AppendItem(Default, "Default");
-                if (OKeywords is {} OKeywordsItem)
+                if (Keywords is {} KeywordsItem)
                 {
-                    fg.AppendLine("OKeywords =>");
+                    fg.AppendLine("Keywords =>");
                     fg.AppendLine("[");
                     using (new DepthWrapper(fg))
                     {
-                        fg.AppendItem(OKeywordsItem.Overall);
-                        if (OKeywordsItem.Specific != null)
+                        fg.AppendItem(KeywordsItem.Overall);
+                        if (KeywordsItem.Specific != null)
                         {
-                            foreach (var subItem in OKeywordsItem.Specific)
+                            foreach (var subItem in KeywordsItem.Specific)
                             {
                                 fg.AppendLine("[");
                                 using (new DepthWrapper(fg))
@@ -793,7 +806,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Unused2 = this.Unused2.Combine(rhs.Unused2);
                 ret.AddonIndex = this.AddonIndex.Combine(rhs.AddonIndex);
                 ret.Default = this.Default.Combine(rhs.Default);
-                ret.OKeywords = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ExceptionExt.Combine(this.OKeywords?.Overall, rhs.OKeywords?.Overall), ExceptionExt.Combine(this.OKeywords?.Specific, rhs.OKeywords?.Specific));
+                ret.Keywords = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ExceptionExt.Combine(this.Keywords?.Overall, rhs.Keywords?.Overall), ExceptionExt.Combine(this.Keywords?.Specific, rhs.Keywords?.Specific));
                 ret.MinLevelForRanks = this.MinLevelForRanks.Combine(rhs.MinLevelForRanks);
                 ret.AltLevelsPerTier = this.AltLevelsPerTier.Combine(rhs.AltLevelsPerTier);
                 ret.Includes = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ObjectTemplateInclude.ErrorMask?>>?>(ExceptionExt.Combine(this.Includes?.Overall, rhs.Includes?.Overall), ExceptionExt.Combine(this.Includes?.Specific, rhs.Includes?.Specific));
@@ -828,7 +841,7 @@ namespace Mutagen.Bethesda.Fallout4
             public bool Unused2;
             public bool AddonIndex;
             public bool Default;
-            public bool OKeywords;
+            public bool Keywords;
             public bool MinLevelForRanks;
             public bool AltLevelsPerTier;
             public ObjectTemplateInclude.TranslationMask? Includes;
@@ -849,7 +862,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Unused2 = defaultOn;
                 this.AddonIndex = defaultOn;
                 this.Default = defaultOn;
-                this.OKeywords = defaultOn;
+                this.Keywords = defaultOn;
                 this.MinLevelForRanks = defaultOn;
                 this.AltLevelsPerTier = defaultOn;
             }
@@ -875,7 +888,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((Unused2, null));
                 ret.Add((AddonIndex, null));
                 ret.Add((Default, null));
-                ret.Add((OKeywords, null));
+                ret.Add((Keywords, null));
                 ret.Add((MinLevelForRanks, null));
                 ret.Add((AltLevelsPerTier, null));
                 ret.Add((Includes == null ? DefaultOn : !Includes.GetCrystal().CopyNothing, Includes?.GetCrystal()));
@@ -955,6 +968,7 @@ namespace Mutagen.Bethesda.Fallout4
     #region Interface
     public partial interface IObjectModTemplateItem :
         IFormLinkContainer,
+        IKeyworded<IKeywordGetter>,
         ILoquiObjectSetter<IObjectModTemplateItem>,
         IObjectModTemplateItemGetter
     {
@@ -966,7 +980,10 @@ namespace Mutagen.Bethesda.Fallout4
         new MemorySlice<Byte> Unused2 { get; set; }
         new Int16 AddonIndex { get; set; }
         new Boolean Default { get; set; }
-        new ExtendedList<IFormLinkGetter<IKeywordGetter>> OKeywords { get; }
+        /// <summary>
+        /// Aspects: IKeyworded&lt;IKeywordGetter&gt;
+        /// </summary>
+        new ExtendedList<IFormLinkGetter<IKeywordGetter>> Keywords { get; }
         new Byte MinLevelForRanks { get; set; }
         new Byte AltLevelsPerTier { get; set; }
         new ExtendedList<ObjectTemplateInclude> Includes { get; }
@@ -976,6 +993,7 @@ namespace Mutagen.Bethesda.Fallout4
         ILoquiObject,
         IBinaryItem,
         IFormLinkContainerGetter,
+        IKeywordedGetter<IKeywordGetter>,
         ILoquiObject<IObjectModTemplateItemGetter>
     {
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
@@ -993,7 +1011,12 @@ namespace Mutagen.Bethesda.Fallout4
         ReadOnlyMemorySlice<Byte> Unused2 { get; }
         Int16 AddonIndex { get; }
         Boolean Default { get; }
-        IReadOnlyList<IFormLinkGetter<IKeywordGetter>> OKeywords { get; }
+        #region Keywords
+        /// <summary>
+        /// Aspects: IKeywordedGetter&lt;IKeywordGetter&gt;
+        /// </summary>
+        IReadOnlyList<IFormLinkGetter<IKeywordGetter>> Keywords { get; }
+        #endregion
         Byte MinLevelForRanks { get; }
         Byte AltLevelsPerTier { get; }
         IReadOnlyList<IObjectTemplateIncludeGetter> Includes { get; }
@@ -1174,7 +1197,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         Unused2 = 5,
         AddonIndex = 6,
         Default = 7,
-        OKeywords = 8,
+        Keywords = 8,
         MinLevelForRanks = 9,
         AltLevelsPerTier = 10,
         Includes = 11,
@@ -1274,7 +1297,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.Unused2 = new byte[1];
             item.AddonIndex = default;
             item.Default = default;
-            item.OKeywords.Clear();
+            item.Keywords.Clear();
             item.MinLevelForRanks = default;
             item.AltLevelsPerTier = default;
             item.Includes.Clear();
@@ -1283,7 +1306,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         #region Mutagen
         public void RemapLinks(IObjectModTemplateItem obj, IReadOnlyDictionary<FormKey, FormKey> mapping)
         {
-            obj.OKeywords.RemapLinks(mapping);
+            obj.Keywords.RemapLinks(mapping);
             obj.Includes.RemapLinks(mapping);
         }
         
@@ -1342,8 +1365,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ret.Unused2 = MemoryExtensions.SequenceEqual(item.Unused2.Span, rhs.Unused2.Span);
             ret.AddonIndex = item.AddonIndex == rhs.AddonIndex;
             ret.Default = item.Default == rhs.Default;
-            ret.OKeywords = item.OKeywords.CollectionEqualsHelper(
-                rhs.OKeywords,
+            ret.Keywords = item.Keywords.CollectionEqualsHelper(
+                rhs.Keywords,
                 (l, r) => object.Equals(l, r),
                 include);
             ret.MinLevelForRanks = item.MinLevelForRanks == rhs.MinLevelForRanks;
@@ -1430,13 +1453,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 fg.AppendItem(item.Default, "Default");
             }
-            if (printMask?.OKeywords?.Overall ?? true)
+            if (printMask?.Keywords?.Overall ?? true)
             {
-                fg.AppendLine("OKeywords =>");
+                fg.AppendLine("Keywords =>");
                 fg.AppendLine("[");
                 using (new DepthWrapper(fg))
                 {
-                    foreach (var subItem in item.OKeywords)
+                    foreach (var subItem in item.Keywords)
                     {
                         fg.AppendLine("[");
                         using (new DepthWrapper(fg))
@@ -1515,9 +1538,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 if (lhs.Default != rhs.Default) return false;
             }
-            if ((crystal?.GetShouldTranslate((int)ObjectModTemplateItem_FieldIndex.OKeywords) ?? true))
+            if ((crystal?.GetShouldTranslate((int)ObjectModTemplateItem_FieldIndex.Keywords) ?? true))
             {
-                if (!lhs.OKeywords.SequenceEqualNullable(rhs.OKeywords)) return false;
+                if (!lhs.Keywords.SequenceEqualNullable(rhs.Keywords)) return false;
             }
             if ((crystal?.GetShouldTranslate((int)ObjectModTemplateItem_FieldIndex.MinLevelForRanks) ?? true))
             {
@@ -1545,7 +1568,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             hash.Add(item.Unused2);
             hash.Add(item.AddonIndex);
             hash.Add(item.Default);
-            hash.Add(item.OKeywords);
+            hash.Add(item.Keywords);
             hash.Add(item.MinLevelForRanks);
             hash.Add(item.AltLevelsPerTier);
             hash.Add(item.Includes);
@@ -1563,7 +1586,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         #region Mutagen
         public IEnumerable<IFormLinkGetter> GetContainedFormLinks(IObjectModTemplateItemGetter obj)
         {
-            foreach (var item in obj.OKeywords)
+            foreach (var item in obj.Keywords)
             {
                 yield return FormLinkInformation.Factory(item);
             }
@@ -1621,13 +1644,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 item.Default = rhs.Default;
             }
-            if ((copyMask?.GetShouldTranslate((int)ObjectModTemplateItem_FieldIndex.OKeywords) ?? true))
+            if ((copyMask?.GetShouldTranslate((int)ObjectModTemplateItem_FieldIndex.Keywords) ?? true))
             {
-                errorMask?.PushIndex((int)ObjectModTemplateItem_FieldIndex.OKeywords);
+                errorMask?.PushIndex((int)ObjectModTemplateItem_FieldIndex.Keywords);
                 try
                 {
-                    item.OKeywords.SetTo(
-                        rhs.OKeywords
+                    item.Keywords.SetTo(
+                        rhs.Keywords
                         .Select(r => (IFormLinkGetter<IKeywordGetter>)new FormLink<IKeywordGetter>(r.FormKey)));
                 }
                 catch (Exception ex)
@@ -1782,7 +1805,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             writer.Write(item.Default);
             Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IFormLinkGetter<IKeywordGetter>>.Instance.Write(
                 writer: writer,
-                items: item.OKeywords,
+                items: item.Keywords,
+                countLengthLength: 1,
                 transl: (MutagenWriter subWriter, IFormLinkGetter<IKeywordGetter> subItem, TypedWriteParams? conv) =>
                 {
                     FormLinkBinaryTranslation.Instance.Write(
@@ -1850,8 +1874,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.Unused2 = ByteArrayBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: frame.SpawnWithLength(1));
             item.AddonIndex = frame.ReadInt16();
             item.Default = frame.ReadBoolean();
-            item.OKeywords.SetTo(
+            item.Keywords.SetTo(
                 Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IFormLinkGetter<IKeywordGetter>>.Instance.Parse(
+                    amount: frame.ReadUInt8(),
                     reader: frame,
                     transl: FormLinkBinaryTranslation.Instance.Parse));
             item.MinLevelForRanks = frame.ReadUInt8();
@@ -1934,14 +1959,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public ReadOnlyMemorySlice<Byte> Unused2 => _data.Span.Slice(0xB, 0x1).ToArray();
         public Int16 AddonIndex => BinaryPrimitives.ReadInt16LittleEndian(_data.Slice(0xC, 0x2));
         public Boolean Default => _data.Slice(0xE, 0x1)[0] == 1;
-        #region OKeywords
-        public IReadOnlyList<IFormLinkGetter<IKeywordGetter>> OKeywords => BinaryOverlayList.FactoryByStartIndex<IFormLinkGetter<IKeywordGetter>>(_data.Slice(0xF), _package, 4, (s, p) => new FormLink<IKeywordGetter>(FormKey.Factory(p.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(s))));
-        protected int OKeywordsEndingPos;
+        #region Keywords
+        public IReadOnlyList<IFormLinkGetter<IKeywordGetter>> Keywords => BinaryOverlayList.FactoryByCountLength<IFormLinkGetter<IKeywordGetter>>(_data.Slice(0xF), _package, 4, countLength: 1, (s, p) => new FormLink<IKeywordGetter>(FormKey.Factory(p.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(s))));
+        protected int KeywordsEndingPos;
+        IReadOnlyList<IFormLinkGetter<IKeywordCommonGetter>>? IKeywordedGetter.Keywords => this.Keywords;
         #endregion
-        public Byte MinLevelForRanks => _data.Span[OKeywordsEndingPos];
-        public Byte AltLevelsPerTier => _data.Span[OKeywordsEndingPos + 0x1];
+        public Byte MinLevelForRanks => _data.Span[KeywordsEndingPos];
+        public Byte AltLevelsPerTier => _data.Span[KeywordsEndingPos + 0x1];
         #region Includes
-        public IReadOnlyList<IObjectTemplateIncludeGetter> Includes => BinaryOverlayList.FactoryByLazyParse<ObjectTemplateIncludeBinaryOverlay>(_data.Slice(OKeywordsEndingPos + 0x2), _package, (s, p) => ObjectTemplateIncludeBinaryOverlay.ObjectTemplateIncludeFactory(s, p));
+        public IReadOnlyList<IObjectTemplateIncludeGetter> Includes => BinaryOverlayList.FactoryByLazyParse<ObjectTemplateIncludeBinaryOverlay>(_data.Slice(KeywordsEndingPos + 0x2), _package, (s, p) => ObjectTemplateIncludeBinaryOverlay.ObjectTemplateIncludeFactory(s, p));
         protected int IncludesEndingPos;
         #endregion
         partial void CustomFactoryEnd(
@@ -1970,7 +1996,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 package: package);
             var finalPos = checked((int)(stream.Position + stream.GetSubrecord().TotalLength));
             int offset = stream.Position + package.MetaData.Constants.SubConstants.TypeAndLengthLength;
-            ret.OKeywordsEndingPos = ret._data.Length;
+            ret.KeywordsEndingPos = 0xF + ret._data[0xF] * 4 + 1;
             ret.IncludesEndingPos = ret._data.Length;
             ret.CustomFactoryEnd(
                 stream: stream,

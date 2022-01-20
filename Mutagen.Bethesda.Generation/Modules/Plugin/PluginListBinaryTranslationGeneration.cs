@@ -174,6 +174,9 @@ namespace Mutagen.Bethesda.Generation.Modules.Plugin
                         byte countLen = (byte)list.CustomData[CounterByteLength];
                         switch (countLen)
                         {
+                            case 1:
+                                args.Add("countLengthLength: 1");
+                                break;
                             case 2:
                                 args.Add("countLengthLength: 2");
                                 break;
@@ -378,6 +381,9 @@ namespace Mutagen.Bethesda.Generation.Modules.Plugin
                                 byte countLen = (byte)list.CustomData[CounterByteLength];
                                 switch (countLen)
                                 {
+                                    case 1:
+                                        args.Add("amount: frame.ReadUInt8()");
+                                        break;
                                     case 2:
                                         args.Add("amount: frame.ReadUInt16()");
                                         break;
@@ -1079,23 +1085,27 @@ namespace Mutagen.Bethesda.Generation.Modules.Plugin
                 case ListBinaryType.PrependCount:
                     {
                         var len = (byte)list.CustomData[CounterByteLength];
+                        var accessorData = $"ret._data";
                         string readStr;
                         switch (len)
                         {
                             case 0:
                                 return;
+                            case 1:
+                                readStr = $"{accessorData}[{passedLengthAccessor ?? "0"}]";
+                                break;
                             case 2:
-                                readStr = $"ReadUInt16LittleEndian";
+                                readStr = $"BinaryPrimitives.ReadUInt16LittleEndian(ret._data{(passedLengthAccessor == null ? null : $".Slice({passedLengthAccessor})")})";
                                 break;
                             case 4:
-                                readStr = $"ReadInt32LittleEndian";
+                                readStr = $"BinaryPrimitives.ReadInt32LittleEndian(ret._data{(passedLengthAccessor == null ? null : $".Slice({passedLengthAccessor})")})";
                                 break;
                             default:
                                 throw new NotImplementedException();
                         }
                         if (subExpLen.HasValue)
                         {
-                            fg.AppendLine($"ret.{typeGen.Name}EndingPos = {(passedLengthAccessor == null ? null : $"{passedLengthAccessor} + ")}BinaryPrimitives.{readStr}(ret._data{(passedLengthAccessor == null ? null : $".Slice({passedLengthAccessor})")}) * {subExpLen.Value} + {len};");
+                            fg.AppendLine($"ret.{typeGen.Name}EndingPos = {(passedLengthAccessor == null ? null : $"{passedLengthAccessor} + ")}{readStr} * {subExpLen.Value} + {len};");
                         }
                         else if (objGen.Fields.Last() != typeGen)
                         {
