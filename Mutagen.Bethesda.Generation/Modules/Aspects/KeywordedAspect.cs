@@ -1,5 +1,6 @@
 using Loqui.Generation;
 using System.Collections.Generic;
+using Loqui;
 
 namespace Mutagen.Bethesda.Generation.Modules.Aspects
 {
@@ -14,6 +15,15 @@ namespace Mutagen.Bethesda.Generation.Modules.Aspects
                 {
                     fg.AppendLine("IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? IKeywordedGetter<IKeywordGetter>.Keywords => this.Keywords;");
                     fg.AppendLine("IReadOnlyList<IFormLinkGetter<IKeywordCommonGetter>>? IKeywordedGetter.Keywords => this.Keywords;");
+                    if (!tg.Nullable)
+                    {
+                        fg.AppendLine("ExtendedList<IFormLinkGetter<IKeywordGetter>>? IKeyworded<IKeywordGetter>.Keywords");
+                        using (new BraceWrapper(fg))
+                        {
+                            fg.AppendLine($"get => this._Keywords;");
+                            fg.AppendLine($"set => this._Keywords = value ?? new();");
+                        }
+                    }
                 }),
                 new(LoquiInterfaceType.IGetter, "Keywords", (o, tg, fg) =>
                 {
