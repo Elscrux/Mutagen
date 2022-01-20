@@ -53,9 +53,7 @@ namespace Mutagen.Bethesda.Fallout4
         #endregion
 
         #region EditorOnly
-        public String? EditorOnly { get; set; }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        String? IObjectTemplateGetter.EditorOnly => this.EditorOnly;
+        public Boolean EditorOnly { get; set; } = default;
         #endregion
         #region Name
         /// <summary>
@@ -477,6 +475,7 @@ namespace Mutagen.Bethesda.Fallout4
         #endregion
 
         #region Mutagen
+        public static readonly RecordType GrupRecordType = ObjectTemplate_Registration.TriggeringRecordType;
         public IEnumerable<IFormLinkGetter> ContainedFormLinks => ObjectTemplateCommon.Instance.GetContainedFormLinks(this);
         public void RemapLinks(IReadOnlyDictionary<FormKey, FormKey> mapping) => ObjectTemplateSetterCommon.Instance.RemapLinks(this, mapping);
         #endregion
@@ -548,7 +547,7 @@ namespace Mutagen.Bethesda.Fallout4
         ITranslatedNamed,
         ITranslatedNamedRequired
     {
-        new String? EditorOnly { get; set; }
+        new Boolean EditorOnly { get; set; }
         /// <summary>
         /// Aspects: INamed, INamedRequired, ITranslatedNamed, ITranslatedNamedRequired
         /// </summary>
@@ -573,7 +572,7 @@ namespace Mutagen.Bethesda.Fallout4
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         object CommonSetterTranslationInstance();
         static ILoquiRegistration StaticRegistration => ObjectTemplate_Registration.Instance;
-        String? EditorOnly { get; }
+        Boolean EditorOnly { get; }
         #region Name
         /// <summary>
         /// Aspects: INamedGetter, INamedRequiredGetter, ITranslatedNamedGetter, ITranslatedNamedRequiredGetter
@@ -798,19 +797,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public static readonly Type? GenericRegistrationType = null;
 
-        public static ICollectionGetter<RecordType> TriggeringRecordTypes => _TriggeringRecordTypes.Value;
-        private static readonly Lazy<ICollectionGetter<RecordType>> _TriggeringRecordTypes = new Lazy<ICollectionGetter<RecordType>>(() =>
-        {
-            return new CollectionGetterWrapper<RecordType>(
-                new HashSet<RecordType>(
-                    new RecordType[]
-                    {
-                        RecordTypes.OBTF,
-                        RecordTypes.FULL,
-                        RecordTypes.OBTS
-                    })
-            );
-        });
+        public static readonly RecordType TriggeringRecordType = RecordTypes.OBTF;
         public static readonly Type BinaryWriteTranslation = typeof(ObjectTemplateBinaryWriteTranslation);
         #region Interface
         ProtocolKey ILoquiRegistration.ProtocolKey => ProtocolKey;
@@ -908,7 +895,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             EqualsMaskHelper.Include include = EqualsMaskHelper.Include.All)
         {
             if (rhs == null) return;
-            ret.EditorOnly = string.Equals(item.EditorOnly, rhs.EditorOnly);
+            ret.EditorOnly = item.EditorOnly == rhs.EditorOnly;
             ret.Name = object.Equals(item.Name, rhs.Name);
             ret.ObjectModTemplateItem = EqualsMaskHelper.EqualsHelper(
                 item.ObjectModTemplateItem,
@@ -961,10 +948,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             FileGeneration fg,
             ObjectTemplate.Mask<bool>? printMask = null)
         {
-            if ((printMask?.EditorOnly ?? true)
-                && item.EditorOnly is {} EditorOnlyItem)
+            if (printMask?.EditorOnly ?? true)
             {
-                fg.AppendItem(EditorOnlyItem, "EditorOnly");
+                fg.AppendItem(item.EditorOnly, "EditorOnly");
             }
             if ((printMask?.Name ?? true)
                 && item.Name is {} NameItem)
@@ -987,7 +973,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             if (!EqualsMaskHelper.RefEquality(lhs, rhs, out var isEqual)) return isEqual;
             if ((crystal?.GetShouldTranslate((int)ObjectTemplate_FieldIndex.EditorOnly) ?? true))
             {
-                if (!string.Equals(lhs.EditorOnly, rhs.EditorOnly)) return false;
+                if (lhs.EditorOnly != rhs.EditorOnly) return false;
             }
             if ((crystal?.GetShouldTranslate((int)ObjectTemplate_FieldIndex.Name) ?? true))
             {
@@ -1007,10 +993,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public virtual int GetHashCode(IObjectTemplateGetter item)
         {
             var hash = new HashCode();
-            if (item.EditorOnly is {} EditorOnlyitem)
-            {
-                hash.Add(EditorOnlyitem);
-            }
+            hash.Add(item.EditorOnly);
             if (item.Name is {} Nameitem)
             {
                 hash.Add(Nameitem);
@@ -1189,11 +1172,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             MutagenWriter writer,
             TypedWriteParams? translationParams)
         {
-            StringBinaryTranslation.Instance.WriteNullable(
+            BooleanBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.WriteAsMarker(
                 writer: writer,
                 item: item.EditorOnly,
-                header: translationParams.ConvertToCustom(RecordTypes.OBTF),
-                binaryType: StringBinaryType.NullTerminate);
+                header: translationParams.ConvertToCustom(RecordTypes.OBTF));
             StringBinaryTranslation.Instance.WriteNullable(
                 writer: writer,
                 item: item.Name,
@@ -1207,7 +1189,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     writer: writer,
                     translationParams: translationParams);
             }
-            using (HeaderExport.Subrecord(writer, RecordTypes.STOP)) { } // End Marker
         }
 
         public void Write(
@@ -1259,15 +1240,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case RecordTypeInts.OBTF:
                 {
                     if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)ObjectTemplate_FieldIndex.EditorOnly) return ParseResult.Stop;
-                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
-                    item.EditorOnly = StringBinaryTranslation.Instance.Parse(
-                        reader: frame.SpawnWithLength(contentLength),
-                        stringBinaryType: StringBinaryType.NullTerminate);
+                    item.EditorOnly = true;
                     return (int)ObjectTemplate_FieldIndex.EditorOnly;
                 }
                 case RecordTypeInts.FULL:
                 {
-                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)ObjectTemplate_FieldIndex.Name) return ParseResult.Stop;
                     frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
                     item.Name = StringBinaryTranslation.Instance.Parse(
                         reader: frame.SpawnWithLength(contentLength),
@@ -1277,14 +1254,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.OBTS:
                 {
-                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)ObjectTemplate_FieldIndex.ObjectModTemplateItem) return ParseResult.Stop;
                     item.ObjectModTemplateItem = Mutagen.Bethesda.Fallout4.ObjectModTemplateItem.CreateFromBinary(frame: frame);
                     return (int)ObjectTemplate_FieldIndex.ObjectModTemplateItem;
-                }
-                case RecordTypeInts.STOP: // End Marker
-                {
-                    frame.ReadSubrecordFrame();
-                    return ParseResult.Stop;
                 }
                 default:
                     return ParseResult.Stop;
@@ -1357,7 +1328,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         #region EditorOnly
         private int? _EditorOnlyLocation;
-        public String? EditorOnly => _EditorOnlyLocation.HasValue ? BinaryStringUtility.ProcessWholeToZString(HeaderTranslation.ExtractSubrecordMemory(_data, _EditorOnlyLocation.Value, _package.MetaData.Constants)) : default(string?);
+        public Boolean EditorOnly => _EditorOnlyLocation.HasValue ? true : default;
         #endregion
         #region Name
         private int? _NameLocation;
@@ -1440,20 +1411,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.FULL:
                 {
-                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)ObjectTemplate_FieldIndex.Name) return ParseResult.Stop;
                     _NameLocation = (stream.Position - offset);
                     return (int)ObjectTemplate_FieldIndex.Name;
                 }
                 case RecordTypeInts.OBTS:
                 {
-                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)ObjectTemplate_FieldIndex.ObjectModTemplateItem) return ParseResult.Stop;
                     _ObjectModTemplateItemLocation = new RangeInt32((stream.Position - offset), finalPos - offset);
                     return (int)ObjectTemplate_FieldIndex.ObjectModTemplateItem;
-                }
-                case RecordTypeInts.STOP: // End Marker
-                {
-                    stream.ReadSubrecordFrame();
-                    return ParseResult.Stop;
                 }
                 default:
                     return ParseResult.Stop;

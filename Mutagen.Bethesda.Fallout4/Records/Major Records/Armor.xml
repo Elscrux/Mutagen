@@ -61,6 +61,7 @@
 				<FormLink refName="Keyword" />
 			</List>
 			<RefList name="ObjectTemplates" counterRecType="OBTE" nullIfCounterZero="True" refName="ObjectTemplate" />
+			<ByteArray name="EndMarker" recordType="STOP" />
 		</Fields>
 		<LinkInterface>IItem</LinkInterface>
 		<LinkInterface>IOutfitTarget</LinkInterface>

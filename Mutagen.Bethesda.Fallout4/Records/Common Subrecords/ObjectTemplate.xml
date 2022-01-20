@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="us-ascii"?>
 <Loqui xmlns="http://tempuri.org/LoquiSource.xsd">
-  <Object name="ObjectTemplate" objType="Subrecord" endMarkerType="STOP" GUID="12f3b2da-acbc-44d1-b314-70bd38de7be0" ID="228">
+  <Object name="ObjectTemplate" objType="Subrecord" GUID="12f3b2da-acbc-44d1-b314-70bd38de7be0" ID="228">
     <Fields>
-      <String name="EditorOnly" recordType="OBTF" nullable="True" />
+	  <Bool name="EditorOnly" recordType="OBTF" boolAsMarker="true" />
       <String name="Name" recordType="FULL" translated="Normal" />
       <RefDirect name="ObjectModTemplateItem" refName="ObjectModTemplateItem" />
     </Fields>
