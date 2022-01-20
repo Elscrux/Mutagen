@@ -1783,6 +1783,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IFormLinkGetter<IKeywordGetter>>.Instance.Write(
                 writer: writer,
                 items: item.OKeywords,
+                countLengthLength: 1,
                 transl: (MutagenWriter subWriter, IFormLinkGetter<IKeywordGetter> subItem, TypedWriteParams? conv) =>
                 {
                     FormLinkBinaryTranslation.Instance.Write(
@@ -1852,6 +1853,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.Default = frame.ReadBoolean();
             item.OKeywords.SetTo(
                 Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IFormLinkGetter<IKeywordGetter>>.Instance.Parse(
+                    amount: frame.ReadUInt8(),
                     reader: frame,
                     transl: FormLinkBinaryTranslation.Instance.Parse));
             item.MinLevelForRanks = frame.ReadUInt8();
@@ -1935,7 +1937,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public Int16 AddonIndex => BinaryPrimitives.ReadInt16LittleEndian(_data.Slice(0xC, 0x2));
         public Boolean Default => _data.Slice(0xE, 0x1)[0] == 1;
         #region OKeywords
-        public IReadOnlyList<IFormLinkGetter<IKeywordGetter>> OKeywords => BinaryOverlayList.FactoryByStartIndex<IFormLinkGetter<IKeywordGetter>>(_data.Slice(0xF), _package, 4, (s, p) => new FormLink<IKeywordGetter>(FormKey.Factory(p.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(s))));
+        public IReadOnlyList<IFormLinkGetter<IKeywordGetter>> OKeywords => BinaryOverlayList.FactoryByCountLength<IFormLinkGetter<IKeywordGetter>>(_data.Slice(0xF), _package, 4, countLength: 1, (s, p) => new FormLink<IKeywordGetter>(FormKey.Factory(p.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(s))));
         protected int OKeywordsEndingPos;
         #endregion
         public Byte MinLevelForRanks => _data.Span[OKeywordsEndingPos];
@@ -1970,7 +1972,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 package: package);
             var finalPos = checked((int)(stream.Position + stream.GetSubrecord().TotalLength));
             int offset = stream.Position + package.MetaData.Constants.SubConstants.TypeAndLengthLength;
-            ret.OKeywordsEndingPos = ret._data.Length;
+            ret.OKeywordsEndingPos = 0xF + ret._data[0xF] * 4 + 1;
             ret.IncludesEndingPos = ret._data.Length;
             ret.CustomFactoryEnd(
                 stream: stream,
