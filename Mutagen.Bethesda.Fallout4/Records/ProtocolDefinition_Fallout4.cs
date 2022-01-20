@@ -214,6 +214,14 @@ namespace Loqui
             LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.ObjectModification_Registration.Instance);
             LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.IdleAnimation_Registration.Instance);
             LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.IdleMarker_Registration.Instance);
+            LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.CollisionLayer_Registration.Instance);
+            LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.Projectile_Registration.Instance);
+            LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.Weapon_Registration.Instance);
+            LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.ImageSpaceAdapter_Registration.Instance);
+            LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.KeyFrame_Registration.Instance);
+            LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.ColorFrame_Registration.Instance);
+            LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.Hazard_Registration.Instance);
+            LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.TaperEffectiveness_Registration.Instance);
         }
     }
 }

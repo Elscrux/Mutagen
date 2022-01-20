@@ -321,6 +321,30 @@ namespace Mutagen.Bethesda.Fallout4
         }
 
         /// <summary>
+        /// Scope a load order query to CollisionLayer
+        /// </summary>
+        /// <param name="listings">ModListings to query</param>
+        /// <returns>A typed object to do further queries on CollisionLayer</returns>
+        public static TopLevelTypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, ICollisionLayer, ICollisionLayerGetter> CollisionLayer(this IEnumerable<IModListingGetter<IFallout4ModGetter>> listings)
+        {
+            return new TopLevelTypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, ICollisionLayer, ICollisionLayerGetter>(
+                (bool includeDeletedRecords) => listings.WinningOverrides<ICollisionLayerGetter>(includeDeletedRecords: includeDeletedRecords),
+                (ILinkCache linkCache, bool includeDeletedRecords) => listings.WinningOverrideContexts<IFallout4Mod, IFallout4ModGetter, ICollisionLayer, ICollisionLayerGetter>(linkCache, includeDeletedRecords: includeDeletedRecords));
+        }
+
+        /// <summary>
+        /// Scope a load order query to CollisionLayer
+        /// </summary>
+        /// <param name="mods">Mods to query</param>
+        /// <returns>A typed object to do further queries on CollisionLayer</returns>
+        public static TopLevelTypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, ICollisionLayer, ICollisionLayerGetter> CollisionLayer(this IEnumerable<IFallout4ModGetter> mods)
+        {
+            return new TopLevelTypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, ICollisionLayer, ICollisionLayerGetter>(
+                (bool includeDeletedRecords) => mods.WinningOverrides<ICollisionLayerGetter>(includeDeletedRecords: includeDeletedRecords),
+                (ILinkCache linkCache, bool includeDeletedRecords) => mods.WinningOverrideContexts<IFallout4Mod, IFallout4ModGetter, ICollisionLayer, ICollisionLayerGetter>(linkCache, includeDeletedRecords: includeDeletedRecords));
+        }
+
+        /// <summary>
         /// Scope a load order query to ColorRecord
         /// </summary>
         /// <param name="listings">ModListings to query</param>
@@ -1017,6 +1041,30 @@ namespace Mutagen.Bethesda.Fallout4
         }
 
         /// <summary>
+        /// Scope a load order query to Hazard
+        /// </summary>
+        /// <param name="listings">ModListings to query</param>
+        /// <returns>A typed object to do further queries on Hazard</returns>
+        public static TopLevelTypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IHazard, IHazardGetter> Hazard(this IEnumerable<IModListingGetter<IFallout4ModGetter>> listings)
+        {
+            return new TopLevelTypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IHazard, IHazardGetter>(
+                (bool includeDeletedRecords) => listings.WinningOverrides<IHazardGetter>(includeDeletedRecords: includeDeletedRecords),
+                (ILinkCache linkCache, bool includeDeletedRecords) => listings.WinningOverrideContexts<IFallout4Mod, IFallout4ModGetter, IHazard, IHazardGetter>(linkCache, includeDeletedRecords: includeDeletedRecords));
+        }
+
+        /// <summary>
+        /// Scope a load order query to Hazard
+        /// </summary>
+        /// <param name="mods">Mods to query</param>
+        /// <returns>A typed object to do further queries on Hazard</returns>
+        public static TopLevelTypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IHazard, IHazardGetter> Hazard(this IEnumerable<IFallout4ModGetter> mods)
+        {
+            return new TopLevelTypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IHazard, IHazardGetter>(
+                (bool includeDeletedRecords) => mods.WinningOverrides<IHazardGetter>(includeDeletedRecords: includeDeletedRecords),
+                (ILinkCache linkCache, bool includeDeletedRecords) => mods.WinningOverrideContexts<IFallout4Mod, IFallout4ModGetter, IHazard, IHazardGetter>(linkCache, includeDeletedRecords: includeDeletedRecords));
+        }
+
+        /// <summary>
         /// Scope a load order query to HeadPart
         /// </summary>
         /// <param name="listings">ModListings to query</param>
@@ -1045,9 +1093,9 @@ namespace Mutagen.Bethesda.Fallout4
         /// </summary>
         /// <param name="listings">ModListings to query</param>
         /// <returns>A typed object to do further queries on IdleAnimation</returns>
-        public static TypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IIdleAnimation, IIdleAnimationGetter> IdleAnimation(this IEnumerable<IModListingGetter<IFallout4ModGetter>> listings)
+        public static TopLevelTypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IIdleAnimation, IIdleAnimationGetter> IdleAnimation(this IEnumerable<IModListingGetter<IFallout4ModGetter>> listings)
         {
-            return new TypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IIdleAnimation, IIdleAnimationGetter>(
+            return new TopLevelTypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IIdleAnimation, IIdleAnimationGetter>(
                 (bool includeDeletedRecords) => listings.WinningOverrides<IIdleAnimationGetter>(includeDeletedRecords: includeDeletedRecords),
                 (ILinkCache linkCache, bool includeDeletedRecords) => listings.WinningOverrideContexts<IFallout4Mod, IFallout4ModGetter, IIdleAnimation, IIdleAnimationGetter>(linkCache, includeDeletedRecords: includeDeletedRecords));
         }
@@ -1057,9 +1105,9 @@ namespace Mutagen.Bethesda.Fallout4
         /// </summary>
         /// <param name="mods">Mods to query</param>
         /// <returns>A typed object to do further queries on IdleAnimation</returns>
-        public static TypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IIdleAnimation, IIdleAnimationGetter> IdleAnimation(this IEnumerable<IFallout4ModGetter> mods)
+        public static TopLevelTypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IIdleAnimation, IIdleAnimationGetter> IdleAnimation(this IEnumerable<IFallout4ModGetter> mods)
         {
-            return new TypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IIdleAnimation, IIdleAnimationGetter>(
+            return new TopLevelTypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IIdleAnimation, IIdleAnimationGetter>(
                 (bool includeDeletedRecords) => mods.WinningOverrides<IIdleAnimationGetter>(includeDeletedRecords: includeDeletedRecords),
                 (ILinkCache linkCache, bool includeDeletedRecords) => mods.WinningOverrideContexts<IFallout4Mod, IFallout4ModGetter, IIdleAnimation, IIdleAnimationGetter>(linkCache, includeDeletedRecords: includeDeletedRecords));
         }
@@ -1069,9 +1117,9 @@ namespace Mutagen.Bethesda.Fallout4
         /// </summary>
         /// <param name="listings">ModListings to query</param>
         /// <returns>A typed object to do further queries on IdleMarker</returns>
-        public static TypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IIdleMarker, IIdleMarkerGetter> IdleMarker(this IEnumerable<IModListingGetter<IFallout4ModGetter>> listings)
+        public static TopLevelTypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IIdleMarker, IIdleMarkerGetter> IdleMarker(this IEnumerable<IModListingGetter<IFallout4ModGetter>> listings)
         {
-            return new TypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IIdleMarker, IIdleMarkerGetter>(
+            return new TopLevelTypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IIdleMarker, IIdleMarkerGetter>(
                 (bool includeDeletedRecords) => listings.WinningOverrides<IIdleMarkerGetter>(includeDeletedRecords: includeDeletedRecords),
                 (ILinkCache linkCache, bool includeDeletedRecords) => listings.WinningOverrideContexts<IFallout4Mod, IFallout4ModGetter, IIdleMarker, IIdleMarkerGetter>(linkCache, includeDeletedRecords: includeDeletedRecords));
         }
@@ -1081,11 +1129,35 @@ namespace Mutagen.Bethesda.Fallout4
         /// </summary>
         /// <param name="mods">Mods to query</param>
         /// <returns>A typed object to do further queries on IdleMarker</returns>
-        public static TypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IIdleMarker, IIdleMarkerGetter> IdleMarker(this IEnumerable<IFallout4ModGetter> mods)
+        public static TopLevelTypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IIdleMarker, IIdleMarkerGetter> IdleMarker(this IEnumerable<IFallout4ModGetter> mods)
         {
-            return new TypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IIdleMarker, IIdleMarkerGetter>(
+            return new TopLevelTypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IIdleMarker, IIdleMarkerGetter>(
                 (bool includeDeletedRecords) => mods.WinningOverrides<IIdleMarkerGetter>(includeDeletedRecords: includeDeletedRecords),
                 (ILinkCache linkCache, bool includeDeletedRecords) => mods.WinningOverrideContexts<IFallout4Mod, IFallout4ModGetter, IIdleMarker, IIdleMarkerGetter>(linkCache, includeDeletedRecords: includeDeletedRecords));
+        }
+
+        /// <summary>
+        /// Scope a load order query to ImageSpaceAdapter
+        /// </summary>
+        /// <param name="listings">ModListings to query</param>
+        /// <returns>A typed object to do further queries on ImageSpaceAdapter</returns>
+        public static TopLevelTypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IImageSpaceAdapter, IImageSpaceAdapterGetter> ImageSpaceAdapter(this IEnumerable<IModListingGetter<IFallout4ModGetter>> listings)
+        {
+            return new TopLevelTypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IImageSpaceAdapter, IImageSpaceAdapterGetter>(
+                (bool includeDeletedRecords) => listings.WinningOverrides<IImageSpaceAdapterGetter>(includeDeletedRecords: includeDeletedRecords),
+                (ILinkCache linkCache, bool includeDeletedRecords) => listings.WinningOverrideContexts<IFallout4Mod, IFallout4ModGetter, IImageSpaceAdapter, IImageSpaceAdapterGetter>(linkCache, includeDeletedRecords: includeDeletedRecords));
+        }
+
+        /// <summary>
+        /// Scope a load order query to ImageSpaceAdapter
+        /// </summary>
+        /// <param name="mods">Mods to query</param>
+        /// <returns>A typed object to do further queries on ImageSpaceAdapter</returns>
+        public static TopLevelTypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IImageSpaceAdapter, IImageSpaceAdapterGetter> ImageSpaceAdapter(this IEnumerable<IFallout4ModGetter> mods)
+        {
+            return new TopLevelTypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IImageSpaceAdapter, IImageSpaceAdapterGetter>(
+                (bool includeDeletedRecords) => mods.WinningOverrides<IImageSpaceAdapterGetter>(includeDeletedRecords: includeDeletedRecords),
+                (ILinkCache linkCache, bool includeDeletedRecords) => mods.WinningOverrideContexts<IFallout4Mod, IFallout4ModGetter, IImageSpaceAdapter, IImageSpaceAdapterGetter>(linkCache, includeDeletedRecords: includeDeletedRecords));
         }
 
         /// <summary>
@@ -1761,6 +1833,30 @@ namespace Mutagen.Bethesda.Fallout4
         }
 
         /// <summary>
+        /// Scope a load order query to Projectile
+        /// </summary>
+        /// <param name="listings">ModListings to query</param>
+        /// <returns>A typed object to do further queries on Projectile</returns>
+        public static TopLevelTypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IProjectile, IProjectileGetter> Projectile(this IEnumerable<IModListingGetter<IFallout4ModGetter>> listings)
+        {
+            return new TopLevelTypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IProjectile, IProjectileGetter>(
+                (bool includeDeletedRecords) => listings.WinningOverrides<IProjectileGetter>(includeDeletedRecords: includeDeletedRecords),
+                (ILinkCache linkCache, bool includeDeletedRecords) => listings.WinningOverrideContexts<IFallout4Mod, IFallout4ModGetter, IProjectile, IProjectileGetter>(linkCache, includeDeletedRecords: includeDeletedRecords));
+        }
+
+        /// <summary>
+        /// Scope a load order query to Projectile
+        /// </summary>
+        /// <param name="mods">Mods to query</param>
+        /// <returns>A typed object to do further queries on Projectile</returns>
+        public static TopLevelTypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IProjectile, IProjectileGetter> Projectile(this IEnumerable<IFallout4ModGetter> mods)
+        {
+            return new TopLevelTypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IProjectile, IProjectileGetter>(
+                (bool includeDeletedRecords) => mods.WinningOverrides<IProjectileGetter>(includeDeletedRecords: includeDeletedRecords),
+                (ILinkCache linkCache, bool includeDeletedRecords) => mods.WinningOverrideContexts<IFallout4Mod, IFallout4ModGetter, IProjectile, IProjectileGetter>(linkCache, includeDeletedRecords: includeDeletedRecords));
+        }
+
+        /// <summary>
         /// Scope a load order query to Quest
         /// </summary>
         /// <param name="listings">ModListings to query</param>
@@ -2169,6 +2265,30 @@ namespace Mutagen.Bethesda.Fallout4
         }
 
         /// <summary>
+        /// Scope a load order query to Weapon
+        /// </summary>
+        /// <param name="listings">ModListings to query</param>
+        /// <returns>A typed object to do further queries on Weapon</returns>
+        public static TypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IWeapon, IWeaponGetter> Weapon(this IEnumerable<IModListingGetter<IFallout4ModGetter>> listings)
+        {
+            return new TypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IWeapon, IWeaponGetter>(
+                (bool includeDeletedRecords) => listings.WinningOverrides<IWeaponGetter>(includeDeletedRecords: includeDeletedRecords),
+                (ILinkCache linkCache, bool includeDeletedRecords) => listings.WinningOverrideContexts<IFallout4Mod, IFallout4ModGetter, IWeapon, IWeaponGetter>(linkCache, includeDeletedRecords: includeDeletedRecords));
+        }
+
+        /// <summary>
+        /// Scope a load order query to Weapon
+        /// </summary>
+        /// <param name="mods">Mods to query</param>
+        /// <returns>A typed object to do further queries on Weapon</returns>
+        public static TypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IWeapon, IWeaponGetter> Weapon(this IEnumerable<IFallout4ModGetter> mods)
+        {
+            return new TypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IWeapon, IWeaponGetter>(
+                (bool includeDeletedRecords) => mods.WinningOverrides<IWeaponGetter>(includeDeletedRecords: includeDeletedRecords),
+                (ILinkCache linkCache, bool includeDeletedRecords) => mods.WinningOverrideContexts<IFallout4Mod, IFallout4ModGetter, IWeapon, IWeaponGetter>(linkCache, includeDeletedRecords: includeDeletedRecords));
+        }
+
+        /// <summary>
         /// Scope a load order query to Weather
         /// </summary>
         /// <param name="listings">ModListings to query</param>
@@ -2505,6 +2625,30 @@ namespace Mutagen.Bethesda.Fallout4
             return new TypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IRegionTarget, IRegionTargetGetter>(
                 (bool includeDeletedRecords) => mods.WinningOverrides<IRegionTargetGetter>(includeDeletedRecords: includeDeletedRecords),
                 (ILinkCache linkCache, bool includeDeletedRecords) => mods.WinningOverrideContexts<IFallout4Mod, IFallout4ModGetter, IRegionTarget, IRegionTargetGetter>(linkCache, includeDeletedRecords: includeDeletedRecords));
+        }
+
+        /// <summary>
+        /// Scope a load order query to IPlacedTrapTarget
+        /// </summary>
+        /// <param name="listings">ModListings to query</param>
+        /// <returns>A typed object to do further queries on IPlacedTrapTarget</returns>
+        public static TypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IPlacedTrapTarget, IPlacedTrapTargetGetter> IPlacedTrapTarget(this IEnumerable<IModListingGetter<IFallout4ModGetter>> listings)
+        {
+            return new TypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IPlacedTrapTarget, IPlacedTrapTargetGetter>(
+                (bool includeDeletedRecords) => listings.WinningOverrides<IPlacedTrapTargetGetter>(includeDeletedRecords: includeDeletedRecords),
+                (ILinkCache linkCache, bool includeDeletedRecords) => listings.WinningOverrideContexts<IFallout4Mod, IFallout4ModGetter, IPlacedTrapTarget, IPlacedTrapTargetGetter>(linkCache, includeDeletedRecords: includeDeletedRecords));
+        }
+
+        /// <summary>
+        /// Scope a load order query to IPlacedTrapTarget
+        /// </summary>
+        /// <param name="mods">Mods to query</param>
+        /// <returns>A typed object to do further queries on IPlacedTrapTarget</returns>
+        public static TypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IPlacedTrapTarget, IPlacedTrapTargetGetter> IPlacedTrapTarget(this IEnumerable<IFallout4ModGetter> mods)
+        {
+            return new TypedLoadOrderAccess<IFallout4Mod, IFallout4ModGetter, IPlacedTrapTarget, IPlacedTrapTargetGetter>(
+                (bool includeDeletedRecords) => mods.WinningOverrides<IPlacedTrapTargetGetter>(includeDeletedRecords: includeDeletedRecords),
+                (ILinkCache linkCache, bool includeDeletedRecords) => mods.WinningOverrideContexts<IFallout4Mod, IFallout4ModGetter, IPlacedTrapTarget, IPlacedTrapTargetGetter>(linkCache, includeDeletedRecords: includeDeletedRecords));
         }
 
         /// <summary>

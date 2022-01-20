@@ -39,6 +39,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Light),
                 typeof(MiscItem),
                 typeof(MoveableStatic),
+                typeof(Projectile),
                 typeof(Spell),
                 typeof(TextureSet),
             };
@@ -112,6 +113,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Tree),
             };
             dict[typeof(IRegionTargetGetter)] = dict[typeof(IRegionTarget)];
+            dict[typeof(IPlacedTrapTarget)] = new Type[]
+            {
+                typeof(Hazard),
+                typeof(Projectile),
+            };
+            dict[typeof(IPlacedTrapTargetGetter)] = dict[typeof(IPlacedTrapTarget)];
             dict[typeof(IHarvestTarget)] = new Type[]
             {
                 typeof(Ingestible),

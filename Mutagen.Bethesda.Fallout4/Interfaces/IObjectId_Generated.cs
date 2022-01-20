@@ -8,7 +8,7 @@ using Mutagen.Bethesda;
 namespace Mutagen.Bethesda.Fallout4
 {
     /// <summary>
-    /// Implemented by: [Activator, Armor, Book, Container, Door, Faction, Furniture, IdleMarker, Ingestible, Key, Light, MiscItem, MoveableStatic, Spell, TextureSet]
+    /// Implemented by: [Activator, Armor, Book, Container, Door, Faction, Furniture, IdleMarker, Ingestible, Key, Light, MiscItem, MoveableStatic, Projectile, Spell, TextureSet]
     /// </summary>
     public partial interface IObjectId :
         IFallout4MajorRecordInternal,
@@ -17,7 +17,7 @@ namespace Mutagen.Bethesda.Fallout4
     }
 
     /// <summary>
-    /// Implemented by: [Activator, Armor, Book, Container, Door, Faction, Furniture, IdleMarker, Ingestible, Key, Light, MiscItem, MoveableStatic, Spell, TextureSet]
+    /// Implemented by: [Activator, Armor, Book, Container, Door, Faction, Furniture, IdleMarker, Ingestible, Key, Light, MiscItem, MoveableStatic, Projectile, Spell, TextureSet]
     /// </summary>
     public partial interface IObjectIdGetter : IFallout4MajorRecordGetter
     {

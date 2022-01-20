@@ -45,6 +45,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Flora
 - Furniture
 - Grass
+- Hazard
 - HeadPart
 - IdleMarker
 - Ingestible
@@ -54,6 +55,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Light
 - MiscItem
 - MoveableStatic
+- Projectile
 - TalkingActivator
 - Tree
 ### INamed
@@ -62,12 +64,14 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Armor
 - Book
 - Class
+- CollisionLayer
 - Component
 - Container
 - Door
 - Faction
 - Flora
 - Furniture
+- Hazard
 - HeadPart
 - Ingestible
 - Ingredient
@@ -80,6 +84,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - MoveableStatic
 - ObjectEffect
 - ObjectTemplate
+- Projectile
 - Race
 - RegionMap
 - ScriptBoolListProperty
@@ -115,6 +120,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Flora
 - Furniture
 - Grass
+- Hazard
 - IdleMarker
 - Ingestible
 - Ingredient
@@ -125,6 +131,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - MiscItem
 - MoveableStatic
 - ObjectEffect
+- Projectile
 - SoundMarker
 - Spell
 - TalkingActivator
@@ -181,6 +188,8 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - IWeightValue
 ### Class
 - INamed
+### CollisionLayer
+- INamed
 ### Component
 - INamed
 - IObjectBounded
@@ -214,6 +223,10 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - IScripted
 ### Grass
 - IModeled
+- IObjectBounded
+### Hazard
+- IModeled
+- INamed
 - IObjectBounded
 ### HeadPart
 - IModeled
@@ -279,6 +292,10 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - IKeyworded
 ### ObjectTemplate
 - INamed
+### Projectile
+- IModeled
+- INamed
+- IObjectBounded
 ### Race
 - IKeyworded
 - INamed

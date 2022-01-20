@@ -44,11 +44,11 @@
 			<Group name="LeveledNpcs" refName="LeveledNpc" />
 			<Group name="Keys" refName="Key" />
 			<Group name="Ingestibles" refName="Ingestible" />
-			<!--<Group name="IdleMarkers" refName="IdleMarker" />
-			<Group name="Notes" refName="Note" />
+			<Group name="IdleMarkers" refName="IdleMarker" />
+			<!--<Group name="Notes" refName="Note" />-->
 			<Group name="Projectiles" refName="Projectile" />
 			<Group name="Hazards" refName="Hazard" />
-			<Group name="BendableSplines" refName="BendableSpline" />
+			<!--<Group name="BendableSplines" refName="BendableSpline" />
 			<Group name="Terminals" refName="Terminal" />-->
 			<Group name="LeveledItems" refName="LeveledItem" />
 			<!--<Group name="Weathers" refName="Weather" />
@@ -59,9 +59,9 @@
 			<!--<Group name="NavigationMeshInfoMaps" refName="NavigationMeshInfoMap" />
 			Placeholder <Group name="Cells" refName="Cell" />
 			<Group name="Worldspaces" refName="Worldspace" />
-			<Group name="Quests" refName="Quest" />
+			<Group name="Quests" refName="Quest" />-->
 			<Group name="IdleAnimations" refName="IdleAnimation" />
-			<Group name="Packages" refName="Package" />
+			<!--<Group name="Packages" refName="Package" />
 			<Group name="CombatStyles" refName="CombatStyle" />
 			<Group name="LoadScreens" refName="LoadScreen" />
 			<Group name="LeveledSpells" refName="LeveledSpell" />
@@ -70,9 +70,9 @@
 			<Group name="EffectShaders" refName="EffectShader" />
 			<Group name="Explosions" refName="Explosion" />
 			<Group name="Debris" refName="Debris" />
-			<Group name="ImageSpaces" refName="ImageSpace" />
+			<Group name="ImageSpaces" refName="ImageSpace" />-->
 			<Group name="ImageSpaceAdapters" refName="ImageSpaceAdapter" />
-			<Group name="FormLists" refName="FormList" />
+			<!--<Group name="FormLists" refName="FormList" />
 			<Group name="Perks" refName="Perk" />
 			<Group name="BodyParts" refName="BodyPartData" />
 			<Group name="AddonNodes" refName="AddonNode" />
@@ -107,9 +107,9 @@
 			<Group name="MovementTypes" refName="MovementType" />
 			<Group name="SoundDescriptors" refName="SoundDescriptor" />
 			<Group name="SoundCategories" refName="SoundCategory" />
-			<Group name="SoundOutputModels" refName="SoundOutputModel" />
+			<Group name="SoundOutputModels" refName="SoundOutputModel" />-->
 			<Group name="CollisionLayers" refName="CollisionLayer" />
-			<Group name="Colors" refName="ColorRecord" />
+			<!--<Group name="Colors" refName="ColorRecord" />
 			<Group name="ReverbParameters" refName="ReverbParameters" />-->
 			<!--TODO Only FO4 specific groups left from PKIN to OVIS-->
 		</Fields>
