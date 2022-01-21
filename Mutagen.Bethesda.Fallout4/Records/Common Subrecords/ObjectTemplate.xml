@@ -12,9 +12,9 @@
       <UInt32 name="IncludeCount" />
       <UInt32 name="PropertyCount" />
       <UInt8 name="LevelMin" />
-      <ByteArray name="Unused1" byteLength="1" nullable="False" />
+      <UInt8 name="Unused1"/>
       <UInt8 name="LevelMax" />
-      <ByteArray name="Unused2" byteLength="1" nullable="False" />
+      <UInt8 name="Unused2" />
       <!--TODO wbOBTEAddonIndexToStr-->
       <Int16 name="AddonIndex" />
       <Bool name="Default" byteLength="1" />

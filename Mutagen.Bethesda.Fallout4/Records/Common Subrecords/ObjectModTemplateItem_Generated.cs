@@ -61,29 +61,13 @@ namespace Mutagen.Bethesda.Fallout4
         public Byte LevelMin { get; set; } = default;
         #endregion
         #region Unused1
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private MemorySlice<Byte> _Unused1 = new byte[1];
-        public MemorySlice<Byte> Unused1
-        {
-            get => _Unused1;
-            set => this._Unused1 = value;
-        }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        ReadOnlyMemorySlice<Byte> IObjectModTemplateItemGetter.Unused1 => this.Unused1;
+        public Byte Unused1 { get; set; } = default;
         #endregion
         #region LevelMax
         public Byte LevelMax { get; set; } = default;
         #endregion
         #region Unused2
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private MemorySlice<Byte> _Unused2 = new byte[1];
-        public MemorySlice<Byte> Unused2
-        {
-            get => _Unused2;
-            set => this._Unused2 = value;
-        }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        ReadOnlyMemorySlice<Byte> IObjectModTemplateItemGetter.Unused2 => this.Unused2;
+        public Byte Unused2 { get; set; } = default;
         #endregion
         #region AddonIndex
         public Int16 AddonIndex { get; set; } = default;
@@ -975,9 +959,9 @@ namespace Mutagen.Bethesda.Fallout4
         new UInt32 IncludeCount { get; set; }
         new UInt32 PropertyCount { get; set; }
         new Byte LevelMin { get; set; }
-        new MemorySlice<Byte> Unused1 { get; set; }
+        new Byte Unused1 { get; set; }
         new Byte LevelMax { get; set; }
-        new MemorySlice<Byte> Unused2 { get; set; }
+        new Byte Unused2 { get; set; }
         new Int16 AddonIndex { get; set; }
         new Boolean Default { get; set; }
         /// <summary>
@@ -1006,9 +990,9 @@ namespace Mutagen.Bethesda.Fallout4
         UInt32 IncludeCount { get; }
         UInt32 PropertyCount { get; }
         Byte LevelMin { get; }
-        ReadOnlyMemorySlice<Byte> Unused1 { get; }
+        Byte Unused1 { get; }
         Byte LevelMax { get; }
-        ReadOnlyMemorySlice<Byte> Unused2 { get; }
+        Byte Unused2 { get; }
         Int16 AddonIndex { get; }
         Boolean Default { get; }
         #region Keywords
@@ -1292,9 +1276,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.IncludeCount = default;
             item.PropertyCount = default;
             item.LevelMin = default;
-            item.Unused1 = new byte[1];
+            item.Unused1 = default;
             item.LevelMax = default;
-            item.Unused2 = new byte[1];
+            item.Unused2 = default;
             item.AddonIndex = default;
             item.Default = default;
             item.Keywords.Clear();
@@ -1360,9 +1344,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ret.IncludeCount = item.IncludeCount == rhs.IncludeCount;
             ret.PropertyCount = item.PropertyCount == rhs.PropertyCount;
             ret.LevelMin = item.LevelMin == rhs.LevelMin;
-            ret.Unused1 = MemoryExtensions.SequenceEqual(item.Unused1.Span, rhs.Unused1.Span);
+            ret.Unused1 = item.Unused1 == rhs.Unused1;
             ret.LevelMax = item.LevelMax == rhs.LevelMax;
-            ret.Unused2 = MemoryExtensions.SequenceEqual(item.Unused2.Span, rhs.Unused2.Span);
+            ret.Unused2 = item.Unused2 == rhs.Unused2;
             ret.AddonIndex = item.AddonIndex == rhs.AddonIndex;
             ret.Default = item.Default == rhs.Default;
             ret.Keywords = item.Keywords.CollectionEqualsHelper(
@@ -1435,7 +1419,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             }
             if (printMask?.Unused1 ?? true)
             {
-                fg.AppendLine($"Unused1 => {SpanExt.ToHexString(item.Unused1)}");
+                fg.AppendItem(item.Unused1, "Unused1");
             }
             if (printMask?.LevelMax ?? true)
             {
@@ -1443,7 +1427,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             }
             if (printMask?.Unused2 ?? true)
             {
-                fg.AppendLine($"Unused2 => {SpanExt.ToHexString(item.Unused2)}");
+                fg.AppendItem(item.Unused2, "Unused2");
             }
             if (printMask?.AddonIndex ?? true)
             {
@@ -1520,7 +1504,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             }
             if ((crystal?.GetShouldTranslate((int)ObjectModTemplateItem_FieldIndex.Unused1) ?? true))
             {
-                if (!MemoryExtensions.SequenceEqual(lhs.Unused1.Span, rhs.Unused1.Span)) return false;
+                if (lhs.Unused1 != rhs.Unused1) return false;
             }
             if ((crystal?.GetShouldTranslate((int)ObjectModTemplateItem_FieldIndex.LevelMax) ?? true))
             {
@@ -1528,7 +1512,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             }
             if ((crystal?.GetShouldTranslate((int)ObjectModTemplateItem_FieldIndex.Unused2) ?? true))
             {
-                if (!MemoryExtensions.SequenceEqual(lhs.Unused2.Span, rhs.Unused2.Span)) return false;
+                if (lhs.Unused2 != rhs.Unused2) return false;
             }
             if ((crystal?.GetShouldTranslate((int)ObjectModTemplateItem_FieldIndex.AddonIndex) ?? true))
             {
@@ -1626,7 +1610,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             }
             if ((copyMask?.GetShouldTranslate((int)ObjectModTemplateItem_FieldIndex.Unused1) ?? true))
             {
-                item.Unused1 = rhs.Unused1.ToArray();
+                item.Unused1 = rhs.Unused1;
             }
             if ((copyMask?.GetShouldTranslate((int)ObjectModTemplateItem_FieldIndex.LevelMax) ?? true))
             {
@@ -1634,7 +1618,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             }
             if ((copyMask?.GetShouldTranslate((int)ObjectModTemplateItem_FieldIndex.Unused2) ?? true))
             {
-                item.Unused2 = rhs.Unused2.ToArray();
+                item.Unused2 = rhs.Unused2;
             }
             if ((copyMask?.GetShouldTranslate((int)ObjectModTemplateItem_FieldIndex.AddonIndex) ?? true))
             {
@@ -1794,13 +1778,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             writer.Write(item.IncludeCount);
             writer.Write(item.PropertyCount);
             writer.Write(item.LevelMin);
-            ByteArrayBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
-                writer: writer,
-                item: item.Unused1);
+            writer.Write(item.Unused1);
             writer.Write(item.LevelMax);
-            ByteArrayBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
-                writer: writer,
-                item: item.Unused2);
+            writer.Write(item.Unused2);
             writer.Write(item.AddonIndex);
             writer.Write(item.Default);
             Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IFormLinkGetter<IKeywordGetter>>.Instance.Write(
@@ -1869,9 +1849,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.IncludeCount = frame.ReadUInt32();
             item.PropertyCount = frame.ReadUInt32();
             item.LevelMin = frame.ReadUInt8();
-            item.Unused1 = ByteArrayBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: frame.SpawnWithLength(1));
+            item.Unused1 = frame.ReadUInt8();
             item.LevelMax = frame.ReadUInt8();
-            item.Unused2 = ByteArrayBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: frame.SpawnWithLength(1));
+            item.Unused2 = frame.ReadUInt8();
             item.AddonIndex = frame.ReadInt16();
             item.Default = frame.ReadBoolean();
             item.Keywords.SetTo(
@@ -1954,9 +1934,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public UInt32 IncludeCount => BinaryPrimitives.ReadUInt32LittleEndian(_data.Slice(0x0, 0x4));
         public UInt32 PropertyCount => BinaryPrimitives.ReadUInt32LittleEndian(_data.Slice(0x4, 0x4));
         public Byte LevelMin => _data.Span[0x8];
-        public ReadOnlyMemorySlice<Byte> Unused1 => _data.Span.Slice(0x9, 0x1).ToArray();
+        public Byte Unused1 => _data.Span[0x9];
         public Byte LevelMax => _data.Span[0xA];
-        public ReadOnlyMemorySlice<Byte> Unused2 => _data.Span.Slice(0xB, 0x1).ToArray();
+        public Byte Unused2 => _data.Span[0xB];
         public Int16 AddonIndex => BinaryPrimitives.ReadInt16LittleEndian(_data.Slice(0xC, 0x2));
         public Boolean Default => _data.Slice(0xE, 0x1)[0] == 1;
         #region Keywords
