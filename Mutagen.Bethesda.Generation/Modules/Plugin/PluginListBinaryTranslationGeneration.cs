@@ -24,6 +24,7 @@ namespace Mutagen.Bethesda.Generation.Modules.Plugin
         public const string CounterRecordType = "ListCounterRecordType";
         public const string CounterByteLength = "CounterByteLength";
         public const string NullIfCounterZero = "NullIfCounterZero";
+        public const string AllowNoCounter = "AllowNoCounter";
 
         public override void Load(ObjectGeneration obj, TypeGeneration field, XElement node)
         {
@@ -32,6 +33,7 @@ namespace Mutagen.Bethesda.Generation.Modules.Plugin
             listType.CustomData[CounterRecordType] = node.GetAttribute("counterRecType", null);
             listType.CustomData[CounterByteLength] = node.GetAttribute("counterLength", default(byte));
             listType.CustomData[NullIfCounterZero] = node.GetAttribute("nullIfCounterZero", false);
+            listType.CustomData[AllowNoCounter] = node.GetAttribute("allowNoCounter", true);
             var asyncItem = node.GetAttribute<bool>("asyncItems", false);
             if (asyncItem && listType.SubTypeGeneration is LoquiType loqui)
             {

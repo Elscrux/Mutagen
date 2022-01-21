@@ -4199,7 +4199,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 items: item.ObjectTemplates,
                 counterType: RecordTypes.OBTE,
                 counterLength: 4,
-                writeCounterIfNull: true,
                 transl: (MutagenWriter subWriter, IObjectTemplateGetter subItem, TypedWriteParams? conv) =>
                 {
                     var Item = subItem;
@@ -4489,10 +4488,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                             countLengthLength: 4,
                             countRecord: RecordTypes.OBTE,
                             triggeringRecord: ObjectTemplate_Registration.TriggeringRecordTypes,
-                            nullIfZero: true,
                             translationParams: translationParams,
                             transl: ObjectTemplate.TryCreateFromBinary)
-                        .CastExtendedListIfAny<ObjectTemplate>();
+                        .CastExtendedList<ObjectTemplate>();
                     return (int)Armor_FieldIndex.ObjectTemplates;
                 }
                 case RecordTypeInts.STOP:

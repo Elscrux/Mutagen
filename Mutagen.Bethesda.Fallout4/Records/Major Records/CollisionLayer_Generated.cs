@@ -1799,6 +1799,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         stringBinaryType: StringBinaryType.NullTerminate);
                     return (int)CollisionLayer_FieldIndex.Name;
                 }
+                case RecordTypeInts.CNAM:
                 case RecordTypeInts.INTV:
                 {
                     item.CollidesWith = 
@@ -1982,6 +1983,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     _NameLocation = (stream.Position - offset);
                     return (int)CollisionLayer_FieldIndex.Name;
                 }
+                case RecordTypeInts.CNAM:
                 case RecordTypeInts.INTV:
                 {
                     this.CollidesWith = BinaryOverlayList.FactoryByCountNullIfZero<IFormLinkGetter<ICollisionLayerGetter>>(

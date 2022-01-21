@@ -60,7 +60,7 @@
 			<List name="AttachParentSlots" recordType="APPR">
 				<FormLink refName="Keyword" />
 			</List>
-			<RefList name="ObjectTemplates" counterRecType="OBTE" nullIfCounterZero="True" refName="ObjectTemplate" />
+			<RefList name="ObjectTemplates" counterRecType="OBTE" refName="ObjectTemplate" allowNoCounter="false" />
 			<ByteArray name="EndMarker" recordType="STOP" />
 		</Fields>
 		<LinkInterface>IItem</LinkInterface>

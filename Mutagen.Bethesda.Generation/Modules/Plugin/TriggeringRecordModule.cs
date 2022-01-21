@@ -675,9 +675,8 @@ namespace Mutagen.Bethesda.Generation.Modules.Plugin
                 if (field.CustomData.TryGetValue(PluginListBinaryTranslationGeneration.CounterRecordType, out var counterObj)
                     && counterObj is string counterTypeStr)
                 {
-                    if (field.CustomData.TryGetValue(PluginListBinaryTranslationGeneration.NullIfCounterZero,
-                            out var nullIfZero)
-                        && (bool)nullIfZero)
+                    var allowNoCounter = (bool)field.CustomData[PluginListBinaryTranslationGeneration.AllowNoCounter];
+                    if (!allowNoCounter)
                     {
                         data.TriggeringRecordTypes.Clear();
                     }
