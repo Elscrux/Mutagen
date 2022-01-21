@@ -361,7 +361,7 @@
           <xs:attribute name="nullIfCounterZero" type="xs:boolean" >
             <xs:annotation>
               <xs:documentation>
-                If has a counter record type, should list be null if count is zero.
+                If has a counter record type, should single record typed list be null if count is zero.
               </xs:documentation>
             </xs:annotation>
           </xs:attribute>
