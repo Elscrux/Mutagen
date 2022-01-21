@@ -11,6 +11,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Mutagen.Bethesda.Generation.Fields;
+using DictType = Mutagen.Bethesda.Generation.Fields.DictType;
+using BoolType = Mutagen.Bethesda.Generation.Fields.BoolType;
 
 namespace Mutagen.Bethesda.Generation.Modules.Plugin
 {

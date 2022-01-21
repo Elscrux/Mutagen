@@ -1,6 +1,7 @@
 using Loqui.Generation;
 using System.Collections.Generic;
 using Loqui;
+using Mutagen.Bethesda.Generation.Fields;
 
 namespace Mutagen.Bethesda.Generation.Modules.Aspects
 {

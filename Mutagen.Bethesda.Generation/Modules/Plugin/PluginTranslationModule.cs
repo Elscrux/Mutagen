@@ -17,9 +17,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Mutagen.Bethesda.Generation.Fields;
 using Mutagen.Bethesda.Plugins.Binary.Parameters;
 using Mutagen.Bethesda.Plugins.Masters;
 using Mutagen.Bethesda.Strings.DI;
+using BoolType = Mutagen.Bethesda.Generation.Fields.BoolType;
+using DictType = Mutagen.Bethesda.Generation.Fields.DictType;
+using EnumType = Mutagen.Bethesda.Generation.Fields.EnumType;
+using FloatType = Mutagen.Bethesda.Generation.Fields.FloatType;
+using PercentType = Mutagen.Bethesda.Generation.Fields.PercentType;
+using StringType = Mutagen.Bethesda.Generation.Fields.StringType;
 
 namespace Mutagen.Bethesda.Generation.Modules.Plugin
 {
@@ -625,7 +632,7 @@ namespace Mutagen.Bethesda.Generation.Modules.Plugin
                 yield return $"Mutagen.Bethesda.{obj.ProtoGen.Protocol.Namespace}.Records";
             }
 
-            if (await LinkModule.HasLinks(obj, includeBaseClass: false) != LinkModule.LinkCase.No
+            if (await LinkModule.HasLinks(obj, includeBaseClass: false) != Case.No
                 || obj.IterateFields().Any(f => f is FormKeyType))
             {
                 yield return "Mutagen.Bethesda.Plugins.Cache";
@@ -1842,7 +1849,7 @@ namespace Mutagen.Bethesda.Generation.Modules.Plugin
                 }
 
                 if (obj.GetObjectType() == ObjectType.Mod
-                    || (await LinkModule.HasLinks(obj, includeBaseClass: false) != LinkModule.LinkCase.No))
+                    || (await LinkModule.HasLinks(obj, includeBaseClass: false) != Case.No))
                 {
                     await LinkModule.GenerateInterfaceImplementation(obj, fg, getter: true);
                 }
