@@ -1200,7 +1200,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     writer: writer,
                     translationParams: translationParams);
             }
-            using (HeaderExport.Subrecord(writer, RecordTypes.STOP)) { } // End Marker
         }
 
         public void Write(
@@ -1270,11 +1269,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)ObjectTemplate_FieldIndex.ObjectModTemplateItem) return ParseResult.Stop;
                     item.ObjectModTemplateItem = Mutagen.Bethesda.Fallout4.ObjectModTemplateItem.CreateFromBinary(frame: frame);
                     return (int)ObjectTemplate_FieldIndex.ObjectModTemplateItem;
-                }
-                case RecordTypeInts.STOP: // End Marker
-                {
-                    frame.ReadSubrecordFrame();
-                    return ParseResult.Stop;
                 }
                 default:
                     return ParseResult.Stop;
@@ -1439,11 +1433,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)ObjectTemplate_FieldIndex.ObjectModTemplateItem) return ParseResult.Stop;
                     _ObjectModTemplateItemLocation = new RangeInt32((stream.Position - offset), finalPos - offset);
                     return (int)ObjectTemplate_FieldIndex.ObjectModTemplateItem;
-                }
-                case RecordTypeInts.STOP: // End Marker
-                {
-                    stream.ReadSubrecordFrame();
-                    return ParseResult.Stop;
                 }
                 default:
                     return ParseResult.Stop;

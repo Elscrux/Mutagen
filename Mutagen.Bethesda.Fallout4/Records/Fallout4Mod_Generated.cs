@@ -92,14 +92,20 @@ namespace Mutagen.Bethesda.Fallout4
             _LeveledNpcs_Object = new Fallout4Group<LeveledNpc>(this);
             _Keys_Object = new Fallout4Group<Key>(this);
             _Ingestibles_Object = new Fallout4Group<Ingestible>(this);
+            _IdleMarkers_Object = new Fallout4Group<IdleMarker>(this);
+            _Projectiles_Object = new Fallout4Group<Projectile>(this);
+            _Hazards_Object = new Fallout4Group<Hazard>(this);
             _LeveledItems_Object = new Fallout4Group<LeveledItem>(this);
             _Regions_Object = new Fallout4Group<Region>(this);
+            _IdleAnimations_Object = new Fallout4Group<IdleAnimation>(this);
+            _ImageSpaceAdapters_Object = new Fallout4Group<ImageSpaceAdapter>(this);
             _VoiceTypes_Object = new Fallout4Group<VoiceType>(this);
             _MaterialTypes_Object = new Fallout4Group<MaterialType>(this);
             _ArmorAddons_Object = new Fallout4Group<ArmorAddon>(this);
             _Messages_Object = new Fallout4Group<Message>(this);
             _MusicTypes_Object = new Fallout4Group<MusicType>(this);
             _MusicTracks_Object = new Fallout4Group<MusicTrack>(this);
+            _CollisionLayers_Object = new Fallout4Group<CollisionLayer>(this);
             CustomCtor();
         }
         partial void CustomCtor();
@@ -357,6 +363,27 @@ namespace Mutagen.Bethesda.Fallout4
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IFallout4GroupGetter<IIngestibleGetter> IFallout4ModGetter.Ingestibles => _Ingestibles_Object;
         #endregion
+        #region IdleMarkers
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Fallout4Group<IdleMarker> _IdleMarkers_Object;
+        public Fallout4Group<IdleMarker> IdleMarkers => _IdleMarkers_Object;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFallout4GroupGetter<IIdleMarkerGetter> IFallout4ModGetter.IdleMarkers => _IdleMarkers_Object;
+        #endregion
+        #region Projectiles
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Fallout4Group<Projectile> _Projectiles_Object;
+        public Fallout4Group<Projectile> Projectiles => _Projectiles_Object;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFallout4GroupGetter<IProjectileGetter> IFallout4ModGetter.Projectiles => _Projectiles_Object;
+        #endregion
+        #region Hazards
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Fallout4Group<Hazard> _Hazards_Object;
+        public Fallout4Group<Hazard> Hazards => _Hazards_Object;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFallout4GroupGetter<IHazardGetter> IFallout4ModGetter.Hazards => _Hazards_Object;
+        #endregion
         #region LeveledItems
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private Fallout4Group<LeveledItem> _LeveledItems_Object;
@@ -370,6 +397,20 @@ namespace Mutagen.Bethesda.Fallout4
         public Fallout4Group<Region> Regions => _Regions_Object;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IFallout4GroupGetter<IRegionGetter> IFallout4ModGetter.Regions => _Regions_Object;
+        #endregion
+        #region IdleAnimations
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Fallout4Group<IdleAnimation> _IdleAnimations_Object;
+        public Fallout4Group<IdleAnimation> IdleAnimations => _IdleAnimations_Object;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFallout4GroupGetter<IIdleAnimationGetter> IFallout4ModGetter.IdleAnimations => _IdleAnimations_Object;
+        #endregion
+        #region ImageSpaceAdapters
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Fallout4Group<ImageSpaceAdapter> _ImageSpaceAdapters_Object;
+        public Fallout4Group<ImageSpaceAdapter> ImageSpaceAdapters => _ImageSpaceAdapters_Object;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFallout4GroupGetter<IImageSpaceAdapterGetter> IFallout4ModGetter.ImageSpaceAdapters => _ImageSpaceAdapters_Object;
         #endregion
         #region VoiceTypes
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -412,6 +453,13 @@ namespace Mutagen.Bethesda.Fallout4
         public Fallout4Group<MusicTrack> MusicTracks => _MusicTracks_Object;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IFallout4GroupGetter<IMusicTrackGetter> IFallout4ModGetter.MusicTracks => _MusicTracks_Object;
+        #endregion
+        #region CollisionLayers
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Fallout4Group<CollisionLayer> _CollisionLayers_Object;
+        public Fallout4Group<CollisionLayer> CollisionLayers => _CollisionLayers_Object;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFallout4GroupGetter<ICollisionLayerGetter> IFallout4ModGetter.CollisionLayers => _CollisionLayers_Object;
         #endregion
 
         #region To String
@@ -487,14 +535,20 @@ namespace Mutagen.Bethesda.Fallout4
                 this.LeveledNpcs = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Keys = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Ingestibles = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
+                this.IdleMarkers = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
+                this.Projectiles = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
+                this.Hazards = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.LeveledItems = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Regions = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
+                this.IdleAnimations = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
+                this.ImageSpaceAdapters = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.VoiceTypes = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.MaterialTypes = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.ArmorAddons = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Messages = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.MusicTypes = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.MusicTracks = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
+                this.CollisionLayers = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
             }
 
             public Mask(
@@ -534,14 +588,20 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem LeveledNpcs,
                 TItem Keys,
                 TItem Ingestibles,
+                TItem IdleMarkers,
+                TItem Projectiles,
+                TItem Hazards,
                 TItem LeveledItems,
                 TItem Regions,
+                TItem IdleAnimations,
+                TItem ImageSpaceAdapters,
                 TItem VoiceTypes,
                 TItem MaterialTypes,
                 TItem ArmorAddons,
                 TItem Messages,
                 TItem MusicTypes,
-                TItem MusicTracks)
+                TItem MusicTracks,
+                TItem CollisionLayers)
             {
                 this.ModHeader = new MaskItem<TItem, Fallout4ModHeader.Mask<TItem>?>(ModHeader, new Fallout4ModHeader.Mask<TItem>(ModHeader));
                 this.GameSettings = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(GameSettings, new Fallout4Group.Mask<TItem>(GameSettings));
@@ -579,14 +639,20 @@ namespace Mutagen.Bethesda.Fallout4
                 this.LeveledNpcs = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(LeveledNpcs, new Fallout4Group.Mask<TItem>(LeveledNpcs));
                 this.Keys = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Keys, new Fallout4Group.Mask<TItem>(Keys));
                 this.Ingestibles = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Ingestibles, new Fallout4Group.Mask<TItem>(Ingestibles));
+                this.IdleMarkers = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(IdleMarkers, new Fallout4Group.Mask<TItem>(IdleMarkers));
+                this.Projectiles = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Projectiles, new Fallout4Group.Mask<TItem>(Projectiles));
+                this.Hazards = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Hazards, new Fallout4Group.Mask<TItem>(Hazards));
                 this.LeveledItems = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(LeveledItems, new Fallout4Group.Mask<TItem>(LeveledItems));
                 this.Regions = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Regions, new Fallout4Group.Mask<TItem>(Regions));
+                this.IdleAnimations = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(IdleAnimations, new Fallout4Group.Mask<TItem>(IdleAnimations));
+                this.ImageSpaceAdapters = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(ImageSpaceAdapters, new Fallout4Group.Mask<TItem>(ImageSpaceAdapters));
                 this.VoiceTypes = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(VoiceTypes, new Fallout4Group.Mask<TItem>(VoiceTypes));
                 this.MaterialTypes = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(MaterialTypes, new Fallout4Group.Mask<TItem>(MaterialTypes));
                 this.ArmorAddons = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(ArmorAddons, new Fallout4Group.Mask<TItem>(ArmorAddons));
                 this.Messages = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Messages, new Fallout4Group.Mask<TItem>(Messages));
                 this.MusicTypes = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(MusicTypes, new Fallout4Group.Mask<TItem>(MusicTypes));
                 this.MusicTracks = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(MusicTracks, new Fallout4Group.Mask<TItem>(MusicTracks));
+                this.CollisionLayers = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(CollisionLayers, new Fallout4Group.Mask<TItem>(CollisionLayers));
             }
 
             #pragma warning disable CS8618
@@ -634,14 +700,20 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? LeveledNpcs { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Keys { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Ingestibles { get; set; }
+            public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? IdleMarkers { get; set; }
+            public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Projectiles { get; set; }
+            public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Hazards { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? LeveledItems { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Regions { get; set; }
+            public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? IdleAnimations { get; set; }
+            public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? ImageSpaceAdapters { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? VoiceTypes { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? MaterialTypes { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? ArmorAddons { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Messages { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? MusicTypes { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? MusicTracks { get; set; }
+            public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? CollisionLayers { get; set; }
             #endregion
 
             #region Equals
@@ -690,14 +762,20 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!object.Equals(this.LeveledNpcs, rhs.LeveledNpcs)) return false;
                 if (!object.Equals(this.Keys, rhs.Keys)) return false;
                 if (!object.Equals(this.Ingestibles, rhs.Ingestibles)) return false;
+                if (!object.Equals(this.IdleMarkers, rhs.IdleMarkers)) return false;
+                if (!object.Equals(this.Projectiles, rhs.Projectiles)) return false;
+                if (!object.Equals(this.Hazards, rhs.Hazards)) return false;
                 if (!object.Equals(this.LeveledItems, rhs.LeveledItems)) return false;
                 if (!object.Equals(this.Regions, rhs.Regions)) return false;
+                if (!object.Equals(this.IdleAnimations, rhs.IdleAnimations)) return false;
+                if (!object.Equals(this.ImageSpaceAdapters, rhs.ImageSpaceAdapters)) return false;
                 if (!object.Equals(this.VoiceTypes, rhs.VoiceTypes)) return false;
                 if (!object.Equals(this.MaterialTypes, rhs.MaterialTypes)) return false;
                 if (!object.Equals(this.ArmorAddons, rhs.ArmorAddons)) return false;
                 if (!object.Equals(this.Messages, rhs.Messages)) return false;
                 if (!object.Equals(this.MusicTypes, rhs.MusicTypes)) return false;
                 if (!object.Equals(this.MusicTracks, rhs.MusicTracks)) return false;
+                if (!object.Equals(this.CollisionLayers, rhs.CollisionLayers)) return false;
                 return true;
             }
             public override int GetHashCode()
@@ -739,14 +817,20 @@ namespace Mutagen.Bethesda.Fallout4
                 hash.Add(this.LeveledNpcs);
                 hash.Add(this.Keys);
                 hash.Add(this.Ingestibles);
+                hash.Add(this.IdleMarkers);
+                hash.Add(this.Projectiles);
+                hash.Add(this.Hazards);
                 hash.Add(this.LeveledItems);
                 hash.Add(this.Regions);
+                hash.Add(this.IdleAnimations);
+                hash.Add(this.ImageSpaceAdapters);
                 hash.Add(this.VoiceTypes);
                 hash.Add(this.MaterialTypes);
                 hash.Add(this.ArmorAddons);
                 hash.Add(this.Messages);
                 hash.Add(this.MusicTypes);
                 hash.Add(this.MusicTracks);
+                hash.Add(this.CollisionLayers);
                 return hash.ToHashCode();
             }
 
@@ -935,6 +1019,21 @@ namespace Mutagen.Bethesda.Fallout4
                     if (!eval(this.Ingestibles.Overall)) return false;
                     if (this.Ingestibles.Specific != null && !this.Ingestibles.Specific.All(eval)) return false;
                 }
+                if (IdleMarkers != null)
+                {
+                    if (!eval(this.IdleMarkers.Overall)) return false;
+                    if (this.IdleMarkers.Specific != null && !this.IdleMarkers.Specific.All(eval)) return false;
+                }
+                if (Projectiles != null)
+                {
+                    if (!eval(this.Projectiles.Overall)) return false;
+                    if (this.Projectiles.Specific != null && !this.Projectiles.Specific.All(eval)) return false;
+                }
+                if (Hazards != null)
+                {
+                    if (!eval(this.Hazards.Overall)) return false;
+                    if (this.Hazards.Specific != null && !this.Hazards.Specific.All(eval)) return false;
+                }
                 if (LeveledItems != null)
                 {
                     if (!eval(this.LeveledItems.Overall)) return false;
@@ -944,6 +1043,16 @@ namespace Mutagen.Bethesda.Fallout4
                 {
                     if (!eval(this.Regions.Overall)) return false;
                     if (this.Regions.Specific != null && !this.Regions.Specific.All(eval)) return false;
+                }
+                if (IdleAnimations != null)
+                {
+                    if (!eval(this.IdleAnimations.Overall)) return false;
+                    if (this.IdleAnimations.Specific != null && !this.IdleAnimations.Specific.All(eval)) return false;
+                }
+                if (ImageSpaceAdapters != null)
+                {
+                    if (!eval(this.ImageSpaceAdapters.Overall)) return false;
+                    if (this.ImageSpaceAdapters.Specific != null && !this.ImageSpaceAdapters.Specific.All(eval)) return false;
                 }
                 if (VoiceTypes != null)
                 {
@@ -974,6 +1083,11 @@ namespace Mutagen.Bethesda.Fallout4
                 {
                     if (!eval(this.MusicTracks.Overall)) return false;
                     if (this.MusicTracks.Specific != null && !this.MusicTracks.Specific.All(eval)) return false;
+                }
+                if (CollisionLayers != null)
+                {
+                    if (!eval(this.CollisionLayers.Overall)) return false;
+                    if (this.CollisionLayers.Specific != null && !this.CollisionLayers.Specific.All(eval)) return false;
                 }
                 return true;
             }
@@ -1162,6 +1276,21 @@ namespace Mutagen.Bethesda.Fallout4
                     if (eval(this.Ingestibles.Overall)) return true;
                     if (this.Ingestibles.Specific != null && this.Ingestibles.Specific.Any(eval)) return true;
                 }
+                if (IdleMarkers != null)
+                {
+                    if (eval(this.IdleMarkers.Overall)) return true;
+                    if (this.IdleMarkers.Specific != null && this.IdleMarkers.Specific.Any(eval)) return true;
+                }
+                if (Projectiles != null)
+                {
+                    if (eval(this.Projectiles.Overall)) return true;
+                    if (this.Projectiles.Specific != null && this.Projectiles.Specific.Any(eval)) return true;
+                }
+                if (Hazards != null)
+                {
+                    if (eval(this.Hazards.Overall)) return true;
+                    if (this.Hazards.Specific != null && this.Hazards.Specific.Any(eval)) return true;
+                }
                 if (LeveledItems != null)
                 {
                     if (eval(this.LeveledItems.Overall)) return true;
@@ -1171,6 +1300,16 @@ namespace Mutagen.Bethesda.Fallout4
                 {
                     if (eval(this.Regions.Overall)) return true;
                     if (this.Regions.Specific != null && this.Regions.Specific.Any(eval)) return true;
+                }
+                if (IdleAnimations != null)
+                {
+                    if (eval(this.IdleAnimations.Overall)) return true;
+                    if (this.IdleAnimations.Specific != null && this.IdleAnimations.Specific.Any(eval)) return true;
+                }
+                if (ImageSpaceAdapters != null)
+                {
+                    if (eval(this.ImageSpaceAdapters.Overall)) return true;
+                    if (this.ImageSpaceAdapters.Specific != null && this.ImageSpaceAdapters.Specific.Any(eval)) return true;
                 }
                 if (VoiceTypes != null)
                 {
@@ -1201,6 +1340,11 @@ namespace Mutagen.Bethesda.Fallout4
                 {
                     if (eval(this.MusicTracks.Overall)) return true;
                     if (this.MusicTracks.Specific != null && this.MusicTracks.Specific.Any(eval)) return true;
+                }
+                if (CollisionLayers != null)
+                {
+                    if (eval(this.CollisionLayers.Overall)) return true;
+                    if (this.CollisionLayers.Specific != null && this.CollisionLayers.Specific.Any(eval)) return true;
                 }
                 return false;
             }
@@ -1252,14 +1396,20 @@ namespace Mutagen.Bethesda.Fallout4
                 obj.LeveledNpcs = this.LeveledNpcs == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.LeveledNpcs.Overall), this.LeveledNpcs.Specific?.Translate(eval));
                 obj.Keys = this.Keys == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Keys.Overall), this.Keys.Specific?.Translate(eval));
                 obj.Ingestibles = this.Ingestibles == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Ingestibles.Overall), this.Ingestibles.Specific?.Translate(eval));
+                obj.IdleMarkers = this.IdleMarkers == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.IdleMarkers.Overall), this.IdleMarkers.Specific?.Translate(eval));
+                obj.Projectiles = this.Projectiles == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Projectiles.Overall), this.Projectiles.Specific?.Translate(eval));
+                obj.Hazards = this.Hazards == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Hazards.Overall), this.Hazards.Specific?.Translate(eval));
                 obj.LeveledItems = this.LeveledItems == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.LeveledItems.Overall), this.LeveledItems.Specific?.Translate(eval));
                 obj.Regions = this.Regions == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Regions.Overall), this.Regions.Specific?.Translate(eval));
+                obj.IdleAnimations = this.IdleAnimations == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.IdleAnimations.Overall), this.IdleAnimations.Specific?.Translate(eval));
+                obj.ImageSpaceAdapters = this.ImageSpaceAdapters == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.ImageSpaceAdapters.Overall), this.ImageSpaceAdapters.Specific?.Translate(eval));
                 obj.VoiceTypes = this.VoiceTypes == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.VoiceTypes.Overall), this.VoiceTypes.Specific?.Translate(eval));
                 obj.MaterialTypes = this.MaterialTypes == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.MaterialTypes.Overall), this.MaterialTypes.Specific?.Translate(eval));
                 obj.ArmorAddons = this.ArmorAddons == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.ArmorAddons.Overall), this.ArmorAddons.Specific?.Translate(eval));
                 obj.Messages = this.Messages == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Messages.Overall), this.Messages.Specific?.Translate(eval));
                 obj.MusicTypes = this.MusicTypes == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.MusicTypes.Overall), this.MusicTypes.Specific?.Translate(eval));
                 obj.MusicTracks = this.MusicTracks == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.MusicTracks.Overall), this.MusicTracks.Specific?.Translate(eval));
+                obj.CollisionLayers = this.CollisionLayers == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.CollisionLayers.Overall), this.CollisionLayers.Specific?.Translate(eval));
             }
             #endregion
 
@@ -1426,6 +1576,18 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         Ingestibles?.ToString(fg);
                     }
+                    if (printMask?.IdleMarkers?.Overall ?? true)
+                    {
+                        IdleMarkers?.ToString(fg);
+                    }
+                    if (printMask?.Projectiles?.Overall ?? true)
+                    {
+                        Projectiles?.ToString(fg);
+                    }
+                    if (printMask?.Hazards?.Overall ?? true)
+                    {
+                        Hazards?.ToString(fg);
+                    }
                     if (printMask?.LeveledItems?.Overall ?? true)
                     {
                         LeveledItems?.ToString(fg);
@@ -1433,6 +1595,14 @@ namespace Mutagen.Bethesda.Fallout4
                     if (printMask?.Regions?.Overall ?? true)
                     {
                         Regions?.ToString(fg);
+                    }
+                    if (printMask?.IdleAnimations?.Overall ?? true)
+                    {
+                        IdleAnimations?.ToString(fg);
+                    }
+                    if (printMask?.ImageSpaceAdapters?.Overall ?? true)
+                    {
+                        ImageSpaceAdapters?.ToString(fg);
                     }
                     if (printMask?.VoiceTypes?.Overall ?? true)
                     {
@@ -1457,6 +1627,10 @@ namespace Mutagen.Bethesda.Fallout4
                     if (printMask?.MusicTracks?.Overall ?? true)
                     {
                         MusicTracks?.ToString(fg);
+                    }
+                    if (printMask?.CollisionLayers?.Overall ?? true)
+                    {
+                        CollisionLayers?.ToString(fg);
                     }
                 }
                 fg.AppendLine("]");
@@ -1519,14 +1693,20 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<Exception?, Fallout4Group.ErrorMask<LeveledNpc.ErrorMask>?>? LeveledNpcs;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Key.ErrorMask>?>? Keys;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Ingestible.ErrorMask>?>? Ingestibles;
+            public MaskItem<Exception?, Fallout4Group.ErrorMask<IdleMarker.ErrorMask>?>? IdleMarkers;
+            public MaskItem<Exception?, Fallout4Group.ErrorMask<Projectile.ErrorMask>?>? Projectiles;
+            public MaskItem<Exception?, Fallout4Group.ErrorMask<Hazard.ErrorMask>?>? Hazards;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<LeveledItem.ErrorMask>?>? LeveledItems;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Region.ErrorMask>?>? Regions;
+            public MaskItem<Exception?, Fallout4Group.ErrorMask<IdleAnimation.ErrorMask>?>? IdleAnimations;
+            public MaskItem<Exception?, Fallout4Group.ErrorMask<ImageSpaceAdapter.ErrorMask>?>? ImageSpaceAdapters;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<VoiceType.ErrorMask>?>? VoiceTypes;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<MaterialType.ErrorMask>?>? MaterialTypes;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<ArmorAddon.ErrorMask>?>? ArmorAddons;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Message.ErrorMask>?>? Messages;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<MusicType.ErrorMask>?>? MusicTypes;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<MusicTrack.ErrorMask>?>? MusicTracks;
+            public MaskItem<Exception?, Fallout4Group.ErrorMask<CollisionLayer.ErrorMask>?>? CollisionLayers;
             #endregion
 
             #region IErrorMask
@@ -1607,10 +1787,20 @@ namespace Mutagen.Bethesda.Fallout4
                         return Keys;
                     case Fallout4Mod_FieldIndex.Ingestibles:
                         return Ingestibles;
+                    case Fallout4Mod_FieldIndex.IdleMarkers:
+                        return IdleMarkers;
+                    case Fallout4Mod_FieldIndex.Projectiles:
+                        return Projectiles;
+                    case Fallout4Mod_FieldIndex.Hazards:
+                        return Hazards;
                     case Fallout4Mod_FieldIndex.LeveledItems:
                         return LeveledItems;
                     case Fallout4Mod_FieldIndex.Regions:
                         return Regions;
+                    case Fallout4Mod_FieldIndex.IdleAnimations:
+                        return IdleAnimations;
+                    case Fallout4Mod_FieldIndex.ImageSpaceAdapters:
+                        return ImageSpaceAdapters;
                     case Fallout4Mod_FieldIndex.VoiceTypes:
                         return VoiceTypes;
                     case Fallout4Mod_FieldIndex.MaterialTypes:
@@ -1623,6 +1813,8 @@ namespace Mutagen.Bethesda.Fallout4
                         return MusicTypes;
                     case Fallout4Mod_FieldIndex.MusicTracks:
                         return MusicTracks;
+                    case Fallout4Mod_FieldIndex.CollisionLayers:
+                        return CollisionLayers;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
                 }
@@ -1741,11 +1933,26 @@ namespace Mutagen.Bethesda.Fallout4
                     case Fallout4Mod_FieldIndex.Ingestibles:
                         this.Ingestibles = new MaskItem<Exception?, Fallout4Group.ErrorMask<Ingestible.ErrorMask>?>(ex, null);
                         break;
+                    case Fallout4Mod_FieldIndex.IdleMarkers:
+                        this.IdleMarkers = new MaskItem<Exception?, Fallout4Group.ErrorMask<IdleMarker.ErrorMask>?>(ex, null);
+                        break;
+                    case Fallout4Mod_FieldIndex.Projectiles:
+                        this.Projectiles = new MaskItem<Exception?, Fallout4Group.ErrorMask<Projectile.ErrorMask>?>(ex, null);
+                        break;
+                    case Fallout4Mod_FieldIndex.Hazards:
+                        this.Hazards = new MaskItem<Exception?, Fallout4Group.ErrorMask<Hazard.ErrorMask>?>(ex, null);
+                        break;
                     case Fallout4Mod_FieldIndex.LeveledItems:
                         this.LeveledItems = new MaskItem<Exception?, Fallout4Group.ErrorMask<LeveledItem.ErrorMask>?>(ex, null);
                         break;
                     case Fallout4Mod_FieldIndex.Regions:
                         this.Regions = new MaskItem<Exception?, Fallout4Group.ErrorMask<Region.ErrorMask>?>(ex, null);
+                        break;
+                    case Fallout4Mod_FieldIndex.IdleAnimations:
+                        this.IdleAnimations = new MaskItem<Exception?, Fallout4Group.ErrorMask<IdleAnimation.ErrorMask>?>(ex, null);
+                        break;
+                    case Fallout4Mod_FieldIndex.ImageSpaceAdapters:
+                        this.ImageSpaceAdapters = new MaskItem<Exception?, Fallout4Group.ErrorMask<ImageSpaceAdapter.ErrorMask>?>(ex, null);
                         break;
                     case Fallout4Mod_FieldIndex.VoiceTypes:
                         this.VoiceTypes = new MaskItem<Exception?, Fallout4Group.ErrorMask<VoiceType.ErrorMask>?>(ex, null);
@@ -1764,6 +1971,9 @@ namespace Mutagen.Bethesda.Fallout4
                         break;
                     case Fallout4Mod_FieldIndex.MusicTracks:
                         this.MusicTracks = new MaskItem<Exception?, Fallout4Group.ErrorMask<MusicTrack.ErrorMask>?>(ex, null);
+                        break;
+                    case Fallout4Mod_FieldIndex.CollisionLayers:
+                        this.CollisionLayers = new MaskItem<Exception?, Fallout4Group.ErrorMask<CollisionLayer.ErrorMask>?>(ex, null);
                         break;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
@@ -1883,11 +2093,26 @@ namespace Mutagen.Bethesda.Fallout4
                     case Fallout4Mod_FieldIndex.Ingestibles:
                         this.Ingestibles = (MaskItem<Exception?, Fallout4Group.ErrorMask<Ingestible.ErrorMask>?>?)obj;
                         break;
+                    case Fallout4Mod_FieldIndex.IdleMarkers:
+                        this.IdleMarkers = (MaskItem<Exception?, Fallout4Group.ErrorMask<IdleMarker.ErrorMask>?>?)obj;
+                        break;
+                    case Fallout4Mod_FieldIndex.Projectiles:
+                        this.Projectiles = (MaskItem<Exception?, Fallout4Group.ErrorMask<Projectile.ErrorMask>?>?)obj;
+                        break;
+                    case Fallout4Mod_FieldIndex.Hazards:
+                        this.Hazards = (MaskItem<Exception?, Fallout4Group.ErrorMask<Hazard.ErrorMask>?>?)obj;
+                        break;
                     case Fallout4Mod_FieldIndex.LeveledItems:
                         this.LeveledItems = (MaskItem<Exception?, Fallout4Group.ErrorMask<LeveledItem.ErrorMask>?>?)obj;
                         break;
                     case Fallout4Mod_FieldIndex.Regions:
                         this.Regions = (MaskItem<Exception?, Fallout4Group.ErrorMask<Region.ErrorMask>?>?)obj;
+                        break;
+                    case Fallout4Mod_FieldIndex.IdleAnimations:
+                        this.IdleAnimations = (MaskItem<Exception?, Fallout4Group.ErrorMask<IdleAnimation.ErrorMask>?>?)obj;
+                        break;
+                    case Fallout4Mod_FieldIndex.ImageSpaceAdapters:
+                        this.ImageSpaceAdapters = (MaskItem<Exception?, Fallout4Group.ErrorMask<ImageSpaceAdapter.ErrorMask>?>?)obj;
                         break;
                     case Fallout4Mod_FieldIndex.VoiceTypes:
                         this.VoiceTypes = (MaskItem<Exception?, Fallout4Group.ErrorMask<VoiceType.ErrorMask>?>?)obj;
@@ -1906,6 +2131,9 @@ namespace Mutagen.Bethesda.Fallout4
                         break;
                     case Fallout4Mod_FieldIndex.MusicTracks:
                         this.MusicTracks = (MaskItem<Exception?, Fallout4Group.ErrorMask<MusicTrack.ErrorMask>?>?)obj;
+                        break;
+                    case Fallout4Mod_FieldIndex.CollisionLayers:
+                        this.CollisionLayers = (MaskItem<Exception?, Fallout4Group.ErrorMask<CollisionLayer.ErrorMask>?>?)obj;
                         break;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
@@ -1951,14 +2179,20 @@ namespace Mutagen.Bethesda.Fallout4
                 if (LeveledNpcs != null) return true;
                 if (Keys != null) return true;
                 if (Ingestibles != null) return true;
+                if (IdleMarkers != null) return true;
+                if (Projectiles != null) return true;
+                if (Hazards != null) return true;
                 if (LeveledItems != null) return true;
                 if (Regions != null) return true;
+                if (IdleAnimations != null) return true;
+                if (ImageSpaceAdapters != null) return true;
                 if (VoiceTypes != null) return true;
                 if (MaterialTypes != null) return true;
                 if (ArmorAddons != null) return true;
                 if (Messages != null) return true;
                 if (MusicTypes != null) return true;
                 if (MusicTracks != null) return true;
+                if (CollisionLayers != null) return true;
                 return false;
             }
             #endregion
@@ -2029,14 +2263,20 @@ namespace Mutagen.Bethesda.Fallout4
                 LeveledNpcs?.ToString(fg);
                 Keys?.ToString(fg);
                 Ingestibles?.ToString(fg);
+                IdleMarkers?.ToString(fg);
+                Projectiles?.ToString(fg);
+                Hazards?.ToString(fg);
                 LeveledItems?.ToString(fg);
                 Regions?.ToString(fg);
+                IdleAnimations?.ToString(fg);
+                ImageSpaceAdapters?.ToString(fg);
                 VoiceTypes?.ToString(fg);
                 MaterialTypes?.ToString(fg);
                 ArmorAddons?.ToString(fg);
                 Messages?.ToString(fg);
                 MusicTypes?.ToString(fg);
                 MusicTracks?.ToString(fg);
+                CollisionLayers?.ToString(fg);
             }
             #endregion
 
@@ -2081,14 +2321,20 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.LeveledNpcs = this.LeveledNpcs.Combine(rhs.LeveledNpcs, (l, r) => l.Combine(r));
                 ret.Keys = this.Keys.Combine(rhs.Keys, (l, r) => l.Combine(r));
                 ret.Ingestibles = this.Ingestibles.Combine(rhs.Ingestibles, (l, r) => l.Combine(r));
+                ret.IdleMarkers = this.IdleMarkers.Combine(rhs.IdleMarkers, (l, r) => l.Combine(r));
+                ret.Projectiles = this.Projectiles.Combine(rhs.Projectiles, (l, r) => l.Combine(r));
+                ret.Hazards = this.Hazards.Combine(rhs.Hazards, (l, r) => l.Combine(r));
                 ret.LeveledItems = this.LeveledItems.Combine(rhs.LeveledItems, (l, r) => l.Combine(r));
                 ret.Regions = this.Regions.Combine(rhs.Regions, (l, r) => l.Combine(r));
+                ret.IdleAnimations = this.IdleAnimations.Combine(rhs.IdleAnimations, (l, r) => l.Combine(r));
+                ret.ImageSpaceAdapters = this.ImageSpaceAdapters.Combine(rhs.ImageSpaceAdapters, (l, r) => l.Combine(r));
                 ret.VoiceTypes = this.VoiceTypes.Combine(rhs.VoiceTypes, (l, r) => l.Combine(r));
                 ret.MaterialTypes = this.MaterialTypes.Combine(rhs.MaterialTypes, (l, r) => l.Combine(r));
                 ret.ArmorAddons = this.ArmorAddons.Combine(rhs.ArmorAddons, (l, r) => l.Combine(r));
                 ret.Messages = this.Messages.Combine(rhs.Messages, (l, r) => l.Combine(r));
                 ret.MusicTypes = this.MusicTypes.Combine(rhs.MusicTypes, (l, r) => l.Combine(r));
                 ret.MusicTracks = this.MusicTracks.Combine(rhs.MusicTracks, (l, r) => l.Combine(r));
+                ret.CollisionLayers = this.CollisionLayers.Combine(rhs.CollisionLayers, (l, r) => l.Combine(r));
                 return ret;
             }
             public static ErrorMask? Combine(ErrorMask? lhs, ErrorMask? rhs)
@@ -2148,14 +2394,20 @@ namespace Mutagen.Bethesda.Fallout4
             public Fallout4Group.TranslationMask<LeveledNpc.TranslationMask>? LeveledNpcs;
             public Fallout4Group.TranslationMask<Key.TranslationMask>? Keys;
             public Fallout4Group.TranslationMask<Ingestible.TranslationMask>? Ingestibles;
+            public Fallout4Group.TranslationMask<IdleMarker.TranslationMask>? IdleMarkers;
+            public Fallout4Group.TranslationMask<Projectile.TranslationMask>? Projectiles;
+            public Fallout4Group.TranslationMask<Hazard.TranslationMask>? Hazards;
             public Fallout4Group.TranslationMask<LeveledItem.TranslationMask>? LeveledItems;
             public Fallout4Group.TranslationMask<Region.TranslationMask>? Regions;
+            public Fallout4Group.TranslationMask<IdleAnimation.TranslationMask>? IdleAnimations;
+            public Fallout4Group.TranslationMask<ImageSpaceAdapter.TranslationMask>? ImageSpaceAdapters;
             public Fallout4Group.TranslationMask<VoiceType.TranslationMask>? VoiceTypes;
             public Fallout4Group.TranslationMask<MaterialType.TranslationMask>? MaterialTypes;
             public Fallout4Group.TranslationMask<ArmorAddon.TranslationMask>? ArmorAddons;
             public Fallout4Group.TranslationMask<Message.TranslationMask>? Messages;
             public Fallout4Group.TranslationMask<MusicType.TranslationMask>? MusicTypes;
             public Fallout4Group.TranslationMask<MusicTrack.TranslationMask>? MusicTracks;
+            public Fallout4Group.TranslationMask<CollisionLayer.TranslationMask>? CollisionLayers;
             #endregion
 
             #region Ctors
@@ -2216,14 +2468,20 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((LeveledNpcs != null ? LeveledNpcs.OnOverall : DefaultOn, LeveledNpcs?.GetCrystal()));
                 ret.Add((Keys != null ? Keys.OnOverall : DefaultOn, Keys?.GetCrystal()));
                 ret.Add((Ingestibles != null ? Ingestibles.OnOverall : DefaultOn, Ingestibles?.GetCrystal()));
+                ret.Add((IdleMarkers != null ? IdleMarkers.OnOverall : DefaultOn, IdleMarkers?.GetCrystal()));
+                ret.Add((Projectiles != null ? Projectiles.OnOverall : DefaultOn, Projectiles?.GetCrystal()));
+                ret.Add((Hazards != null ? Hazards.OnOverall : DefaultOn, Hazards?.GetCrystal()));
                 ret.Add((LeveledItems != null ? LeveledItems.OnOverall : DefaultOn, LeveledItems?.GetCrystal()));
                 ret.Add((Regions != null ? Regions.OnOverall : DefaultOn, Regions?.GetCrystal()));
+                ret.Add((IdleAnimations != null ? IdleAnimations.OnOverall : DefaultOn, IdleAnimations?.GetCrystal()));
+                ret.Add((ImageSpaceAdapters != null ? ImageSpaceAdapters.OnOverall : DefaultOn, ImageSpaceAdapters?.GetCrystal()));
                 ret.Add((VoiceTypes != null ? VoiceTypes.OnOverall : DefaultOn, VoiceTypes?.GetCrystal()));
                 ret.Add((MaterialTypes != null ? MaterialTypes.OnOverall : DefaultOn, MaterialTypes?.GetCrystal()));
                 ret.Add((ArmorAddons != null ? ArmorAddons.OnOverall : DefaultOn, ArmorAddons?.GetCrystal()));
                 ret.Add((Messages != null ? Messages.OnOverall : DefaultOn, Messages?.GetCrystal()));
                 ret.Add((MusicTypes != null ? MusicTypes.OnOverall : DefaultOn, MusicTypes?.GetCrystal()));
                 ret.Add((MusicTracks != null ? MusicTracks.OnOverall : DefaultOn, MusicTracks?.GetCrystal()));
+                ret.Add((CollisionLayers != null ? CollisionLayers.OnOverall : DefaultOn, CollisionLayers?.GetCrystal()));
             }
 
             public static implicit operator TranslationMask(bool defaultOn)
@@ -2301,14 +2559,20 @@ namespace Mutagen.Bethesda.Fallout4
             _LeveledNpcs_Object = new Fallout4Group<LeveledNpc>(this);
             _Keys_Object = new Fallout4Group<Key>(this);
             _Ingestibles_Object = new Fallout4Group<Ingestible>(this);
+            _IdleMarkers_Object = new Fallout4Group<IdleMarker>(this);
+            _Projectiles_Object = new Fallout4Group<Projectile>(this);
+            _Hazards_Object = new Fallout4Group<Hazard>(this);
             _LeveledItems_Object = new Fallout4Group<LeveledItem>(this);
             _Regions_Object = new Fallout4Group<Region>(this);
+            _IdleAnimations_Object = new Fallout4Group<IdleAnimation>(this);
+            _ImageSpaceAdapters_Object = new Fallout4Group<ImageSpaceAdapter>(this);
             _VoiceTypes_Object = new Fallout4Group<VoiceType>(this);
             _MaterialTypes_Object = new Fallout4Group<MaterialType>(this);
             _ArmorAddons_Object = new Fallout4Group<ArmorAddon>(this);
             _Messages_Object = new Fallout4Group<Message>(this);
             _MusicTypes_Object = new Fallout4Group<MusicType>(this);
             _MusicTracks_Object = new Fallout4Group<MusicTrack>(this);
+            _CollisionLayers_Object = new Fallout4Group<CollisionLayer>(this);
             CustomCtor();
         }
         public void AddRecords(
@@ -2455,6 +2719,18 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 this.Ingestibles.RecordCache.Set(rhsMod.Ingestibles.RecordCache.Items);
             }
+            if (mask?.IdleMarkers ?? true)
+            {
+                this.IdleMarkers.RecordCache.Set(rhsMod.IdleMarkers.RecordCache.Items);
+            }
+            if (mask?.Projectiles ?? true)
+            {
+                this.Projectiles.RecordCache.Set(rhsMod.Projectiles.RecordCache.Items);
+            }
+            if (mask?.Hazards ?? true)
+            {
+                this.Hazards.RecordCache.Set(rhsMod.Hazards.RecordCache.Items);
+            }
             if (mask?.LeveledItems ?? true)
             {
                 this.LeveledItems.RecordCache.Set(rhsMod.LeveledItems.RecordCache.Items);
@@ -2462,6 +2738,14 @@ namespace Mutagen.Bethesda.Fallout4
             if (mask?.Regions ?? true)
             {
                 this.Regions.RecordCache.Set(rhsMod.Regions.RecordCache.Items);
+            }
+            if (mask?.IdleAnimations ?? true)
+            {
+                this.IdleAnimations.RecordCache.Set(rhsMod.IdleAnimations.RecordCache.Items);
+            }
+            if (mask?.ImageSpaceAdapters ?? true)
+            {
+                this.ImageSpaceAdapters.RecordCache.Set(rhsMod.ImageSpaceAdapters.RecordCache.Items);
             }
             if (mask?.VoiceTypes ?? true)
             {
@@ -2486,6 +2770,10 @@ namespace Mutagen.Bethesda.Fallout4
             if (mask?.MusicTracks ?? true)
             {
                 this.MusicTracks.RecordCache.Set(rhsMod.MusicTracks.RecordCache.Items);
+            }
+            if (mask?.CollisionLayers ?? true)
+            {
+                this.CollisionLayers.RecordCache.Set(rhsMod.CollisionLayers.RecordCache.Items);
             }
         }
 
@@ -2532,14 +2820,20 @@ namespace Mutagen.Bethesda.Fallout4
             count += LeveledNpcs.RecordCache.Count > 0 ? 1 : default(uint);
             count += Keys.RecordCache.Count > 0 ? 1 : default(uint);
             count += Ingestibles.RecordCache.Count > 0 ? 1 : default(uint);
+            count += IdleMarkers.RecordCache.Count > 0 ? 1 : default(uint);
+            count += Projectiles.RecordCache.Count > 0 ? 1 : default(uint);
+            count += Hazards.RecordCache.Count > 0 ? 1 : default(uint);
             count += LeveledItems.RecordCache.Count > 0 ? 1 : default(uint);
             count += Regions.RecordCache.Count > 0 ? 1 : default(uint);
+            count += IdleAnimations.RecordCache.Count > 0 ? 1 : default(uint);
+            count += ImageSpaceAdapters.RecordCache.Count > 0 ? 1 : default(uint);
             count += VoiceTypes.RecordCache.Count > 0 ? 1 : default(uint);
             count += MaterialTypes.RecordCache.Count > 0 ? 1 : default(uint);
             count += ArmorAddons.RecordCache.Count > 0 ? 1 : default(uint);
             count += Messages.RecordCache.Count > 0 ? 1 : default(uint);
             count += MusicTypes.RecordCache.Count > 0 ? 1 : default(uint);
             count += MusicTracks.RecordCache.Count > 0 ? 1 : default(uint);
+            count += CollisionLayers.RecordCache.Count > 0 ? 1 : default(uint);
             GetCustomRecordCount((customCount) => count += customCount);
             return count;
         }
@@ -2822,14 +3116,20 @@ namespace Mutagen.Bethesda.Fallout4
         new Fallout4Group<LeveledNpc> LeveledNpcs { get; }
         new Fallout4Group<Key> Keys { get; }
         new Fallout4Group<Ingestible> Ingestibles { get; }
+        new Fallout4Group<IdleMarker> IdleMarkers { get; }
+        new Fallout4Group<Projectile> Projectiles { get; }
+        new Fallout4Group<Hazard> Hazards { get; }
         new Fallout4Group<LeveledItem> LeveledItems { get; }
         new Fallout4Group<Region> Regions { get; }
+        new Fallout4Group<IdleAnimation> IdleAnimations { get; }
+        new Fallout4Group<ImageSpaceAdapter> ImageSpaceAdapters { get; }
         new Fallout4Group<VoiceType> VoiceTypes { get; }
         new Fallout4Group<MaterialType> MaterialTypes { get; }
         new Fallout4Group<ArmorAddon> ArmorAddons { get; }
         new Fallout4Group<Message> Messages { get; }
         new Fallout4Group<MusicType> MusicTypes { get; }
         new Fallout4Group<MusicTrack> MusicTracks { get; }
+        new Fallout4Group<CollisionLayer> CollisionLayers { get; }
     }
 
     public partial interface IFallout4ModGetter :
@@ -2884,14 +3184,20 @@ namespace Mutagen.Bethesda.Fallout4
         IFallout4GroupGetter<ILeveledNpcGetter> LeveledNpcs { get; }
         IFallout4GroupGetter<IKeyGetter> Keys { get; }
         IFallout4GroupGetter<IIngestibleGetter> Ingestibles { get; }
+        IFallout4GroupGetter<IIdleMarkerGetter> IdleMarkers { get; }
+        IFallout4GroupGetter<IProjectileGetter> Projectiles { get; }
+        IFallout4GroupGetter<IHazardGetter> Hazards { get; }
         IFallout4GroupGetter<ILeveledItemGetter> LeveledItems { get; }
         IFallout4GroupGetter<IRegionGetter> Regions { get; }
+        IFallout4GroupGetter<IIdleAnimationGetter> IdleAnimations { get; }
+        IFallout4GroupGetter<IImageSpaceAdapterGetter> ImageSpaceAdapters { get; }
         IFallout4GroupGetter<IVoiceTypeGetter> VoiceTypes { get; }
         IFallout4GroupGetter<IMaterialTypeGetter> MaterialTypes { get; }
         IFallout4GroupGetter<IArmorAddonGetter> ArmorAddons { get; }
         IFallout4GroupGetter<IMessageGetter> Messages { get; }
         IFallout4GroupGetter<IMusicTypeGetter> MusicTypes { get; }
         IFallout4GroupGetter<IMusicTrackGetter> MusicTracks { get; }
+        IFallout4GroupGetter<ICollisionLayerGetter> CollisionLayers { get; }
 
     }
 
@@ -3484,14 +3790,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         LeveledNpcs = 33,
         Keys = 34,
         Ingestibles = 35,
-        LeveledItems = 36,
-        Regions = 37,
-        VoiceTypes = 38,
-        MaterialTypes = 39,
-        ArmorAddons = 40,
-        Messages = 41,
-        MusicTypes = 42,
-        MusicTracks = 43,
+        IdleMarkers = 36,
+        Projectiles = 37,
+        Hazards = 38,
+        LeveledItems = 39,
+        Regions = 40,
+        IdleAnimations = 41,
+        ImageSpaceAdapters = 42,
+        VoiceTypes = 43,
+        MaterialTypes = 44,
+        ArmorAddons = 45,
+        Messages = 46,
+        MusicTypes = 47,
+        MusicTracks = 48,
+        CollisionLayers = 49,
     }
     #endregion
 
@@ -3509,9 +3821,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public const string GUID = "9cae6baa-1084-4862-ae0a-07c79b9f2a3a";
 
-        public const ushort AdditionalFieldCount = 44;
+        public const ushort AdditionalFieldCount = 50;
 
-        public const ushort FieldCount = 44;
+        public const ushort FieldCount = 50;
 
         public static readonly Type MaskType = typeof(Fallout4Mod.Mask<>);
 
@@ -3615,14 +3927,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.LeveledNpcs.Clear();
             item.Keys.Clear();
             item.Ingestibles.Clear();
+            item.IdleMarkers.Clear();
+            item.Projectiles.Clear();
+            item.Hazards.Clear();
             item.LeveledItems.Clear();
             item.Regions.Clear();
+            item.IdleAnimations.Clear();
+            item.ImageSpaceAdapters.Clear();
             item.VoiceTypes.Clear();
             item.MaterialTypes.Clear();
             item.ArmorAddons.Clear();
             item.Messages.Clear();
             item.MusicTypes.Clear();
             item.MusicTracks.Clear();
+            item.CollisionLayers.Clear();
         }
         
         #region Mutagen
@@ -3664,14 +3982,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.LeveledNpcs.RemapLinks(mapping);
             obj.Keys.RemapLinks(mapping);
             obj.Ingestibles.RemapLinks(mapping);
+            obj.IdleMarkers.RemapLinks(mapping);
+            obj.Projectiles.RemapLinks(mapping);
+            obj.Hazards.RemapLinks(mapping);
             obj.LeveledItems.RemapLinks(mapping);
             obj.Regions.RemapLinks(mapping);
+            obj.IdleAnimations.RemapLinks(mapping);
+            obj.ImageSpaceAdapters.RemapLinks(mapping);
             obj.VoiceTypes.RemapLinks(mapping);
             obj.MaterialTypes.RemapLinks(mapping);
             obj.ArmorAddons.RemapLinks(mapping);
             obj.Messages.RemapLinks(mapping);
             obj.MusicTypes.RemapLinks(mapping);
             obj.MusicTracks.RemapLinks(mapping);
+            obj.CollisionLayers.RemapLinks(mapping);
         }
         
         public IEnumerable<IMajorRecord> EnumerateMajorRecords(IFallout4Mod obj)
@@ -3741,14 +4065,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.LeveledNpcs.Remove(keys);
             obj.Keys.Remove(keys);
             obj.Ingestibles.Remove(keys);
+            obj.IdleMarkers.Remove(keys);
+            obj.Projectiles.Remove(keys);
+            obj.Hazards.Remove(keys);
             obj.LeveledItems.Remove(keys);
             obj.Regions.Remove(keys);
+            obj.IdleAnimations.Remove(keys);
+            obj.ImageSpaceAdapters.Remove(keys);
             obj.VoiceTypes.Remove(keys);
             obj.MaterialTypes.Remove(keys);
             obj.ArmorAddons.Remove(keys);
             obj.Messages.Remove(keys);
             obj.MusicTypes.Remove(keys);
             obj.MusicTracks.Remove(keys);
+            obj.CollisionLayers.Remove(keys);
         }
         
         public void Remove(
@@ -4048,6 +4378,30 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         type: type,
                         keys: keys);
                     break;
+                case "IdleMarker":
+                case "IIdleMarkerGetter":
+                case "IIdleMarker":
+                case "IIdleMarkerInternal":
+                    obj.IdleMarkers.Remove(
+                        type: type,
+                        keys: keys);
+                    break;
+                case "Projectile":
+                case "IProjectileGetter":
+                case "IProjectile":
+                case "IProjectileInternal":
+                    obj.Projectiles.Remove(
+                        type: type,
+                        keys: keys);
+                    break;
+                case "Hazard":
+                case "IHazardGetter":
+                case "IHazard":
+                case "IHazardInternal":
+                    obj.Hazards.Remove(
+                        type: type,
+                        keys: keys);
+                    break;
                 case "LeveledItem":
                 case "ILeveledItemGetter":
                 case "ILeveledItem":
@@ -4061,6 +4415,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IRegion":
                 case "IRegionInternal":
                     obj.Regions.Remove(
+                        type: type,
+                        keys: keys);
+                    break;
+                case "IdleAnimation":
+                case "IIdleAnimationGetter":
+                case "IIdleAnimation":
+                case "IIdleAnimationInternal":
+                    obj.IdleAnimations.Remove(
+                        type: type,
+                        keys: keys);
+                    break;
+                case "ImageSpaceAdapter":
+                case "IImageSpaceAdapterGetter":
+                case "IImageSpaceAdapter":
+                case "IImageSpaceAdapterInternal":
+                    obj.ImageSpaceAdapters.Remove(
                         type: type,
                         keys: keys);
                     break;
@@ -4112,9 +4482,18 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         type: type,
                         keys: keys);
                     break;
+                case "CollisionLayer":
+                case "ICollisionLayerGetter":
+                case "ICollisionLayer":
+                case "ICollisionLayerInternal":
+                    obj.CollisionLayers.Remove(
+                        type: type,
+                        keys: keys);
+                    break;
                 case "IIdleRelation":
                 case "IIdleRelationGetter":
                     Remove(obj, keys, typeof(IActionRecordGetter), throwIfUnknown: throwIfUnknown);
+                    Remove(obj, keys, typeof(IIdleAnimationGetter), throwIfUnknown: throwIfUnknown);
                     break;
                 case "IObjectId":
                 case "IObjectIdGetter":
@@ -4125,11 +4504,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     Remove(obj, keys, typeof(IDoorGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IFactionGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IFurnitureGetter), throwIfUnknown: throwIfUnknown);
+                    Remove(obj, keys, typeof(IIdleMarkerGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IIngestibleGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IKeyGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(ILightGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IMoveableStaticGetter), throwIfUnknown: throwIfUnknown);
+                    Remove(obj, keys, typeof(IProjectileGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(ISpellGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(ITextureSetGetter), throwIfUnknown: throwIfUnknown);
                     break;
@@ -4186,6 +4567,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     Remove(obj, keys, typeof(ILandscapeTextureGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IMoveableStaticGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(ITreeGetter), throwIfUnknown: throwIfUnknown);
+                    break;
+                case "IPlacedTrapTarget":
+                case "IPlacedTrapTargetGetter":
+                    Remove(obj, keys, typeof(IHazardGetter), throwIfUnknown: throwIfUnknown);
+                    Remove(obj, keys, typeof(IProjectileGetter), throwIfUnknown: throwIfUnknown);
                     break;
                 case "IHarvestTarget":
                 case "IHarvestTargetGetter":
@@ -4312,14 +4698,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ret.LeveledNpcs = MaskItemExt.Factory(item.LeveledNpcs.GetEqualsMask(rhs.LeveledNpcs, include), include);
             ret.Keys = MaskItemExt.Factory(item.Keys.GetEqualsMask(rhs.Keys, include), include);
             ret.Ingestibles = MaskItemExt.Factory(item.Ingestibles.GetEqualsMask(rhs.Ingestibles, include), include);
+            ret.IdleMarkers = MaskItemExt.Factory(item.IdleMarkers.GetEqualsMask(rhs.IdleMarkers, include), include);
+            ret.Projectiles = MaskItemExt.Factory(item.Projectiles.GetEqualsMask(rhs.Projectiles, include), include);
+            ret.Hazards = MaskItemExt.Factory(item.Hazards.GetEqualsMask(rhs.Hazards, include), include);
             ret.LeveledItems = MaskItemExt.Factory(item.LeveledItems.GetEqualsMask(rhs.LeveledItems, include), include);
             ret.Regions = MaskItemExt.Factory(item.Regions.GetEqualsMask(rhs.Regions, include), include);
+            ret.IdleAnimations = MaskItemExt.Factory(item.IdleAnimations.GetEqualsMask(rhs.IdleAnimations, include), include);
+            ret.ImageSpaceAdapters = MaskItemExt.Factory(item.ImageSpaceAdapters.GetEqualsMask(rhs.ImageSpaceAdapters, include), include);
             ret.VoiceTypes = MaskItemExt.Factory(item.VoiceTypes.GetEqualsMask(rhs.VoiceTypes, include), include);
             ret.MaterialTypes = MaskItemExt.Factory(item.MaterialTypes.GetEqualsMask(rhs.MaterialTypes, include), include);
             ret.ArmorAddons = MaskItemExt.Factory(item.ArmorAddons.GetEqualsMask(rhs.ArmorAddons, include), include);
             ret.Messages = MaskItemExt.Factory(item.Messages.GetEqualsMask(rhs.Messages, include), include);
             ret.MusicTypes = MaskItemExt.Factory(item.MusicTypes.GetEqualsMask(rhs.MusicTypes, include), include);
             ret.MusicTracks = MaskItemExt.Factory(item.MusicTracks.GetEqualsMask(rhs.MusicTracks, include), include);
+            ret.CollisionLayers = MaskItemExt.Factory(item.CollisionLayers.GetEqualsMask(rhs.CollisionLayers, include), include);
         }
         
         public string ToString(
@@ -4510,6 +4902,18 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 item.Ingestibles?.ToString(fg, "Ingestibles");
             }
+            if (printMask?.IdleMarkers?.Overall ?? true)
+            {
+                item.IdleMarkers?.ToString(fg, "IdleMarkers");
+            }
+            if (printMask?.Projectiles?.Overall ?? true)
+            {
+                item.Projectiles?.ToString(fg, "Projectiles");
+            }
+            if (printMask?.Hazards?.Overall ?? true)
+            {
+                item.Hazards?.ToString(fg, "Hazards");
+            }
             if (printMask?.LeveledItems?.Overall ?? true)
             {
                 item.LeveledItems?.ToString(fg, "LeveledItems");
@@ -4517,6 +4921,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             if (printMask?.Regions?.Overall ?? true)
             {
                 item.Regions?.ToString(fg, "Regions");
+            }
+            if (printMask?.IdleAnimations?.Overall ?? true)
+            {
+                item.IdleAnimations?.ToString(fg, "IdleAnimations");
+            }
+            if (printMask?.ImageSpaceAdapters?.Overall ?? true)
+            {
+                item.ImageSpaceAdapters?.ToString(fg, "ImageSpaceAdapters");
             }
             if (printMask?.VoiceTypes?.Overall ?? true)
             {
@@ -4541,6 +4953,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             if (printMask?.MusicTracks?.Overall ?? true)
             {
                 item.MusicTracks?.ToString(fg, "MusicTracks");
+            }
+            if (printMask?.CollisionLayers?.Overall ?? true)
+            {
+                item.CollisionLayers?.ToString(fg, "CollisionLayers");
             }
         }
         
@@ -4839,6 +5255,30 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 else if (!isIngestiblesEqual) return false;
             }
+            if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.IdleMarkers) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.IdleMarkers, rhs.IdleMarkers, out var lhsIdleMarkers, out var rhsIdleMarkers, out var isIdleMarkersEqual))
+                {
+                    if (!object.Equals(lhsIdleMarkers, rhsIdleMarkers)) return false;
+                }
+                else if (!isIdleMarkersEqual) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.Projectiles) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.Projectiles, rhs.Projectiles, out var lhsProjectiles, out var rhsProjectiles, out var isProjectilesEqual))
+                {
+                    if (!object.Equals(lhsProjectiles, rhsProjectiles)) return false;
+                }
+                else if (!isProjectilesEqual) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.Hazards) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.Hazards, rhs.Hazards, out var lhsHazards, out var rhsHazards, out var isHazardsEqual))
+                {
+                    if (!object.Equals(lhsHazards, rhsHazards)) return false;
+                }
+                else if (!isHazardsEqual) return false;
+            }
             if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.LeveledItems) ?? true))
             {
                 if (EqualsMaskHelper.RefEquality(lhs.LeveledItems, rhs.LeveledItems, out var lhsLeveledItems, out var rhsLeveledItems, out var isLeveledItemsEqual))
@@ -4854,6 +5294,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     if (!object.Equals(lhsRegions, rhsRegions)) return false;
                 }
                 else if (!isRegionsEqual) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.IdleAnimations) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.IdleAnimations, rhs.IdleAnimations, out var lhsIdleAnimations, out var rhsIdleAnimations, out var isIdleAnimationsEqual))
+                {
+                    if (!object.Equals(lhsIdleAnimations, rhsIdleAnimations)) return false;
+                }
+                else if (!isIdleAnimationsEqual) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.ImageSpaceAdapters) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.ImageSpaceAdapters, rhs.ImageSpaceAdapters, out var lhsImageSpaceAdapters, out var rhsImageSpaceAdapters, out var isImageSpaceAdaptersEqual))
+                {
+                    if (!object.Equals(lhsImageSpaceAdapters, rhsImageSpaceAdapters)) return false;
+                }
+                else if (!isImageSpaceAdaptersEqual) return false;
             }
             if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.VoiceTypes) ?? true))
             {
@@ -4903,6 +5359,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 else if (!isMusicTracksEqual) return false;
             }
+            if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.CollisionLayers) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.CollisionLayers, rhs.CollisionLayers, out var lhsCollisionLayers, out var rhsCollisionLayers, out var isCollisionLayersEqual))
+                {
+                    if (!object.Equals(lhsCollisionLayers, rhsCollisionLayers)) return false;
+                }
+                else if (!isCollisionLayersEqual) return false;
+            }
             return true;
         }
         
@@ -4945,14 +5409,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             hash.Add(item.LeveledNpcs);
             hash.Add(item.Keys);
             hash.Add(item.Ingestibles);
+            hash.Add(item.IdleMarkers);
+            hash.Add(item.Projectiles);
+            hash.Add(item.Hazards);
             hash.Add(item.LeveledItems);
             hash.Add(item.Regions);
+            hash.Add(item.IdleAnimations);
+            hash.Add(item.ImageSpaceAdapters);
             hash.Add(item.VoiceTypes);
             hash.Add(item.MaterialTypes);
             hash.Add(item.ArmorAddons);
             hash.Add(item.Messages);
             hash.Add(item.MusicTypes);
             hash.Add(item.MusicTracks);
+            hash.Add(item.CollisionLayers);
             return hash.ToHashCode();
         }
         
@@ -5146,6 +5616,21 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IIngestible":
                 case "IIngestibleInternal":
                     return obj.Ingestibles;
+                case "IdleMarker":
+                case "IIdleMarkerGetter":
+                case "IIdleMarker":
+                case "IIdleMarkerInternal":
+                    return obj.IdleMarkers;
+                case "Projectile":
+                case "IProjectileGetter":
+                case "IProjectile":
+                case "IProjectileInternal":
+                    return obj.Projectiles;
+                case "Hazard":
+                case "IHazardGetter":
+                case "IHazard":
+                case "IHazardInternal":
+                    return obj.Hazards;
                 case "LeveledItem":
                 case "ILeveledItemGetter":
                 case "ILeveledItem":
@@ -5156,6 +5641,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IRegion":
                 case "IRegionInternal":
                     return obj.Regions;
+                case "IdleAnimation":
+                case "IIdleAnimationGetter":
+                case "IIdleAnimation":
+                case "IIdleAnimationInternal":
+                    return obj.IdleAnimations;
+                case "ImageSpaceAdapter":
+                case "IImageSpaceAdapterGetter":
+                case "IImageSpaceAdapter":
+                case "IImageSpaceAdapterInternal":
+                    return obj.ImageSpaceAdapters;
                 case "VoiceType":
                 case "IVoiceTypeGetter":
                 case "IVoiceType":
@@ -5186,6 +5681,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IMusicTrack":
                 case "IMusicTrackInternal":
                     return obj.MusicTracks;
+                case "CollisionLayer":
+                case "ICollisionLayerGetter":
+                case "ICollisionLayer":
+                case "ICollisionLayerInternal":
+                    return obj.CollisionLayers;
                 default:
                     throw new ArgumentException($"Unknown major record type: {type}");
             }
@@ -5206,7 +5706,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 mod: item,
                 modHeader: item.ModHeader.DeepCopy(),
                 modKey: modKey);
-            Stream[] outputStreams = new Stream[43];
+            Stream[] outputStreams = new Stream[49];
             List<Action> toDo = new List<Action>();
             toDo.Add(() => WriteGroupParallel(item.GameSettings, writer.MetaData.MasterReferences!, 0, outputStreams, param.StringsWriter));
             toDo.Add(() => WriteGroupParallel(item.Keywords, writer.MetaData.MasterReferences!, 1, outputStreams, param.StringsWriter));
@@ -5243,14 +5743,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             toDo.Add(() => WriteGroupParallel(item.LeveledNpcs, writer.MetaData.MasterReferences!, 32, outputStreams, param.StringsWriter));
             toDo.Add(() => WriteGroupParallel(item.Keys, writer.MetaData.MasterReferences!, 33, outputStreams, param.StringsWriter));
             toDo.Add(() => WriteGroupParallel(item.Ingestibles, writer.MetaData.MasterReferences!, 34, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.LeveledItems, writer.MetaData.MasterReferences!, 35, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Regions, writer.MetaData.MasterReferences!, 36, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.VoiceTypes, writer.MetaData.MasterReferences!, 37, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.MaterialTypes, writer.MetaData.MasterReferences!, 38, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.ArmorAddons, writer.MetaData.MasterReferences!, 39, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.Messages, writer.MetaData.MasterReferences!, 40, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.MusicTypes, writer.MetaData.MasterReferences!, 41, outputStreams, param.StringsWriter));
-            toDo.Add(() => WriteGroupParallel(item.MusicTracks, writer.MetaData.MasterReferences!, 42, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.IdleMarkers, writer.MetaData.MasterReferences!, 35, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Projectiles, writer.MetaData.MasterReferences!, 36, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Hazards, writer.MetaData.MasterReferences!, 37, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.LeveledItems, writer.MetaData.MasterReferences!, 38, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Regions, writer.MetaData.MasterReferences!, 39, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.IdleAnimations, writer.MetaData.MasterReferences!, 40, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.ImageSpaceAdapters, writer.MetaData.MasterReferences!, 41, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.VoiceTypes, writer.MetaData.MasterReferences!, 42, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.MaterialTypes, writer.MetaData.MasterReferences!, 43, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.ArmorAddons, writer.MetaData.MasterReferences!, 44, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.Messages, writer.MetaData.MasterReferences!, 45, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.MusicTypes, writer.MetaData.MasterReferences!, 46, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.MusicTracks, writer.MetaData.MasterReferences!, 47, outputStreams, param.StringsWriter));
+            toDo.Add(() => WriteGroupParallel(item.CollisionLayers, writer.MetaData.MasterReferences!, 48, outputStreams, param.StringsWriter));
             Parallel.Invoke(toDo.ToArray());
             PluginUtilityTranslation.CompileStreamsInto(
                 outputStreams.NotNull(),
@@ -5549,6 +6055,27 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     yield return item;
                 }
             }
+            if (obj.IdleMarkers is IFormLinkContainerGetter IdleMarkerslinkCont)
+            {
+                foreach (var item in IdleMarkerslinkCont.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
+            if (obj.Projectiles is IFormLinkContainerGetter ProjectileslinkCont)
+            {
+                foreach (var item in ProjectileslinkCont.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
+            if (obj.Hazards is IFormLinkContainerGetter HazardslinkCont)
+            {
+                foreach (var item in HazardslinkCont.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
             if (obj.LeveledItems is IFormLinkContainerGetter LeveledItemslinkCont)
             {
                 foreach (var item in LeveledItemslinkCont.ContainedFormLinks)
@@ -5559,6 +6086,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             if (obj.Regions is IFormLinkContainerGetter RegionslinkCont)
             {
                 foreach (var item in RegionslinkCont.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
+            if (obj.IdleAnimations is IFormLinkContainerGetter IdleAnimationslinkCont)
+            {
+                foreach (var item in IdleAnimationslinkCont.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
+            if (obj.ImageSpaceAdapters is IFormLinkContainerGetter ImageSpaceAdapterslinkCont)
+            {
+                foreach (var item in ImageSpaceAdapterslinkCont.ContainedFormLinks)
                 {
                     yield return item;
                 }
@@ -5601,6 +6142,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             if (obj.MusicTracks is IFormLinkContainerGetter MusicTrackslinkCont)
             {
                 foreach (var item in MusicTrackslinkCont.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
+            if (obj.CollisionLayers is IFormLinkContainerGetter CollisionLayerslinkCont)
+            {
+                foreach (var item in CollisionLayerslinkCont.ContainedFormLinks)
                 {
                     yield return item;
                 }
@@ -5750,11 +6298,31 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 yield return item;
             }
+            foreach (var item in obj.IdleMarkers.EnumerateMajorRecords())
+            {
+                yield return item;
+            }
+            foreach (var item in obj.Projectiles.EnumerateMajorRecords())
+            {
+                yield return item;
+            }
+            foreach (var item in obj.Hazards.EnumerateMajorRecords())
+            {
+                yield return item;
+            }
             foreach (var item in obj.LeveledItems.EnumerateMajorRecords())
             {
                 yield return item;
             }
             foreach (var item in obj.Regions.EnumerateMajorRecords())
+            {
+                yield return item;
+            }
+            foreach (var item in obj.IdleAnimations.EnumerateMajorRecords())
+            {
+                yield return item;
+            }
+            foreach (var item in obj.ImageSpaceAdapters.EnumerateMajorRecords())
             {
                 yield return item;
             }
@@ -5779,6 +6347,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 yield return item;
             }
             foreach (var item in obj.MusicTracks.EnumerateMajorRecords())
+            {
+                yield return item;
+            }
+            foreach (var item in obj.CollisionLayers.EnumerateMajorRecords())
             {
                 yield return item;
             }
@@ -6132,6 +6704,33 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         yield return item;
                     }
                     yield break;
+                case "IdleMarker":
+                case "IIdleMarkerGetter":
+                case "IIdleMarker":
+                case "IIdleMarkerInternal":
+                    foreach (var item in obj.IdleMarkers.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                case "Projectile":
+                case "IProjectileGetter":
+                case "IProjectile":
+                case "IProjectileInternal":
+                    foreach (var item in obj.Projectiles.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                case "Hazard":
+                case "IHazardGetter":
+                case "IHazard":
+                case "IHazardInternal":
+                    foreach (var item in obj.Hazards.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
                 case "LeveledItem":
                 case "ILeveledItemGetter":
                 case "ILeveledItem":
@@ -6146,6 +6745,24 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IRegion":
                 case "IRegionInternal":
                     foreach (var item in obj.Regions.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                case "IdleAnimation":
+                case "IIdleAnimationGetter":
+                case "IIdleAnimation":
+                case "IIdleAnimationInternal":
+                    foreach (var item in obj.IdleAnimations.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                case "ImageSpaceAdapter":
+                case "IImageSpaceAdapterGetter":
+                case "IImageSpaceAdapter":
+                case "IImageSpaceAdapterInternal":
+                    foreach (var item in obj.ImageSpaceAdapters.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -6204,10 +6821,23 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         yield return item;
                     }
                     yield break;
+                case "CollisionLayer":
+                case "ICollisionLayerGetter":
+                case "ICollisionLayer":
+                case "ICollisionLayerInternal":
+                    foreach (var item in obj.CollisionLayers.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
                 case "IIdleRelation":
                 {
                     if (!Fallout4Mod_Registration.SetterType.IsAssignableFrom(obj.GetType())) yield break;
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IActionRecordGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IIdleAnimationGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -6216,6 +6846,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IIdleRelationGetter":
                 {
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IActionRecordGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IIdleAnimationGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -6252,6 +6886,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IIdleMarkerGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IIngestibleGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -6269,6 +6907,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         yield return item;
                     }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IMoveableStaticGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IProjectileGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -6312,6 +6954,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IIdleMarkerGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IIngestibleGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -6329,6 +6975,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         yield return item;
                     }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IMoveableStaticGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IProjectileGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -6634,6 +7284,31 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         yield return item;
                     }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(ITreeGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "IPlacedTrapTarget":
+                {
+                    if (!Fallout4Mod_Registration.SetterType.IsAssignableFrom(obj.GetType())) yield break;
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IHazardGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IProjectileGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "IPlacedTrapTargetGetter":
+                {
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IHazardGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IProjectileGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -7094,6 +7769,30 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     group: (m) => m.Ingestibles,
                     groupGetter: (m) => m.Ingestibles);
             }
+            foreach (var item in obj.IdleMarkers)
+            {
+                yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, IdleMarker, IIdleMarkerGetter>(
+                    modKey: obj.ModKey,
+                    record: item,
+                    group: (m) => m.IdleMarkers,
+                    groupGetter: (m) => m.IdleMarkers);
+            }
+            foreach (var item in obj.Projectiles)
+            {
+                yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, Projectile, IProjectileGetter>(
+                    modKey: obj.ModKey,
+                    record: item,
+                    group: (m) => m.Projectiles,
+                    groupGetter: (m) => m.Projectiles);
+            }
+            foreach (var item in obj.Hazards)
+            {
+                yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, Hazard, IHazardGetter>(
+                    modKey: obj.ModKey,
+                    record: item,
+                    group: (m) => m.Hazards,
+                    groupGetter: (m) => m.Hazards);
+            }
             foreach (var item in obj.LeveledItems)
             {
                 yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, LeveledItem, ILeveledItemGetter>(
@@ -7109,6 +7808,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     record: item,
                     group: (m) => m.Regions,
                     groupGetter: (m) => m.Regions);
+            }
+            foreach (var item in obj.IdleAnimations)
+            {
+                yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, IdleAnimation, IIdleAnimationGetter>(
+                    modKey: obj.ModKey,
+                    record: item,
+                    group: (m) => m.IdleAnimations,
+                    groupGetter: (m) => m.IdleAnimations);
+            }
+            foreach (var item in obj.ImageSpaceAdapters)
+            {
+                yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, ImageSpaceAdapter, IImageSpaceAdapterGetter>(
+                    modKey: obj.ModKey,
+                    record: item,
+                    group: (m) => m.ImageSpaceAdapters,
+                    groupGetter: (m) => m.ImageSpaceAdapters);
             }
             foreach (var item in obj.VoiceTypes)
             {
@@ -7157,6 +7872,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     record: item,
                     group: (m) => m.MusicTracks,
                     groupGetter: (m) => m.MusicTracks);
+            }
+            foreach (var item in obj.CollisionLayers)
+            {
+                yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, CollisionLayer, ICollisionLayerGetter>(
+                    modKey: obj.ModKey,
+                    record: item,
+                    group: (m) => m.CollisionLayers,
+                    groupGetter: (m) => m.CollisionLayers);
             }
         }
         
@@ -7644,6 +8367,45 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                             groupGetter: (m) => m.Ingestibles);
                     }
                     yield break;
+                case "IdleMarker":
+                case "IIdleMarkerGetter":
+                case "IIdleMarker":
+                case "IIdleMarkerInternal":
+                    foreach (var item in obj.IdleMarkers)
+                    {
+                        yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, IdleMarker, IIdleMarkerGetter>(
+                            modKey: obj.ModKey,
+                            record: item,
+                            group: (m) => m.IdleMarkers,
+                            groupGetter: (m) => m.IdleMarkers);
+                    }
+                    yield break;
+                case "Projectile":
+                case "IProjectileGetter":
+                case "IProjectile":
+                case "IProjectileInternal":
+                    foreach (var item in obj.Projectiles)
+                    {
+                        yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, Projectile, IProjectileGetter>(
+                            modKey: obj.ModKey,
+                            record: item,
+                            group: (m) => m.Projectiles,
+                            groupGetter: (m) => m.Projectiles);
+                    }
+                    yield break;
+                case "Hazard":
+                case "IHazardGetter":
+                case "IHazard":
+                case "IHazardInternal":
+                    foreach (var item in obj.Hazards)
+                    {
+                        yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, Hazard, IHazardGetter>(
+                            modKey: obj.ModKey,
+                            record: item,
+                            group: (m) => m.Hazards,
+                            groupGetter: (m) => m.Hazards);
+                    }
+                    yield break;
                 case "LeveledItem":
                 case "ILeveledItemGetter":
                 case "ILeveledItem":
@@ -7668,6 +8430,32 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                             record: item,
                             group: (m) => m.Regions,
                             groupGetter: (m) => m.Regions);
+                    }
+                    yield break;
+                case "IdleAnimation":
+                case "IIdleAnimationGetter":
+                case "IIdleAnimation":
+                case "IIdleAnimationInternal":
+                    foreach (var item in obj.IdleAnimations)
+                    {
+                        yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, IdleAnimation, IIdleAnimationGetter>(
+                            modKey: obj.ModKey,
+                            record: item,
+                            group: (m) => m.IdleAnimations,
+                            groupGetter: (m) => m.IdleAnimations);
+                    }
+                    yield break;
+                case "ImageSpaceAdapter":
+                case "IImageSpaceAdapterGetter":
+                case "IImageSpaceAdapter":
+                case "IImageSpaceAdapterInternal":
+                    foreach (var item in obj.ImageSpaceAdapters)
+                    {
+                        yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, ImageSpaceAdapter, IImageSpaceAdapterGetter>(
+                            modKey: obj.ModKey,
+                            record: item,
+                            group: (m) => m.ImageSpaceAdapters,
+                            groupGetter: (m) => m.ImageSpaceAdapters);
                     }
                     yield break;
                 case "VoiceType":
@@ -7748,6 +8536,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                             groupGetter: (m) => m.MusicTracks);
                     }
                     yield break;
+                case "CollisionLayer":
+                case "ICollisionLayerGetter":
+                case "ICollisionLayer":
+                case "ICollisionLayerInternal":
+                    foreach (var item in obj.CollisionLayers)
+                    {
+                        yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, CollisionLayer, ICollisionLayerGetter>(
+                            modKey: obj.ModKey,
+                            record: item,
+                            group: (m) => m.CollisionLayers,
+                            groupGetter: (m) => m.CollisionLayers);
+                    }
+                    yield break;
                 case "IIdleRelation":
                 case "IIdleRelationGetter":
                 {
@@ -7755,6 +8556,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         obj,
                         linkCache: linkCache,
                         type: typeof(IActionRecordGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
+                        type: typeof(IIdleAnimationGetter),
                         throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -7823,6 +8632,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     foreach (var item in EnumerateMajorRecordContexts(
                         obj,
                         linkCache: linkCache,
+                        type: typeof(IIdleMarkerGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
                         type: typeof(IIngestibleGetter),
                         throwIfUnknown: throwIfUnknown))
                     {
@@ -7856,6 +8673,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         obj,
                         linkCache: linkCache,
                         type: typeof(IMoveableStaticGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
+                        type: typeof(IProjectileGetter),
                         throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -8133,6 +8958,27 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         obj,
                         linkCache: linkCache,
                         type: typeof(ITreeGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "IPlacedTrapTarget":
+                case "IPlacedTrapTargetGetter":
+                {
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
+                        type: typeof(IHazardGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
+                        type: typeof(IProjectileGetter),
                         throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -9017,6 +9863,66 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     errorMask?.PopIndex();
                 }
             }
+            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.IdleMarkers) ?? true))
+            {
+                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.IdleMarkers);
+                try
+                {
+                    item.IdleMarkers.DeepCopyIn(
+                        rhs: rhs.IdleMarkers,
+                        errorMask: errorMask,
+                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.IdleMarkers));
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.Projectiles) ?? true))
+            {
+                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.Projectiles);
+                try
+                {
+                    item.Projectiles.DeepCopyIn(
+                        rhs: rhs.Projectiles,
+                        errorMask: errorMask,
+                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.Projectiles));
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.Hazards) ?? true))
+            {
+                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.Hazards);
+                try
+                {
+                    item.Hazards.DeepCopyIn(
+                        rhs: rhs.Hazards,
+                        errorMask: errorMask,
+                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.Hazards));
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
             if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.LeveledItems) ?? true))
             {
                 errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.LeveledItems);
@@ -9046,6 +9952,46 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         rhs: rhs.Regions,
                         errorMask: errorMask,
                         copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.Regions));
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.IdleAnimations) ?? true))
+            {
+                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.IdleAnimations);
+                try
+                {
+                    item.IdleAnimations.DeepCopyIn(
+                        rhs: rhs.IdleAnimations,
+                        errorMask: errorMask,
+                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.IdleAnimations));
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.ImageSpaceAdapters) ?? true))
+            {
+                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.ImageSpaceAdapters);
+                try
+                {
+                    item.ImageSpaceAdapters.DeepCopyIn(
+                        rhs: rhs.ImageSpaceAdapters,
+                        errorMask: errorMask,
+                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.ImageSpaceAdapters));
                 }
                 catch (Exception ex)
                 when (errorMask != null)
@@ -9166,6 +10112,26 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         rhs: rhs.MusicTracks,
                         errorMask: errorMask,
                         copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.MusicTracks));
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.CollisionLayers) ?? true))
+            {
+                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.CollisionLayers);
+                try
+                {
+                    item.CollisionLayers.DeepCopyIn(
+                        rhs: rhs.CollisionLayers,
+                        errorMask: errorMask,
+                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.CollisionLayers));
                 }
                 catch (Exception ex)
                 when (errorMask != null)
@@ -9302,14 +10268,20 @@ namespace Mutagen.Bethesda.Fallout4
         public bool LeveledNpcs;
         public bool Keys;
         public bool Ingestibles;
+        public bool IdleMarkers;
+        public bool Projectiles;
+        public bool Hazards;
         public bool LeveledItems;
         public bool Regions;
+        public bool IdleAnimations;
+        public bool ImageSpaceAdapters;
         public bool VoiceTypes;
         public bool MaterialTypes;
         public bool ArmorAddons;
         public bool Messages;
         public bool MusicTypes;
         public bool MusicTracks;
+        public bool CollisionLayers;
         public GroupMask()
         {
         }
@@ -9350,14 +10322,20 @@ namespace Mutagen.Bethesda.Fallout4
             LeveledNpcs = defaultValue;
             Keys = defaultValue;
             Ingestibles = defaultValue;
+            IdleMarkers = defaultValue;
+            Projectiles = defaultValue;
+            Hazards = defaultValue;
             LeveledItems = defaultValue;
             Regions = defaultValue;
+            IdleAnimations = defaultValue;
+            ImageSpaceAdapters = defaultValue;
             VoiceTypes = defaultValue;
             MaterialTypes = defaultValue;
             ArmorAddons = defaultValue;
             Messages = defaultValue;
             MusicTypes = defaultValue;
             MusicTracks = defaultValue;
+            CollisionLayers = defaultValue;
         }
     }
 
@@ -9774,6 +10752,39 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         translationParams: translationParams);
                 }
             }
+            if (importMask?.IdleMarkers ?? true)
+            {
+                var IdleMarkersItem = item.IdleMarkers;
+                if (IdleMarkersItem.RecordCache.Count > 0)
+                {
+                    ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)IdleMarkersItem).BinaryWriteTranslator).Write<IIdleMarkerGetter>(
+                        item: IdleMarkersItem,
+                        writer: writer,
+                        translationParams: translationParams);
+                }
+            }
+            if (importMask?.Projectiles ?? true)
+            {
+                var ProjectilesItem = item.Projectiles;
+                if (ProjectilesItem.RecordCache.Count > 0)
+                {
+                    ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)ProjectilesItem).BinaryWriteTranslator).Write<IProjectileGetter>(
+                        item: ProjectilesItem,
+                        writer: writer,
+                        translationParams: translationParams);
+                }
+            }
+            if (importMask?.Hazards ?? true)
+            {
+                var HazardsItem = item.Hazards;
+                if (HazardsItem.RecordCache.Count > 0)
+                {
+                    ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)HazardsItem).BinaryWriteTranslator).Write<IHazardGetter>(
+                        item: HazardsItem,
+                        writer: writer,
+                        translationParams: translationParams);
+                }
+            }
             if (importMask?.LeveledItems ?? true)
             {
                 var LeveledItemsItem = item.LeveledItems;
@@ -9792,6 +10803,28 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 {
                     ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)RegionsItem).BinaryWriteTranslator).Write<IRegionGetter>(
                         item: RegionsItem,
+                        writer: writer,
+                        translationParams: translationParams);
+                }
+            }
+            if (importMask?.IdleAnimations ?? true)
+            {
+                var IdleAnimationsItem = item.IdleAnimations;
+                if (IdleAnimationsItem.RecordCache.Count > 0)
+                {
+                    ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)IdleAnimationsItem).BinaryWriteTranslator).Write<IIdleAnimationGetter>(
+                        item: IdleAnimationsItem,
+                        writer: writer,
+                        translationParams: translationParams);
+                }
+            }
+            if (importMask?.ImageSpaceAdapters ?? true)
+            {
+                var ImageSpaceAdaptersItem = item.ImageSpaceAdapters;
+                if (ImageSpaceAdaptersItem.RecordCache.Count > 0)
+                {
+                    ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)ImageSpaceAdaptersItem).BinaryWriteTranslator).Write<IImageSpaceAdapterGetter>(
+                        item: ImageSpaceAdaptersItem,
                         writer: writer,
                         translationParams: translationParams);
                 }
@@ -9858,6 +10891,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 {
                     ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)MusicTracksItem).BinaryWriteTranslator).Write<IMusicTrackGetter>(
                         item: MusicTracksItem,
+                        writer: writer,
+                        translationParams: translationParams);
+                }
+            }
+            if (importMask?.CollisionLayers ?? true)
+            {
+                var CollisionLayersItem = item.CollisionLayers;
+                if (CollisionLayersItem.RecordCache.Count > 0)
+                {
+                    ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)CollisionLayersItem).BinaryWriteTranslator).Write<ICollisionLayerGetter>(
+                        item: CollisionLayersItem,
                         writer: writer,
                         translationParams: translationParams);
                 }
@@ -10418,6 +11462,48 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     }
                     return (int)Fallout4Mod_FieldIndex.Ingestibles;
                 }
+                case RecordTypeInts.IDLM:
+                {
+                    if (importMask?.IdleMarkers ?? true)
+                    {
+                        item.IdleMarkers.CopyInFromBinary(
+                            frame: frame,
+                            translationParams: null);
+                    }
+                    else
+                    {
+                        frame.Position += contentLength;
+                    }
+                    return (int)Fallout4Mod_FieldIndex.IdleMarkers;
+                }
+                case RecordTypeInts.PROJ:
+                {
+                    if (importMask?.Projectiles ?? true)
+                    {
+                        item.Projectiles.CopyInFromBinary(
+                            frame: frame,
+                            translationParams: null);
+                    }
+                    else
+                    {
+                        frame.Position += contentLength;
+                    }
+                    return (int)Fallout4Mod_FieldIndex.Projectiles;
+                }
+                case RecordTypeInts.HAZD:
+                {
+                    if (importMask?.Hazards ?? true)
+                    {
+                        item.Hazards.CopyInFromBinary(
+                            frame: frame,
+                            translationParams: null);
+                    }
+                    else
+                    {
+                        frame.Position += contentLength;
+                    }
+                    return (int)Fallout4Mod_FieldIndex.Hazards;
+                }
                 case RecordTypeInts.LVLI:
                 {
                     if (importMask?.LeveledItems ?? true)
@@ -10445,6 +11531,34 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         frame.Position += contentLength;
                     }
                     return (int)Fallout4Mod_FieldIndex.Regions;
+                }
+                case RecordTypeInts.IDLE:
+                {
+                    if (importMask?.IdleAnimations ?? true)
+                    {
+                        item.IdleAnimations.CopyInFromBinary(
+                            frame: frame,
+                            translationParams: null);
+                    }
+                    else
+                    {
+                        frame.Position += contentLength;
+                    }
+                    return (int)Fallout4Mod_FieldIndex.IdleAnimations;
+                }
+                case RecordTypeInts.IMAD:
+                {
+                    if (importMask?.ImageSpaceAdapters ?? true)
+                    {
+                        item.ImageSpaceAdapters.CopyInFromBinary(
+                            frame: frame,
+                            translationParams: null);
+                    }
+                    else
+                    {
+                        frame.Position += contentLength;
+                    }
+                    return (int)Fallout4Mod_FieldIndex.ImageSpaceAdapters;
                 }
                 case RecordTypeInts.VTYP:
                 {
@@ -10529,6 +11643,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         frame.Position += contentLength;
                     }
                     return (int)Fallout4Mod_FieldIndex.MusicTracks;
+                }
+                case RecordTypeInts.COLL:
+                {
+                    if (importMask?.CollisionLayers ?? true)
+                    {
+                        item.CollisionLayers.CopyInFromBinary(
+                            frame: frame,
+                            translationParams: null);
+                    }
+                    else
+                    {
+                        frame.Position += contentLength;
+                    }
+                    return (int)Fallout4Mod_FieldIndex.CollisionLayers;
                 }
                 default:
                     frame.Position += contentLength;
@@ -10865,6 +11993,21 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private IFallout4GroupGetter<IIngestibleGetter>? _Ingestibles => _IngestiblesLocations != null ? Fallout4GroupBinaryOverlay<IIngestibleGetter>.Fallout4GroupFactory(_data, _IngestiblesLocations, _package) : default;
         public IFallout4GroupGetter<IIngestibleGetter> Ingestibles => _Ingestibles ?? new Fallout4Group<Ingestible>(this);
         #endregion
+        #region IdleMarkers
+        private List<RangeInt64>? _IdleMarkersLocations;
+        private IFallout4GroupGetter<IIdleMarkerGetter>? _IdleMarkers => _IdleMarkersLocations != null ? Fallout4GroupBinaryOverlay<IIdleMarkerGetter>.Fallout4GroupFactory(_data, _IdleMarkersLocations, _package) : default;
+        public IFallout4GroupGetter<IIdleMarkerGetter> IdleMarkers => _IdleMarkers ?? new Fallout4Group<IdleMarker>(this);
+        #endregion
+        #region Projectiles
+        private List<RangeInt64>? _ProjectilesLocations;
+        private IFallout4GroupGetter<IProjectileGetter>? _Projectiles => _ProjectilesLocations != null ? Fallout4GroupBinaryOverlay<IProjectileGetter>.Fallout4GroupFactory(_data, _ProjectilesLocations, _package) : default;
+        public IFallout4GroupGetter<IProjectileGetter> Projectiles => _Projectiles ?? new Fallout4Group<Projectile>(this);
+        #endregion
+        #region Hazards
+        private List<RangeInt64>? _HazardsLocations;
+        private IFallout4GroupGetter<IHazardGetter>? _Hazards => _HazardsLocations != null ? Fallout4GroupBinaryOverlay<IHazardGetter>.Fallout4GroupFactory(_data, _HazardsLocations, _package) : default;
+        public IFallout4GroupGetter<IHazardGetter> Hazards => _Hazards ?? new Fallout4Group<Hazard>(this);
+        #endregion
         #region LeveledItems
         private List<RangeInt64>? _LeveledItemsLocations;
         private IFallout4GroupGetter<ILeveledItemGetter>? _LeveledItems => _LeveledItemsLocations != null ? Fallout4GroupBinaryOverlay<ILeveledItemGetter>.Fallout4GroupFactory(_data, _LeveledItemsLocations, _package) : default;
@@ -10874,6 +12017,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private List<RangeInt64>? _RegionsLocations;
         private IFallout4GroupGetter<IRegionGetter>? _Regions => _RegionsLocations != null ? Fallout4GroupBinaryOverlay<IRegionGetter>.Fallout4GroupFactory(_data, _RegionsLocations, _package) : default;
         public IFallout4GroupGetter<IRegionGetter> Regions => _Regions ?? new Fallout4Group<Region>(this);
+        #endregion
+        #region IdleAnimations
+        private List<RangeInt64>? _IdleAnimationsLocations;
+        private IFallout4GroupGetter<IIdleAnimationGetter>? _IdleAnimations => _IdleAnimationsLocations != null ? Fallout4GroupBinaryOverlay<IIdleAnimationGetter>.Fallout4GroupFactory(_data, _IdleAnimationsLocations, _package) : default;
+        public IFallout4GroupGetter<IIdleAnimationGetter> IdleAnimations => _IdleAnimations ?? new Fallout4Group<IdleAnimation>(this);
+        #endregion
+        #region ImageSpaceAdapters
+        private List<RangeInt64>? _ImageSpaceAdaptersLocations;
+        private IFallout4GroupGetter<IImageSpaceAdapterGetter>? _ImageSpaceAdapters => _ImageSpaceAdaptersLocations != null ? Fallout4GroupBinaryOverlay<IImageSpaceAdapterGetter>.Fallout4GroupFactory(_data, _ImageSpaceAdaptersLocations, _package) : default;
+        public IFallout4GroupGetter<IImageSpaceAdapterGetter> ImageSpaceAdapters => _ImageSpaceAdapters ?? new Fallout4Group<ImageSpaceAdapter>(this);
         #endregion
         #region VoiceTypes
         private List<RangeInt64>? _VoiceTypesLocations;
@@ -10904,6 +12057,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private List<RangeInt64>? _MusicTracksLocations;
         private IFallout4GroupGetter<IMusicTrackGetter>? _MusicTracks => _MusicTracksLocations != null ? Fallout4GroupBinaryOverlay<IMusicTrackGetter>.Fallout4GroupFactory(_data, _MusicTracksLocations, _package) : default;
         public IFallout4GroupGetter<IMusicTrackGetter> MusicTracks => _MusicTracks ?? new Fallout4Group<MusicTrack>(this);
+        #endregion
+        #region CollisionLayers
+        private List<RangeInt64>? _CollisionLayersLocations;
+        private IFallout4GroupGetter<ICollisionLayerGetter>? _CollisionLayers => _CollisionLayersLocations != null ? Fallout4GroupBinaryOverlay<ICollisionLayerGetter>.Fallout4GroupFactory(_data, _CollisionLayersLocations, _package) : default;
+        public IFallout4GroupGetter<ICollisionLayerGetter> CollisionLayers => _CollisionLayers ?? new Fallout4Group<CollisionLayer>(this);
         #endregion
         protected Fallout4ModBinaryOverlay(
             IMutagenReadStream stream,
@@ -11202,6 +12360,24 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     _IngestiblesLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Ingestibles;
                 }
+                case RecordTypeInts.IDLM:
+                {
+                    _IdleMarkersLocations ??= new();
+                    _IdleMarkersLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
+                    return (int)Fallout4Mod_FieldIndex.IdleMarkers;
+                }
+                case RecordTypeInts.PROJ:
+                {
+                    _ProjectilesLocations ??= new();
+                    _ProjectilesLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
+                    return (int)Fallout4Mod_FieldIndex.Projectiles;
+                }
+                case RecordTypeInts.HAZD:
+                {
+                    _HazardsLocations ??= new();
+                    _HazardsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
+                    return (int)Fallout4Mod_FieldIndex.Hazards;
+                }
                 case RecordTypeInts.LVLI:
                 {
                     _LeveledItemsLocations ??= new();
@@ -11213,6 +12389,18 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     _RegionsLocations ??= new();
                     _RegionsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Regions;
+                }
+                case RecordTypeInts.IDLE:
+                {
+                    _IdleAnimationsLocations ??= new();
+                    _IdleAnimationsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
+                    return (int)Fallout4Mod_FieldIndex.IdleAnimations;
+                }
+                case RecordTypeInts.IMAD:
+                {
+                    _ImageSpaceAdaptersLocations ??= new();
+                    _ImageSpaceAdaptersLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
+                    return (int)Fallout4Mod_FieldIndex.ImageSpaceAdapters;
                 }
                 case RecordTypeInts.VTYP:
                 {
@@ -11249,6 +12437,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     _MusicTracksLocations ??= new();
                     _MusicTracksLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.MusicTracks;
+                }
+                case RecordTypeInts.COLL:
+                {
+                    _CollisionLayersLocations ??= new();
+                    _CollisionLayersLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
+                    return (int)Fallout4Mod_FieldIndex.CollisionLayers;
                 }
                 default:
                     return default(int?);

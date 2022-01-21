@@ -21,6 +21,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             dict[typeof(IIdleRelation)] = new Type[]
             {
                 typeof(ActionRecord),
+                typeof(IdleAnimation),
             };
             dict[typeof(IIdleRelationGetter)] = dict[typeof(IIdleRelation)];
             dict[typeof(IObjectId)] = new Type[]
@@ -32,11 +33,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Door),
                 typeof(Faction),
                 typeof(Furniture),
+                typeof(IdleMarker),
                 typeof(Ingestible),
                 typeof(Key),
                 typeof(Light),
                 typeof(MiscItem),
                 typeof(MoveableStatic),
+                typeof(Projectile),
                 typeof(Spell),
                 typeof(TextureSet),
             };
@@ -110,6 +113,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 typeof(Tree),
             };
             dict[typeof(IRegionTargetGetter)] = dict[typeof(IRegionTarget)];
+            dict[typeof(IPlacedTrapTarget)] = new Type[]
+            {
+                typeof(Hazard),
+                typeof(Projectile),
+            };
+            dict[typeof(IPlacedTrapTargetGetter)] = dict[typeof(IPlacedTrapTarget)];
             dict[typeof(IHarvestTarget)] = new Type[]
             {
                 typeof(Ingestible),

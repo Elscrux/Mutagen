@@ -8,18 +8,18 @@ using Mutagen.Bethesda;
 namespace Mutagen.Bethesda.Fallout4
 {
     /// <summary>
-    /// Implemented by: [ActionRecord, IdleAnimation]
+    /// Implemented by: [Hazard, Projectile]
     /// </summary>
-    public partial interface IIdleRelation :
+    public partial interface IPlacedTrapTarget :
         IFallout4MajorRecordInternal,
-        IIdleRelationGetter
+        IPlacedTrapTargetGetter
     {
     }
 
     /// <summary>
-    /// Implemented by: [ActionRecord, IdleAnimation]
+    /// Implemented by: [Hazard, Projectile]
     /// </summary>
-    public partial interface IIdleRelationGetter : IFallout4MajorRecordGetter
+    public partial interface IPlacedTrapTargetGetter : IFallout4MajorRecordGetter
     {
     }
 }

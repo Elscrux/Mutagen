@@ -115,6 +115,9 @@
     <Compile Include="Records\Major Records\Book.cs">
       <DependentUpon>Book.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Major Records\CollisionLayer.cs">
+      <DependentUpon>CollisionLayer.xml</DependentUpon>
+    </Compile>
     <Compile Include="Records\Major Records\Container.cs">
       <DependentUpon>Container.xml</DependentUpon>
     </Compile>
@@ -169,8 +172,20 @@
     <Compile Include="Records\Major Records\Grass.cs">
       <DependentUpon>Grass.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Major Records\Hazard.cs">
+      <DependentUpon>Hazard.xml</DependentUpon>
+    </Compile>
     <Compile Include="Records\Major Records\HeadPart.cs">
       <DependentUpon>HeadPart.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\IdleAnimation.cs">
+      <DependentUpon>IdleAnimation.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\IdleMarker.cs">
+      <DependentUpon>IdleMarker.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\ImageSpaceAdapter.cs">
+      <DependentUpon>ImageSpaceAdapter.xml</DependentUpon>
     </Compile>
     <Compile Include="Records\Major Records\Ingestible.cs">
       <DependentUpon>Ingestible.xml</DependentUpon>
@@ -222,6 +237,9 @@
     </Compile>
     <Compile Include="Records\Major Records\Part.cs">
       <DependentUpon>HeadPart.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Projectile.cs">
+      <DependentUpon>Projectile.xml</DependentUpon>
     </Compile>
     <Compile Include="Records\Major Records\Race.cs">
       <DependentUpon>Race.xml</DependentUpon>
@@ -906,6 +924,37 @@
     </Compile>
     <Compile Include="Records\Major Records\ObjectModification_Generated.cs">
       <DependentUpon>ObjectModification.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\IdleAnimation_Generated.cs">
+      <DependentUpon>IdleAnimation.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\IdleMarker_Generated.cs">
+      <DependentUpon>IdleMarker.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\CollisionLayer_Generated.cs">
+      <DependentUpon>CollisionLayer.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Projectile_Generated.cs">
+      <DependentUpon>Projectile.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\Weapon_Generated.cs">
+      <DependentUpon>Weapon.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Interfaces\IPlacedTrapTarget_Generated.cs" />
+    <Compile Include="Records\Major Records\Hazard_Generated.cs">
+      <DependentUpon>Hazard.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\ImageSpaceAdapter_Generated.cs">
+      <DependentUpon>ImageSpaceAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\KeyFrame_Generated.cs">
+      <DependentUpon>ImageSpaceAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\ColorFrame_Generated.cs">
+      <DependentUpon>ImageSpaceAdapter.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\TaperEffectiveness_Generated.cs">
+      <DependentUpon>Hazard.xml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
