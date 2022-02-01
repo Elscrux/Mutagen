@@ -55,9 +55,21 @@ namespace Mutagen.Bethesda.Fallout4
 
         #region Name
         /// <summary>
-        /// Aspects: INamedRequired
+        /// Aspects: INamed, INamedRequired
         /// </summary>
-        public String Name { get; set; } = string.Empty;
+        public String? Name { get; set; }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        String? IClassGetter.Name => this.Name;
+        #region Aspects
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        string INamedRequiredGetter.Name => this.Name ?? string.Empty;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        string INamedRequired.Name
+        {
+            get => this.Name ?? string.Empty;
+            set => this.Name = value;
+        }
+        #endregion
         #endregion
         #region Description
         public String Description { get; set; } = string.Empty;
@@ -685,12 +697,13 @@ namespace Mutagen.Bethesda.Fallout4
         IClassGetter,
         IFallout4MajorRecordInternal,
         ILoquiObjectSetter<IClassInternal>,
+        INamed,
         INamedRequired
     {
         /// <summary>
-        /// Aspects: INamedRequired
+        /// Aspects: INamed, INamedRequired
         /// </summary>
-        new String Name { get; set; }
+        new String? Name { get; set; }
         new String Description { get; set; }
         new String? Icon { get; set; }
         new Properties? Properties { get; set; }
@@ -712,14 +725,15 @@ namespace Mutagen.Bethesda.Fallout4
         IBinaryItem,
         ILoquiObject<IClassGetter>,
         IMapsToGetter<IClassGetter>,
+        INamedGetter,
         INamedRequiredGetter
     {
         static new ILoquiRegistration StaticRegistration => Class_Registration.Instance;
         #region Name
         /// <summary>
-        /// Aspects: INamedRequiredGetter
+        /// Aspects: INamedGetter, INamedRequiredGetter
         /// </summary>
-        String Name { get; }
+        String? Name { get; }
         #endregion
         String Description { get; }
         String? Icon { get; }
@@ -986,7 +1000,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public void Clear(IClassInternal item)
         {
             ClearPartial();
-            item.Name = string.Empty;
+            item.Name = default;
             item.Description = string.Empty;
             item.Icon = default;
             item.Properties = null;
@@ -1140,9 +1154,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 item: item,
                 fg: fg,
                 printMask: printMask);
-            if (printMask?.Name ?? true)
+            if ((printMask?.Name ?? true)
+                && item.Name is {} NameItem)
             {
-                fg.AppendItem(item.Name, "Name");
+                fg.AppendItem(NameItem, "Name");
             }
             if (printMask?.Description ?? true)
             {
@@ -1278,7 +1293,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public virtual int GetHashCode(IClassGetter item)
         {
             var hash = new HashCode();
-            hash.Add(item.Name);
+            if (item.Name is {} Nameitem)
+            {
+                hash.Add(Nameitem);
+            }
             hash.Add(item.Description);
             if (item.Icon is {} Iconitem)
             {
@@ -1610,7 +1628,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 item: item,
                 writer: writer,
                 translationParams: translationParams);
-            StringBinaryTranslation.Instance.Write(
+            StringBinaryTranslation.Instance.WriteNullable(
                 writer: writer,
                 item: item.Name,
                 header: translationParams.ConvertToCustom(RecordTypes.FULL),
@@ -1826,7 +1844,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         #region Name
         private int? _NameLocation;
-        public String Name => _NameLocation.HasValue ? BinaryStringUtility.ProcessWholeToZString(HeaderTranslation.ExtractSubrecordMemory(_data, _NameLocation.Value, _package.MetaData.Constants), encoding: _package.MetaData.Encodings.NonTranslated) : string.Empty;
+        public String? Name => _NameLocation.HasValue ? BinaryStringUtility.ProcessWholeToZString(HeaderTranslation.ExtractSubrecordMemory(_data, _NameLocation.Value, _package.MetaData.Constants), encoding: _package.MetaData.Encodings.NonTranslated) : default(string?);
+        #region Aspects
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        string INamedRequiredGetter.Name => this.Name ?? string.Empty;
+        #endregion
         #endregion
         #region Description
         private int? _DescriptionLocation;
