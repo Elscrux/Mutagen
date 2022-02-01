@@ -56,7 +56,7 @@ namespace Mutagen.Bethesda.Generation.Modules.Plugin
             {
                 if (field is LoquiType loqui)
                 {
-                    var subCase = await HasLinks(loqui, includeBaseClass, specifications);
+                    var subCase = await HasLinks(loqui, includeBaseClass: true, specifications);
                     if (subCase > bestCase)
                     {
                         bestCase = subCase;
@@ -66,7 +66,7 @@ namespace Mutagen.Bethesda.Generation.Modules.Plugin
                 {
                     if (cont.SubTypeGeneration is LoquiType contLoqui)
                     {
-                        var subCase = await HasLinks(contLoqui, includeBaseClass, specifications);
+                        var subCase = await HasLinks(contLoqui, includeBaseClass: true, specifications);
                         if (subCase > bestCase)
                         {
                             bestCase = subCase;
@@ -81,7 +81,7 @@ namespace Mutagen.Bethesda.Generation.Modules.Plugin
                 {
                     if (dict.ValueTypeGen is LoquiType valLoqui)
                     {
-                        var subCase = await HasLinks(valLoqui, includeBaseClass, specifications);
+                        var subCase = await HasLinks(valLoqui, includeBaseClass: true, specifications);
                         if (subCase > bestCase)
                         {
                             bestCase = subCase;
@@ -89,7 +89,7 @@ namespace Mutagen.Bethesda.Generation.Modules.Plugin
                     }
                     if (dict.KeyTypeGen is LoquiType keyLoqui)
                     {
-                        var subCase = await HasLinks(keyLoqui, includeBaseClass, specifications);
+                        var subCase = await HasLinks(keyLoqui, includeBaseClass: true, specifications);
                         if (subCase > bestCase)
                         {
                             bestCase = subCase;

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Loqui xmlns="http://tempuri.org/LoquiSource.xsd">
+  <Object name="Projectile" recordType="PROJ" objType="Record" baseClass="Fallout4MajorRecord" GUID="e30fd76c-743b-4383-82e4-129f9793bf7a" ID="239">
+    <LinkInterface>IObjectId</LinkInterface>
+  </Object>
+</Loqui>

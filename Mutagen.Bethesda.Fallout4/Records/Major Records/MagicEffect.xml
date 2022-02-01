@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Loqui xmlns="http://tempuri.org/LoquiSource.xsd">
+  <Object name="MagicEffect" recordType="MGEF" objType="Record" baseClass="Fallout4MajorRecord" GUID="daa8d891-40bb-4c9f-b41b-be62f907dda4" ID="103">
+  </Object>
+</Loqui>

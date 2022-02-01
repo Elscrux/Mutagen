@@ -884,20 +884,22 @@ namespace Mutagen.Bethesda.Skyrim
 
             public static void CustomStringImports(MutagenFrame frame, IConditionData item)
             {
-                if (!frame.Reader.TryGetSubrecordFrame(out var subMeta)) return;
                 if (!(item is IFunctionConditionData funcData)) return;
-                switch (subMeta.RecordType.TypeInt)
+                while (frame.Reader.TryGetSubrecordFrame(out var subMeta))
                 {
-                    case 0x31534943: // CIS1
-                        funcData.ParameterOneString = BinaryStringUtility.ProcessWholeToZString(subMeta.Content, frame.MetaData.Encodings.NonTranslated);
-                        break;
-                    case 0x32534943: // CIS2
-                        funcData.ParameterTwoString = BinaryStringUtility.ProcessWholeToZString(subMeta.Content, frame.MetaData.Encodings.NonTranslated);
-                        break;
-                    default:
-                        return;
+                    switch (subMeta.RecordType.TypeInt)
+                    {
+                        case 0x31534943: // CIS1
+                            funcData.ParameterOneString = BinaryStringUtility.ProcessWholeToZString(subMeta.Content, frame.MetaData.Encodings.NonTranslated);
+                            break;
+                        case 0x32534943: // CIS2
+                            funcData.ParameterTwoString = BinaryStringUtility.ProcessWholeToZString(subMeta.Content, frame.MetaData.Encodings.NonTranslated);
+                            break;
+                        default:
+                            return;
+                    }
+                    frame.Position += subMeta.TotalLength;
                 }
-                frame.Position += subMeta.TotalLength;
             }
         }
 
@@ -1139,12 +1141,12 @@ namespace Mutagen.Bethesda.Skyrim
                 {
                     case Condition.ParameterCategory.None:
                     case Condition.ParameterCategory.Number:
+                    case Condition.ParameterCategory.String:
                         writer.Write(item.ParameterOneNumber);
                         break;
                     case Condition.ParameterCategory.Form:
                         FormKeyBinaryTranslation.Instance.Write(writer, item.ParameterOneRecord.FormKey);
                         break;
-                    case Condition.ParameterCategory.String:
                     default:
                         throw new NotImplementedException();
                 }
@@ -1152,12 +1154,12 @@ namespace Mutagen.Bethesda.Skyrim
                 {
                     case Condition.ParameterCategory.None:
                     case Condition.ParameterCategory.Number:
+                    case Condition.ParameterCategory.String:
                         writer.Write(item.ParameterTwoNumber);
                         break;
                     case Condition.ParameterCategory.Form:
                         FormKeyBinaryTranslation.Instance.Write(writer, item.ParameterTwoRecord.FormKey);
                         break;
-                    case Condition.ParameterCategory.String:
                     default:
                         throw new NotImplementedException();
                 }

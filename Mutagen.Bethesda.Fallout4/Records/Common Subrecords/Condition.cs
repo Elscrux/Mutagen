@@ -984,19 +984,21 @@ namespace Mutagen.Bethesda.Fallout4
 
             public static void CustomStringImports(MutagenFrame frame, IConditionData item)
             {
-                if (!frame.Reader.TryGetSubrecordFrame(out var subMeta)) return;
-                switch (subMeta.RecordType.TypeInt)
+                while (frame.Reader.TryGetSubrecordFrame(out var subMeta))
                 {
-                    case 0x31534943: // CIS1
-                        item.ParameterOneString = BinaryStringUtility.ProcessWholeToZString(subMeta.Content, frame.MetaData.Encodings.NonTranslated);
-                        break;
-                    case 0x32534943: // CIS2
-                        item.ParameterTwoString = BinaryStringUtility.ProcessWholeToZString(subMeta.Content, frame.MetaData.Encodings.NonTranslated);
-                        break;
-                    default:
-                        return;
+                    switch (subMeta.RecordType.TypeInt)
+                    {
+                        case 0x31534943: // CIS1
+                            item.ParameterOneString = BinaryStringUtility.ProcessWholeToZString(subMeta.Content, frame.MetaData.Encodings.NonTranslated);
+                            break;
+                        case 0x32534943: // CIS2
+                            item.ParameterTwoString = BinaryStringUtility.ProcessWholeToZString(subMeta.Content, frame.MetaData.Encodings.NonTranslated);
+                            break;
+                        default:
+                            return;
+                    }
+                    frame.Position += subMeta.TotalLength;
                 }
-                frame.Position += subMeta.TotalLength;
             }
         }
 
@@ -1163,13 +1165,11 @@ namespace Mutagen.Bethesda.Fallout4
                 {
                     case Condition.ParameterCategory.None:
                     case Condition.ParameterCategory.Number:
+                    case Condition.ParameterCategory.String: //writer.Write(item.ParameterOneString);
                         writer.Write(item.ParameterOneNumber);
                         break;
                     case Condition.ParameterCategory.Form:
                         FormKeyBinaryTranslation.Instance.Write(writer, item.ParameterOneRecord.FormKey);
-                        break;
-                    case Condition.ParameterCategory.String:
-                        BinaryStringUtility.Write(writer, item.ParameterOneString, writer.MetaData.Encodings.NonTranslated);
                         break;
                     default:
                         throw new NotImplementedException();
@@ -1178,13 +1178,11 @@ namespace Mutagen.Bethesda.Fallout4
                 {
                     case Condition.ParameterCategory.None:
                     case Condition.ParameterCategory.Number:
+                    case Condition.ParameterCategory.String: //writer.Write(item.ParameterTwoString);
                         writer.Write(item.ParameterTwoNumber);
                         break;
                     case Condition.ParameterCategory.Form:
                         FormKeyBinaryTranslation.Instance.Write(writer, item.ParameterTwoRecord.FormKey);
-                        break;
-                    case Condition.ParameterCategory.String:
-                        BinaryStringUtility.Write(writer, item.ParameterTwoString, writer.MetaData.Encodings.NonTranslated);
                         break;
                     default:
                         throw new NotImplementedException();

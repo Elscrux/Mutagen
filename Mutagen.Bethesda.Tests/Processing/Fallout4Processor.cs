@@ -118,7 +118,10 @@ public class Fallout4Processor : Processor
                         language,
                         StringsSource.Normal,
                         new StringsAlignmentCustom("GMST", GameSettingStringHandler),
-                        new RecordType[] { "KYWD", "FULL" }
+                        new RecordType[] { "KYWD", "FULL" },
+                        new RecordType[] { "ENCH", "FULL" },
+                        new RecordType[] { "SPEL", "FULL" },
+                        new RecordType[] { "ACTI", "FULL", "ATTX" }
                     ));
                 break;
             //case StringsSource.DL:

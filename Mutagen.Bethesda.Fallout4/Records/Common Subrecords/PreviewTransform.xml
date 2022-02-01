@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Loqui xmlns="http://tempuri.org/LoquiSource.xsd">
+  <Object name="PreviewTransform" objType="Subrecord" recordType="PTRN" GUID="7f759050-a8c1-4dd5-9306-a9b8b9ccd547" ID="142">
+    <Fields>
+      <FormLink name="Transform" refName="Transform" nullable="True" />
+    </Fields>
+  </Object>
+</Loqui>

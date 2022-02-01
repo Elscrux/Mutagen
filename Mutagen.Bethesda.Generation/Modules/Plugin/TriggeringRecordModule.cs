@@ -737,6 +737,7 @@ namespace Mutagen.Bethesda.Generation.Modules.Plugin
             {
                 using (var c = new ClassWrapper(fg, "RecordTypes"))
                 {
+                    c.Partial = true;
                 }
                 using (new BraceWrapper(fg))
                 {

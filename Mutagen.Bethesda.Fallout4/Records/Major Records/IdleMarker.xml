@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Loqui xmlns="http://tempuri.org/LoquiSource.xsd">
+  <Object name="IdleMarker" recordType="IDLM" objType="Record" baseClass="Fallout4MajorRecord" GUID="cd13f861-e1bc-4d00-860c-477d1c5ad2bf" ID="232">
+    <LinkInterface>IObjectId</LinkInterface>
+  </Object>
+</Loqui>

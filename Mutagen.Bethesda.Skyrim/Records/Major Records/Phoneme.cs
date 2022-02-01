@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using static Mutagen.Bethesda.Skyrim.Phoneme;
 
 namespace Mutagen.Bethesda.Skyrim

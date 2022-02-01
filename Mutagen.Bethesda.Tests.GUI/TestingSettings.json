@@ -15,33 +15,25 @@
   "PassthroughSettings": {
     "CacheReuse": {
       "ReuseDecompression": false,
+      "ReuseMerge": false,
       "ReuseAlignment": false,
       "ReuseProcessing": false,
       "ReuseTrimming": false
     },
     "Trimming": {
+      "Enabled": true,
       "TypesToTrim": [
         "RACE",
         "MGEF",
-        "ENCH",
-        "SPEL",
-        "ACTI",
-        "TACT",
-        "ARMO",
-        "BOOK",
-        "CONT",
-        "DOOR",
-        "INGR",
-        "LIGH",
-        "MISC",
         "STAT",
-        "SCOL",
-        "MSTT"
+        "WEAP",
+        "AMMO",
+        "NPC_"
       ]
     },
     "DeleteCachesAfter": false,
     "TestNormal": true,
-    "TestBinaryOverlay": true,
+    "TestBinaryOverlay": false,
     "TestImport": false,
     "TestFolder": false,
     "TestCopyIn": false,
