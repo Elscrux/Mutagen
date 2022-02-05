@@ -72,6 +72,13 @@
               </xs:documentation>
             </xs:annotation>
           </xs:attribute>
+          <xs:attribute name="shortCircuitToLastRequired" type="xs:boolean" >
+            <xs:annotation>
+              <xs:documentation>
+                Whether to short circuit only to the last required field
+              </xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
           <xs:attribute name="customRecordFallback" type="xs:boolean" >
             <xs:annotation>
               <xs:documentation>

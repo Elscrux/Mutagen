@@ -227,6 +227,20 @@ namespace Mutagen.Bethesda.Fallout4
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IPhonemeGetter? IFaceFxPhonemesGetter.W => this.W;
         #endregion
+        #region Unknowns
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ExtendedList<Phoneme> _Unknowns = new ExtendedList<Phoneme>();
+        public ExtendedList<Phoneme> Unknowns
+        {
+            get => this._Unknowns;
+            init => this._Unknowns = value;
+        }
+        #region Interface Members
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IReadOnlyList<IPhonemeGetter> IFaceFxPhonemesGetter.Unknowns => _Unknowns;
+        #endregion
+
+        #endregion
 
         #region To String
 
@@ -282,6 +296,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.R = new MaskItem<TItem, Phoneme.Mask<TItem>?>(initialValue, new Phoneme.Mask<TItem>(initialValue));
                 this.Th = new MaskItem<TItem, Phoneme.Mask<TItem>?>(initialValue, new Phoneme.Mask<TItem>(initialValue));
                 this.W = new MaskItem<TItem, Phoneme.Mask<TItem>?>(initialValue, new Phoneme.Mask<TItem>(initialValue));
+                this.Unknowns = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, Phoneme.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, Phoneme.Mask<TItem>?>>());
             }
 
             public Mask(
@@ -301,7 +316,8 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem OohQ,
                 TItem R,
                 TItem Th,
-                TItem W)
+                TItem W,
+                TItem Unknowns)
             {
                 this.ForceNames = ForceNames;
                 this.Aah_LipBigAah = new MaskItem<TItem, Phoneme.Mask<TItem>?>(Aah_LipBigAah, new Phoneme.Mask<TItem>(Aah_LipBigAah));
@@ -320,6 +336,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.R = new MaskItem<TItem, Phoneme.Mask<TItem>?>(R, new Phoneme.Mask<TItem>(R));
                 this.Th = new MaskItem<TItem, Phoneme.Mask<TItem>?>(Th, new Phoneme.Mask<TItem>(Th));
                 this.W = new MaskItem<TItem, Phoneme.Mask<TItem>?>(W, new Phoneme.Mask<TItem>(W));
+                this.Unknowns = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, Phoneme.Mask<TItem>?>>?>(Unknowns, Enumerable.Empty<MaskItemIndexed<TItem, Phoneme.Mask<TItem>?>>());
             }
 
             #pragma warning disable CS8618
@@ -348,6 +365,7 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<TItem, Phoneme.Mask<TItem>?>? R { get; set; }
             public MaskItem<TItem, Phoneme.Mask<TItem>?>? Th { get; set; }
             public MaskItem<TItem, Phoneme.Mask<TItem>?>? W { get; set; }
+            public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, Phoneme.Mask<TItem>?>>?>? Unknowns;
             #endregion
 
             #region Equals
@@ -377,6 +395,7 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!object.Equals(this.R, rhs.R)) return false;
                 if (!object.Equals(this.Th, rhs.Th)) return false;
                 if (!object.Equals(this.W, rhs.W)) return false;
+                if (!object.Equals(this.Unknowns, rhs.Unknowns)) return false;
                 return true;
             }
             public override int GetHashCode()
@@ -399,6 +418,7 @@ namespace Mutagen.Bethesda.Fallout4
                 hash.Add(this.R);
                 hash.Add(this.Th);
                 hash.Add(this.W);
+                hash.Add(this.Unknowns);
                 return hash.ToHashCode();
             }
 
@@ -488,6 +508,18 @@ namespace Mutagen.Bethesda.Fallout4
                     if (!eval(this.W.Overall)) return false;
                     if (this.W.Specific != null && !this.W.Specific.All(eval)) return false;
                 }
+                if (this.Unknowns != null)
+                {
+                    if (!eval(this.Unknowns.Overall)) return false;
+                    if (this.Unknowns.Specific != null)
+                    {
+                        foreach (var item in this.Unknowns.Specific)
+                        {
+                            if (!eval(item.Overall)) return false;
+                            if (item.Specific != null && !item.Specific.All(eval)) return false;
+                        }
+                    }
+                }
                 return true;
             }
             #endregion
@@ -576,6 +608,18 @@ namespace Mutagen.Bethesda.Fallout4
                     if (eval(this.W.Overall)) return true;
                     if (this.W.Specific != null && this.W.Specific.Any(eval)) return true;
                 }
+                if (this.Unknowns != null)
+                {
+                    if (eval(this.Unknowns.Overall)) return true;
+                    if (this.Unknowns.Specific != null)
+                    {
+                        foreach (var item in this.Unknowns.Specific)
+                        {
+                            if (!eval(item.Overall)) return false;
+                            if (item.Specific != null && !item.Specific.All(eval)) return false;
+                        }
+                    }
+                }
                 return false;
             }
             #endregion
@@ -607,6 +651,21 @@ namespace Mutagen.Bethesda.Fallout4
                 obj.R = this.R == null ? null : new MaskItem<R, Phoneme.Mask<R>?>(eval(this.R.Overall), this.R.Specific?.Translate(eval));
                 obj.Th = this.Th == null ? null : new MaskItem<R, Phoneme.Mask<R>?>(eval(this.Th.Overall), this.Th.Specific?.Translate(eval));
                 obj.W = this.W == null ? null : new MaskItem<R, Phoneme.Mask<R>?>(eval(this.W.Overall), this.W.Specific?.Translate(eval));
+                if (Unknowns != null)
+                {
+                    obj.Unknowns = new MaskItem<R, IEnumerable<MaskItemIndexed<R, Phoneme.Mask<R>?>>?>(eval(this.Unknowns.Overall), Enumerable.Empty<MaskItemIndexed<R, Phoneme.Mask<R>?>>());
+                    if (Unknowns.Specific != null)
+                    {
+                        var l = new List<MaskItemIndexed<R, Phoneme.Mask<R>?>>();
+                        obj.Unknowns.Specific = l;
+                        foreach (var item in Unknowns.Specific.WithIndex())
+                        {
+                            MaskItemIndexed<R, Phoneme.Mask<R>?>? mask = item.Item == null ? null : new MaskItemIndexed<R, Phoneme.Mask<R>?>(item.Item.Index, eval(item.Item.Overall), item.Item.Specific?.Translate(eval));
+                            if (mask == null) continue;
+                            l.Add(mask);
+                        }
+                    }
+                }
             }
             #endregion
 
@@ -697,6 +756,29 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         W?.ToString(fg);
                     }
+                    if ((printMask?.Unknowns?.Overall ?? true)
+                        && Unknowns is {} UnknownsItem)
+                    {
+                        fg.AppendLine("Unknowns =>");
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            fg.AppendItem(UnknownsItem.Overall);
+                            if (UnknownsItem.Specific != null)
+                            {
+                                foreach (var subItem in UnknownsItem.Specific)
+                                {
+                                    fg.AppendLine("[");
+                                    using (new DepthWrapper(fg))
+                                    {
+                                        subItem?.ToString(fg);
+                                    }
+                                    fg.AppendLine("]");
+                                }
+                            }
+                        }
+                        fg.AppendLine("]");
+                    }
                 }
                 fg.AppendLine("]");
             }
@@ -739,6 +821,7 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<Exception?, Phoneme.ErrorMask?>? R;
             public MaskItem<Exception?, Phoneme.ErrorMask?>? Th;
             public MaskItem<Exception?, Phoneme.ErrorMask?>? W;
+            public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, Phoneme.ErrorMask?>>?>? Unknowns;
             #endregion
 
             #region IErrorMask
@@ -781,6 +864,8 @@ namespace Mutagen.Bethesda.Fallout4
                         return Th;
                     case FaceFxPhonemes_FieldIndex.W:
                         return W;
+                    case FaceFxPhonemes_FieldIndex.Unknowns:
+                        return Unknowns;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
                 }
@@ -841,6 +926,9 @@ namespace Mutagen.Bethesda.Fallout4
                         break;
                     case FaceFxPhonemes_FieldIndex.W:
                         this.W = new MaskItem<Exception?, Phoneme.ErrorMask?>(ex, null);
+                        break;
+                    case FaceFxPhonemes_FieldIndex.Unknowns:
+                        this.Unknowns = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, Phoneme.ErrorMask?>>?>(ex, null);
                         break;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
@@ -903,6 +991,9 @@ namespace Mutagen.Bethesda.Fallout4
                     case FaceFxPhonemes_FieldIndex.W:
                         this.W = (MaskItem<Exception?, Phoneme.ErrorMask?>?)obj;
                         break;
+                    case FaceFxPhonemes_FieldIndex.Unknowns:
+                        this.Unknowns = (MaskItem<Exception?, IEnumerable<MaskItem<Exception?, Phoneme.ErrorMask?>>?>)obj;
+                        break;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
                 }
@@ -928,6 +1019,7 @@ namespace Mutagen.Bethesda.Fallout4
                 if (R != null) return true;
                 if (Th != null) return true;
                 if (W != null) return true;
+                if (Unknowns != null) return true;
                 return false;
             }
             #endregion
@@ -979,6 +1071,28 @@ namespace Mutagen.Bethesda.Fallout4
                 R?.ToString(fg);
                 Th?.ToString(fg);
                 W?.ToString(fg);
+                if (Unknowns is {} UnknownsItem)
+                {
+                    fg.AppendLine("Unknowns =>");
+                    fg.AppendLine("[");
+                    using (new DepthWrapper(fg))
+                    {
+                        fg.AppendItem(UnknownsItem.Overall);
+                        if (UnknownsItem.Specific != null)
+                        {
+                            foreach (var subItem in UnknownsItem.Specific)
+                            {
+                                fg.AppendLine("[");
+                                using (new DepthWrapper(fg))
+                                {
+                                    subItem?.ToString(fg);
+                                }
+                                fg.AppendLine("]");
+                            }
+                        }
+                    }
+                    fg.AppendLine("]");
+                }
             }
             #endregion
 
@@ -1004,6 +1118,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.R = this.R.Combine(rhs.R, (l, r) => l.Combine(r));
                 ret.Th = this.Th.Combine(rhs.Th, (l, r) => l.Combine(r));
                 ret.W = this.W.Combine(rhs.W, (l, r) => l.Combine(r));
+                ret.Unknowns = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, Phoneme.ErrorMask?>>?>(ExceptionExt.Combine(this.Unknowns?.Overall, rhs.Unknowns?.Overall), ExceptionExt.Combine(this.Unknowns?.Specific, rhs.Unknowns?.Specific));
                 return ret;
             }
             public static ErrorMask? Combine(ErrorMask? lhs, ErrorMask? rhs)
@@ -1044,6 +1159,7 @@ namespace Mutagen.Bethesda.Fallout4
             public Phoneme.TranslationMask? R;
             public Phoneme.TranslationMask? Th;
             public Phoneme.TranslationMask? W;
+            public Phoneme.TranslationMask? Unknowns;
             #endregion
 
             #region Ctors
@@ -1086,6 +1202,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((R != null ? R.OnOverall : DefaultOn, R?.GetCrystal()));
                 ret.Add((Th != null ? Th.OnOverall : DefaultOn, Th?.GetCrystal()));
                 ret.Add((W != null ? W.OnOverall : DefaultOn, W?.GetCrystal()));
+                ret.Add((Unknowns == null ? DefaultOn : !Unknowns.GetCrystal().CopyNothing, Unknowns?.GetCrystal()));
             }
 
             public static implicit operator TranslationMask(bool defaultOn)
@@ -1175,6 +1292,7 @@ namespace Mutagen.Bethesda.Fallout4
         new Phoneme? R { get; set; }
         new Phoneme? Th { get; set; }
         new Phoneme? W { get; set; }
+        new ExtendedList<Phoneme> Unknowns { get; }
     }
 
     public partial interface IFaceFxPhonemesGetter :
@@ -1206,6 +1324,7 @@ namespace Mutagen.Bethesda.Fallout4
         IPhonemeGetter? R { get; }
         IPhonemeGetter? Th { get; }
         IPhonemeGetter? W { get; }
+        IReadOnlyList<IPhonemeGetter> Unknowns { get; }
 
     }
 
@@ -1392,6 +1511,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         R = 14,
         Th = 15,
         W = 16,
+        Unknowns = 17,
     }
     #endregion
 
@@ -1409,9 +1529,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public const string GUID = "9319b560-0d83-4c5a-9133-281ed67d8d2f";
 
-        public const ushort AdditionalFieldCount = 17;
+        public const ushort AdditionalFieldCount = 18;
 
-        public const ushort FieldCount = 17;
+        public const ushort FieldCount = 18;
 
         public static readonly Type MaskType = typeof(FaceFxPhonemes.Mask<>);
 
@@ -1496,6 +1616,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.R = null;
             item.Th = null;
             item.W = null;
+            item.Unknowns.Clear();
         }
         
         #region Mutagen
@@ -1627,6 +1748,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 rhs.W,
                 (loqLhs, loqRhs, incl) => loqLhs.GetEqualsMask(loqRhs, incl),
                 include);
+            ret.Unknowns = item.Unknowns.CollectionEqualsHelper(
+                rhs.Unknowns,
+                (loqLhs, loqRhs) => loqLhs.GetEqualsMask(loqRhs, include),
+                include);
         }
         
         public string ToString(
@@ -1756,6 +1881,24 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 && item.W is {} WItem)
             {
                 WItem?.ToString(fg, "W");
+            }
+            if (printMask?.Unknowns?.Overall ?? true)
+            {
+                fg.AppendLine("Unknowns =>");
+                fg.AppendLine("[");
+                using (new DepthWrapper(fg))
+                {
+                    foreach (var subItem in item.Unknowns)
+                    {
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            subItem?.ToString(fg, "Item");
+                        }
+                        fg.AppendLine("]");
+                    }
+                }
+                fg.AppendLine("]");
             }
         }
         
@@ -1898,6 +2041,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 else if (!isWEqual) return false;
             }
+            if ((crystal?.GetShouldTranslate((int)FaceFxPhonemes_FieldIndex.Unknowns) ?? true))
+            {
+                if (!lhs.Unknowns.SequenceEqualNullable(rhs.Unknowns)) return false;
+            }
             return true;
         }
         
@@ -1969,6 +2116,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 hash.Add(Witem);
             }
+            hash.Add(item.Unknowns);
             return hash.ToHashCode();
         }
         
@@ -2410,6 +2558,30 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         item.W = default;
                     }
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)FaceFxPhonemes_FieldIndex.Unknowns) ?? true))
+            {
+                errorMask?.PushIndex((int)FaceFxPhonemes_FieldIndex.Unknowns);
+                try
+                {
+                    item.Unknowns.SetTo(
+                        rhs.Unknowns
+                        .Select(r =>
+                        {
+                            return r.DeepCopy(
+                                errorMask: errorMask,
+                                default(TranslationCrystal));
+                        }));
                 }
                 catch (Exception ex)
                 when (errorMask != null)

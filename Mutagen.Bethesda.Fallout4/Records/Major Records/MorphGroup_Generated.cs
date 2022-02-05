@@ -94,6 +94,17 @@ namespace Mutagen.Bethesda.Fallout4
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         ReadOnlyMemorySlice<Byte>? IMorphGroupGetter.UnknownMPPK => this.UnknownMPPK;
         #endregion
+        #region UnknownMPGS
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected MemorySlice<Byte>? _UnknownMPGS;
+        public MemorySlice<Byte>? UnknownMPGS
+        {
+            get => this._UnknownMPGS;
+            set => this._UnknownMPGS = value;
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        ReadOnlyMemorySlice<Byte>? IMorphGroupGetter.UnknownMPGS => this.UnknownMPGS;
+        #endregion
 
         #region To String
 
@@ -135,16 +146,19 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Name = initialValue;
                 this.MorphPresets = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, MorphPreset.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, MorphPreset.Mask<TItem>?>>());
                 this.UnknownMPPK = initialValue;
+                this.UnknownMPGS = initialValue;
             }
 
             public Mask(
                 TItem Name,
                 TItem MorphPresets,
-                TItem UnknownMPPK)
+                TItem UnknownMPPK,
+                TItem UnknownMPGS)
             {
                 this.Name = Name;
                 this.MorphPresets = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, MorphPreset.Mask<TItem>?>>?>(MorphPresets, Enumerable.Empty<MaskItemIndexed<TItem, MorphPreset.Mask<TItem>?>>());
                 this.UnknownMPPK = UnknownMPPK;
+                this.UnknownMPGS = UnknownMPGS;
             }
 
             #pragma warning disable CS8618
@@ -159,6 +173,7 @@ namespace Mutagen.Bethesda.Fallout4
             public TItem Name;
             public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, MorphPreset.Mask<TItem>?>>?>? MorphPresets;
             public TItem UnknownMPPK;
+            public TItem UnknownMPGS;
             #endregion
 
             #region Equals
@@ -174,6 +189,7 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!object.Equals(this.Name, rhs.Name)) return false;
                 if (!object.Equals(this.MorphPresets, rhs.MorphPresets)) return false;
                 if (!object.Equals(this.UnknownMPPK, rhs.UnknownMPPK)) return false;
+                if (!object.Equals(this.UnknownMPGS, rhs.UnknownMPGS)) return false;
                 return true;
             }
             public override int GetHashCode()
@@ -182,6 +198,7 @@ namespace Mutagen.Bethesda.Fallout4
                 hash.Add(this.Name);
                 hash.Add(this.MorphPresets);
                 hash.Add(this.UnknownMPPK);
+                hash.Add(this.UnknownMPGS);
                 return hash.ToHashCode();
             }
 
@@ -204,6 +221,7 @@ namespace Mutagen.Bethesda.Fallout4
                     }
                 }
                 if (!eval(this.UnknownMPPK)) return false;
+                if (!eval(this.UnknownMPGS)) return false;
                 return true;
             }
             #endregion
@@ -225,6 +243,7 @@ namespace Mutagen.Bethesda.Fallout4
                     }
                 }
                 if (eval(this.UnknownMPPK)) return true;
+                if (eval(this.UnknownMPGS)) return true;
                 return false;
             }
             #endregion
@@ -256,6 +275,7 @@ namespace Mutagen.Bethesda.Fallout4
                     }
                 }
                 obj.UnknownMPPK = eval(this.UnknownMPPK);
+                obj.UnknownMPGS = eval(this.UnknownMPGS);
             }
             #endregion
 
@@ -309,6 +329,10 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         fg.AppendItem(UnknownMPPK, "UnknownMPPK");
                     }
+                    if (printMask?.UnknownMPGS ?? true)
+                    {
+                        fg.AppendItem(UnknownMPGS, "UnknownMPGS");
+                    }
                 }
                 fg.AppendLine("]");
             }
@@ -337,6 +361,7 @@ namespace Mutagen.Bethesda.Fallout4
             public Exception? Name;
             public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, MorphPreset.ErrorMask?>>?>? MorphPresets;
             public Exception? UnknownMPPK;
+            public Exception? UnknownMPGS;
             #endregion
 
             #region IErrorMask
@@ -351,6 +376,8 @@ namespace Mutagen.Bethesda.Fallout4
                         return MorphPresets;
                     case MorphGroup_FieldIndex.UnknownMPPK:
                         return UnknownMPPK;
+                    case MorphGroup_FieldIndex.UnknownMPGS:
+                        return UnknownMPGS;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
                 }
@@ -369,6 +396,9 @@ namespace Mutagen.Bethesda.Fallout4
                         break;
                     case MorphGroup_FieldIndex.UnknownMPPK:
                         this.UnknownMPPK = ex;
+                        break;
+                    case MorphGroup_FieldIndex.UnknownMPGS:
+                        this.UnknownMPGS = ex;
                         break;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
@@ -389,6 +419,9 @@ namespace Mutagen.Bethesda.Fallout4
                     case MorphGroup_FieldIndex.UnknownMPPK:
                         this.UnknownMPPK = (Exception?)obj;
                         break;
+                    case MorphGroup_FieldIndex.UnknownMPGS:
+                        this.UnknownMPGS = (Exception?)obj;
+                        break;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
                 }
@@ -400,6 +433,7 @@ namespace Mutagen.Bethesda.Fallout4
                 if (Name != null) return true;
                 if (MorphPresets != null) return true;
                 if (UnknownMPPK != null) return true;
+                if (UnknownMPGS != null) return true;
                 return false;
             }
             #endregion
@@ -458,6 +492,7 @@ namespace Mutagen.Bethesda.Fallout4
                     fg.AppendLine("]");
                 }
                 fg.AppendItem(UnknownMPPK, "UnknownMPPK");
+                fg.AppendItem(UnknownMPGS, "UnknownMPGS");
             }
             #endregion
 
@@ -469,6 +504,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Name = this.Name.Combine(rhs.Name);
                 ret.MorphPresets = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, MorphPreset.ErrorMask?>>?>(ExceptionExt.Combine(this.MorphPresets?.Overall, rhs.MorphPresets?.Overall), ExceptionExt.Combine(this.MorphPresets?.Specific, rhs.MorphPresets?.Specific));
                 ret.UnknownMPPK = this.UnknownMPPK.Combine(rhs.UnknownMPPK);
+                ret.UnknownMPGS = this.UnknownMPGS.Combine(rhs.UnknownMPGS);
                 return ret;
             }
             public static ErrorMask? Combine(ErrorMask? lhs, ErrorMask? rhs)
@@ -495,6 +531,7 @@ namespace Mutagen.Bethesda.Fallout4
             public bool Name;
             public MorphPreset.TranslationMask? MorphPresets;
             public bool UnknownMPPK;
+            public bool UnknownMPGS;
             #endregion
 
             #region Ctors
@@ -506,6 +543,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.OnOverall = onOverall;
                 this.Name = defaultOn;
                 this.UnknownMPPK = defaultOn;
+                this.UnknownMPGS = defaultOn;
             }
 
             #endregion
@@ -524,6 +562,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((Name, null));
                 ret.Add((MorphPresets == null ? DefaultOn : !MorphPresets.GetCrystal().CopyNothing, MorphPresets?.GetCrystal()));
                 ret.Add((UnknownMPPK, null));
+                ret.Add((UnknownMPGS, null));
             }
 
             public static implicit operator TranslationMask(bool defaultOn)
@@ -610,6 +649,7 @@ namespace Mutagen.Bethesda.Fallout4
         new String? Name { get; set; }
         new ExtendedList<MorphPreset>? MorphPresets { get; set; }
         new MemorySlice<Byte>? UnknownMPPK { get; set; }
+        new MemorySlice<Byte>? UnknownMPGS { get; set; }
     }
 
     public partial interface IMorphGroupGetter :
@@ -635,6 +675,7 @@ namespace Mutagen.Bethesda.Fallout4
         #endregion
         IReadOnlyList<IMorphPresetGetter>? MorphPresets { get; }
         ReadOnlyMemorySlice<Byte>? UnknownMPPK { get; }
+        ReadOnlyMemorySlice<Byte>? UnknownMPGS { get; }
 
     }
 
@@ -807,6 +848,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         Name = 0,
         MorphPresets = 1,
         UnknownMPPK = 2,
+        UnknownMPGS = 3,
     }
     #endregion
 
@@ -824,9 +866,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public const string GUID = "f6ad0ece-f514-44d3-99e5-4c6b52e3b85f";
 
-        public const ushort AdditionalFieldCount = 3;
+        public const ushort AdditionalFieldCount = 4;
 
-        public const ushort FieldCount = 3;
+        public const ushort FieldCount = 4;
 
         public static readonly Type MaskType = typeof(MorphGroup.Mask<>);
 
@@ -865,9 +907,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         RecordTypes.MPPM,
                         RecordTypes.MPPT,
                         RecordTypes.MPPF,
-                        RecordTypes.MPGS,
                         RecordTypes.MPPC,
-                        RecordTypes.MPPK
+                        RecordTypes.MPPK,
+                        RecordTypes.MPGS
                     })
             );
         });
@@ -916,6 +958,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.Name = default;
             item.MorphPresets = null;
             item.UnknownMPPK = default;
+            item.UnknownMPGS = default;
         }
         
         #region Mutagen
@@ -974,6 +1017,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 (loqLhs, loqRhs) => loqLhs.GetEqualsMask(loqRhs, include),
                 include);
             ret.UnknownMPPK = MemorySliceExt.Equal(item.UnknownMPPK, rhs.UnknownMPPK);
+            ret.UnknownMPGS = MemorySliceExt.Equal(item.UnknownMPGS, rhs.UnknownMPGS);
         }
         
         public string ToString(
@@ -1049,6 +1093,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 fg.AppendLine($"UnknownMPPK => {SpanExt.ToHexString(UnknownMPPKItem)}");
             }
+            if ((printMask?.UnknownMPGS ?? true)
+                && item.UnknownMPGS is {} UnknownMPGSItem)
+            {
+                fg.AppendLine($"UnknownMPGS => {SpanExt.ToHexString(UnknownMPGSItem)}");
+            }
         }
         
         #region Equals and Hash
@@ -1070,6 +1119,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 if (!MemorySliceExt.Equal(lhs.UnknownMPPK, rhs.UnknownMPPK)) return false;
             }
+            if ((crystal?.GetShouldTranslate((int)MorphGroup_FieldIndex.UnknownMPGS) ?? true))
+            {
+                if (!MemorySliceExt.Equal(lhs.UnknownMPGS, rhs.UnknownMPGS)) return false;
+            }
             return true;
         }
         
@@ -1084,6 +1137,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             if (item.UnknownMPPK is {} UnknownMPPKItem)
             {
                 hash.Add(UnknownMPPKItem);
+            }
+            if (item.UnknownMPGS is {} UnknownMPGSItem)
+            {
+                hash.Add(UnknownMPGSItem);
             }
             return hash.ToHashCode();
         }
@@ -1169,6 +1226,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 else
                 {
                     item.UnknownMPPK = default;
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)MorphGroup_FieldIndex.UnknownMPGS) ?? true))
+            {
+                if(rhs.UnknownMPGS is {} UnknownMPGSrhs)
+                {
+                    item.UnknownMPGS = UnknownMPGSrhs.ToArray();
+                }
+                else
+                {
+                    item.UnknownMPGS = default;
                 }
             }
         }
@@ -1290,6 +1358,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 writer: writer,
                 item: item.UnknownMPPK,
                 header: translationParams.ConvertToCustom(RecordTypes.MPPK));
+            ByteArrayBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
+                writer: writer,
+                item: item.UnknownMPGS,
+                header: translationParams.ConvertToCustom(RecordTypes.MPGS));
         }
 
         public void Write(
@@ -1352,7 +1424,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case RecordTypeInts.MPPM:
                 case RecordTypeInts.MPPT:
                 case RecordTypeInts.MPPF:
-                case RecordTypeInts.MPGS:
                 case RecordTypeInts.MPPC:
                 {
                     if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)MorphGroup_FieldIndex.MorphPresets) return ParseResult.Stop;
@@ -1373,6 +1444,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
                     item.UnknownMPPK = ByteArrayBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: frame.SpawnWithLength(contentLength));
                     return (int)MorphGroup_FieldIndex.UnknownMPPK;
+                }
+                case RecordTypeInts.MPGS:
+                {
+                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)MorphGroup_FieldIndex.UnknownMPGS) return ParseResult.Stop;
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.UnknownMPGS = ByteArrayBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: frame.SpawnWithLength(contentLength));
+                    return (int)MorphGroup_FieldIndex.UnknownMPGS;
                 }
                 default:
                     return ParseResult.Stop;
@@ -1456,6 +1534,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private int? _UnknownMPPKLocation;
         public ReadOnlyMemorySlice<Byte>? UnknownMPPK => _UnknownMPPKLocation.HasValue ? HeaderTranslation.ExtractSubrecordMemory(_data, _UnknownMPPKLocation.Value, _package.MetaData.Constants) : default(ReadOnlyMemorySlice<byte>?);
         #endregion
+        #region UnknownMPGS
+        private int? _UnknownMPGSLocation;
+        public ReadOnlyMemorySlice<Byte>? UnknownMPGS => _UnknownMPGSLocation.HasValue ? HeaderTranslation.ExtractSubrecordMemory(_data, _UnknownMPGSLocation.Value, _package.MetaData.Constants) : default(ReadOnlyMemorySlice<byte>?);
+        #endregion
         partial void CustomFactoryEnd(
             OverlayStream stream,
             int finalPos,
@@ -1524,7 +1606,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case RecordTypeInts.MPPM:
                 case RecordTypeInts.MPPT:
                 case RecordTypeInts.MPPF:
-                case RecordTypeInts.MPGS:
                 case RecordTypeInts.MPPC:
                 {
                     if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)MorphGroup_FieldIndex.MorphPresets) return ParseResult.Stop;
@@ -1544,6 +1625,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)MorphGroup_FieldIndex.UnknownMPPK) return ParseResult.Stop;
                     _UnknownMPPKLocation = (stream.Position - offset);
                     return (int)MorphGroup_FieldIndex.UnknownMPPK;
+                }
+                case RecordTypeInts.MPGS:
+                {
+                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)MorphGroup_FieldIndex.UnknownMPGS) return ParseResult.Stop;
+                    _UnknownMPGSLocation = (stream.Position - offset);
+                    return (int)MorphGroup_FieldIndex.UnknownMPGS;
                 }
                 default:
                     return ParseResult.Stop;

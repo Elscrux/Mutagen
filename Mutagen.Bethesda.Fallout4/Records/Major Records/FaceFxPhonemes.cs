@@ -28,7 +28,7 @@ namespace Mutagen.Bethesda.Fallout4
             OohQ,
             R,
             Th,
-            W
+            W,
         }
     }
 
@@ -87,7 +87,8 @@ namespace Mutagen.Bethesda.Fallout4
                     faceFx.W = phoneme;
                     break;
                 default:
-                    throw new NotImplementedException();
+                    faceFx.Unknowns.Add(phoneme);
+                    break;
             }
         }
 
@@ -173,7 +174,7 @@ namespace Mutagen.Bethesda.Fallout4
             }
         }
 
-        public static string GetString(this Target target, bool lipMode)
+        public static string? TryGetString(this Target target, bool lipMode)
         {
             switch (target)
             {
@@ -210,7 +211,7 @@ namespace Mutagen.Bethesda.Fallout4
                 case Target.W:
                     return "W";
                 default:
-                    throw new NotImplementedException();
+                    return null;
             }
         }
     }
@@ -227,10 +228,14 @@ namespace Mutagen.Bethesda.Fallout4
 
             static FaceFxPhonemesBinaryCreateTranslation()
             {
-                TargetWithNames = Targets.Select(t =>
-                {
-                    return (t, t.GetString(lipMode: false));
-                }).ToExtendedList();
+                TargetWithNames = Targets
+                    .Select(t =>
+                    {
+                        return (t, t.TryGetString(lipMode: false));
+                    })
+                    .Where(x => x.Item2 != null)
+                    .Select(x => (x.t, x.Item2!))
+                    .ToExtendedList();
             }
 
             public static bool IsTypical(string str)
@@ -301,23 +306,31 @@ namespace Mutagen.Bethesda.Fallout4
                 }
 
                 // Read in all the slots
-                var expectedSize = targets.Count * 4;
+                int? expectedSize = null;
                 ReadOnlyMemorySlice<byte>[] slots = new ReadOnlyMemorySlice<byte>[SlotSize];
                 for (int i = 0; i < SlotSize; i++)
                 {
                     var subMetaFrame = frame.Reader.ReadSubrecordFrame(RecordTypes.PHWT);
                     var content = subMetaFrame.Content;
-                    if (content.Length < expectedSize)
+                    if (expectedSize == null)
+                    {
+                        expectedSize = content.Length;
+                    }
+                    else if (content.Length != expectedSize)
                     {
                         throw new ArgumentException($"Unexpected target size: {content.Length} < {expectedSize}");
                     }
                     slots[i] = subMetaFrame.Content;
                 }
-
+                
                 // Loop over the targets outlined in listing, parse slots
-                for (int i = 0; i < targets.Count; i++)
+                var expectedTargets = expectedSize / 4;
+                for (int i = 0; i < expectedTargets; i++)
                 {
-                    var target = targets[i];
+                    if (!targets.TryGet(i, out var target))
+                    {
+                        target = ((Target)i, string.Empty);
+                    }
                     var phoneme = new Phoneme()
                     {
                         Name = target.Name
@@ -338,12 +351,19 @@ namespace Mutagen.Bethesda.Fallout4
         {
             public static void WriteFaceFxPhonemes(MutagenWriter writer, IFaceFxPhonemesGetter item)
             {
-                IPhonemeGetter?[] phonemes = new IPhonemeGetter?[FaceFxPhonemesBinaryCreateTranslation.TargetSize];
+                IPhonemeGetter?[] phonemes = new IPhonemeGetter?[FaceFxPhonemesBinaryCreateTranslation.TargetSize + item.Unknowns.Count];
                 foreach (var target in FaceFxPhonemesBinaryCreateTranslation.Targets)
                 {
                     phonemes[(int)target] = item.GetGetter(target);
                 }
-                if (!phonemes.Any(p => p != null)) return;
+
+                for (int i = 0; i < item.Unknowns.Count; i++)
+                {
+                    var unknownPhoneme = item.Unknowns[i];
+                    int target = i + FaceFxPhonemesBinaryCreateTranslation.TargetSize;
+                    phonemes[target] = unknownPhoneme;
+                }
+                if (phonemes.All(p => p == null)) return;
                 var force = item.ForceNames;
                 var hasAll = phonemes.All(p => p != null);
                 if (!hasAll || force)
@@ -352,7 +372,6 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         var phoneme = phonemes[i];
                         if (phoneme == null) continue;
-                        var target = (Target)i;
                         using (HeaderExport.Subrecord(writer, RecordTypes.PHTN))
                         {
                             writer.Write(phoneme.Name, StringBinaryType.NullTerminate, writer.MetaData.Encodings.NonTranslated);
@@ -363,9 +382,8 @@ namespace Mutagen.Bethesda.Fallout4
                 {
                     using (HeaderExport.Subrecord(writer, RecordTypes.PHWT))
                     {
-                        foreach (var target in FaceFxPhonemesBinaryCreateTranslation.Targets)
+                        foreach (var phoneme in phonemes)
                         {
-                            IPhonemeGetter? phoneme = phonemes[(int)target];
                             if (phoneme == null) continue;
                             writer.Write(phoneme.Get(slot));
                         }
@@ -409,6 +427,8 @@ namespace Mutagen.Bethesda.Fallout4
             public IPhonemeGetter? Th => throw new NotImplementedException();
 
             public IPhonemeGetter? W => throw new NotImplementedException();
+            
+            public IReadOnlyList<IPhonemeGetter> Unknowns => throw new NotImplementedException();
 
             partial void CustomFactoryEnd(OverlayStream stream, int finalPos, int offset)
             {

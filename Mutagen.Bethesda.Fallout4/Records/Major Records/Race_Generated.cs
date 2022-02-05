@@ -726,8 +726,8 @@ namespace Mutagen.Bethesda.Fallout4
         IFormLinkNullableGetter<IQuestGetter> IRaceGetter.DialogueQuest => this.DialogueQuest;
         #endregion
         #region BoneData
-        public IGenderedItem<ExtendedList<Bone>>? BoneData { get; set; }
-        IGenderedItemGetter<IReadOnlyList<IBoneGetter>>? IRaceGetter.BoneData => this.BoneData;
+        public IGenderedItem<ExtendedList<Bone>?> BoneData { get; set; } = new GenderedItem<ExtendedList<Bone>?>(default, default);
+        IGenderedItemGetter<IReadOnlyList<IBoneGetter>?> IRaceGetter.BoneData => this.BoneData;
         #endregion
         #region DATADataTypeState
         public Race.DATADataType DATADataTypeState { get; set; } = default;
@@ -845,7 +845,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.HairColorLookupTexture = initialValue;
                 this.HairColorExtendedLookupTexture = initialValue;
                 this.DialogueQuest = initialValue;
-                this.BoneData = new MaskItem<TItem, GenderedItem<TItem>?>(initialValue, default);
+                this.BoneData = new GenderedItem<TItem>(initialValue, initialValue);
                 this.DATADataTypeState = initialValue;
             }
 
@@ -1044,7 +1044,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.HairColorLookupTexture = HairColorLookupTexture;
                 this.HairColorExtendedLookupTexture = HairColorExtendedLookupTexture;
                 this.DialogueQuest = DialogueQuest;
-                this.BoneData = new MaskItem<TItem, GenderedItem<TItem>?>(BoneData, default);
+                this.BoneData = new GenderedItem<TItem>(BoneData, BoneData);
                 this.DATADataTypeState = DATADataTypeState;
             }
 
@@ -1146,7 +1146,7 @@ namespace Mutagen.Bethesda.Fallout4
             public TItem HairColorLookupTexture;
             public TItem HairColorExtendedLookupTexture;
             public TItem DialogueQuest;
-            public MaskItem<TItem, GenderedItem<TItem>?>? BoneData;
+            public GenderedItem<TItem> BoneData;
             public TItem DATADataTypeState;
             #endregion
 
@@ -1579,9 +1579,7 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!eval(this.HairColorLookupTexture)) return false;
                 if (!eval(this.HairColorExtendedLookupTexture)) return false;
                 if (!eval(this.DialogueQuest)) return false;
-                if (!GenderedItem.All(
-                    this.BoneData,
-                    eval: eval)) return false;
+                if (!eval(this.BoneData.Male) || !eval(this.BoneData.Female)) return false;
                 if (!eval(this.DATADataTypeState)) return false;
                 return true;
             }
@@ -1812,9 +1810,7 @@ namespace Mutagen.Bethesda.Fallout4
                 if (eval(this.HairColorLookupTexture)) return true;
                 if (eval(this.HairColorExtendedLookupTexture)) return true;
                 if (eval(this.DialogueQuest)) return true;
-                if (GenderedItem.Any(
-                    this.BoneData,
-                    eval: eval)) return true;
+                if (eval(this.BoneData.Male) || eval(this.BoneData.Female)) return true;
                 if (eval(this.DATADataTypeState)) return true;
                 return false;
             }
@@ -2074,9 +2070,9 @@ namespace Mutagen.Bethesda.Fallout4
                 obj.HairColorLookupTexture = eval(this.HairColorLookupTexture);
                 obj.HairColorExtendedLookupTexture = eval(this.HairColorExtendedLookupTexture);
                 obj.DialogueQuest = eval(this.DialogueQuest);
-                obj.BoneData = GenderedItem.TranslateHelper(
-                    this.BoneData,
-                    eval);
+                obj.BoneData = new GenderedItem<R>(
+                    eval(this.BoneData.Male),
+                    eval(this.BoneData.Female));
                 obj.DATADataTypeState = eval(this.DATADataTypeState);
             }
             #endregion
@@ -2665,8 +2661,7 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         fg.AppendItem(DialogueQuest, "DialogueQuest");
                     }
-                    if (BoneData != null
-                        && (printMask?.BoneData?.Overall ?? true))
+                    if ((true))
                     {
                         fg.AppendLine($"BoneData => {BoneData}");
                     }
@@ -3991,10 +3986,7 @@ namespace Mutagen.Bethesda.Fallout4
                 fg.AppendItem(HairColorLookupTexture, "HairColorLookupTexture");
                 fg.AppendItem(HairColorExtendedLookupTexture, "HairColorExtendedLookupTexture");
                 fg.AppendItem(DialogueQuest, "DialogueQuest");
-                if (BoneData != null)
-                {
-                    fg.AppendLine($"BoneData => {BoneData}");
-                }
+                fg.AppendLine($"BoneData => {BoneData}");
                 fg.AppendItem(DATADataTypeState, "DATADataTypeState");
             }
             #endregion
@@ -4631,7 +4623,7 @@ namespace Mutagen.Bethesda.Fallout4
         new String? HairColorLookupTexture { get; set; }
         new String? HairColorExtendedLookupTexture { get; set; }
         new IFormLinkNullable<IQuestGetter> DialogueQuest { get; set; }
-        new IGenderedItem<ExtendedList<Bone>>? BoneData { get; set; }
+        new IGenderedItem<ExtendedList<Bone>?> BoneData { get; set; }
         new Race.DATADataType DATADataTypeState { get; set; }
     }
 
@@ -4649,7 +4641,7 @@ namespace Mutagen.Bethesda.Fallout4
         new IGenderedItem<Model?> BehaviorGraph { get; set; }
         new IDictionary<BipedObject, BipedObjectData> BipedObjects { get; }
         new IGenderedItem<HeadData?>? HeadData { get; set; }
-        new IGenderedItem<ExtendedList<Bone>>? BoneData { get; set; }
+        new IGenderedItem<ExtendedList<Bone>?> BoneData { get; set; }
     }
 
     [AssociatedRecordTypesAttribute(Mutagen.Bethesda.Fallout4.Internals.RecordTypeInts.RACE)]
@@ -4764,7 +4756,7 @@ namespace Mutagen.Bethesda.Fallout4
         String? HairColorLookupTexture { get; }
         String? HairColorExtendedLookupTexture { get; }
         IFormLinkNullableGetter<IQuestGetter> DialogueQuest { get; }
-        IGenderedItemGetter<IReadOnlyList<IBoneGetter>>? BoneData { get; }
+        IGenderedItemGetter<IReadOnlyList<IBoneGetter>?> BoneData { get; }
         Race.DATADataType DATADataTypeState { get; }
 
     }
@@ -5081,7 +5073,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 new RecordType("FTSF")),
             new KeyValuePair<RecordType, RecordType>(
                 new RecordType("AHCM"),
-                new RecordType("AHCF")));
+                new RecordType("AHCF")),
+            new KeyValuePair<RecordType, RecordType>(
+                new RecordType("DFTM"),
+                new RecordType("DFTF")));
         #region Interface
         ProtocolKey ILoquiRegistration.ProtocolKey => ProtocolKey;
         ObjectKey ILoquiRegistration.ObjectKey => ObjectKey;
@@ -5217,7 +5212,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.HairColorLookupTexture = default;
             item.HairColorExtendedLookupTexture = default;
             item.DialogueQuest.Clear();
-            item.BoneData = null;
+            item.BoneData.Male = null;
+            item.BoneData.Female = null;
             item.DATADataTypeState = default;
             base.Clear(item);
         }
@@ -5504,11 +5500,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ret.HairColorLookupTexture = string.Equals(item.HairColorLookupTexture, rhs.HairColorLookupTexture);
             ret.HairColorExtendedLookupTexture = string.Equals(item.HairColorExtendedLookupTexture, rhs.HairColorExtendedLookupTexture);
             ret.DialogueQuest = item.DialogueQuest.Equals(rhs.DialogueQuest);
-            ret.BoneData = GenderedItem.EqualityMaskHelper(
-                lhs: item.BoneData,
-                rhs: rhs.BoneData,
-                maskGetter: (l, r, i) => EqualityComparer<IReadOnlyList<IBoneGetter>>.Default.Equals(l, r),
-                include: include);
+            ret.BoneData = new GenderedItem<bool>(
+                male: item.BoneData.Male.SequenceEqualNullable(rhs.BoneData.Male),
+                female: item.BoneData.Female.SequenceEqualNullable(rhs.BoneData.Female));
             ret.DATADataTypeState = item.DATADataTypeState == rhs.DATADataTypeState;
             base.FillEqualsMask(item, rhs, ret, include);
         }
@@ -6074,10 +6068,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 fg.AppendItem(item.DialogueQuest.FormKeyNullable, "DialogueQuest");
             }
-            if ((printMask?.BoneData?.Overall ?? true)
-                && item.BoneData is {} BoneDataItem)
+            if (true)
             {
-                BoneDataItem?.ToString(fg, "BoneData");
+                item.BoneData.ToString(fg, "BoneData");
             }
             if (printMask?.DATADataTypeState ?? true)
             {
@@ -6660,10 +6653,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 hash.Add(HairColorExtendedLookupTextureitem);
             }
             hash.Add(item.DialogueQuest);
-            if (item.BoneData is {} BoneDataitem)
-            {
-                hash.Add(HashCode.Combine(BoneDataitem.Male, BoneDataitem.Female));
-            }
+            hash.Add(HashCode.Combine(item.BoneData.Male, item.BoneData.Female));
             hash.Add(item.DATADataTypeState);
             hash.Add(base.GetHashCode());
             return hash.ToHashCode();
@@ -7568,16 +7558,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 item.DialogueQuest.SetTo(rhs.DialogueQuest.FormKeyNullable);
             }
-            if (rhs.BoneData is not {} rhsBoneDataitem)
-            {
-                item.BoneData = null;
-            }
-            else
-            {
-                item.BoneData = new GenderedItem<ExtendedList<Bone>>(
-                    male: rhsBoneDataitem.Male.Select(x => x.DeepCopy()).ToExtendedList(),
-                    female: rhsBoneDataitem.Female.Select(x => x.DeepCopy()).ToExtendedList());
-            }
+            item.BoneData = new GenderedItem<ExtendedList<Bone>?>(
+                male: rhs.BoneData.Male?.Select(x => x.DeepCopy()).ToExtendedList(),
+                female: rhs.BoneData.Female?.Select(x => x.DeepCopy()).ToExtendedList());
             if ((copyMask?.GetShouldTranslate((int)Race_FieldIndex.DATADataTypeState) ?? true))
             {
                 item.DATADataTypeState = rhs.DATADataTypeState;
@@ -8223,18 +8206,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 writer: writer,
                 item: item.IdleChatterTimeMax,
                 header: translationParams.ConvertToCustom(RecordTypes.NTOP));
-            Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IMorphValueGetter>.Instance.Write(
-                writer: writer,
-                items: item.MorphValues,
-                transl: (MutagenWriter subWriter, IMorphValueGetter subItem, TypedWriteParams? conv) =>
-                {
-                    var Item = subItem;
-                    ((MorphValueBinaryWriteTranslation)((IBinaryItem)Item).BinaryWriteTranslator).Write(
-                        item: Item,
-                        writer: subWriter,
-                        translationParams: conv);
-                });
-            RaceBinaryWriteTranslation.WriteBinaryMorphLastIndex(
+            RaceBinaryWriteTranslation.WriteBinaryMorphValues(
                 writer: writer,
                 item: item);
             StringBinaryTranslation.Instance.WriteNullable(
@@ -8321,15 +8293,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 item: item);
         }
 
-        public static partial void WriteBinaryMorphLastIndexCustom(
+        public static partial void WriteBinaryMorphValuesCustom(
             MutagenWriter writer,
             IRaceGetter item);
 
-        public static void WriteBinaryMorphLastIndex(
+        public static void WriteBinaryMorphValues(
             MutagenWriter writer,
             IRaceGetter item)
         {
-            WriteBinaryMorphLastIndexCustom(
+            WriteBinaryMorphValuesCustom(
                 writer: writer,
                 item: item);
         }
@@ -8516,114 +8488,100 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.DATA:
                 {
-                    switch (recordParseCount?.GetOrAdd(nextRecordType) ?? 0)
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    var dataFrame = frame.SpawnWithLength(contentLength);
+                    item.Height = Mutagen.Bethesda.Plugins.Binary.Translations.GenderedItemBinaryTranslation.Parse<Single>(
+                        frame: frame,
+                        transl: FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse);
+                    if (frame.MetaData.FormVersion!.Value >= 109)
                     {
-                        case 0:
-                            frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
-                            var dataFrame = frame.SpawnWithLength(contentLength);
-                            item.Height = Mutagen.Bethesda.Plugins.Binary.Translations.GenderedItemBinaryTranslation.Parse<Single>(
-                                frame: frame,
-                                transl: FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse);
-                            if (frame.MetaData.FormVersion!.Value >= 109)
-                            {
-                                item.DefaultWeight = Mutagen.Bethesda.Plugins.Binary.Translations.GenderedItemBinaryTranslation.Parse<RaceWeight>(
-                                    frame: frame,
-                                    transl: RaceWeight.TryCreateFromBinary);
-                            }
-                            item.Flags = EnumBinaryTranslation<Race.Flag, MutagenFrame, MutagenWriter>.Instance.Parse(
-                                reader: dataFrame,
-                                length: 4);
-                            item.AccelerationRate = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
-                            item.DecelerationRate = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
-                            item.Size = EnumBinaryTranslation<Size, MutagenFrame, MutagenWriter>.Instance.Parse(
-                                reader: dataFrame,
-                                length: 4);
-                            item.Unknown = ByteArrayBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame.SpawnWithLength(8));
-                            item.InjuredHealthPercent = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
-                            item.ShieldBipedObject = EnumBinaryTranslation<BipedObject, MutagenFrame, MutagenWriter>.Instance.Parse(
-                                reader: dataFrame,
-                                length: 4);
-                            if (frame.MetaData.FormVersion!.Value >= 124)
-                            {
-                                item.BeardBipedObject = EnumBinaryTranslation<BipedObject, MutagenFrame, MutagenWriter>.Instance.Parse(
-                                    reader: dataFrame,
-                                    length: 4);
-                            }
-                            item.BodyBipedObject = EnumBinaryTranslation<BipedObject, MutagenFrame, MutagenWriter>.Instance.Parse(
-                                reader: dataFrame,
-                                length: 4);
-                            item.AimAngleTolerance = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
-                            item.FlightRadius = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
-                            item.AngularAccelerationRate = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
-                            item.AngularTolerance = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
-                            RaceBinaryCreateTranslation.FillBinaryFlags2Custom(
-                                frame: dataFrame,
-                                item: item);
-                            item.Unknown2 = ByteArrayBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame.SpawnWithLength(36));
-                            item.PipboyBipedObject = EnumBinaryTranslation<BipedObject, MutagenFrame, MutagenWriter>.Instance.Parse(
-                                reader: dataFrame,
-                                length: 4);
-                            item.XPValue = dataFrame.ReadInt16();
-                            item.SeverableDebrisScale = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
-                            item.SeverableDebrisCount = dataFrame.ReadUInt8();
-                            item.SeverableDecalCount = dataFrame.ReadUInt8();
-                            item.ExplodableDebrisScale = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
-                            item.ExplodableDebrisCount = dataFrame.ReadUInt8();
-                            item.ExplodableDecalCount = dataFrame.ReadUInt8();
-                            item.SeverableExplosion.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
-                            item.SeverableDebris.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
-                            item.SeverableImpactDataSet.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
-                            item.ExplodableExplosion.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
-                            item.ExplodableDebris.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
-                            item.ExplodableImpactDataSet.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
-                            if (frame.MetaData.FormVersion!.Value >= 96)
-                            {
-                                item.OnCrippleDebrisScale = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
-                            }
-                            if (frame.MetaData.FormVersion!.Value >= 96)
-                            {
-                                item.OnCrippleDebrisCount = dataFrame.ReadUInt8();
-                            }
-                            if (frame.MetaData.FormVersion!.Value >= 96)
-                            {
-                                item.OnCrippleDecalCount = dataFrame.ReadUInt8();
-                            }
-                            if (frame.MetaData.FormVersion!.Value >= 96)
-                            {
-                                item.OnCrippleExplosion.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
-                            }
-                            if (frame.MetaData.FormVersion!.Value >= 96)
-                            {
-                                item.OnCrippleDebris.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
-                            }
-                            if (frame.MetaData.FormVersion!.Value >= 96)
-                            {
-                                item.OnCrippleImpactDataSet.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
-                            }
-                            if (frame.MetaData.FormVersion!.Value >= 118)
-                            {
-                                item.ExplodableSubsegmentExplosion.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
-                            }
-                            if (frame.MetaData.FormVersion!.Value >= 98)
-                            {
-                                item.OrientationLimitsPitch = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
-                            }
-                            if (frame.MetaData.FormVersion!.Value >= 98)
-                            {
-                                item.OrientationLimitsRoll = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
-                            }
-                            return (int)Race_FieldIndex.OrientationLimitsRoll;
-                        case 1:
-                            item.Subgraphs.SetTo(
-                                Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<Subgraph>.Instance.Parse(
-                                    reader: frame,
-                                    triggeringRecord: RecordTypes.DATA,
-                                    translationParams: translationParams,
-                                    transl: Subgraph.TryCreateFromBinary));
-                            return new ParseResult((int)Race_FieldIndex.Subgraphs, nextRecordType);
-                        default:
-                            throw new NotImplementedException();
+                        item.DefaultWeight = Mutagen.Bethesda.Plugins.Binary.Translations.GenderedItemBinaryTranslation.Parse<RaceWeight>(
+                            frame: frame,
+                            transl: RaceWeight.TryCreateFromBinary);
                     }
+                    item.Flags = EnumBinaryTranslation<Race.Flag, MutagenFrame, MutagenWriter>.Instance.Parse(
+                        reader: dataFrame,
+                        length: 4);
+                    item.AccelerationRate = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
+                    item.DecelerationRate = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
+                    item.Size = EnumBinaryTranslation<Size, MutagenFrame, MutagenWriter>.Instance.Parse(
+                        reader: dataFrame,
+                        length: 4);
+                    item.Unknown = ByteArrayBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame.SpawnWithLength(8));
+                    item.InjuredHealthPercent = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
+                    item.ShieldBipedObject = EnumBinaryTranslation<BipedObject, MutagenFrame, MutagenWriter>.Instance.Parse(
+                        reader: dataFrame,
+                        length: 4);
+                    if (frame.MetaData.FormVersion!.Value >= 124)
+                    {
+                        item.BeardBipedObject = EnumBinaryTranslation<BipedObject, MutagenFrame, MutagenWriter>.Instance.Parse(
+                            reader: dataFrame,
+                            length: 4);
+                    }
+                    item.BodyBipedObject = EnumBinaryTranslation<BipedObject, MutagenFrame, MutagenWriter>.Instance.Parse(
+                        reader: dataFrame,
+                        length: 4);
+                    item.AimAngleTolerance = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
+                    item.FlightRadius = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
+                    item.AngularAccelerationRate = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
+                    item.AngularTolerance = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
+                    RaceBinaryCreateTranslation.FillBinaryFlags2Custom(
+                        frame: dataFrame,
+                        item: item);
+                    item.Unknown2 = ByteArrayBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame.SpawnWithLength(36));
+                    item.PipboyBipedObject = EnumBinaryTranslation<BipedObject, MutagenFrame, MutagenWriter>.Instance.Parse(
+                        reader: dataFrame,
+                        length: 4);
+                    item.XPValue = dataFrame.ReadInt16();
+                    item.SeverableDebrisScale = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
+                    item.SeverableDebrisCount = dataFrame.ReadUInt8();
+                    item.SeverableDecalCount = dataFrame.ReadUInt8();
+                    item.ExplodableDebrisScale = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
+                    item.ExplodableDebrisCount = dataFrame.ReadUInt8();
+                    item.ExplodableDecalCount = dataFrame.ReadUInt8();
+                    item.SeverableExplosion.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    item.SeverableDebris.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    item.SeverableImpactDataSet.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    item.ExplodableExplosion.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    item.ExplodableDebris.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    item.ExplodableImpactDataSet.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    if (frame.MetaData.FormVersion!.Value >= 96)
+                    {
+                        item.OnCrippleDebrisScale = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
+                    }
+                    if (frame.MetaData.FormVersion!.Value >= 96)
+                    {
+                        item.OnCrippleDebrisCount = dataFrame.ReadUInt8();
+                    }
+                    if (frame.MetaData.FormVersion!.Value >= 96)
+                    {
+                        item.OnCrippleDecalCount = dataFrame.ReadUInt8();
+                    }
+                    if (frame.MetaData.FormVersion!.Value >= 96)
+                    {
+                        item.OnCrippleExplosion.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    }
+                    if (frame.MetaData.FormVersion!.Value >= 96)
+                    {
+                        item.OnCrippleDebris.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    }
+                    if (frame.MetaData.FormVersion!.Value >= 96)
+                    {
+                        item.OnCrippleImpactDataSet.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    }
+                    if (frame.MetaData.FormVersion!.Value >= 118)
+                    {
+                        item.ExplodableSubsegmentExplosion.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    }
+                    if (frame.MetaData.FormVersion!.Value >= 98)
+                    {
+                        item.OrientationLimitsPitch = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
+                    }
+                    if (frame.MetaData.FormVersion!.Value >= 98)
+                    {
+                        item.OrientationLimitsRoll = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
+                    }
+                    return (int)Race_FieldIndex.OrientationLimitsRoll;
                 }
                 case RecordTypeInts.MNAM:
                 case RecordTypeInts.FNAM:
@@ -8886,6 +8844,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     item.SubgraphAdditiveRace.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
                     return (int)Race_FieldIndex.SubgraphAdditiveRace;
                 }
+                case RecordTypeInts.SGNM:
+                case RecordTypeInts.SAKD:
+                case RecordTypeInts.STKD:
+                case RecordTypeInts.SAPT:
+                case RecordTypeInts.SRAF:
+                {
+                    item.Subgraphs.SetTo(
+                        Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<Subgraph>.Instance.Parse(
+                            reader: frame,
+                            triggeringRecord: Subgraph_Registration.TriggeringRecordTypes,
+                            translationParams: translationParams,
+                            transl: Subgraph.TryCreateFromBinary));
+                    return (int)Race_FieldIndex.Subgraphs;
+                }
                 case RecordTypeInts.PTOP:
                 {
                     frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
@@ -8902,19 +8874,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case RecordTypeInts.MSM0:
                 case RecordTypeInts.MSM1:
                 {
-                    item.MorphValues.SetTo(
-                        Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<MorphValue>.Instance.Parse(
-                            reader: frame,
-                            triggeringRecord: MorphValue_Registration.TriggeringRecordTypes,
-                            translationParams: translationParams,
-                            transl: MorphValue.TryCreateFromBinary));
-                    return (int)Race_FieldIndex.MorphValues;
-                }
-                case RecordTypeInts.MLSI:
-                {
-                    return RaceBinaryCreateTranslation.FillBinaryMorphLastIndexCustom(
+                    RaceBinaryCreateTranslation.FillBinaryMorphValuesCustom(
                         frame: frame.SpawnWithLength(frame.MetaData.Constants.SubConstants.HeaderLength + contentLength),
                         item: item);
+                    return (int)Race_FieldIndex.MorphValues;
                 }
                 case RecordTypeInts.HNAM:
                 {
@@ -8938,9 +8901,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     item.DialogueQuest.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
                     return (int)Race_FieldIndex.DialogueQuest;
                 }
-                case RecordTypeInts.BSMB:
-                case RecordTypeInts.BSMS:
-                case RecordTypeInts.BMMP:
+                case RecordTypeInts.BSMP:
                 {
                     return RaceBinaryCreateTranslation.FillBinaryBoneDataParseCustom(
                         frame: frame.SpawnWithLength(frame.MetaData.Constants.SubConstants.HeaderLength + contentLength),
@@ -8977,7 +8938,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             MutagenFrame frame,
             IRaceInternal item);
 
-        public static partial ParseResult FillBinaryMorphLastIndexCustom(
+        public static partial void FillBinaryMorphValuesCustom(
             MutagenFrame frame,
             IRaceInternal item);
 
@@ -9460,11 +9421,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private int? _IdleChatterTimeMaxLocation;
         public Single? IdleChatterTimeMax => _IdleChatterTimeMaxLocation.HasValue ? HeaderTranslation.ExtractSubrecordMemory(_data, _IdleChatterTimeMaxLocation.Value, _package.MetaData.Constants).Float() : default(Single?);
         #endregion
-        public IReadOnlyList<IMorphValueGetter> MorphValues { get; private set; } = ListExt.Empty<MorphValueBinaryOverlay>();
-        #region MorphLastIndex
-        public partial ParseResult MorphLastIndexCustomParse(
+        #region MorphValues
+        partial void MorphValuesCustomParse(
             OverlayStream stream,
-            int offset);
+            long finalPos,
+            int offset,
+            RecordType type,
+            PreviousParse lastParsed);
         #endregion
         #region HairColorLookupTexture
         private int? _HairColorLookupTextureLocation;
@@ -9619,26 +9582,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.DATA:
                 {
-                    switch (recordParseCount?.GetOrAdd(type) ?? 0)
-                    {
-                        case 0:
-                            _DATALocation = (stream.Position - offset) + _package.MetaData.Constants.SubConstants.TypeAndLengthLength;
-                            return (int)Race_FieldIndex.OrientationLimitsRoll;
-                        case 1:
-                            this.Subgraphs = BinaryOverlayList.FactoryByArray<SubgraphBinaryOverlay>(
-                                mem: stream.RemainingMemory,
-                                package: _package,
-                                parseParams: parseParams,
-                                getter: (s, p, recConv) => SubgraphBinaryOverlay.SubgraphFactory(new OverlayStream(s, p), p, recConv),
-                                locs: ParseRecordLocations(
-                                    stream: stream,
-                                    trigger: type,
-                                    constants: _package.MetaData.Constants.SubConstants,
-                                    skipHeader: false));
-                            return new ParseResult((int)Race_FieldIndex.Subgraphs, type);
-                        default:
-                            throw new NotImplementedException();
-                    }
+                    _DATALocation = (stream.Position - offset) + _package.MetaData.Constants.SubConstants.TypeAndLengthLength;
+                    return (int)Race_FieldIndex.OrientationLimitsRoll;
                 }
                 case RecordTypeInts.MNAM:
                 case RecordTypeInts.FNAM:
@@ -9879,6 +9824,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     _SubgraphAdditiveRaceLocation = (stream.Position - offset);
                     return (int)Race_FieldIndex.SubgraphAdditiveRace;
                 }
+                case RecordTypeInts.SGNM:
+                case RecordTypeInts.SAKD:
+                case RecordTypeInts.STKD:
+                case RecordTypeInts.SAPT:
+                case RecordTypeInts.SRAF:
+                {
+                    this.Subgraphs = this.ParseRepeatedTypelessSubrecord<SubgraphBinaryOverlay>(
+                        stream: stream,
+                        parseParams: parseParams,
+                        trigger: Subgraph_Registration.TriggeringRecordTypes,
+                        factory: SubgraphBinaryOverlay.SubgraphFactory);
+                    return (int)Race_FieldIndex.Subgraphs;
+                }
                 case RecordTypeInts.PTOP:
                 {
                     _IdleChatterTimeMinLocation = (stream.Position - offset);
@@ -9893,18 +9851,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case RecordTypeInts.MSM0:
                 case RecordTypeInts.MSM1:
                 {
-                    this.MorphValues = this.ParseRepeatedTypelessSubrecord<MorphValueBinaryOverlay>(
+                    MorphValuesCustomParse(
                         stream: stream,
-                        parseParams: parseParams,
-                        trigger: MorphValue_Registration.TriggeringRecordTypes,
-                        factory: MorphValueBinaryOverlay.MorphValueFactory);
+                        finalPos: finalPos,
+                        offset: offset,
+                        type: type,
+                        lastParsed: lastParsed);
                     return (int)Race_FieldIndex.MorphValues;
-                }
-                case RecordTypeInts.MLSI:
-                {
-                    return MorphLastIndexCustomParse(
-                        stream,
-                        offset);
                 }
                 case RecordTypeInts.HNAM:
                 {
@@ -9921,9 +9874,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     _DialogueQuestLocation = (stream.Position - offset);
                     return (int)Race_FieldIndex.DialogueQuest;
                 }
-                case RecordTypeInts.BSMB:
-                case RecordTypeInts.BSMS:
-                case RecordTypeInts.BMMP:
+                case RecordTypeInts.BSMP:
                 {
                     return BoneDataParseCustomParse(
                         stream,

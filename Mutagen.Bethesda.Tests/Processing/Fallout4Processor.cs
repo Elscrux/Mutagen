@@ -6,6 +6,7 @@ using Mutagen.Bethesda.Plugins.Binary.Streams;
 using Mutagen.Bethesda.Strings;
 using Noggog;
 using System;
+using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,6 +27,7 @@ public class Fallout4Processor : Processor
         base.AddDynamicProcessorInstructions();
         AddDynamicProcessing(RecordTypes.GMST, ProcessGameSettings);
         AddDynamicProcessing(RecordTypes.TRNS, ProcessTransforms);
+        AddDynamicProcessing(RecordTypes.RACE, ProcessRaces);
     }
 
     protected override IEnumerable<Task> ExtraJobs(Func<IMutagenReadStream> streamGetter)
@@ -69,6 +71,26 @@ public class Fallout4Processor : Processor
         if (!majorFrame.TryLocateSubrecordPinFrame(RecordTypes.DATA, out var dataRec)) return;
         int offset = 0;
         ProcessZeroFloats(dataRec, fileOffset, ref offset, 9);
+    }
+
+    private void ProcessRaces(
+        MajorRecordFrame majorFrame,
+        long fileOffset)
+    {
+        if (!majorFrame.TryLocateSubrecordPinFrame(RecordTypes.MLSI, out var mlsi)) return;
+
+        var max = majorFrame.FindEnumerateSubrecords(RecordTypes.MSID)
+            .Select(x => x.AsInt32())
+            .Max(0);
+
+        var existing = mlsi.AsInt32();
+        if (existing == max) return;
+
+        byte[] sub = new byte[4];
+        BinaryPrimitives.WriteInt32LittleEndian(sub, max);
+        _instructions.SetSubstitution(
+            fileOffset + mlsi.Location + mlsi.HeaderLength,
+            sub);
     }
 
     public void GameSettingStringHandler(

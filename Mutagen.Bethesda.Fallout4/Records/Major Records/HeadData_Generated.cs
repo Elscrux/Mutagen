@@ -1611,9 +1611,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         RecordTypes.MPPM,
                         RecordTypes.MPPT,
                         RecordTypes.MPPF,
-                        RecordTypes.MPGS,
                         RecordTypes.MPPC,
                         RecordTypes.MPPK,
+                        RecordTypes.MPGS,
                         RecordTypes.FMRI,
                         RecordTypes.FMRN,
                         RecordTypes.WMAP
@@ -2587,9 +2587,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case RecordTypeInts.MPPM:
                 case RecordTypeInts.MPPT:
                 case RecordTypeInts.MPPF:
-                case RecordTypeInts.MPGS:
                 case RecordTypeInts.MPPC:
                 case RecordTypeInts.MPPK:
+                case RecordTypeInts.MPGS:
                 {
                     if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)HeadData_FieldIndex.MorphGroups) return ParseResult.Stop;
                     item.MorphGroups.SetTo(
@@ -2853,9 +2853,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case RecordTypeInts.MPPM:
                 case RecordTypeInts.MPPT:
                 case RecordTypeInts.MPPF:
-                case RecordTypeInts.MPGS:
                 case RecordTypeInts.MPPC:
                 case RecordTypeInts.MPPK:
+                case RecordTypeInts.MPGS:
                 {
                     if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)HeadData_FieldIndex.MorphGroups) return ParseResult.Stop;
                     this.MorphGroups = this.ParseRepeatedTypelessSubrecord<MorphGroupBinaryOverlay>(

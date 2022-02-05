@@ -46,8 +46,7 @@ public class GenderedType : WrapperType
         else if (SubTypeGeneration is FormLinkType linkType)
         {
             fg.AppendLine($"{accessorPrefix}.Male = {linkType.DirectTypeName(getter: false)}.Null;");
-            fg.AppendLine($"{accessorPrefix}.Female = {linkType.DirectTypeName(getter: false)}.Null;");
-        }
+            fg.AppendLine($"{accessorPrefix}.Female = {linkType.DirectTypeName(getter: false)}.Null;");}
         else
         {
             SubTypeGeneration.GenerateClear(fg, $"{accessorPrefix}.Male");
@@ -57,7 +56,7 @@ public class GenderedType : WrapperType
 
     public override void GenerateForClass(FileGeneration fg)
     {
-        fg.AppendLine($"public IGenderedItem<{SubTypeGeneration.TypeName(getter: false, needsCovariance: true)}{SubTypeGeneration.NullChar}>{(this.Nullable ? "?" : null)} {this.Name} {{ get; set; }}{(this.Nullable ? null : $" = new GenderedItem<{SubTypeGeneration.TypeName(getter: false, needsCovariance: true)}{(this.ItemNullable ? "?" : null)}>({this.SubTypeGeneration.GetDefault(getter: false)}, {this.SubTypeGeneration.GetDefault(getter: false)});")}");
+        fg.AppendLine($"public IGenderedItem<{SubTypeGeneration.TypeName(getter: false, needsCovariance: true)}{SubTypeGeneration.NullChar}>{(this.Nullable ? "?" : null)} {this.Name} {{ get; set; }}{(this.Nullable ? null : $" = new GenderedItem<{SubTypeGeneration.TypeName(getter: false, needsCovariance: true)}{SubTypeGeneration.NullChar}>({this.SubTypeGeneration.GetDefault(getter: false)}, {this.SubTypeGeneration.GetDefault(getter: false)});")}");
         fg.AppendLine($"IGenderedItemGetter<{SubTypeGeneration.TypeName(getter: true, needsCovariance: true)}{SubTypeGeneration.NullChar}>{(this.Nullable ? "?" : null)} {this.ObjectGen.Interface(getter: true, internalInterface: true)}.{this.Name} => this.{this.Name};");
     }
 

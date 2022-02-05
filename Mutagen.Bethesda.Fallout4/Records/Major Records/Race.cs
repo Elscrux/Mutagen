@@ -6,12 +6,14 @@ using Mutagen.Bethesda.Plugins.Records;
 using System;
 using System.Buffers.Binary;
 using System.Collections.Generic;
+using Noggog;
+using System.Linq;
 
 namespace Mutagen.Bethesda.Fallout4
 {
     public partial class Race
     {
-        internal static readonly RecordType NAM2 = new RecordType("NAM2");
+        internal static readonly RecordType NAM2 = new("NAM2");
         public bool ExportingExtraNam2 { get; set; }
 
         [Flags]
@@ -103,51 +105,78 @@ namespace Mutagen.Bethesda.Fallout4
 
             public static partial void FillBinaryBipedObjectsCustom(MutagenFrame frame, IRaceInternal item)
             {
-                throw new NotImplementedException();
-                string[] names = new string[NumBipedObjectNames];
+                FillBinaryBipedObjectsDictionary(frame, item.FormVersion, item.BipedObjects);
+            }
+
+            public static void FillBinaryBipedObjectsDictionary(IMutagenReadStream frame,
+                int formVersion,
+                IDictionary<BipedObject, BipedObjectData> dict)
+            {
                 for (int i = 0; i < NumBipedObjectNames; i++)
                 {
+                    var data = new BipedObjectData();
+                    dict[(BipedObject)i] = data;
+                    var subFrame = frame.ReadSubrecordFrame();
+                    if (subFrame.RecordType != RecordTypes.NAME)
+                    {
+                        throw new ArgumentException($"Unexpected record type: {subFrame.RecordType} != {RecordTypes.NAME}");
+                    }
 
+                    data.Name = subFrame.AsString(frame.MetaData.Encodings.NonTranslated);
+                }
+
+                var content = frame.ReadSubrecordFrame(RecordTypes.RBPC).Content;
+                for (int i = 0; i < NumBipedObjectNames; i++)
+                {
+                    FormLink<IActorValueInformationGetter> link;
+                    if (formVersion < 78)
+                    {
+                        link = frame.MetaData.RecordInfoCache!.GetNthFormKey<IActorValueInformationGetter>(BinaryPrimitives.ReadInt32LittleEndian(content));
+                    }
+                    else
+                    {
+                        link = FormKeyBinaryTranslation.Instance.Parse(content, frame.MetaData.MasterReferences);
+                    }
+
+                    dict[(BipedObject)i].Conditions = link;
+                    content = content.Slice(4);
                 }
             }
 
-            public static partial ParseResult FillBinaryFaceFxPhonemesListingParsingCustom(MutagenFrame frame, IRaceInternal item)
-            {
-                throw new NotImplementedException();
-            }
+            public static partial ParseResult FillBinaryFaceFxPhonemesListingParsingCustom(MutagenFrame frame, IRaceInternal item) => FaceFxPhonemesBinaryCreateTranslation.ParseFaceFxPhonemes(frame, item.FaceFxPhonemes);
 
-            public static partial ParseResult FillBinaryFaceFxPhonemesRawParsingCustom(MutagenFrame frame, IRaceInternal item)
-            {
-                throw new NotImplementedException();
-            }
+            public static partial ParseResult FillBinaryFaceFxPhonemesRawParsingCustom(MutagenFrame frame, IRaceInternal item) => FaceFxPhonemesBinaryCreateTranslation.ParseFaceFxPhonemes(frame, item.FaceFxPhonemes);
 
-            public static partial ParseResult FillBinaryMorphLastIndexCustom(MutagenFrame frame, IRaceInternal item)
+            public static partial void FillBinaryMorphValuesCustom(MutagenFrame frame, IRaceInternal item)
             {
-                throw new NotImplementedException();
+                item.MorphValues.SetTo(
+                    Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<MorphValue>.Instance.Parse(
+                        reader: frame.SpawnAll(),
+                        triggeringRecord: MorphValue_Registration.TriggeringRecordTypes,
+                        transl: MorphValue.TryCreateFromBinary));
+
+                // Read off last index subrecord
+                frame.ReadSubrecordFrame(RecordTypes.MLSI);
             }
 
             public static partial ParseResult FillBinaryBoneDataParseCustom(MutagenFrame frame, IRaceInternal item)
             {
-                throw new NotImplementedException();
+                var genderFrame = frame.ReadSubrecordFrame(RecordTypes.BSMP);
+                
+                ExtendedList<Bone> list = Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<Bone>.Instance.Parse(
+                    reader: frame.SpawnAll(),
+                    triggeringRecord: Bone_Registration.TriggeringRecordTypes,
+                    transl: Bone.TryCreateFromBinary);
+                if (genderFrame.AsInt32() == 0)
+                {
+                    item.BoneData.Male = list;
+                }
+                else
+                {
+                    item.BoneData.Female = list;
+                }
+                return null;
             }
-
-            //        static partial void FillBinaryBipedObjectNamesCustom(MutagenFrame frame, IRaceInternal item)
-            //        {
-            //            for (int i = 0; i < NumBipedObjectNames; i++)
-            //            {
-            //                if (!frame.Reader.TryReadSubrecordFrame(RecordTypes.NAME, out var subHeader)) break;
-            //                BipedObject type = (BipedObject)i;
-            //                var val = BinaryStringUtility.ProcessWholeToZString(subHeader.Content);
-            //                if (!string.IsNullOrEmpty(val))
-            //                {
-            //                    item.BipedObjectNames[type] = val;
-            //                }
-            //            }
-            //        }
-
-            //        static partial void FillBinaryFaceFxPhonemesListingParsingCustom(MutagenFrame frame, IRaceInternal item) => FaceFxPhonemesBinaryCreateTranslation.ParseFaceFxPhonemes(frame, item.FaceFxPhonemes);
-
-            //        static partial void FillBinaryFaceFxPhonemesRawParsingCustom(MutagenFrame frame, IRaceInternal item) => FaceFxPhonemesBinaryCreateTranslation.ParseFaceFxPhonemes(frame, item.FaceFxPhonemes);
 
             public static partial void FillBinaryFlags2Custom(MutagenFrame frame, IRaceInternal item)
             {
@@ -159,26 +188,25 @@ namespace Mutagen.Bethesda.Fallout4
                 flags2 <<= 32;
                 item.Flags |= ((Race.Flag)flags2);
             }
-
-            //        static partial void FillBinaryBodyTemplateCustom(MutagenFrame frame, IRaceInternal item)
-            //        {
-            //            item.BodyTemplate = BodyTemplateBinaryCreateTranslation.Parse(frame);
-            //        }
         }
 
         public partial class RaceBinaryOverlay
         {
+            private readonly ICollectionGetter<RecordType> BoneRecordTypes = new CollectionGetterWrapper<RecordType>(
+                new HashSet<RecordType>(new[]{ RecordTypes.BSMB, RecordTypes.BSMS, RecordTypes.BMMP}));
+
             public bool ExportingExtraNam2 { get; private set; }
-            //        public bool ExportingExtraNam3 => throw new NotImplementedException();
 
-            //        private int? _faceFxPhonemesLoc;
-            //        public IFaceFxPhonemesGetter FaceFxPhonemes => GetFaceFx();
+            private int? _faceFxPhonemesLoc;
+            public IFaceFxPhonemesGetter FaceFxPhonemes => GetFaceFx();
 
-            public IReadOnlyDictionary<BipedObject, IBipedObjectDataGetter> BipedObjects => throw new NotImplementedException();
+            public IReadOnlyDictionary<BipedObject, IBipedObjectDataGetter> BipedObjects { get; private set; } =
+                DictionaryExt.Empty<BipedObject, IBipedObjectDataGetter>();
 
-            public IFaceFxPhonemesGetter FaceFxPhonemes => throw new NotImplementedException();
+            private GenderedItem<IReadOnlyList<IBoneGetter>?>? _boneData;
+            public IGenderedItemGetter<IReadOnlyList<IBoneGetter>?> BoneData => _boneData ?? new GenderedItem<IReadOnlyList<IBoneGetter>?>(null, null);
 
-            public IGenderedItemGetter<IReadOnlyList<IBoneGetter>>? BoneData => throw new NotImplementedException();
+            public IReadOnlyList<IMorphValueGetter> MorphValues { get; private set; } = ListExt.Empty<MorphValueBinaryOverlay>();
 
             partial void ExtraNAM2CustomParse(OverlayStream stream, int offset)
             {
@@ -186,61 +214,27 @@ namespace Mutagen.Bethesda.Fallout4
 
             public partial ParseResult BoneDataParseCustomParse(OverlayStream stream, int offset)
             {
-                throw new NotImplementedException();
+                var genderFrame = stream.ReadSubrecordFrame(RecordTypes.BSMP);
+                _boneData ??= new GenderedItem<IReadOnlyList<IBoneGetter>?>(null, null);
+                IReadOnlyList<IBoneGetter> list = BinaryOverlayList.FactoryByArray<IBoneGetter>(
+                    mem: stream.RemainingMemory,
+                    package: _package,
+                    getter: (s, p) => BoneBinaryOverlay.BoneFactory(s, p),
+                    locs: ParseRecordLocations(
+                        stream: stream,
+                        constants: _package.MetaData.Constants.SubConstants,
+                        triggers: BoneRecordTypes,
+                        skipHeader: true));
+                if (genderFrame.AsInt32() == 0)
+                {
+                    _boneData.Male = list;
+                }
+                else
+                {
+                    _boneData.Female = list;
+                }
+                return null;
             }
-
-            //        private int? _bipedObjectNamesLoc;
-            //        public IReadOnlyDictionary<BipedObject, string> BipedObjectNames
-            //        {
-            //            get
-            //            {
-            //                if (_bipedObjectNamesLoc == null) return DictionaryExt.Empty<BipedObject, string>();
-            //                var ret = new Dictionary<BipedObject, string>();
-            //                var loc = _bipedObjectNamesLoc.Value;
-            //                for (int i = 0; i < RaceBinaryCreateTranslation.NumBipedObjectNames; i++)
-            //                {
-            //                    if (!_package.MetaData.Constants.TrySubrecordFrame(_data.Slice(loc), RecordTypes.NAME, out var subHeader)) break;
-            //                    BipedObject type = (BipedObject)i;
-            //                    var val = BinaryStringUtility.ProcessWholeToZString(subHeader.Content);
-            //                    if (!string.IsNullOrEmpty(val))
-            //                    {
-            //                        ret[type] = val;
-            //                    }
-            //                    loc += subHeader.HeaderAndContentData.Length;
-            //                }
-            //                return ret;
-            //            }
-            //        }
-
-            //        void BipedObjectNamesCustomParse(OverlayStream stream, int finalPos, int offset)
-            //        {
-            //            _bipedObjectNamesLoc = (ushort)(stream.Position - offset);
-            //            UtilityTranslation.SkipPastAll(stream, _package.MetaData.Constants, RecordTypes.NAME);
-            //        }
-
-            //        partial void FaceFxPhonemesListingParsingCustomParse(OverlayStream stream, int offset)
-            //        {
-            //            FaceFxPhonemesRawParsingCustomParse(stream, offset);
-            //        }
-
-            //        partial void FaceFxPhonemesRawParsingCustomParse(OverlayStream stream, int offset)
-            //        {
-            //            if (_faceFxPhonemesLoc == null)
-            //            {
-            //                _faceFxPhonemesLoc = (ushort)(stream.Position - offset);
-            //            }
-            //            UtilityTranslation.SkipPastAll(stream, _package.MetaData.Constants, RecordTypes.PHTN);
-            //            UtilityTranslation.SkipPastAll(stream, _package.MetaData.Constants, RecordTypes.PHWT);
-            //        }
-
-            //        private FaceFxPhonemes GetFaceFx()
-            //        {
-            //            var ret = new FaceFxPhonemes();
-            //            if (_faceFxPhonemesLoc == null) return ret;
-            //            var frame = new MutagenFrame(new MutagenMemoryReadStream(_data.Slice(_faceFxPhonemesLoc.Value), _package.MetaData));
-            //            FaceFxPhonemesBinaryCreateTranslation.ParseFaceFxPhonemes(frame, ret);
-            //            return ret;
-            //        }
 
             public Race.Flag GetFlagsCustom()
             {
@@ -257,28 +251,37 @@ namespace Mutagen.Bethesda.Fallout4
                 return flag;
             }
 
-            //        private int? _BodyTemplateLocation;
-            //        public IBodyTemplateGetter? GetBodyTemplateCustom() => _BodyTemplateLocation.HasValue ? BodyTemplateBinaryOverlay.CustomFactory(new OverlayStream(_data.Slice(_BodyTemplateLocation!.Value), _package), _package) : default;
-            //        public bool BodyTemplate_IsSet => _BodyTemplateLocation.HasValue;
-
-            //        partial void BodyTemplateCustomParse(OverlayStream stream, long finalPos, int offset)
-            //        {
-            //            _BodyTemplateLocation = (stream.Position - offset);
-            //        }
-
-            private static void BipedObjectsCustomParse(OverlayStream stream, int finalPos, int offset)
+            private void BipedObjectsCustomParse(OverlayStream stream, int finalPos, int offset)
             {
-                throw new NotImplementedException();
+                var dict = new Dictionary<BipedObject, BipedObjectData>();
+                RaceBinaryCreateTranslation.FillBinaryBipedObjectsDictionary(stream, FormVersion, dict);
+                BipedObjects = dict.Covariant<BipedObject, BipedObjectData, IBipedObjectDataGetter>();
             }
 
             public partial ParseResult FaceFxPhonemesListingParsingCustomParse(OverlayStream stream, int offset)
             {
-                throw new NotImplementedException();
+                FaceFxPhonemesRawParsingCustomParse(stream, offset);
+                return null;
             }
 
             public partial ParseResult FaceFxPhonemesRawParsingCustomParse(OverlayStream stream, int offset)
             {
-                throw new NotImplementedException();
+                if (_faceFxPhonemesLoc == null)
+                {
+                    _faceFxPhonemesLoc = (ushort)(stream.Position - offset);
+                }
+                PluginUtilityTranslation.SkipPastAll(stream, _package.MetaData.Constants, RecordTypes.PHTN);
+                PluginUtilityTranslation.SkipPastAll(stream, _package.MetaData.Constants, RecordTypes.PHWT);
+                return null;
+            }
+
+            private FaceFxPhonemes GetFaceFx()
+            {
+                var ret = new FaceFxPhonemes();
+                if (_faceFxPhonemesLoc == null) return ret;
+                var frame = new MutagenFrame(new MutagenMemoryReadStream(_data.Slice(_faceFxPhonemesLoc.Value), _package.MetaData));
+                FaceFxPhonemesBinaryCreateTranslation.ParseFaceFxPhonemes(frame, ret);
+                return ret;
             }
 
             partial void Flags2CustomParse(OverlayStream stream, int offset)
@@ -286,9 +289,16 @@ namespace Mutagen.Bethesda.Fallout4
                 throw new NotImplementedException();
             }
 
-            public partial ParseResult MorphLastIndexCustomParse(OverlayStream stream, int offset)
+            partial void MorphValuesCustomParse(OverlayStream stream, long finalPos, int offset, RecordType type, PreviousParse lastParsed)
             {
-                throw new NotImplementedException();
+                this.MorphValues = this.ParseRepeatedTypelessSubrecord<MorphValueBinaryOverlay>(
+                    stream: stream,
+                    parseParams: null,
+                    trigger: MorphValue_Registration.TriggeringRecordTypes,
+                    factory: MorphValueBinaryOverlay.MorphValueFactory);
+
+                // Read off last index subrecord
+                stream.ReadSubrecordFrame(RecordTypes.MLSI);
             }
         }
 
@@ -304,40 +314,61 @@ namespace Mutagen.Bethesda.Fallout4
 
             public static partial void WriteBinaryBipedObjectsCustom(MutagenWriter writer, IRaceGetter item)
             {
-                throw new NotImplementedException();
+                var bipedObjs = item.BipedObjects;
+                for (int i = 0; i < RaceBinaryCreateTranslation.NumBipedObjectNames; i++)
+                {
+                    using var name = HeaderExport.Subrecord(writer, RecordTypes.NAME);
+                    StringBinaryTranslation.Instance.Write(writer, bipedObjs[(BipedObject)i].Name, StringBinaryType.NullTerminate);
+                }
+                
+                using var rbpc = HeaderExport.Subrecord(writer, RecordTypes.RBPC);
+                if (item.FormVersion < 78)
+                {
+                    var dict = new Dictionary<FormKey, int>();
+                    for (int i = 0; i < RaceBinaryCreateTranslation.NumBipedObjectNames; i++)
+                    {
+                        dict[writer.MetaData.RecordInfoCache!.GetNthFormKey<IActorValueInformationGetter>(i)] = i;
+                    }
+
+                    for (int i = 0; i < RaceBinaryCreateTranslation.NumBipedObjectNames; i++)
+                    {
+                        var cond = bipedObjs[(BipedObject)i].Conditions;
+                        writer.Write(dict[cond.FormKey]);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < RaceBinaryCreateTranslation.NumBipedObjectNames; i++)
+                    {
+                        FormLinkBinaryTranslation.Instance.Write(writer, bipedObjs[(BipedObject)i].Conditions);
+                    }
+                }
             }
 
             public static partial void WriteBinaryBoneDataParseCustom(MutagenWriter writer, IRaceGetter item)
             {
-                throw new NotImplementedException();
+                var bones = item.BoneData;
+                WriteBinaryBoneDataParseCustom(writer, bones.Male, 0);
+                WriteBinaryBoneDataParseCustom(writer, bones.Female, 1);
             }
 
-            //        static partial void WriteBinaryBipedObjectNamesCustom(MutagenWriter writer, IRaceGetter item)
-            //        {
-            //            var bipedObjs = item.BipedObjectNames;
-            //            for (int i = 0; i < RaceBinaryCreateTranslation.NumBipedObjectNames; i++)
-            //            {
-            //                var bipedObj = (BipedObject)i;
-            //                using (HeaderExport.Subrecord(writer, RecordTypes.NAME))
-            //                {
-            //                    if (bipedObjs.TryGetValue(bipedObj, out var val))
-            //                    {
-            //                        writer.Write(val, StringBinaryType.NullTerminate);
-            //                    }
-            //                    else
-            //                    {
-            //                        writer.Write(string.Empty, StringBinaryType.NullTerminate);
-            //                    }
-            //                }
-            //            }
-            //        }
-
-            //        static partial void WriteBinaryFaceFxPhonemesListingParsingCustom(MutagenWriter writer, IRaceGetter item) => FaceFxPhonemesBinaryWriteTranslation.WriteFaceFxPhonemes(writer, item.FaceFxPhonemes);
-
-            //        static partial void WriteBinaryFaceFxPhonemesRawParsingCustom(MutagenWriter writer, IRaceGetter item)
-            //        {
-            //            // Handled by Listing section
-            //}
+            private static void WriteBinaryBoneDataParseCustom(MutagenWriter writer, IReadOnlyList<IBoneGetter>? bones, int genderInt)
+            {
+                if (bones == null) return;
+                using (HeaderExport.Subrecord(writer, RecordTypes.BSMP))
+                {
+                    writer.Write(genderInt);
+                }
+                ListBinaryTranslation<IBoneGetter>.Instance.Write(writer, bones,
+                    transl: (MutagenWriter subWriter, IBoneGetter subItem, TypedWriteParams? conv) =>
+                    {
+                        var Item = subItem;
+                        ((BoneBinaryWriteTranslation)((IBinaryItem)Item).BinaryWriteTranslator).Write(
+                            item: Item,
+                            writer: subWriter,
+                            translationParams: conv);
+                    });
+            }
 
             public static partial void WriteBinaryFlags2Custom(MutagenWriter writer, IRaceGetter item)
             {
@@ -346,28 +377,39 @@ namespace Mutagen.Bethesda.Fallout4
                 writer.Write((uint)flags);
             }
 
-            public static partial void WriteBinaryFaceFxPhonemesListingParsingCustom(MutagenWriter writer, IRaceGetter item)
-            {
-                throw new NotImplementedException();
-            }
+            public static partial void WriteBinaryFaceFxPhonemesListingParsingCustom(MutagenWriter writer, IRaceGetter item) => FaceFxPhonemesBinaryWriteTranslation.WriteFaceFxPhonemes(writer, item.FaceFxPhonemes);
 
             public static partial void WriteBinaryFaceFxPhonemesRawParsingCustom(MutagenWriter writer, IRaceGetter item)
             {
-                throw new NotImplementedException();
+                // Handled by Listing section
             }
 
-            public static partial void WriteBinaryMorphLastIndexCustom(MutagenWriter writer, IRaceGetter item)
+            public static partial void WriteBinaryMorphValuesCustom(MutagenWriter writer, IRaceGetter item)
             {
-                throw new NotImplementedException();
+                var morphs = item.MorphValues;
+                Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IMorphValueGetter>.Instance.Write(
+                    writer: writer,
+                    items: morphs,
+                    transl: (MutagenWriter subWriter, IMorphValueGetter subItem, TypedWriteParams? conv) =>
+                    {
+                        var Item = subItem;
+                        ((MorphValueBinaryWriteTranslation)((IBinaryItem)Item).BinaryWriteTranslator).Write(
+                            item: Item,
+                            writer: subWriter,
+                            translationParams: conv);
+                    });
+                using (HeaderExport.Subrecord(writer, RecordTypes.MLSI))
+                {
+                    if (morphs.Count == 0)
+                    {
+                        writer.Write(0);
+                    }
+                    else
+                    {
+                        writer.Write(morphs.Max(x => x.Index));
+                    }
+                }
             }
-
-            //        static partial void WriteBinaryBodyTemplateCustom(MutagenWriter writer, IRaceGetter item)
-            //        {
-            //            if (item.BodyTemplate.TryGet(out var templ))
-            //            {
-            //                BodyTemplateBinaryWriteTranslation.Write(writer, templ);
-            //            }
-            //}
         }
     }
 }

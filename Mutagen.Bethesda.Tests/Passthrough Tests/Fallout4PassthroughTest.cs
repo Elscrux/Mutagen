@@ -20,7 +20,37 @@ namespace Mutagen.Bethesda.Tests
         public override ModRecordAligner.AlignmentRules GetAlignmentRules()
         {
             var ret = new ModRecordAligner.AlignmentRules();
-            // Alignment rules to come
+            ret.StartMarkers.Add(RecordTypes.RACE, new[]
+            {
+                RecordTypes.SGNM,
+                RecordTypes.SAKD,
+                RecordTypes.STKD,
+                RecordTypes.SAPT,
+                RecordTypes.SRAF,
+            });
+            ret.StopMarkers.Add(RecordTypes.RACE, new[]
+            {
+                RecordTypes.BSMP,
+            });
+            ret.AddAlignments(
+                RecordTypes.RACE,
+                new ModRecordAligner.AlignmentRepeatedRule(
+                    RecordTypes.SGNM,
+                    RecordTypes.SAKD,
+                    RecordTypes.STKD,
+                    RecordTypes.SAPT,
+                    RecordTypes.SRAF),
+                RecordTypes.PTOP,
+                RecordTypes.NTOP,
+                new ModRecordAligner.AlignmentRepeatedRule(
+                    RecordTypes.MSID,
+                    RecordTypes.MSM0,
+                    RecordTypes.MSM1),
+                RecordTypes.MLSI,
+                RecordTypes.HNAM,
+                RecordTypes.HLTX,
+                RecordTypes.QSTI
+            );
             return ret;
         }
 

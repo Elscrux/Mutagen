@@ -34,6 +34,7 @@ public partial class RecordTypes
     public static readonly RecordType BOOK = new(0x4B4F4F42);
     public static readonly RecordType BPTD = new(0x44545042);
     public static readonly RecordType BSMB = new(0x424D5342);
+    public static readonly RecordType BSMP = new(0x504D5342);
     public static readonly RecordType BSMS = new(0x534D5342);
     public static readonly RecordType CDIX = new(0x58494443);
     public static readonly RecordType CELL = new(0x4C4C4543);
@@ -143,7 +144,6 @@ public partial class RecordTypes
     public static readonly RecordType MGEF = new(0x4645474D);
     public static readonly RecordType MICO = new(0x4F43494D);
     public static readonly RecordType MISC = new(0x4353494D);
-    public static readonly RecordType MLSI = new(0x49534C4D);
     public static readonly RecordType MNAM = new(0x4D414E4D);
     public static readonly RecordType MOD2 = new(0x32444F4D);
     public static readonly RecordType MOD3 = new(0x33444F4D);

@@ -317,6 +317,7 @@
     <Compile Include="Records\Major Records\GameSettingBool_Generated.cs">
       <DependentUpon>GameSetting.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\RecordTypes.cs" />
     <Compile Include="WarmupFallout4_Generated.cs" />
     <Compile Include="Records\RecordTypes_Generated.cs" />
     <Compile Include="Records\RecordTypeInts_Generated.cs" />

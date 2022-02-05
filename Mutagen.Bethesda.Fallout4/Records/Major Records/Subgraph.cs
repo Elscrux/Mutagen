@@ -17,41 +17,40 @@ namespace Mutagen.Bethesda.Fallout4
             Pipboy
         }
     }
-
+    
     namespace Internals
     {
         public partial class SubgraphBinaryCreateTranslation
         {
-            public static partial ParseResult FillBinaryFlagsParsingCustom(MutagenFrame frame, ISubgraph item, PreviousParse lastParsed)
+            public static partial void FillBinaryRoleCustom(MutagenFrame frame, ISubgraph item)
             {
+                frame.ReadSubrecord(RecordTypes.SRAF);
                 item.Role = (SubgraphRole)frame.ReadUInt16();
                 item.Perspective = (Perspective)frame.ReadUInt16();
-                throw new NotImplementedException();
-                return lastParsed;
             }
         }
 
         public partial class SubgraphBinaryOverlay
         {
-            public partial ParseResult FlagsParsingCustomParse(OverlayStream stream, int offset, PreviousParse lastParsed)
+            partial void RoleCustomParse(OverlayStream stream, long finalPos, int offset)
             {
-                throw new NotImplementedException();
+                stream.ReadSubrecord(RecordTypes.SRAF);
+                _role = (SubgraphRole)stream.ReadUInt16();
+                Perspective = (Perspective)stream.ReadUInt16();
             }
 
-            public Subgraph.SubgraphRole Role => throw new NotImplementedException();
-            public Perspective Perspective => throw new NotImplementedException();
+            private Subgraph.SubgraphRole _role;
+            public Subgraph.SubgraphRole GetRoleCustom() => _role;
+            public Perspective Perspective { get; private set; }
         }
 
         public partial class SubgraphBinaryWriteTranslation
         {
-            public static partial void WriteBinaryFlagsParsingCustom(
-                MutagenWriter writer,
-                ISubgraphGetter item)
+            public static partial void WriteBinaryRoleCustom(MutagenWriter writer, ISubgraphGetter item)
             {
                 using var header = HeaderExport.Subrecord(writer, RecordTypes.SRAF);
                 writer.Write((ushort)item.Role);
                 writer.Write((ushort)item.Perspective);
-                throw new NotImplementedException();
             }
         }
     }

@@ -32,6 +32,7 @@ public partial class RecordTypeInts
     public const int BOOK = 0x4B4F4F42;
     public const int BPTD = 0x44545042;
     public const int BSMB = 0x424D5342;
+    public const int BSMP = 0x504D5342;
     public const int BSMS = 0x534D5342;
     public const int CDIX = 0x58494443;
     public const int CELL = 0x4C4C4543;
@@ -141,7 +142,6 @@ public partial class RecordTypeInts
     public const int MGEF = 0x4645474D;
     public const int MICO = 0x4F43494D;
     public const int MISC = 0x4353494D;
-    public const int MLSI = 0x49534C4D;
     public const int MNAM = 0x4D414E4D;
     public const int MOD2 = 0x32444F4D;
     public const int MOD3 = 0x33444F4D;

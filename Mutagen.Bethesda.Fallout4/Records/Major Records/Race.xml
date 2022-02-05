@@ -165,6 +165,7 @@
           <Mapping From="RPRM" To="RPRF" />
           <Mapping From="FTSM" To="FTSF" />
           <Mapping From="AHCM" To="AHCF" />
+          <Mapping From="DFTM" To="DFTF" />
         </FemaleTypeOverrides>
         <Fields>
           <RefDirect refName="HeadData" />
@@ -177,19 +178,14 @@
       <RefList name="Subgraphs" refName="Subgraph" />
       <Float name="IdleChatterTimeMin" recordType="PTOP" />
       <Float name="IdleChatterTimeMax" recordType="NTOP" />
-      <RefList name="MorphValues" refName="MorphValue" />
-      <CustomLogic name="MorphLastIndex" recordType="MLSI" />
+      <RefList name="MorphValues" refName="MorphValue" binary="Custom" />
       <String name="HairColorLookupTexture" recordType="HNAM" />
       <String name="HairColorExtendedLookupTexture" recordType="HLTX" />
       <FormLink name="DialogueQuest" refName="Quest" recordType="QSTI" />
-      <CustomLogic name="BoneDataParse" recordType="BSMB">
-        <RecordType>BSMB</RecordType>
-        <RecordType>BSMS</RecordType>
-        <RecordType>BMMP</RecordType>
-      </CustomLogic>
-      <Gendered name="BoneData" nullable="True" binary="NoGeneration">
+      <CustomLogic name="BoneDataParse" recordType="BSMP" />
+      <Gendered name="BoneData" nullable="false" binary="NoGeneration">
         <Fields>
-          <RefList refName="Bone" />
+          <RefList refName="Bone" nullable="True" />
         </Fields>
       </Gendered>
     </Fields>
@@ -267,6 +263,7 @@
       <RefDirect name="R" nullable="True" refName="Phoneme" binary="NoGeneration" />
       <RefDirect name="Th" nullable="True" refName="Phoneme" binary="NoGeneration" />
       <RefDirect name="W" nullable="True" refName="Phoneme" binary="NoGeneration" />
+      <RefList name="Unknowns" refName="Phoneme" binary="NoGeneration" />
     </Fields>
   </Object>
   <Object name="Phoneme" objType="Subrecord" GUID="3d986dc9-0861-4e9d-9f73-339253f68cbb" ID="253">
@@ -389,6 +386,7 @@
       <String name="Name" recordType="MPGN" />
       <RefList name="MorphPresets" refName="MorphPreset" counterRecType="MPPC" />
       <ByteArray name="UnknownMPPK" recordType="MPPK" />
+      <ByteArray name="UnknownMPGS" recordType="MPGS" />
     </Fields>
   </Object>
   <Object name="MorphPreset" objType="Subrecord" GUID="c06ee700-01b5-46fe-8047-6cbd4eeeb74d" ID="261">
@@ -398,7 +396,6 @@
       <String name="UnknownMPPM" recordType="MPPM" />
       <FormLink name="Texture" recordType="MPPT" refName="TextureSet" />
       <ByteArray name="UnknownMPPF" recordType="MPPF" />
-      <ByteArray name="UnknownMPGS" recordType="MPGS" />
     </Fields>
   </Object>
   <Object name="FaceMorph" objType="Subrecord" GUID="0b0f2ecd-d3a5-4659-8ed0-52ca56395482" ID="262">
@@ -407,7 +404,7 @@
       <String name="Name" recordType="FMRN" />
     </Fields>
   </Object>
-  <Object name="Subgraph" objType="Subrecord" recordType="DATA" GUID="ffb4e210-de52-4021-a797-6384123f8a01" ID="263">
+  <Object name="Subgraph" objType="Subrecord" GUID="ffb4e210-de52-4021-a797-6384123f8a01" ID="263" shortCircuitToLastRequired="true">
     <Fields>
       <String name="BehaviorGraph" recordType="SGNM" />
       <List name="ActorKeywords">
@@ -419,9 +416,8 @@
       <List name="AnimationPaths">
         <String recordType="SAPT" />
       </List>
-      <CustomLogic name="FlagsParsing" recordType="SRAF" />
-      <Enum name="Role" enumName="Subgraph.SubgraphRole" byteLength="4" binary="NoGeneration" />
-      <Enum name="Perspective" enumName="Perspective" byteLength="4" binary="NoGeneration" />
+      <Enum name="Role" enumName="Subgraph.SubgraphRole" binary="Custom" recordType="SRAF" nullable="False" />
+      <Enum name="Perspective" enumName="Perspective" binary="NoGeneration" />
     </Fields>
   </Object>
   <Object name="MorphValue" objType="Subrecord" GUID="60ecab47-8ab4-491c-998b-330f30ebfba2" ID="264">

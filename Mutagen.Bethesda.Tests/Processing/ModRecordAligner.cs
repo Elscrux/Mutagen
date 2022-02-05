@@ -16,9 +16,10 @@ namespace Mutagen.Bethesda.Tests
     {
         public class AlignmentRules
         {
-            public Dictionary<RecordType, Dictionary<RecordType, AlignmentRule>> Alignments = new Dictionary<RecordType, Dictionary<RecordType, AlignmentRule>>();
-            public Dictionary<RecordType, IEnumerable<RecordType>> StopMarkers = new Dictionary<RecordType, IEnumerable<RecordType>>();
-            public Dictionary<int, List<RecordType>> GroupAlignment = new Dictionary<int, List<RecordType>>();
+            public Dictionary<RecordType, Dictionary<RecordType, AlignmentRule>> Alignments = new();
+            public Dictionary<RecordType, IEnumerable<RecordType>> StartMarkers = new();
+            public Dictionary<RecordType, IEnumerable<RecordType>> StopMarkers = new();
+            public Dictionary<int, List<RecordType>> GroupAlignment = new();
 
             public void AddAlignments(RecordType type, params RecordType[] recTypes)
             {
@@ -321,6 +322,15 @@ namespace Mutagen.Bethesda.Tests
                 {
                     stopMarkers = null;
                 }
+
+                bool started = false;
+                if (!alignmentRules.StartMarkers.TryGetValue(recType, out var startMarkers))
+                {
+                    startMarkers = null;
+                    started = true;
+                }
+
+                var startTriggers = startMarkers?.ToHashSet();
                 writer.Write(recType.TypeInt);
                 writer.Write(len);
                 if (!alignmentRules.Alignments.TryGetValue(recType, out var alignments))
@@ -335,19 +345,29 @@ namespace Mutagen.Bethesda.Tests
                 ReadOnlyMemorySlice<byte>? rest = null;
                 while (inputStream.Position < endPos)
                 {
-                    var subType = HeaderTranslation.GetNextSubrecordType(
-                        inputStream,
-                        out var _);
-                    if (stopMarkers?.Contains(subType) ?? false)
+                    var subType = inputStream.GetSubrecordFrame();
+                    if (stopMarkers?.Contains(subType.RecordType) ?? false)
                     {
                         rest = inputStream.ReadMemory((int)(endPos - inputStream.Position), readSafe: true);
                         break;
                     }
-                    if (!alignments.TryGetValue(subType, out var rule))
+                    
+                    if (!started && (startTriggers?.Contains(subType.RecordType) ?? false))
+                    {
+                        started = true;
+                    }
+
+                    if (!started)
+                    {
+                        inputStream.WriteTo(writer.BaseStream, subType.TotalLength);
+                        continue;
+                    }
+                    
+                    if (!alignments.TryGetValue(subType.RecordType, out var rule))
                     {
                         throw new ArgumentException($"Encountered an unknown record: {subType}");
                     }
-                    dataDict.Add(subType, rule.GetBytes(inputStream));
+                    dataDict.Add(subType.RecordType, rule.GetBytes(inputStream));
                 }
                 foreach (var alignment in alignmentRules.Alignments[recType])
                 {

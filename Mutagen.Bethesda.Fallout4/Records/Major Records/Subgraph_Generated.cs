@@ -771,7 +771,6 @@ namespace Mutagen.Bethesda.Fallout4
         #endregion
 
         #region Mutagen
-        public static readonly RecordType GrupRecordType = Subgraph_Registration.TriggeringRecordType;
         public IEnumerable<IFormLinkGetter> ContainedFormLinks => SubgraphCommon.Instance.GetContainedFormLinks(this);
         public void RemapLinks(IReadOnlyDictionary<FormKey, FormKey> mapping) => SubgraphSetterCommon.Instance.RemapLinks(this, mapping);
         #endregion
@@ -1086,7 +1085,21 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public static readonly Type? GenericRegistrationType = null;
 
-        public static readonly RecordType TriggeringRecordType = RecordTypes.DATA;
+        public static ICollectionGetter<RecordType> TriggeringRecordTypes => _TriggeringRecordTypes.Value;
+        private static readonly Lazy<ICollectionGetter<RecordType>> _TriggeringRecordTypes = new Lazy<ICollectionGetter<RecordType>>(() =>
+        {
+            return new CollectionGetterWrapper<RecordType>(
+                new HashSet<RecordType>(
+                    new RecordType[]
+                    {
+                        RecordTypes.SGNM,
+                        RecordTypes.SAKD,
+                        RecordTypes.STKD,
+                        RecordTypes.SAPT,
+                        RecordTypes.SRAF
+                    })
+            );
+        });
         public static readonly Type BinaryWriteTranslation = typeof(SubgraphBinaryWriteTranslation);
         #region Interface
         ProtocolKey ILoquiRegistration.ProtocolKey => ProtocolKey;
@@ -1152,7 +1165,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
-            frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
             PluginUtilityTranslation.SubrecordParse(
                 record: item,
                 frame: frame,
@@ -1605,20 +1617,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 items: item.AnimationPaths,
                 recordType: translationParams.ConvertToCustom(RecordTypes.SAPT),
                 transl: StringBinaryTranslation.Instance.Write);
-            SubgraphBinaryWriteTranslation.WriteBinaryFlagsParsing(
+            SubgraphBinaryWriteTranslation.WriteBinaryRole(
                 writer: writer,
                 item: item);
         }
 
-        public static partial void WriteBinaryFlagsParsingCustom(
+        public static partial void WriteBinaryRoleCustom(
             MutagenWriter writer,
             ISubgraphGetter item);
 
-        public static void WriteBinaryFlagsParsing(
+        public static void WriteBinaryRole(
             MutagenWriter writer,
             ISubgraphGetter item)
         {
-            WriteBinaryFlagsParsingCustom(
+            WriteBinaryRoleCustom(
                 writer: writer,
                 item: item);
         }
@@ -1628,20 +1640,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ISubgraphGetter item,
             TypedWriteParams? translationParams = null)
         {
-            using (HeaderExport.Subrecord(
+            WriteEmbedded(
+                item: item,
+                writer: writer);
+            WriteRecordTypes(
+                item: item,
                 writer: writer,
-                record: translationParams.ConvertToCustom(RecordTypes.DATA),
-                overflowRecord: translationParams?.OverflowRecordType,
-                out var writerToUse))
-            {
-                WriteEmbedded(
-                    item: item,
-                    writer: writerToUse);
-                WriteRecordTypes(
-                    item: item,
-                    writer: writerToUse,
-                    translationParams: translationParams);
-            }
+                translationParams: translationParams);
         }
 
         public void Write(
@@ -1681,6 +1686,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 case RecordTypeInts.SGNM:
                 {
+                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)Subgraph_FieldIndex.Role) return ParseResult.Stop;
                     frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
                     item.BehaviorGraph = StringBinaryTranslation.Instance.Parse(
                         reader: frame.SpawnWithLength(contentLength),
@@ -1689,6 +1695,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.SAKD:
                 {
+                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)Subgraph_FieldIndex.Role) return ParseResult.Stop;
                     item.ActorKeywords.SetTo(
                         Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IFormLinkGetter<IKeywordGetter>>.Instance.Parse(
                             reader: frame,
@@ -1698,6 +1705,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.STKD:
                 {
+                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)Subgraph_FieldIndex.Role) return ParseResult.Stop;
                     item.TargetKeywords.SetTo(
                         Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IFormLinkGetter<IKeywordGetter>>.Instance.Parse(
                             reader: frame,
@@ -1707,6 +1715,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.SAPT:
                 {
+                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)Subgraph_FieldIndex.Role) return ParseResult.Stop;
                     item.AnimationPaths.SetTo(
                         Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<String>.Instance.Parse(
                             reader: frame,
@@ -1716,20 +1725,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.SRAF:
                 {
-                    return SubgraphBinaryCreateTranslation.FillBinaryFlagsParsingCustom(
+                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)Subgraph_FieldIndex.Role) return ParseResult.Stop;
+                    SubgraphBinaryCreateTranslation.FillBinaryRoleCustom(
                         frame: frame.SpawnWithLength(frame.MetaData.Constants.SubConstants.HeaderLength + contentLength),
-                        item: item,
-                        lastParsed: lastParsed);
+                        item: item);
+                    return (int)Subgraph_FieldIndex.Role;
                 }
                 default:
                     return ParseResult.Stop;
             }
         }
 
-        public static partial ParseResult FillBinaryFlagsParsingCustom(
+        public static partial void FillBinaryRoleCustom(
             MutagenFrame frame,
-            ISubgraph item,
-            PreviousParse lastParsed);
+            ISubgraph item);
 
     }
 
@@ -1802,11 +1811,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public IReadOnlyList<IFormLinkGetter<IKeywordGetter>> ActorKeywords { get; private set; } = ListExt.Empty<IFormLinkGetter<IKeywordGetter>>();
         public IReadOnlyList<IFormLinkGetter<IKeywordGetter>> TargetKeywords { get; private set; } = ListExt.Empty<IFormLinkGetter<IKeywordGetter>>();
         public IReadOnlyList<String> AnimationPaths { get; private set; } = ListExt.Empty<String>();
-        #region FlagsParsing
-        public partial ParseResult FlagsParsingCustomParse(
+        #region Role
+        partial void RoleCustomParse(
             OverlayStream stream,
-            int offset,
-            PreviousParse lastParsed);
+            long finalPos,
+            int offset);
+        public Subgraph.SubgraphRole Role => GetRoleCustom();
         #endregion
         partial void CustomFactoryEnd(
             OverlayStream stream,
@@ -1830,17 +1840,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TypedParseParams? parseParams = null)
         {
             var ret = new SubgraphBinaryOverlay(
-                bytes: HeaderTranslation.ExtractSubrecordMemory(stream.RemainingMemory, package.MetaData.Constants, parseParams),
+                bytes: stream.RemainingMemory,
                 package: package);
-            var finalPos = checked((int)(stream.Position + stream.GetSubrecord().TotalLength));
-            int offset = stream.Position + package.MetaData.Constants.SubConstants.TypeAndLengthLength;
-            ret.CustomFactoryEnd(
+            int offset = stream.Position;
+            ret.FillTypelessSubrecordTypes(
                 stream: stream,
-                finalPos: finalPos,
-                offset: offset);
-            ret.FillSubrecordTypes(
-                stream: stream,
-                finalPos: finalPos,
+                finalPos: stream.Length,
                 offset: offset,
                 parseParams: parseParams,
                 fill: ret.FillRecordType);
@@ -1872,11 +1877,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 case RecordTypeInts.SGNM:
                 {
+                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)Subgraph_FieldIndex.Role) return ParseResult.Stop;
                     _BehaviorGraphLocation = (stream.Position - offset);
                     return (int)Subgraph_FieldIndex.BehaviorGraph;
                 }
                 case RecordTypeInts.SAKD:
                 {
+                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)Subgraph_FieldIndex.Role) return ParseResult.Stop;
                     this.ActorKeywords = BinaryOverlayList.FactoryByArray<IFormLinkGetter<IKeywordGetter>>(
                         mem: stream.RemainingMemory,
                         package: _package,
@@ -1891,6 +1898,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.STKD:
                 {
+                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)Subgraph_FieldIndex.Role) return ParseResult.Stop;
                     this.TargetKeywords = BinaryOverlayList.FactoryByArray<IFormLinkGetter<IKeywordGetter>>(
                         mem: stream.RemainingMemory,
                         package: _package,
@@ -1905,6 +1913,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.SAPT:
                 {
+                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)Subgraph_FieldIndex.Role) return ParseResult.Stop;
                     this.AnimationPaths = BinaryOverlayList.FactoryByArray<String>(
                         mem: stream.RemainingMemory,
                         package: _package,
@@ -1919,10 +1928,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.SRAF:
                 {
-                    return FlagsParsingCustomParse(
-                        stream,
-                        offset,
-                        lastParsed: lastParsed);
+                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)Subgraph_FieldIndex.Role) return ParseResult.Stop;
+                    RoleCustomParse(
+                        stream: stream,
+                        finalPos: finalPos,
+                        offset: offset);
+                    return (int)Subgraph_FieldIndex.Role;
                 }
                 default:
                     return ParseResult.Stop;
