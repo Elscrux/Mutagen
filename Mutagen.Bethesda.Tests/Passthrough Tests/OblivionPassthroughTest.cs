@@ -6,7 +6,7 @@ using Noggog;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using static Mutagen.Bethesda.Tests.ModRecordAligner;
+using Mutagen.Bethesda.Plugins.Binary.Processing;
 
 namespace Mutagen.Bethesda.Tests
 {
@@ -139,17 +139,17 @@ namespace Mutagen.Bethesda.Tests
                 new RecordType("MODL"),
                 new RecordType("MODB"),
                 new RecordType("MODT"),
-                new AlignmentRepeatedRule(new RecordType("CNTO")),
-                new AlignmentRepeatedRule(new RecordType("SPLO")),
-                new AlignmentRepeatedRule(new RecordType("NIFZ")),
+                new ModRecordAligner.AlignmentRepeatedRule(new RecordType("CNTO")),
+                new ModRecordAligner.AlignmentRepeatedRule(new RecordType("SPLO")),
+                new ModRecordAligner.AlignmentRepeatedRule(new RecordType("NIFZ")),
                 new RecordType("NIFT"),
                 new RecordType("ACBS"),
-                new AlignmentRepeatedRule(new RecordType("SNAM")),
+                new ModRecordAligner.AlignmentRepeatedRule(new RecordType("SNAM")),
                 new RecordType("INAM"),
                 new RecordType("SCRI"),
                 new RecordType("AIDT"),
-                new AlignmentRepeatedRule(new RecordType("PKID")),
-                new AlignmentRepeatedRule(new RecordType("KFFZ")),
+                new ModRecordAligner.AlignmentRepeatedRule(new RecordType("PKID")),
+                new ModRecordAligner.AlignmentRepeatedRule(new RecordType("KFFZ")),
                 new RecordType("DATA"),
                 new RecordType("RNAM"),
                 new RecordType("ZNAM"),

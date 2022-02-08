@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using Mutagen.Bethesda.Plugins;
+using Mutagen.Bethesda.Plugins.Binary.Processing;
 using Mutagen.Bethesda.Plugins.Records;
 using Mutagen.Bethesda.Skyrim;
 using Mutagen.Bethesda.Skyrim.Internals;
 using Noggog;
-using static Mutagen.Bethesda.Tests.ModRecordAligner;
 
 namespace Mutagen.Bethesda.Tests
 {
@@ -68,13 +64,13 @@ namespace Mutagen.Bethesda.Tests
                 new RecordType("XRMR"),
                 new RecordType("LNAM"),
                 new RecordType("INAM"),
-                new AlignmentRepeatedRule(new RecordType("XLRM")),
+                new ModRecordAligner.AlignmentRepeatedRule(new RecordType("XLRM")),
                 new RecordType("XMBP"),
                 new RecordType("XRGD"),
                 new RecordType("XRGB"),
                 new RecordType("XRDS"),
-                new AlignmentRepeatedRule(new RecordType("XPWR")),
-                new AlignmentRepeatedRule(new RecordType("XLTW")),
+                new ModRecordAligner.AlignmentRepeatedRule(new RecordType("XPWR")),
+                new ModRecordAligner.AlignmentRepeatedRule(new RecordType("XLTW")),
                 new RecordType("XEMI"),
                 new RecordType("XLIG"),
                 new RecordType("XALP"),
@@ -91,7 +87,7 @@ namespace Mutagen.Bethesda.Tests
                 new RecordType("XSCL"),
                 new RecordType("XSPC"),
                 new RecordType("XAPD"),
-                new AlignmentRepeatedRule(new RecordType("XAPR")),
+                new ModRecordAligner.AlignmentRepeatedRule(new RecordType("XAPR")),
                 new RecordType("XLIB"),
                 new RecordType("XLCM"),
                 new RecordType("XLCN"),
@@ -99,7 +95,7 @@ namespace Mutagen.Bethesda.Tests
                 new RecordType("XLOC"),
                 new RecordType("XEZN"),
                 new RecordType("XNDP"),
-                new AlignmentRepeatedRule(new RecordType("XLRT")),
+                new ModRecordAligner.AlignmentRepeatedRule(new RecordType("XLRT")),
                 new RecordType("XIS2"),
                 new RecordType("XOWN"),
                 new RecordType("XRNK"),
@@ -107,14 +103,14 @@ namespace Mutagen.Bethesda.Tests
                 new RecordType("XCHG"),
                 new RecordType("XLRL"),
                 new RecordType("XESP"),
-                new AlignmentRepeatedRule(new RecordType("XLKR")),
-                new AlignmentSubRule(
+                new ModRecordAligner.AlignmentRepeatedRule(new RecordType("XLKR")),
+                new ModRecordAligner.AlignmentSubRule(
                     new RecordType("XPRD"),
                     new RecordType("XPPA"),
                     new RecordType("INAM"),
                     new RecordType("SCHR"),
                     new RecordType("SCTX")),
-                new AlignmentRepeatedRule(new RecordType("PDTO")),
+                new ModRecordAligner.AlignmentRepeatedRule(new RecordType("PDTO")),
                 new RecordType("XACT"),
                 new RecordType("XHTW"),
                 new RecordType("XFVC"),
@@ -135,26 +131,26 @@ namespace Mutagen.Bethesda.Tests
                 new RecordType("XEZN"),
                 new RecordType("XRGD"),
                 new RecordType("XRGB"),
-                new AlignmentSubRule(
+                new ModRecordAligner.AlignmentSubRule(
                     new RecordType("XPRD"),
                     new RecordType("XPPA"),
                     new RecordType("INAM"),
                     new RecordType("SCHR"),
                     new RecordType("SCTX")),
-                new AlignmentRepeatedRule(new RecordType("PDTO")),
+                new ModRecordAligner.AlignmentRepeatedRule(new RecordType("PDTO")),
                 new RecordType("XLCM"),
                 new RecordType("XMRC"),
                 new RecordType("XCNT"),
                 new RecordType("XRDS"),
                 new RecordType("XHLP"),
-                new AlignmentRepeatedRule(new RecordType("XLKR")),
+                new ModRecordAligner.AlignmentRepeatedRule(new RecordType("XLKR")),
                 new RecordType("XAPD"),
-                new AlignmentRepeatedRule(new RecordType("XAPR")),
+                new ModRecordAligner.AlignmentRepeatedRule(new RecordType("XAPR")),
                 new RecordType("XCLP"),
                 new RecordType("XLCN"),
                 new RecordType("XLRL"),
                 new RecordType("XIS2"),
-                new AlignmentRepeatedRule(new RecordType("XLRT")),
+                new ModRecordAligner.AlignmentRepeatedRule(new RecordType("XLRT")),
                 new RecordType("XHTW"),
                 new RecordType("XHOR"),
                 new RecordType("XFVC"),
@@ -166,7 +162,7 @@ namespace Mutagen.Bethesda.Tests
                 new RecordType("XIBS"),
                 new RecordType("XSCL"),
                 new RecordType("DATA"));
-            AlignmentRule[] trapRules = new AlignmentRule[]
+            ModRecordAligner.AlignmentRule[] trapRules = new ModRecordAligner.AlignmentRule[]
             {
                 new RecordType("EDID"),
                 new RecordType("VMAD"),
@@ -179,7 +175,7 @@ namespace Mutagen.Bethesda.Tests
                 new RecordType("XPWR"),
                 new RecordType("XLKR"),
                 new RecordType("XAPD"),
-                new AlignmentRepeatedRule(new RecordType("XAPR")),
+                new ModRecordAligner.AlignmentRepeatedRule(new RecordType("XAPR")),
                 new RecordType("XESP"),
                 new RecordType("XEMI"),
                 new RecordType("XMBR"),
