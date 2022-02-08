@@ -36,7 +36,7 @@ namespace Mutagen.Bethesda.Tests
             });
             ret.AddAlignments(
                 RecordTypes.RACE,
-                new AlignmentRepeatedRule(
+                AlignmentRepeatedRule.Basic(
                     RecordTypes.SGNM,
                     RecordTypes.SAKD,
                     RecordTypes.STKD,
@@ -44,7 +44,7 @@ namespace Mutagen.Bethesda.Tests
                     RecordTypes.SRAF),
                 RecordTypes.PTOP,
                 RecordTypes.NTOP,
-                new AlignmentRepeatedRule(
+                AlignmentRepeatedRule.Basic(
                     RecordTypes.MSID,
                     RecordTypes.MSM0,
                     RecordTypes.MSM1),

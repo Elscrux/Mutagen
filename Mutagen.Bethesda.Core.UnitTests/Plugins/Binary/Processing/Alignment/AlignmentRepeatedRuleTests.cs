@@ -55,7 +55,7 @@ public class AlignmentRepeatedRuleTests
             RecordTypes.TX03);
         var read = new MutagenMemoryReadStream(bytes, new ParsingBundle(GameConstants.SkyrimSE, null!));
         AssertBytes(
-            new AlignmentRepeatedRule(
+            AlignmentRepeatedRule.Basic(
                 RecordTypes.TX00,
                 RecordTypes.TX01).GetBytes(read),
             RecordTypes.TX00,
@@ -74,7 +74,7 @@ public class AlignmentRepeatedRuleTests
             RecordTypes.TX03);
         var read = new MutagenMemoryReadStream(bytes, new ParsingBundle(GameConstants.SkyrimSE, null!));
         AssertBytes(
-            new AlignmentRepeatedRule(
+            AlignmentRepeatedRule.Basic(
                 RecordTypes.TX00,
                 RecordTypes.TX01).GetBytes(read),
             RecordTypes.TX01,

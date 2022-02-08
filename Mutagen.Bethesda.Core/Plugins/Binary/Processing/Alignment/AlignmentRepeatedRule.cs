@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Mutagen.Bethesda.Plugins.Binary.Streams;
@@ -15,11 +15,16 @@ public class AlignmentRepeatedRule : AlignmentRule
 { 
     public List<RecordType> SubTypes; 
  
-    public AlignmentRepeatedRule( 
+    private AlignmentRepeatedRule( 
         params RecordType[] types) 
     { 
         SubTypes = types.ToList(); 
-    } 
+    }
+
+    public static AlignmentRepeatedRule Basic(params RecordType[] recordTypes)
+    {
+        return new AlignmentRepeatedRule(recordTypes);
+    }
  
     public override IEnumerable<RecordType> RecordTypes => SubTypes; 
  
