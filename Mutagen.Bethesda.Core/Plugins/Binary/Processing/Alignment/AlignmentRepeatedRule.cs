@@ -1,3 +1,4 @@
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,46 +14,57 @@ namespace Mutagen.Bethesda.Plugins.Binary.Processing.Alignment;
 /// </summary> 
 public class AlignmentRepeatedRule : AlignmentRule 
 { 
-    public List<RecordType> SubTypes; 
+    public HashSet<RecordType> SubTypes; 
  
     private AlignmentRepeatedRule( 
         params RecordType[] types) 
     { 
-        SubTypes = types.ToList(); 
-    }
+        SubTypes = types.ToHashSet(); 
+    } 
 
-    public static AlignmentRepeatedRule Basic(params RecordType[] recordTypes)
+    public static AlignmentRule Basic(params RecordType[] recordTypes)
     {
         return new AlignmentRepeatedRule(recordTypes);
     }
  
     public override IEnumerable<RecordType> RecordTypes => SubTypes; 
  
-    public override ReadOnlyMemorySlice<byte> GetBytes(IMutagenReadStream inputStream) 
-    { 
-        var dataList = new List<byte[]>(); 
+    public override ReadOnlyMemorySlice<byte> GetBytes(IMutagenReadStream inputStream)
+    {
+        if (inputStream.Complete) return Array.Empty<byte>();
+        var dataList = new List<List<ReadOnlyMemorySlice<byte>>>();
+        var latestList = new List<ReadOnlyMemorySlice<byte>>();
+        var encountered = new HashSet<RecordType>(SubTypes);
+        RecordType? lastEncountered = null;
         MutagenWriter stream; 
         while (!inputStream.Complete) 
         { 
-            var subType = HeaderTranslation.ReadNextSubrecordType( 
-                inputStream, 
-                out var subLen); 
+            var frame = inputStream.GetSubrecordFrame(readSafe: true);
+            var subType = frame.RecordType;
             if (!SubTypes.Contains(subType)) 
             { 
-                inputStream.Position -= 6; 
                 break; 
-            } 
-            var data = new byte[subLen + 6]; 
-            stream = new MutagenWriter(new MemoryStream(data), inputStream.MetaData.Constants); 
-            using (HeaderExport.Subrecord(stream, subType)) 
-            { 
-                inputStream.WriteTo(stream.BaseStream, subLen); 
-            } 
-            dataList.Add(data); 
+            }
+
+            if (lastEncountered == subType
+                || encountered.Remove(subType))
+            {
+            }
+            else
+            {
+                dataList.Add(latestList);
+                latestList = new List<ReadOnlyMemorySlice<byte>>();
+                encountered.Add(SubTypes);
+            }
+
+            lastEncountered = subType;
+            latestList.Add(frame.HeaderAndContentData);
+            inputStream.Position += frame.TotalLength;
         } 
-        byte[] ret = new byte[dataList.Sum((d) => d.Length)]; 
+        dataList.Add(latestList);
+        byte[] ret = new byte[dataList.SelectMany(x => x).Sum((d) => d.Length)]; 
         stream = new MutagenWriter(new MemoryStream(ret), inputStream.MetaData.Constants); 
-        foreach (var data in dataList) 
+        foreach (var data in dataList.SelectMany(x => x)) 
         { 
             stream.Write(data); 
         } 
