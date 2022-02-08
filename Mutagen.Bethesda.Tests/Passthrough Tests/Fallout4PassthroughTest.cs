@@ -3,6 +3,7 @@ using Mutagen.Bethesda.Fallout4;
 using Mutagen.Bethesda.Fallout4.Internals;
 using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Plugins.Binary.Processing;
+using Mutagen.Bethesda.Plugins.Binary.Processing.Alignment;
 using Mutagen.Bethesda.Plugins.Records;
 using Noggog;
 
@@ -18,9 +19,9 @@ namespace Mutagen.Bethesda.Tests
             GameRelease = GameRelease.Fallout4;
         }
 
-        public override ModRecordAligner.AlignmentRules GetAlignmentRules()
+        public override AlignmentRules GetAlignmentRules()
         {
-            var ret = new ModRecordAligner.AlignmentRules();
+            var ret = new AlignmentRules();
             ret.StartMarkers.Add(RecordTypes.RACE, new[]
             {
                 RecordTypes.SGNM,
@@ -35,7 +36,7 @@ namespace Mutagen.Bethesda.Tests
             });
             ret.AddAlignments(
                 RecordTypes.RACE,
-                new ModRecordAligner.AlignmentRepeatedRule(
+                new AlignmentRepeatedRule(
                     RecordTypes.SGNM,
                     RecordTypes.SAKD,
                     RecordTypes.STKD,
@@ -43,7 +44,7 @@ namespace Mutagen.Bethesda.Tests
                     RecordTypes.SRAF),
                 RecordTypes.PTOP,
                 RecordTypes.NTOP,
-                new ModRecordAligner.AlignmentRepeatedRule(
+                new AlignmentRepeatedRule(
                     RecordTypes.MSID,
                     RecordTypes.MSM0,
                     RecordTypes.MSM1),
