@@ -28,7 +28,10 @@ public class AlignmentRules
         var dict = Alignments.GetOrAdd(type);
         foreach (var rule in rules)
         {
-            dict[rule.RecordType] = rule;
+            foreach (var ruleRecordType in rule.RecordTypes)
+            {
+                dict[ruleRecordType] = rule;
+            }
         }
     }
 

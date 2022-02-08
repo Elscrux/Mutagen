@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Mutagen.Bethesda.Plugins.Binary.Streams;
 using Mutagen.Bethesda.Plugins.Binary.Translations;
@@ -13,9 +14,9 @@ public class AlignmentStraightRecord : AlignmentRule
     public AlignmentStraightRecord(string str) 
     { 
         _recordType = new RecordType(str); 
-    } 
- 
-    public override RecordType RecordType => _recordType; 
+    }
+
+    public override IEnumerable<RecordType> RecordTypes => _recordType.AsEnumerable(); 
  
     public override ReadOnlyMemorySlice<byte> GetBytes(IMutagenReadStream inputStream) 
     { 

@@ -20,7 +20,7 @@ public class AlignmentSubRule : AlignmentRule
         SubTypes = types.ToList(); 
     } 
  
-    public override RecordType RecordType => SubTypes[0]; 
+    public override IEnumerable<RecordType> RecordTypes => SubTypes; 
  
     public override ReadOnlyMemorySlice<byte> GetBytes(IMutagenReadStream inputStream) 
     { 
