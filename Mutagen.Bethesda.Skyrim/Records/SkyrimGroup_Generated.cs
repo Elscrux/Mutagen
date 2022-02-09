@@ -1474,7 +1474,7 @@ namespace Mutagen.Bethesda.Skyrim.Internals
         }
 
         #region ContainedRecordTypeParse
-         partial void ContainedRecordTypeParseCustomParse(
+        partial void ContainedRecordTypeParseCustomParse(
             OverlayStream stream,
             int offset);
         #endregion

@@ -1479,7 +1479,7 @@ namespace Mutagen.Bethesda.Oblivion.Internals
         }
 
         #region InitialParser
-         partial void InitialParserCustomParse(
+        partial void InitialParserCustomParse(
             OverlayStream stream,
             int offset);
         #endregion

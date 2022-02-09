@@ -1319,7 +1319,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public SByte Unknown => (sbyte)_data.Slice(0x0, 0x1)[0];
         #region Flags
-         partial void FlagsCustomParse(
+        partial void FlagsCustomParse(
             OverlayStream stream,
             int offset);
         protected int FlagsEndingPos;
