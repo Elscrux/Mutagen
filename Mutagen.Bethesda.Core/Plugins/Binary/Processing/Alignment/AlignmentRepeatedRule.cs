@@ -9,7 +9,10 @@ using Noggog;
 
 namespace Mutagen.Bethesda.Plugins.Binary.Processing.Alignment;
 
-public record AlignmentRepeatedSubrule(RecordType RecordType, bool Single);
+public record AlignmentRepeatedSubrule(RecordType RecordType, bool Single)
+{
+    public bool Ender { get; init; }
+}
 
 /// <summary> 
 /// For use when a set of records is repeated. 
@@ -85,6 +88,12 @@ public class AlignmentRepeatedRule : AlignmentRule
             }
             latestList.Add(frame.HeaderAndContentData);
             inputStream.Position += frame.TotalLength;
+
+            if (rule.Ender)
+            {
+                lastEncountered = null;
+                encountered.Clear();
+            }
         } 
         dataList.Add(latestList);
 

@@ -5,7 +5,7 @@ using Mutagen.Bethesda.Plugins.Binary.Processing.Alignment;
 using Mutagen.Bethesda.Plugins.Binary.Streams;
 using Mutagen.Bethesda.Plugins.Binary.Translations;
 using Mutagen.Bethesda.Plugins.Meta;
-using Mutagen.Bethesda.Skyrim.Internals;
+using Mutagen.Bethesda.Plugins.Records.Internals;
 using Noggog;
 using Xunit;
 
@@ -160,9 +160,9 @@ public class AlignmentRepeatedRuleTests
         var read = new MutagenMemoryReadStream(bytes, new ParsingBundle(GameConstants.SkyrimSE, null!));
         AssertBytes(
             AlignmentRepeatedRule.Sorted(
-                new AlignmentRepeatedSubrule(RecordTypes.TX00, true),
-                new AlignmentRepeatedSubrule(RecordTypes.TX01, true),
-                new AlignmentRepeatedSubrule(RecordTypes.TX02, true))
+                    new AlignmentRepeatedSubrule(RecordTypes.TX00, true),
+                    new AlignmentRepeatedSubrule(RecordTypes.TX01, true),
+                    new AlignmentRepeatedSubrule(RecordTypes.TX02, true))
                 .GetBytes(read),
             RecordTypes.TX00,
             RecordTypes.TX01,
@@ -170,5 +170,39 @@ public class AlignmentRepeatedRuleTests
             RecordTypes.TX00,
             RecordTypes.TX01,
             RecordTypes.TX02);
+    }
+    
+    [Fact]
+    public void Fo4SubgraphTest()
+    {
+        var bytes = GetBytes(
+            RecordTypes.SGNM,
+            RecordTypes.SAPT,
+            RecordTypes.SRAF,
+            
+            RecordTypes.SAKD,
+            RecordTypes.SAKD,
+            RecordTypes.SGNM,
+            RecordTypes.SRAF);
+        var read = new MutagenMemoryReadStream(bytes, new ParsingBundle(GameConstants.SkyrimSE, null!));
+        AssertBytes(
+            AlignmentRepeatedRule.Sorted(
+                    new AlignmentRepeatedSubrule(RecordTypes.SGNM, Single: true),
+                    new AlignmentRepeatedSubrule(RecordTypes.SAKD, Single: false),
+                    new AlignmentRepeatedSubrule(RecordTypes.STKD, Single: false),
+                    new AlignmentRepeatedSubrule(RecordTypes.SAPT, Single: false),
+                    new AlignmentRepeatedSubrule(RecordTypes.SRAF, Single: true)
+                    {
+                        Ender = true
+                    })
+                .GetBytes(read),
+            RecordTypes.SGNM,
+            RecordTypes.SAPT,
+            RecordTypes.SRAF,
+            
+            RecordTypes.SGNM,
+            RecordTypes.SAKD,
+            RecordTypes.SAKD,
+            RecordTypes.SRAF);
     }
 }

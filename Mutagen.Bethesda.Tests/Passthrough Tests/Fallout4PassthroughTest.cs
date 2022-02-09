@@ -36,12 +36,15 @@ namespace Mutagen.Bethesda.Tests
             });
             ret.AddAlignments(
                 RecordTypes.RACE,
-                AlignmentRepeatedRule.Basic(
-                    RecordTypes.SGNM,
-                    RecordTypes.SAKD,
-                    RecordTypes.STKD,
-                    RecordTypes.SAPT,
-                    RecordTypes.SRAF),
+                AlignmentRepeatedRule.Sorted(
+                    new AlignmentRepeatedSubrule(RecordTypes.SGNM, Single: true),
+                    new AlignmentRepeatedSubrule(RecordTypes.SAKD, Single: false),
+                    new AlignmentRepeatedSubrule(RecordTypes.STKD, Single: false),
+                    new AlignmentRepeatedSubrule(RecordTypes.SAPT, Single: false),
+                    new AlignmentRepeatedSubrule(RecordTypes.SRAF, Single: true)
+                    {
+                        Ender = true
+                    }),
                 RecordTypes.PTOP,
                 RecordTypes.NTOP,
                 AlignmentRepeatedRule.Basic(
