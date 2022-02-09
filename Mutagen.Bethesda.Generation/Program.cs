@@ -43,7 +43,7 @@ namespace Mutagen.Bethesda.Generation
             GeneratePex();
         }
  
-        static bool ShouldRun(string key)
+        public static bool ShouldRun(string key)
         {
             if (Args.Length == 0) return true;
             return Args.Contains(key, StringComparer.OrdinalIgnoreCase);
