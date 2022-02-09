@@ -8,6 +8,7 @@ using System.Buffers.Binary;
 using System.Collections.Generic;
 using Noggog;
 using System.Linq;
+using Mutagen.Bethesda.Translations.Binary;
 
 namespace Mutagen.Bethesda.Fallout4
 {
@@ -178,6 +179,13 @@ namespace Mutagen.Bethesda.Fallout4
                 return null;
             }
 
+            public static partial void FillBinaryFlagsCustom(MutagenFrame frame, IRaceInternal item)
+            {
+                item.Flags = EnumBinaryTranslation<Race.Flag, MutagenFrame, MutagenWriter>.Instance.Parse(
+                    reader: frame,
+                    length: 4);
+            }
+
             public static partial void FillBinaryFlags2Custom(MutagenFrame frame, IRaceInternal item)
             {
                 // Clear out upper flags
@@ -216,15 +224,11 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 var genderFrame = stream.ReadSubrecordFrame(RecordTypes.BSMP);
                 _boneData ??= new GenderedItem<IReadOnlyList<IBoneGetter>?>(null, null);
-                IReadOnlyList<IBoneGetter> list = BinaryOverlayList.FactoryByArray<IBoneGetter>(
-                    mem: stream.RemainingMemory,
-                    package: _package,
-                    getter: (s, p) => BoneBinaryOverlay.BoneFactory(s, p),
-                    locs: ParseRecordLocations(
-                        stream: stream,
-                        constants: _package.MetaData.Constants.SubConstants,
-                        triggers: BoneRecordTypes,
-                        skipHeader: true));
+                IReadOnlyList<IBoneGetter> list = this.ParseRepeatedTypelessSubrecord(
+                    stream: stream,
+                    parseParams: null,
+                    trigger: Bone_Registration.TriggeringRecordTypes,
+                    factory: BoneBinaryOverlay.BoneFactory);
                 if (genderFrame.AsInt32() == 0)
                 {
                     _boneData.Male = list;
@@ -245,7 +249,7 @@ namespace Mutagen.Bethesda.Fallout4
                 flag &= ((Race.Flag)0x00000000FFFFFFFF);
 
                 // Set upper flags
-                ulong flags2 = BinaryPrimitives.ReadUInt32LittleEndian(_data.Span.Slice(_DATALocation!.Value + 124, 4));
+                ulong flags2 = BinaryPrimitives.ReadUInt32LittleEndian(_data.Span.Slice(_Flags2Location, 4));
                 flags2 <<= 32;
                 flag |= ((Race.Flag)flags2);
                 return flag;
@@ -282,11 +286,6 @@ namespace Mutagen.Bethesda.Fallout4
                 var frame = new MutagenFrame(new MutagenMemoryReadStream(_data.Slice(_faceFxPhonemesLoc.Value), _package.MetaData));
                 FaceFxPhonemesBinaryCreateTranslation.ParseFaceFxPhonemes(frame, ret);
                 return ret;
-            }
-
-            partial void Flags2CustomParse(OverlayStream stream, int offset)
-            {
-                throw new NotImplementedException();
             }
 
             partial void MorphValuesCustomParse(OverlayStream stream, long finalPos, int offset, RecordType type, PreviousParse lastParsed)
@@ -359,7 +358,7 @@ namespace Mutagen.Bethesda.Fallout4
                 {
                     writer.Write(genderInt);
                 }
-                ListBinaryTranslation<IBoneGetter>.Instance.Write(writer, bones,
+                Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IBoneGetter>.Instance.Write(writer, bones,
                     transl: (MutagenWriter subWriter, IBoneGetter subItem, TypedWriteParams? conv) =>
                     {
                         var Item = subItem;
@@ -368,6 +367,14 @@ namespace Mutagen.Bethesda.Fallout4
                             writer: subWriter,
                             translationParams: conv);
                     });
+            }
+
+            public static partial void WriteBinaryFlagsCustom(MutagenWriter writer, IRaceGetter item)
+            {
+                EnumBinaryTranslation<Race.Flag, MutagenFrame, MutagenWriter>.Instance.Write(
+                    writer,
+                    item.Flags,
+                    length: 4);
             }
 
             public static partial void WriteBinaryFlags2Custom(MutagenWriter writer, IRaceGetter item)
@@ -387,6 +394,8 @@ namespace Mutagen.Bethesda.Fallout4
             public static partial void WriteBinaryMorphValuesCustom(MutagenWriter writer, IRaceGetter item)
             {
                 var morphs = item.MorphValues;
+                if (morphs.Count == 0) return;
+                
                 Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IMorphValueGetter>.Instance.Write(
                     writer: writer,
                     items: morphs,

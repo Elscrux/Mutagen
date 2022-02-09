@@ -556,15 +556,15 @@ namespace Mutagen.Bethesda.Fallout4
         #endregion
         #region EquipmentSlots
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private ExtendedList<IFormLinkGetter<IEquipTypeGetter>> _EquipmentSlots = new ExtendedList<IFormLinkGetter<IEquipTypeGetter>>();
-        public ExtendedList<IFormLinkGetter<IEquipTypeGetter>> EquipmentSlots
+        private ExtendedList<EquipmentSlot> _EquipmentSlots = new ExtendedList<EquipmentSlot>();
+        public ExtendedList<EquipmentSlot> EquipmentSlots
         {
             get => this._EquipmentSlots;
             init => this._EquipmentSlots = value;
         }
         #region Interface Members
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IReadOnlyList<IFormLinkGetter<IEquipTypeGetter>> IRaceGetter.EquipmentSlots => _EquipmentSlots;
+        IReadOnlyList<IEquipmentSlotGetter> IRaceGetter.EquipmentSlots => _EquipmentSlots;
         #endregion
 
         #endregion
@@ -826,7 +826,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.BipedObjects = new MaskItem<TItem, IEnumerable<MaskItemIndexed<BipedObject, TItem, BipedObjectData.Mask<TItem>?>>?>(initialValue, null);
                 this.MovementDataOverrides = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, MovementDataOverride.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, MovementDataOverride.Mask<TItem>?>>());
                 this.EquipmentFlags = initialValue;
-                this.EquipmentSlots = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(initialValue, Enumerable.Empty<(int Index, TItem Value)>());
+                this.EquipmentSlots = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, EquipmentSlot.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, EquipmentSlot.Mask<TItem>?>>());
                 this.UnarmedWeapon = initialValue;
                 this.FaceFxPhonemes = new MaskItem<TItem, FaceFxPhonemes.Mask<TItem>?>(initialValue, new FaceFxPhonemes.Mask<TItem>(initialValue));
                 this.BaseMovementDefault = initialValue;
@@ -1025,7 +1025,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.BipedObjects = new MaskItem<TItem, IEnumerable<MaskItemIndexed<BipedObject, TItem, BipedObjectData.Mask<TItem>?>>?>(BipedObjects, null);
                 this.MovementDataOverrides = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, MovementDataOverride.Mask<TItem>?>>?>(MovementDataOverrides, Enumerable.Empty<MaskItemIndexed<TItem, MovementDataOverride.Mask<TItem>?>>());
                 this.EquipmentFlags = EquipmentFlags;
-                this.EquipmentSlots = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(EquipmentSlots, Enumerable.Empty<(int Index, TItem Value)>());
+                this.EquipmentSlots = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, EquipmentSlot.Mask<TItem>?>>?>(EquipmentSlots, Enumerable.Empty<MaskItemIndexed<TItem, EquipmentSlot.Mask<TItem>?>>());
                 this.UnarmedWeapon = UnarmedWeapon;
                 this.FaceFxPhonemes = new MaskItem<TItem, FaceFxPhonemes.Mask<TItem>?>(FaceFxPhonemes, new FaceFxPhonemes.Mask<TItem>(FaceFxPhonemes));
                 this.BaseMovementDefault = BaseMovementDefault;
@@ -1127,7 +1127,7 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<TItem, IEnumerable<MaskItemIndexed<BipedObject, TItem, BipedObjectData.Mask<TItem>?>>?>? BipedObjects;
             public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, MovementDataOverride.Mask<TItem>?>>?>? MovementDataOverrides;
             public TItem EquipmentFlags;
-            public MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>? EquipmentSlots;
+            public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, EquipmentSlot.Mask<TItem>?>>?>? EquipmentSlots;
             public TItem UnarmedWeapon;
             public MaskItem<TItem, FaceFxPhonemes.Mask<TItem>?>? FaceFxPhonemes { get; set; }
             public TItem BaseMovementDefault;
@@ -1529,7 +1529,8 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         foreach (var item in this.EquipmentSlots.Specific)
                         {
-                            if (!eval(item.Value)) return false;
+                            if (!eval(item.Overall)) return false;
+                            if (item.Specific != null && !item.Specific.All(eval)) return false;
                         }
                     }
                 }
@@ -1760,7 +1761,8 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         foreach (var item in this.EquipmentSlots.Specific)
                         {
-                            if (!eval(item.Value)) return false;
+                            if (!eval(item.Overall)) return false;
+                            if (item.Specific != null && !item.Specific.All(eval)) return false;
                         }
                     }
                 }
@@ -2009,15 +2011,16 @@ namespace Mutagen.Bethesda.Fallout4
                 obj.EquipmentFlags = eval(this.EquipmentFlags);
                 if (EquipmentSlots != null)
                 {
-                    obj.EquipmentSlots = new MaskItem<R, IEnumerable<(int Index, R Value)>?>(eval(this.EquipmentSlots.Overall), Enumerable.Empty<(int Index, R Value)>());
+                    obj.EquipmentSlots = new MaskItem<R, IEnumerable<MaskItemIndexed<R, EquipmentSlot.Mask<R>?>>?>(eval(this.EquipmentSlots.Overall), Enumerable.Empty<MaskItemIndexed<R, EquipmentSlot.Mask<R>?>>());
                     if (EquipmentSlots.Specific != null)
                     {
-                        var l = new List<(int Index, R Item)>();
+                        var l = new List<MaskItemIndexed<R, EquipmentSlot.Mask<R>?>>();
                         obj.EquipmentSlots.Specific = l;
                         foreach (var item in EquipmentSlots.Specific.WithIndex())
                         {
-                            R mask = eval(item.Item.Value);
-                            l.Add((item.Index, mask));
+                            MaskItemIndexed<R, EquipmentSlot.Mask<R>?>? mask = item.Item == null ? null : new MaskItemIndexed<R, EquipmentSlot.Mask<R>?>(item.Item.Index, eval(item.Item.Overall), item.Item.Specific?.Translate(eval));
+                            if (mask == null) continue;
+                            l.Add(mask);
                         }
                     }
                 }
@@ -2542,7 +2545,7 @@ namespace Mutagen.Bethesda.Fallout4
                                     fg.AppendLine("[");
                                     using (new DepthWrapper(fg))
                                     {
-                                        fg.AppendItem(subItem);
+                                        subItem?.ToString(fg);
                                     }
                                     fg.AppendLine("]");
                                 }
@@ -2751,7 +2754,7 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<Exception?, IEnumerable<MaskItemIndexed<BipedObject, Exception?, BipedObjectData.ErrorMask?>>?>? BipedObjects;
             public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, MovementDataOverride.ErrorMask?>>?>? MovementDataOverrides;
             public Exception? EquipmentFlags;
-            public MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>? EquipmentSlots;
+            public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, EquipmentSlot.ErrorMask?>>?>? EquipmentSlots;
             public Exception? UnarmedWeapon;
             public MaskItem<Exception?, FaceFxPhonemes.ErrorMask?>? FaceFxPhonemes;
             public Exception? BaseMovementDefault;
@@ -3183,7 +3186,7 @@ namespace Mutagen.Bethesda.Fallout4
                         this.EquipmentFlags = ex;
                         break;
                     case Race_FieldIndex.EquipmentSlots:
-                        this.EquipmentSlots = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ex, null);
+                        this.EquipmentSlots = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, EquipmentSlot.ErrorMask?>>?>(ex, null);
                         break;
                     case Race_FieldIndex.UnarmedWeapon:
                         this.UnarmedWeapon = ex;
@@ -3467,7 +3470,7 @@ namespace Mutagen.Bethesda.Fallout4
                         this.EquipmentFlags = (Exception?)obj;
                         break;
                     case Race_FieldIndex.EquipmentSlots:
-                        this.EquipmentSlots = (MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>)obj;
+                        this.EquipmentSlots = (MaskItem<Exception?, IEnumerable<MaskItem<Exception?, EquipmentSlot.ErrorMask?>>?>)obj;
                         break;
                     case Race_FieldIndex.UnarmedWeapon:
                         this.UnarmedWeapon = (Exception?)obj;
@@ -3915,7 +3918,7 @@ namespace Mutagen.Bethesda.Fallout4
                                 fg.AppendLine("[");
                                 using (new DepthWrapper(fg))
                                 {
-                                    fg.AppendItem(subItem);
+                                    subItem?.ToString(fg);
                                 }
                                 fg.AppendLine("]");
                             }
@@ -4066,7 +4069,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.BipedObjects = new MaskItem<Exception?, IEnumerable<MaskItemIndexed<BipedObject, Exception?, BipedObjectData.ErrorMask?>>?>(ExceptionExt.Combine(this.BipedObjects?.Overall, rhs.BipedObjects?.Overall), ExceptionExt.Combine(this.BipedObjects?.Specific, rhs.BipedObjects?.Specific));
                 ret.MovementDataOverrides = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, MovementDataOverride.ErrorMask?>>?>(ExceptionExt.Combine(this.MovementDataOverrides?.Overall, rhs.MovementDataOverrides?.Overall), ExceptionExt.Combine(this.MovementDataOverrides?.Specific, rhs.MovementDataOverrides?.Specific));
                 ret.EquipmentFlags = this.EquipmentFlags.Combine(rhs.EquipmentFlags);
-                ret.EquipmentSlots = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ExceptionExt.Combine(this.EquipmentSlots?.Overall, rhs.EquipmentSlots?.Overall), ExceptionExt.Combine(this.EquipmentSlots?.Specific, rhs.EquipmentSlots?.Specific));
+                ret.EquipmentSlots = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, EquipmentSlot.ErrorMask?>>?>(ExceptionExt.Combine(this.EquipmentSlots?.Overall, rhs.EquipmentSlots?.Overall), ExceptionExt.Combine(this.EquipmentSlots?.Specific, rhs.EquipmentSlots?.Specific));
                 ret.UnarmedWeapon = this.UnarmedWeapon.Combine(rhs.UnarmedWeapon);
                 ret.FaceFxPhonemes = this.FaceFxPhonemes.Combine(rhs.FaceFxPhonemes, (l, r) => l.Combine(r));
                 ret.BaseMovementDefault = this.BaseMovementDefault.Combine(rhs.BaseMovementDefault);
@@ -4179,7 +4182,7 @@ namespace Mutagen.Bethesda.Fallout4
             public BipedObjectData.TranslationMask? BipedObjects;
             public MovementDataOverride.TranslationMask? MovementDataOverrides;
             public bool EquipmentFlags;
-            public bool EquipmentSlots;
+            public EquipmentSlot.TranslationMask? EquipmentSlots;
             public bool UnarmedWeapon;
             public FaceFxPhonemes.TranslationMask? FaceFxPhonemes;
             public bool BaseMovementDefault;
@@ -4266,7 +4269,6 @@ namespace Mutagen.Bethesda.Fallout4
                 this.SoundOpenCorpse = defaultOn;
                 this.SoundCloseCorpse = defaultOn;
                 this.EquipmentFlags = defaultOn;
-                this.EquipmentSlots = defaultOn;
                 this.UnarmedWeapon = defaultOn;
                 this.BaseMovementDefault = defaultOn;
                 this.BaseMovementDefaultSwim = defaultOn;
@@ -4359,7 +4361,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((BipedObjects != null || DefaultOn, BipedObjects?.GetCrystal()));
                 ret.Add((MovementDataOverrides == null ? DefaultOn : !MovementDataOverrides.GetCrystal().CopyNothing, MovementDataOverrides?.GetCrystal()));
                 ret.Add((EquipmentFlags, null));
-                ret.Add((EquipmentSlots, null));
+                ret.Add((EquipmentSlots == null ? DefaultOn : !EquipmentSlots.GetCrystal().CopyNothing, EquipmentSlots?.GetCrystal()));
                 ret.Add((UnarmedWeapon, null));
                 ret.Add((FaceFxPhonemes != null ? FaceFxPhonemes.OnOverall : DefaultOn, FaceFxPhonemes?.GetCrystal()));
                 ret.Add((BaseMovementDefault, null));
@@ -4604,7 +4606,7 @@ namespace Mutagen.Bethesda.Fallout4
         new IDictionary<BipedObject, BipedObjectData> BipedObjects { get; }
         new ExtendedList<MovementDataOverride> MovementDataOverrides { get; }
         new EquipTypeFlag? EquipmentFlags { get; set; }
-        new ExtendedList<IFormLinkGetter<IEquipTypeGetter>> EquipmentSlots { get; }
+        new ExtendedList<EquipmentSlot> EquipmentSlots { get; }
         new IFormLinkNullable<IWeaponGetter> UnarmedWeapon { get; set; }
         new FaceFxPhonemes FaceFxPhonemes { get; set; }
         new IFormLinkNullable<IMovementTypeGetter> BaseMovementDefault { get; set; }
@@ -4737,7 +4739,7 @@ namespace Mutagen.Bethesda.Fallout4
         IReadOnlyDictionary<BipedObject, IBipedObjectDataGetter> BipedObjects { get; }
         IReadOnlyList<IMovementDataOverrideGetter> MovementDataOverrides { get; }
         EquipTypeFlag? EquipmentFlags { get; }
-        IReadOnlyList<IFormLinkGetter<IEquipTypeGetter>> EquipmentSlots { get; }
+        IReadOnlyList<IEquipmentSlotGetter> EquipmentSlots { get; }
         IFormLinkNullableGetter<IWeaponGetter> UnarmedWeapon { get; }
         IFaceFxPhonemesGetter FaceFxPhonemes { get; }
         IFormLinkNullableGetter<IMovementTypeGetter> BaseMovementDefault { get; }
@@ -5470,7 +5472,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ret.EquipmentFlags = item.EquipmentFlags == rhs.EquipmentFlags;
             ret.EquipmentSlots = item.EquipmentSlots.CollectionEqualsHelper(
                 rhs.EquipmentSlots,
-                (l, r) => object.Equals(l, r),
+                (loqLhs, loqRhs) => loqLhs.GetEqualsMask(loqRhs, include),
                 include);
             ret.UnarmedWeapon = item.UnarmedWeapon.Equals(rhs.UnarmedWeapon);
             ret.FaceFxPhonemes = MaskItemExt.Factory(item.FaceFxPhonemes.GetEqualsMask(rhs.FaceFxPhonemes, include), include);
@@ -5956,7 +5958,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         fg.AppendLine("[");
                         using (new DepthWrapper(fg))
                         {
-                            fg.AppendItem(subItem.FormKey);
+                            subItem?.ToString(fg, "Item");
                         }
                         fg.AppendLine("]");
                     }
@@ -6793,7 +6795,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 yield return FormLinkInformation.Factory(item);
             }
-            foreach (var item in obj.EquipmentSlots)
+            foreach (var item in obj.EquipmentSlots.SelectMany(f => f.ContainedFormLinks))
             {
                 yield return FormLinkInformation.Factory(item);
             }
@@ -7406,7 +7408,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 {
                     item.EquipmentSlots.SetTo(
                         rhs.EquipmentSlots
-                        .Select(r => (IFormLinkGetter<IEquipTypeGetter>)new FormLink<IEquipTypeGetter>(r.FormKey)));
+                        .Select(r =>
+                        {
+                            return r.DeepCopy(
+                                errorMask: errorMask,
+                                default(TranslationCrystal));
+                        }));
                 }
                 catch (Exception ex)
                 when (errorMask != null)
@@ -7821,10 +7828,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                                 writer: subWriter);
                         });
                 }
-                EnumBinaryTranslation<Race.Flag, MutagenFrame, MutagenWriter>.Instance.Write(
-                    writer,
-                    item.Flags,
-                    length: 4);
+                RaceBinaryWriteTranslation.WriteBinaryFlags(
+                    writer: writer,
+                    item: item);
                 FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
                     writer: writer,
                     item: item.AccelerationRate);
@@ -8117,15 +8123,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 item.EquipmentFlags,
                 length: 4,
                 header: translationParams.ConvertToCustom(RecordTypes.VNAM));
-            Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IFormLinkGetter<IEquipTypeGetter>>.Instance.Write(
+            Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IEquipmentSlotGetter>.Instance.Write(
                 writer: writer,
                 items: item.EquipmentSlots,
-                transl: (MutagenWriter subWriter, IFormLinkGetter<IEquipTypeGetter> subItem, TypedWriteParams? conv) =>
+                transl: (MutagenWriter subWriter, IEquipmentSlotGetter subItem, TypedWriteParams? conv) =>
                 {
-                    FormLinkBinaryTranslation.Instance.Write(
+                    var Item = subItem;
+                    ((EquipmentSlotBinaryWriteTranslation)((IBinaryItem)Item).BinaryWriteTranslator).Write(
+                        item: Item,
                         writer: subWriter,
-                        item: subItem,
-                        header: translationParams.ConvertToCustom(RecordTypes.QNAM));
+                        translationParams: conv);
                 });
             FormLinkBinaryTranslation.Instance.WriteNullable(
                 writer: writer,
@@ -8224,6 +8231,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 item: item.DialogueQuest,
                 header: translationParams.ConvertToCustom(RecordTypes.QSTI));
             RaceBinaryWriteTranslation.WriteBinaryBoneDataParse(
+                writer: writer,
+                item: item);
+        }
+
+        public static partial void WriteBinaryFlagsCustom(
+            MutagenWriter writer,
+            IRaceGetter item);
+
+        public static void WriteBinaryFlags(
+            MutagenWriter writer,
+            IRaceGetter item)
+        {
+            WriteBinaryFlagsCustom(
                 writer: writer,
                 item: item);
         }
@@ -8499,9 +8519,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                             frame: frame,
                             transl: RaceWeight.TryCreateFromBinary);
                     }
-                    item.Flags = EnumBinaryTranslation<Race.Flag, MutagenFrame, MutagenWriter>.Instance.Parse(
-                        reader: dataFrame,
-                        length: 4);
+                    RaceBinaryCreateTranslation.FillBinaryFlagsCustom(
+                        frame: dataFrame,
+                        item: item);
                     item.AccelerationRate = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
                     item.DecelerationRate = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
                     item.Size = EnumBinaryTranslation<Size, MutagenFrame, MutagenWriter>.Instance.Parse(
@@ -8759,12 +8779,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     return (int)Race_FieldIndex.EquipmentFlags;
                 }
                 case RecordTypeInts.QNAM:
+                case RecordTypeInts.ZNAM:
                 {
                     item.EquipmentSlots.SetTo(
-                        Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IFormLinkGetter<IEquipTypeGetter>>.Instance.Parse(
+                        Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<EquipmentSlot>.Instance.Parse(
                             reader: frame,
-                            triggeringRecord: translationParams.ConvertToCustom(RecordTypes.QNAM),
-                            transl: FormLinkBinaryTranslation.Instance.Parse));
+                            triggeringRecord: EquipmentSlot_Registration.TriggeringRecordTypes,
+                            translationParams: translationParams,
+                            transl: EquipmentSlot.TryCreateFromBinary));
                     return (int)Race_FieldIndex.EquipmentSlots;
                 }
                 case RecordTypeInts.UNWP:
@@ -8918,6 +8940,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             }
         }
 
+        public static partial void FillBinaryFlagsCustom(
+            MutagenFrame frame,
+            IRaceInternal item);
+
         public static partial void FillBinaryFlags2Custom(
             MutagenFrame frame,
             IRaceInternal item);
@@ -9062,8 +9088,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         #endregion
         #region Flags
         private int _FlagsLocation => _DATALocation!.Value + DefaultWeightVersioningOffset + 0x20;
-        private bool _Flags_IsSet => _DATALocation.HasValue;
-        public Race.Flag Flags => _Flags_IsSet ? (Race.Flag)BinaryPrimitives.ReadInt32LittleEndian(_data.Span.Slice(_FlagsLocation, 0x4)) : default;
+        public Race.Flag Flags => GetFlagsCustom();
         #endregion
         #region AccelerationRate
         private int _AccelerationRateLocation => _DATALocation!.Value + DefaultWeightVersioningOffset + 0x24;
@@ -9363,7 +9388,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private int? _EquipmentFlagsLocation;
         public EquipTypeFlag? EquipmentFlags => _EquipmentFlagsLocation.HasValue ? (EquipTypeFlag)BinaryPrimitives.ReadInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _EquipmentFlagsLocation!.Value, _package.MetaData.Constants)) : default(EquipTypeFlag?);
         #endregion
-        public IReadOnlyList<IFormLinkGetter<IEquipTypeGetter>> EquipmentSlots { get; private set; } = ListExt.Empty<IFormLinkGetter<IEquipTypeGetter>>();
+        public IReadOnlyList<IEquipmentSlotGetter> EquipmentSlots { get; private set; } = ListExt.Empty<EquipmentSlotBinaryOverlay>();
         #region UnarmedWeapon
         private int? _UnarmedWeaponLocation;
         public IFormLinkNullableGetter<IWeaponGetter> UnarmedWeapon => _UnarmedWeaponLocation.HasValue ? new FormLinkNullable<IWeaponGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _UnarmedWeaponLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<IWeaponGetter>.Null;
@@ -9744,17 +9769,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     return (int)Race_FieldIndex.EquipmentFlags;
                 }
                 case RecordTypeInts.QNAM:
+                case RecordTypeInts.ZNAM:
                 {
-                    this.EquipmentSlots = BinaryOverlayList.FactoryByArray<IFormLinkGetter<IEquipTypeGetter>>(
-                        mem: stream.RemainingMemory,
-                        package: _package,
-                        getter: (s, p) => new FormLink<IEquipTypeGetter>(FormKey.Factory(p.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(s))),
-                        locs: ParseRecordLocations(
-                            stream: stream,
-                            constants: _package.MetaData.Constants.SubConstants,
-                            trigger: type,
-                            skipHeader: true,
-                            parseParams: parseParams));
+                    this.EquipmentSlots = this.ParseRepeatedTypelessSubrecord<EquipmentSlotBinaryOverlay>(
+                        stream: stream,
+                        parseParams: parseParams,
+                        trigger: EquipmentSlot_Registration.TriggeringRecordTypes,
+                        factory: EquipmentSlotBinaryOverlay.EquipmentSlotFactory);
                     return (int)Race_FieldIndex.EquipmentSlots;
                 }
                 case RecordTypeInts.UNWP:

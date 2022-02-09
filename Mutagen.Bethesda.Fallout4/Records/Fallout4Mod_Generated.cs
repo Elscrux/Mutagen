@@ -70,6 +70,8 @@ namespace Mutagen.Bethesda.Fallout4
             _Factions_Object = new Fallout4Group<Faction>(this);
             _HeadParts_Object = new Fallout4Group<HeadPart>(this);
             _Races_Object = new Fallout4Group<Race>(this);
+            _SoundMarkers_Object = new Fallout4Group<SoundMarker>(this);
+            _AcousticSpaces_Object = new Fallout4Group<AcousticSpace>(this);
             CustomCtor();
         }
         partial void CustomCtor();
@@ -173,6 +175,20 @@ namespace Mutagen.Bethesda.Fallout4
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IFallout4GroupGetter<IRaceGetter> IFallout4ModGetter.Races => _Races_Object;
         #endregion
+        #region SoundMarkers
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Fallout4Group<SoundMarker> _SoundMarkers_Object;
+        public Fallout4Group<SoundMarker> SoundMarkers => _SoundMarkers_Object;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFallout4GroupGetter<ISoundMarkerGetter> IFallout4ModGetter.SoundMarkers => _SoundMarkers_Object;
+        #endregion
+        #region AcousticSpaces
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Fallout4Group<AcousticSpace> _AcousticSpaces_Object;
+        public Fallout4Group<AcousticSpace> AcousticSpaces => _AcousticSpaces_Object;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFallout4GroupGetter<IAcousticSpaceGetter> IFallout4ModGetter.AcousticSpaces => _AcousticSpaces_Object;
+        #endregion
 
         #region To String
 
@@ -225,6 +241,8 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Factions = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.HeadParts = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Races = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
+                this.SoundMarkers = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
+                this.AcousticSpaces = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
             }
 
             public Mask(
@@ -241,7 +259,9 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem Classes,
                 TItem Factions,
                 TItem HeadParts,
-                TItem Races)
+                TItem Races,
+                TItem SoundMarkers,
+                TItem AcousticSpaces)
             {
                 this.ModHeader = new MaskItem<TItem, Fallout4ModHeader.Mask<TItem>?>(ModHeader, new Fallout4ModHeader.Mask<TItem>(ModHeader));
                 this.GameSettings = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(GameSettings, new Fallout4Group.Mask<TItem>(GameSettings));
@@ -257,6 +277,8 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Factions = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Factions, new Fallout4Group.Mask<TItem>(Factions));
                 this.HeadParts = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(HeadParts, new Fallout4Group.Mask<TItem>(HeadParts));
                 this.Races = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Races, new Fallout4Group.Mask<TItem>(Races));
+                this.SoundMarkers = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(SoundMarkers, new Fallout4Group.Mask<TItem>(SoundMarkers));
+                this.AcousticSpaces = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(AcousticSpaces, new Fallout4Group.Mask<TItem>(AcousticSpaces));
             }
 
             #pragma warning disable CS8618
@@ -282,6 +304,8 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Factions { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? HeadParts { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Races { get; set; }
+            public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? SoundMarkers { get; set; }
+            public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? AcousticSpaces { get; set; }
             #endregion
 
             #region Equals
@@ -308,6 +332,8 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!object.Equals(this.Factions, rhs.Factions)) return false;
                 if (!object.Equals(this.HeadParts, rhs.HeadParts)) return false;
                 if (!object.Equals(this.Races, rhs.Races)) return false;
+                if (!object.Equals(this.SoundMarkers, rhs.SoundMarkers)) return false;
+                if (!object.Equals(this.AcousticSpaces, rhs.AcousticSpaces)) return false;
                 return true;
             }
             public override int GetHashCode()
@@ -327,6 +353,8 @@ namespace Mutagen.Bethesda.Fallout4
                 hash.Add(this.Factions);
                 hash.Add(this.HeadParts);
                 hash.Add(this.Races);
+                hash.Add(this.SoundMarkers);
+                hash.Add(this.AcousticSpaces);
                 return hash.ToHashCode();
             }
 
@@ -405,6 +433,16 @@ namespace Mutagen.Bethesda.Fallout4
                     if (!eval(this.Races.Overall)) return false;
                     if (this.Races.Specific != null && !this.Races.Specific.All(eval)) return false;
                 }
+                if (SoundMarkers != null)
+                {
+                    if (!eval(this.SoundMarkers.Overall)) return false;
+                    if (this.SoundMarkers.Specific != null && !this.SoundMarkers.Specific.All(eval)) return false;
+                }
+                if (AcousticSpaces != null)
+                {
+                    if (!eval(this.AcousticSpaces.Overall)) return false;
+                    if (this.AcousticSpaces.Specific != null && !this.AcousticSpaces.Specific.All(eval)) return false;
+                }
                 return true;
             }
             #endregion
@@ -482,6 +520,16 @@ namespace Mutagen.Bethesda.Fallout4
                     if (eval(this.Races.Overall)) return true;
                     if (this.Races.Specific != null && this.Races.Specific.Any(eval)) return true;
                 }
+                if (SoundMarkers != null)
+                {
+                    if (eval(this.SoundMarkers.Overall)) return true;
+                    if (this.SoundMarkers.Specific != null && this.SoundMarkers.Specific.Any(eval)) return true;
+                }
+                if (AcousticSpaces != null)
+                {
+                    if (eval(this.AcousticSpaces.Overall)) return true;
+                    if (this.AcousticSpaces.Specific != null && this.AcousticSpaces.Specific.Any(eval)) return true;
+                }
                 return false;
             }
             #endregion
@@ -510,6 +558,8 @@ namespace Mutagen.Bethesda.Fallout4
                 obj.Factions = this.Factions == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Factions.Overall), this.Factions.Specific?.Translate(eval));
                 obj.HeadParts = this.HeadParts == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.HeadParts.Overall), this.HeadParts.Specific?.Translate(eval));
                 obj.Races = this.Races == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Races.Overall), this.Races.Specific?.Translate(eval));
+                obj.SoundMarkers = this.SoundMarkers == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.SoundMarkers.Overall), this.SoundMarkers.Specific?.Translate(eval));
+                obj.AcousticSpaces = this.AcousticSpaces == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.AcousticSpaces.Overall), this.AcousticSpaces.Specific?.Translate(eval));
             }
             #endregion
 
@@ -588,6 +638,14 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         Races?.ToString(fg);
                     }
+                    if (printMask?.SoundMarkers?.Overall ?? true)
+                    {
+                        SoundMarkers?.ToString(fg);
+                    }
+                    if (printMask?.AcousticSpaces?.Overall ?? true)
+                    {
+                        AcousticSpaces?.ToString(fg);
+                    }
                 }
                 fg.AppendLine("]");
             }
@@ -627,6 +685,8 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Faction.ErrorMask>?>? Factions;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<HeadPart.ErrorMask>?>? HeadParts;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Race.ErrorMask>?>? Races;
+            public MaskItem<Exception?, Fallout4Group.ErrorMask<SoundMarker.ErrorMask>?>? SoundMarkers;
+            public MaskItem<Exception?, Fallout4Group.ErrorMask<AcousticSpace.ErrorMask>?>? AcousticSpaces;
             #endregion
 
             #region IErrorMask
@@ -663,6 +723,10 @@ namespace Mutagen.Bethesda.Fallout4
                         return HeadParts;
                     case Fallout4Mod_FieldIndex.Races:
                         return Races;
+                    case Fallout4Mod_FieldIndex.SoundMarkers:
+                        return SoundMarkers;
+                    case Fallout4Mod_FieldIndex.AcousticSpaces:
+                        return AcousticSpaces;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
                 }
@@ -714,6 +778,12 @@ namespace Mutagen.Bethesda.Fallout4
                         break;
                     case Fallout4Mod_FieldIndex.Races:
                         this.Races = new MaskItem<Exception?, Fallout4Group.ErrorMask<Race.ErrorMask>?>(ex, null);
+                        break;
+                    case Fallout4Mod_FieldIndex.SoundMarkers:
+                        this.SoundMarkers = new MaskItem<Exception?, Fallout4Group.ErrorMask<SoundMarker.ErrorMask>?>(ex, null);
+                        break;
+                    case Fallout4Mod_FieldIndex.AcousticSpaces:
+                        this.AcousticSpaces = new MaskItem<Exception?, Fallout4Group.ErrorMask<AcousticSpace.ErrorMask>?>(ex, null);
                         break;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
@@ -767,6 +837,12 @@ namespace Mutagen.Bethesda.Fallout4
                     case Fallout4Mod_FieldIndex.Races:
                         this.Races = (MaskItem<Exception?, Fallout4Group.ErrorMask<Race.ErrorMask>?>?)obj;
                         break;
+                    case Fallout4Mod_FieldIndex.SoundMarkers:
+                        this.SoundMarkers = (MaskItem<Exception?, Fallout4Group.ErrorMask<SoundMarker.ErrorMask>?>?)obj;
+                        break;
+                    case Fallout4Mod_FieldIndex.AcousticSpaces:
+                        this.AcousticSpaces = (MaskItem<Exception?, Fallout4Group.ErrorMask<AcousticSpace.ErrorMask>?>?)obj;
+                        break;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
                 }
@@ -789,6 +865,8 @@ namespace Mutagen.Bethesda.Fallout4
                 if (Factions != null) return true;
                 if (HeadParts != null) return true;
                 if (Races != null) return true;
+                if (SoundMarkers != null) return true;
+                if (AcousticSpaces != null) return true;
                 return false;
             }
             #endregion
@@ -837,6 +915,8 @@ namespace Mutagen.Bethesda.Fallout4
                 Factions?.ToString(fg);
                 HeadParts?.ToString(fg);
                 Races?.ToString(fg);
+                SoundMarkers?.ToString(fg);
+                AcousticSpaces?.ToString(fg);
             }
             #endregion
 
@@ -859,6 +939,8 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Factions = this.Factions.Combine(rhs.Factions, (l, r) => l.Combine(r));
                 ret.HeadParts = this.HeadParts.Combine(rhs.HeadParts, (l, r) => l.Combine(r));
                 ret.Races = this.Races.Combine(rhs.Races, (l, r) => l.Combine(r));
+                ret.SoundMarkers = this.SoundMarkers.Combine(rhs.SoundMarkers, (l, r) => l.Combine(r));
+                ret.AcousticSpaces = this.AcousticSpaces.Combine(rhs.AcousticSpaces, (l, r) => l.Combine(r));
                 return ret;
             }
             public static ErrorMask? Combine(ErrorMask? lhs, ErrorMask? rhs)
@@ -896,6 +978,8 @@ namespace Mutagen.Bethesda.Fallout4
             public Fallout4Group.TranslationMask<Faction.TranslationMask>? Factions;
             public Fallout4Group.TranslationMask<HeadPart.TranslationMask>? HeadParts;
             public Fallout4Group.TranslationMask<Race.TranslationMask>? Races;
+            public Fallout4Group.TranslationMask<SoundMarker.TranslationMask>? SoundMarkers;
+            public Fallout4Group.TranslationMask<AcousticSpace.TranslationMask>? AcousticSpaces;
             #endregion
 
             #region Ctors
@@ -934,6 +1018,8 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((Factions != null ? Factions.OnOverall : DefaultOn, Factions?.GetCrystal()));
                 ret.Add((HeadParts != null ? HeadParts.OnOverall : DefaultOn, HeadParts?.GetCrystal()));
                 ret.Add((Races != null ? Races.OnOverall : DefaultOn, Races?.GetCrystal()));
+                ret.Add((SoundMarkers != null ? SoundMarkers.OnOverall : DefaultOn, SoundMarkers?.GetCrystal()));
+                ret.Add((AcousticSpaces != null ? AcousticSpaces.OnOverall : DefaultOn, AcousticSpaces?.GetCrystal()));
             }
 
             public static implicit operator TranslationMask(bool defaultOn)
@@ -989,6 +1075,8 @@ namespace Mutagen.Bethesda.Fallout4
             _Factions_Object = new Fallout4Group<Faction>(this);
             _HeadParts_Object = new Fallout4Group<HeadPart>(this);
             _Races_Object = new Fallout4Group<Race>(this);
+            _SoundMarkers_Object = new Fallout4Group<SoundMarker>(this);
+            _AcousticSpaces_Object = new Fallout4Group<AcousticSpace>(this);
             CustomCtor();
         }
         public void AddRecords(
@@ -1047,6 +1135,14 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 this.Races.RecordCache.Set(rhsMod.Races.RecordCache.Items);
             }
+            if (mask?.SoundMarkers ?? true)
+            {
+                this.SoundMarkers.RecordCache.Set(rhsMod.SoundMarkers.RecordCache.Items);
+            }
+            if (mask?.AcousticSpaces ?? true)
+            {
+                this.AcousticSpaces.RecordCache.Set(rhsMod.AcousticSpaces.RecordCache.Items);
+            }
         }
 
         public override void SyncRecordCount()
@@ -1070,6 +1166,8 @@ namespace Mutagen.Bethesda.Fallout4
             count += Factions.RecordCache.Count > 0 ? 1 : default(uint);
             count += HeadParts.RecordCache.Count > 0 ? 1 : default(uint);
             count += Races.RecordCache.Count > 0 ? 1 : default(uint);
+            count += SoundMarkers.RecordCache.Count > 0 ? 1 : default(uint);
+            count += AcousticSpaces.RecordCache.Count > 0 ? 1 : default(uint);
             GetCustomRecordCount((customCount) => count += customCount);
             return count;
         }
@@ -1332,6 +1430,8 @@ namespace Mutagen.Bethesda.Fallout4
         new Fallout4Group<Faction> Factions { get; }
         new Fallout4Group<HeadPart> HeadParts { get; }
         new Fallout4Group<Race> Races { get; }
+        new Fallout4Group<SoundMarker> SoundMarkers { get; }
+        new Fallout4Group<AcousticSpace> AcousticSpaces { get; }
     }
 
     public partial interface IFallout4ModGetter :
@@ -1364,6 +1464,8 @@ namespace Mutagen.Bethesda.Fallout4
         IFallout4GroupGetter<IFactionGetter> Factions { get; }
         IFallout4GroupGetter<IHeadPartGetter> HeadParts { get; }
         IFallout4GroupGetter<IRaceGetter> Races { get; }
+        IFallout4GroupGetter<ISoundMarkerGetter> SoundMarkers { get; }
+        IFallout4GroupGetter<IAcousticSpaceGetter> AcousticSpaces { get; }
 
     }
 
@@ -1940,6 +2042,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         Factions = 11,
         HeadParts = 12,
         Races = 13,
+        SoundMarkers = 14,
+        AcousticSpaces = 15,
     }
     #endregion
 
@@ -1957,9 +2061,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public const string GUID = "9cae6baa-1084-4862-ae0a-07c79b9f2a3a";
 
-        public const ushort AdditionalFieldCount = 14;
+        public const ushort AdditionalFieldCount = 16;
 
-        public const ushort FieldCount = 14;
+        public const ushort FieldCount = 16;
 
         public static readonly Type MaskType = typeof(Fallout4Mod.Mask<>);
 
@@ -2041,6 +2145,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.Factions.Clear();
             item.HeadParts.Clear();
             item.Races.Clear();
+            item.SoundMarkers.Clear();
+            item.AcousticSpaces.Clear();
         }
         
         #region Mutagen
@@ -2060,6 +2166,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.Factions.RemapLinks(mapping);
             obj.HeadParts.RemapLinks(mapping);
             obj.Races.RemapLinks(mapping);
+            obj.SoundMarkers.RemapLinks(mapping);
+            obj.AcousticSpaces.RemapLinks(mapping);
         }
         
         public IEnumerable<IMajorRecord> EnumerateMajorRecords(IFallout4Mod obj)
@@ -2107,6 +2215,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.Factions.Remove(keys);
             obj.HeadParts.Remove(keys);
             obj.Races.Remove(keys);
+            obj.SoundMarkers.Remove(keys);
+            obj.AcousticSpaces.Remove(keys);
         }
         
         public void Remove(
@@ -2230,6 +2340,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         type: type,
                         keys: keys);
                     break;
+                case "SoundMarker":
+                case "ISoundMarkerGetter":
+                case "ISoundMarker":
+                case "ISoundMarkerInternal":
+                    obj.SoundMarkers.Remove(
+                        type: type,
+                        keys: keys);
+                    break;
+                case "AcousticSpace":
+                case "IAcousticSpaceGetter":
+                case "IAcousticSpace":
+                case "IAcousticSpaceInternal":
+                    obj.AcousticSpaces.Remove(
+                        type: type,
+                        keys: keys);
+                    break;
                 case "IIdleRelation":
                 case "IIdleRelationGetter":
                     Remove(obj, keys, typeof(IActionRecordGetter), throwIfUnknown: throwIfUnknown);
@@ -2326,6 +2452,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ret.Factions = MaskItemExt.Factory(item.Factions.GetEqualsMask(rhs.Factions, include), include);
             ret.HeadParts = MaskItemExt.Factory(item.HeadParts.GetEqualsMask(rhs.HeadParts, include), include);
             ret.Races = MaskItemExt.Factory(item.Races.GetEqualsMask(rhs.Races, include), include);
+            ret.SoundMarkers = MaskItemExt.Factory(item.SoundMarkers.GetEqualsMask(rhs.SoundMarkers, include), include);
+            ret.AcousticSpaces = MaskItemExt.Factory(item.AcousticSpaces.GetEqualsMask(rhs.AcousticSpaces, include), include);
         }
         
         public string ToString(
@@ -2427,6 +2555,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             if (printMask?.Races?.Overall ?? true)
             {
                 item.Races?.ToString(fg, "Races");
+            }
+            if (printMask?.SoundMarkers?.Overall ?? true)
+            {
+                item.SoundMarkers?.ToString(fg, "SoundMarkers");
+            }
+            if (printMask?.AcousticSpaces?.Overall ?? true)
+            {
+                item.AcousticSpaces?.ToString(fg, "AcousticSpaces");
             }
         }
         
@@ -2549,6 +2685,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 else if (!isRacesEqual) return false;
             }
+            if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.SoundMarkers) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.SoundMarkers, rhs.SoundMarkers, out var lhsSoundMarkers, out var rhsSoundMarkers, out var isSoundMarkersEqual))
+                {
+                    if (!object.Equals(lhsSoundMarkers, rhsSoundMarkers)) return false;
+                }
+                else if (!isSoundMarkersEqual) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.AcousticSpaces) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.AcousticSpaces, rhs.AcousticSpaces, out var lhsAcousticSpaces, out var rhsAcousticSpaces, out var isAcousticSpacesEqual))
+                {
+                    if (!object.Equals(lhsAcousticSpaces, rhsAcousticSpaces)) return false;
+                }
+                else if (!isAcousticSpacesEqual) return false;
+            }
             return true;
         }
         
@@ -2569,6 +2721,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             hash.Add(item.Factions);
             hash.Add(item.HeadParts);
             hash.Add(item.Races);
+            hash.Add(item.SoundMarkers);
+            hash.Add(item.AcousticSpaces);
             return hash.ToHashCode();
         }
         
@@ -2652,6 +2806,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IRace":
                 case "IRaceInternal":
                     return obj.Races;
+                case "SoundMarker":
+                case "ISoundMarkerGetter":
+                case "ISoundMarker":
+                case "ISoundMarkerInternal":
+                    return obj.SoundMarkers;
+                case "AcousticSpace":
+                case "IAcousticSpaceGetter":
+                case "IAcousticSpace":
+                case "IAcousticSpaceInternal":
+                    return obj.AcousticSpaces;
                 default:
                     throw new ArgumentException($"Unknown major record type: {type}");
             }
@@ -2676,7 +2840,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 mod: item,
                 modHeader: item.ModHeader.DeepCopy(),
                 modKey: modKey);
-            Stream[] outputStreams = new Stream[13];
+            Stream[] outputStreams = new Stream[15];
             List<Action> toDo = new List<Action>();
             toDo.Add(() => WriteGroupParallel(item.GameSettings, 0, outputStreams, bundle, parallelParam));
             toDo.Add(() => WriteGroupParallel(item.Keywords, 1, outputStreams, bundle, parallelParam));
@@ -2691,6 +2855,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             toDo.Add(() => WriteGroupParallel(item.Factions, 10, outputStreams, bundle, parallelParam));
             toDo.Add(() => WriteGroupParallel(item.HeadParts, 11, outputStreams, bundle, parallelParam));
             toDo.Add(() => WriteGroupParallel(item.Races, 12, outputStreams, bundle, parallelParam));
+            toDo.Add(() => WriteGroupParallel(item.SoundMarkers, 13, outputStreams, bundle, parallelParam));
+            toDo.Add(() => WriteGroupParallel(item.AcousticSpaces, 14, outputStreams, bundle, parallelParam));
             Parallel.Invoke(parallelParam.ParallelOptions, toDo.ToArray());
             PluginUtilityTranslation.CompileStreamsInto(
                 outputStreams.NotNull(),
@@ -2830,6 +2996,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     yield return item;
                 }
             }
+            if (obj.SoundMarkers is IFormLinkContainerGetter SoundMarkerslinkCont)
+            {
+                foreach (var item in SoundMarkerslinkCont.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
+            if (obj.AcousticSpaces is IFormLinkContainerGetter AcousticSpaceslinkCont)
+            {
+                foreach (var item in AcousticSpaceslinkCont.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
             yield break;
         }
         
@@ -2884,6 +3064,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 yield return item;
             }
             foreach (var item in obj.Races.EnumerateMajorRecords())
+            {
+                yield return item;
+            }
+            foreach (var item in obj.SoundMarkers.EnumerateMajorRecords())
+            {
+                yield return item;
+            }
+            foreach (var item in obj.AcousticSpaces.EnumerateMajorRecords())
             {
                 yield return item;
             }
@@ -3035,6 +3223,24 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IRace":
                 case "IRaceInternal":
                     foreach (var item in obj.Races.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                case "SoundMarker":
+                case "ISoundMarkerGetter":
+                case "ISoundMarker":
+                case "ISoundMarkerInternal":
+                    foreach (var item in obj.SoundMarkers.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                case "AcousticSpace":
+                case "IAcousticSpaceGetter":
+                case "IAcousticSpace":
+                case "IAcousticSpaceInternal":
+                    foreach (var item in obj.AcousticSpaces.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -3277,6 +3483,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     group: (m) => m.Races,
                     groupGetter: (m) => m.Races);
             }
+            foreach (var item in obj.SoundMarkers)
+            {
+                yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, SoundMarker, ISoundMarkerGetter>(
+                    modKey: obj.ModKey,
+                    record: item,
+                    group: (m) => m.SoundMarkers,
+                    groupGetter: (m) => m.SoundMarkers);
+            }
+            foreach (var item in obj.AcousticSpaces)
+            {
+                yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, AcousticSpace, IAcousticSpaceGetter>(
+                    modKey: obj.ModKey,
+                    record: item,
+                    group: (m) => m.AcousticSpaces,
+                    groupGetter: (m) => m.AcousticSpaces);
+            }
         }
         
         public IEnumerable<IModContext<IFallout4Mod, IFallout4ModGetter, IMajorRecord, IMajorRecordGetter>> EnumerateMajorRecordContexts(
@@ -3475,6 +3697,32 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                             record: item,
                             group: (m) => m.Races,
                             groupGetter: (m) => m.Races);
+                    }
+                    yield break;
+                case "SoundMarker":
+                case "ISoundMarkerGetter":
+                case "ISoundMarker":
+                case "ISoundMarkerInternal":
+                    foreach (var item in obj.SoundMarkers)
+                    {
+                        yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, SoundMarker, ISoundMarkerGetter>(
+                            modKey: obj.ModKey,
+                            record: item,
+                            group: (m) => m.SoundMarkers,
+                            groupGetter: (m) => m.SoundMarkers);
+                    }
+                    yield break;
+                case "AcousticSpace":
+                case "IAcousticSpaceGetter":
+                case "IAcousticSpace":
+                case "IAcousticSpaceInternal":
+                    foreach (var item in obj.AcousticSpaces)
+                    {
+                        yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, AcousticSpace, IAcousticSpaceGetter>(
+                            modKey: obj.ModKey,
+                            record: item,
+                            group: (m) => m.AcousticSpaces,
+                            groupGetter: (m) => m.AcousticSpaces);
                     }
                     yield break;
                 case "IIdleRelation":
@@ -3878,6 +4126,46 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     errorMask?.PopIndex();
                 }
             }
+            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.SoundMarkers) ?? true))
+            {
+                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.SoundMarkers);
+                try
+                {
+                    item.SoundMarkers.DeepCopyIn(
+                        rhs: rhs.SoundMarkers,
+                        errorMask: errorMask,
+                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.SoundMarkers));
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.AcousticSpaces) ?? true))
+            {
+                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.AcousticSpaces);
+                try
+                {
+                    item.AcousticSpaces.DeepCopyIn(
+                        rhs: rhs.AcousticSpaces,
+                        errorMask: errorMask,
+                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.AcousticSpaces));
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
         }
         
         #endregion
@@ -3981,6 +4269,8 @@ namespace Mutagen.Bethesda.Fallout4
         public bool Factions;
         public bool HeadParts;
         public bool Races;
+        public bool SoundMarkers;
+        public bool AcousticSpaces;
         public GroupMask()
         {
         }
@@ -3999,6 +4289,8 @@ namespace Mutagen.Bethesda.Fallout4
             Factions = defaultValue;
             HeadParts = defaultValue;
             Races = defaultValue;
+            SoundMarkers = defaultValue;
+            AcousticSpaces = defaultValue;
         }
     }
 
@@ -4169,6 +4461,28 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 {
                     ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)RacesItem).BinaryWriteTranslator).Write<IRaceGetter>(
                         item: RacesItem,
+                        writer: writer,
+                        translationParams: translationParams);
+                }
+            }
+            if (importMask?.SoundMarkers ?? true)
+            {
+                var SoundMarkersItem = item.SoundMarkers;
+                if (SoundMarkersItem.RecordCache.Count > 0)
+                {
+                    ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)SoundMarkersItem).BinaryWriteTranslator).Write<ISoundMarkerGetter>(
+                        item: SoundMarkersItem,
+                        writer: writer,
+                        translationParams: translationParams);
+                }
+            }
+            if (importMask?.AcousticSpaces ?? true)
+            {
+                var AcousticSpacesItem = item.AcousticSpaces;
+                if (AcousticSpacesItem.RecordCache.Count > 0)
+                {
+                    ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)AcousticSpacesItem).BinaryWriteTranslator).Write<IAcousticSpaceGetter>(
+                        item: AcousticSpacesItem,
                         writer: writer,
                         translationParams: translationParams);
                 }
@@ -4421,6 +4735,34 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     }
                     return (int)Fallout4Mod_FieldIndex.Races;
                 }
+                case RecordTypeInts.SOUN:
+                {
+                    if (importMask?.SoundMarkers ?? true)
+                    {
+                        item.SoundMarkers.CopyInFromBinary(
+                            frame: frame,
+                            translationParams: null);
+                    }
+                    else
+                    {
+                        frame.Position += contentLength;
+                    }
+                    return (int)Fallout4Mod_FieldIndex.SoundMarkers;
+                }
+                case RecordTypeInts.ASPC:
+                {
+                    if (importMask?.AcousticSpaces ?? true)
+                    {
+                        item.AcousticSpaces.CopyInFromBinary(
+                            frame: frame,
+                            translationParams: null);
+                    }
+                    else
+                    {
+                        frame.Position += contentLength;
+                    }
+                    return (int)Fallout4Mod_FieldIndex.AcousticSpaces;
+                }
                 default:
                     frame.Position += contentLength;
                     return default(int?);
@@ -4647,6 +4989,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private IFallout4GroupGetter<IRaceGetter>? _Races => _RacesLocations != null ? Fallout4GroupBinaryOverlay<IRaceGetter>.Fallout4GroupFactory(_data, _RacesLocations, _package) : default;
         public IFallout4GroupGetter<IRaceGetter> Races => _Races ?? new Fallout4Group<Race>(this);
         #endregion
+        #region SoundMarkers
+        private List<RangeInt64>? _SoundMarkersLocations;
+        private IFallout4GroupGetter<ISoundMarkerGetter>? _SoundMarkers => _SoundMarkersLocations != null ? Fallout4GroupBinaryOverlay<ISoundMarkerGetter>.Fallout4GroupFactory(_data, _SoundMarkersLocations, _package) : default;
+        public IFallout4GroupGetter<ISoundMarkerGetter> SoundMarkers => _SoundMarkers ?? new Fallout4Group<SoundMarker>(this);
+        #endregion
+        #region AcousticSpaces
+        private List<RangeInt64>? _AcousticSpacesLocations;
+        private IFallout4GroupGetter<IAcousticSpaceGetter>? _AcousticSpaces => _AcousticSpacesLocations != null ? Fallout4GroupBinaryOverlay<IAcousticSpaceGetter>.Fallout4GroupFactory(_data, _AcousticSpacesLocations, _package) : default;
+        public IFallout4GroupGetter<IAcousticSpaceGetter> AcousticSpaces => _AcousticSpaces ?? new Fallout4Group<AcousticSpace>(this);
+        #endregion
         protected Fallout4ModBinaryOverlay(
             IMutagenReadStream stream,
             ModKey modKey,
@@ -4812,6 +5164,18 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     _RacesLocations ??= new();
                     _RacesLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Races;
+                }
+                case RecordTypeInts.SOUN:
+                {
+                    _SoundMarkersLocations ??= new();
+                    _SoundMarkersLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
+                    return (int)Fallout4Mod_FieldIndex.SoundMarkers;
+                }
+                case RecordTypeInts.ASPC:
+                {
+                    _AcousticSpacesLocations ??= new();
+                    _AcousticSpacesLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
+                    return (int)Fallout4Mod_FieldIndex.AcousticSpaces;
                 }
                 default:
                     return default(int?);

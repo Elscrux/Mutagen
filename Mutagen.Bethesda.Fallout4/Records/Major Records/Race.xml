@@ -32,7 +32,7 @@
               <RefDirect refName="RaceWeight" />
             </Fields>
           </Gendered>
-          <Enum name="Flags" enumName="Race.Flag" byteLength="4" />
+          <Enum name="Flags" enumName="Race.Flag" byteLength="4" binary="Custom" />
           <Float name="AccelerationRate" />
           <Float name="DecelerationRate" />
           <Enum name="Size" enumName="Size" byteLength="4" />
@@ -149,9 +149,7 @@
       </Dict>
       <RefList name="MovementDataOverrides" refName="MovementDataOverride" />
       <Enum name="EquipmentFlags" enumName="EquipTypeFlag" byteLength="4" recordType="VNAM" />
-      <List name="EquipmentSlots">
-        <FormLink recordType="QNAM" refName="EquipType" />
-      </List>
+      <RefList name="EquipmentSlots" refName="EquipmentSlot" />
       <FormLink name="UnarmedWeapon" recordType="UNWP" refName="Weapon" />
       <CustomLogic name="FaceFxPhonemesListingParsing" recordType="PHTN" />
       <CustomLogic name="FaceFxPhonemesRawParsing" recordType="PHWT" />
@@ -425,6 +423,12 @@
       <Int32 name="Index" recordType="MSID" />
       <String name="MinName" recordType="MSM0" />
       <String name="MaxName" recordType="MSM1" />
+    </Fields>
+  </Object>
+  <Object name="EquipmentSlot" objType="Subrecord" GUID="a01724f1-1a38-49ec-8762-ddf47baa785e" ID="265">
+    <Fields>
+      <FormLink name="Slot" recordType="QNAM" refName="EquipType" />
+      <String name="Node" recordType="ZNAM" />
     </Fields>
   </Object>
 </Loqui>

@@ -1013,6 +1013,9 @@
     <Compile Include="Records\Major Records\RadioReceiver_Generated.cs">
       <DependentUpon>Activator.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Major Records\EquipmentSlot_Generated.cs">
+      <DependentUpon>Race.xml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="GitInfo" Version="2.2.0">

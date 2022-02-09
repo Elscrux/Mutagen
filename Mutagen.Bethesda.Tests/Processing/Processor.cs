@@ -327,7 +327,7 @@ public abstract class Processor
 
         // Modify Length 
         byte[] lenData = new byte[4];
-        BinaryPrimitives.WriteUInt32LittleEndian(lenData.AsSpan(), (ushort)(frame.ContentLength + amount));
+        BinaryPrimitives.WriteUInt32LittleEndian(lenData.AsSpan(), checked((uint)(frame.ContentLength + amount)));
         _instructions.SetSubstitution(
             loc: refLoc + Constants.HeaderLength,
             sub: lenData);

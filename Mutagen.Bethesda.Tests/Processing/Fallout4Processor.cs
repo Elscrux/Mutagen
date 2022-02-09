@@ -79,18 +79,29 @@ public class Fallout4Processor : Processor
     {
         if (!majorFrame.TryLocateSubrecordPinFrame(RecordTypes.MLSI, out var mlsi)) return;
 
-        var max = majorFrame.FindEnumerateSubrecords(RecordTypes.MSID)
-            .Select(x => x.AsInt32())
-            .Max(0);
+        if (majorFrame.TryLocateSubrecord(RecordTypes.MSID, out _))
+        {
+            var max = majorFrame.FindEnumerateSubrecords(RecordTypes.MSID)
+                .Select(x => x.AsInt32())
+                .Max(0);
 
-        var existing = mlsi.AsInt32();
-        if (existing == max) return;
+            var existing = mlsi.AsInt32();
+            if (existing == max) return;
 
-        byte[] sub = new byte[4];
-        BinaryPrimitives.WriteInt32LittleEndian(sub, max);
-        _instructions.SetSubstitution(
-            fileOffset + mlsi.Location + mlsi.HeaderLength,
-            sub);
+            byte[] sub = new byte[4];
+            BinaryPrimitives.WriteInt32LittleEndian(sub, max);
+            _instructions.SetSubstitution(
+                fileOffset + mlsi.Location + mlsi.HeaderLength,
+                sub);
+        }
+        else
+        {
+            _instructions.SetRemove(RangeInt64.FromLength(fileOffset + mlsi.Location, mlsi.TotalLength));
+            ProcessLengths(
+                majorFrame,
+                -mlsi.TotalLength,
+                fileOffset);
+        }
     }
 
     public void GameSettingStringHandler(
@@ -143,25 +154,30 @@ public class Fallout4Processor : Processor
                         new RecordType[] { "KYWD", "FULL" },
                         new RecordType[] { "ENCH", "FULL" },
                         new RecordType[] { "SPEL", "FULL" },
-                        new RecordType[] { "ACTI", "FULL", "ATTX" }
+                        new RecordType[] { "ACTI", "FULL", "ATTX" },
+                        new RecordType[] { "RACE", "TTGP", "MPPN" }
                     ));
                 break;
-            //case StringsSource.DL:
-            //    ProcessStringsFiles(
-            //        modKey,
-            //        dataFolder,
-            //        language,
-            //        StringsSource.DL,
-            //        strict: true,
-            //        RenumberStringsFileEntries(
-            //            modKey,
-            //            stream,
-            //            dataFolder,
-            //            language,
-            //            StringsSource.DL,
-            //            new RecordType[] { "SCRL", "DESC" },
-            //        ));
-            //    break;
+            case StringsSource.DL:
+                ProcessStringsFiles(
+                    GameRelease.Fallout4,
+                    modKey,
+                    dataFolder,
+                    language,
+                    StringsSource.DL,
+                    strict: false,
+                    knownDeadKeys: knownDeadKeys,
+                    bsaOrder: bsaOrder,
+                    RenumberStringsFileEntries(
+                        GameRelease.Fallout4,
+                        modKey,
+                        stream,
+                        dataFolder,
+                        language,
+                        StringsSource.DL,
+                        new RecordType[] { "RACE", "DESC" }
+                    ));
+                break;
             //case StringsSource.IL:
             //    ProcessStringsFiles(
             //        modKey,
