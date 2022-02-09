@@ -241,6 +241,10 @@ namespace Mutagen.Bethesda.Generation.Modules.Binary
         {
             var fieldData = typeGen.GetFieldData();
             var returningParseValue = fieldData.HasTrigger;
+            if (data != null)
+            {
+                DataBinaryTranslationGeneration.GenerateWrapperExtraMembers(fg, data, objGen, typeGen, passedLengthAccessor);
+            }
             using (var args = new ArgsWrapper(fg,
                 $"{(returningParseValue ? "public " : null)}partial {(returningParseValue ? nameof(ParseResult) : "void")} {(typeGen.Name == null ? typeGen.GetFieldData().RecordType?.ToString() : typeGen.Name)}CustomParse"))
             {

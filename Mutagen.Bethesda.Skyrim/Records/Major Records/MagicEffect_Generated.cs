@@ -4863,6 +4863,8 @@ namespace Mutagen.Bethesda.Skyrim.Internals
         public Single BaseCost => _BaseCost_IsSet ? _data.Slice(_BaseCostLocation, 4).Float() : default;
         #endregion
         #region AssociatedItem
+        private int _AssociatedItemLocation => _DATALocation!.Value + 0x8;
+        private bool _AssociatedItem_IsSet => _DATALocation.HasValue;
         partial void AssociatedItemCustomParse(
             OverlayStream stream,
             int offset);

@@ -12932,6 +12932,8 @@ namespace Mutagen.Bethesda.Skyrim.Internals
         public Single Duration => _Duration_IsSet ? _data.Slice(_DurationLocation, 4).Float() : default;
         #endregion
         #region Counts1
+        private int _Counts1Location => _DNAMLocation!.Value + 0x8;
+        private bool _Counts1_IsSet => _DNAMLocation.HasValue;
         partial void Counts1CustomParse(
             OverlayStream stream,
             int offset);
@@ -12947,6 +12949,8 @@ namespace Mutagen.Bethesda.Skyrim.Internals
         public P2Float RadialBlurCenter => _RadialBlurCenter_IsSet ? P2FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Read(_data.Slice(_RadialBlurCenterLocation, 8)) : default;
         #endregion
         #region Counts2
+        private int _Counts2Location => _DNAMLocation!.Value + 0xD4;
+        private bool _Counts2_IsSet => _DNAMLocation.HasValue;
         partial void Counts2CustomParse(
             OverlayStream stream,
             int offset);
@@ -12957,6 +12961,8 @@ namespace Mutagen.Bethesda.Skyrim.Internals
         public ImageSpaceAdapter.DepthOfFieldFlag DepthOfFieldFlags => _DepthOfFieldFlags_IsSet ? (ImageSpaceAdapter.DepthOfFieldFlag)BinaryPrimitives.ReadInt32LittleEndian(_data.Span.Slice(_DepthOfFieldFlagsLocation, 0x4)) : default;
         #endregion
         #region Counts3
+        private int _Counts3Location => _DNAMLocation!.Value + 0xE4;
+        private bool _Counts3_IsSet => _DNAMLocation.HasValue;
         partial void Counts3CustomParse(
             OverlayStream stream,
             int offset);

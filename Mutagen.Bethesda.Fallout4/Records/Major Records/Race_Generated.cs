@@ -9127,6 +9127,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public Single AngularTolerance => _AngularTolerance_IsSet ? _data.Slice(_AngularToleranceLocation, 4).Float() : default;
         #endregion
         #region Flags2
+        private int _Flags2Location => _DATALocation!.Value + BeardBipedObjectVersioningOffset + 0x58;
+        private bool _Flags2_IsSet => _DATALocation.HasValue;
         partial void Flags2CustomParse(
             OverlayStream stream,
             int offset);

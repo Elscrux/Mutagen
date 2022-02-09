@@ -8288,6 +8288,8 @@ namespace Mutagen.Bethesda.Skyrim.Internals
         public Single AngularTolerance => _AngularTolerance_IsSet ? _data.Slice(_AngularToleranceLocation, 4).Float() : default;
         #endregion
         #region Flags2
+        private int _Flags2Location => _DATALocation!.Value + 0x7C;
+        private bool _Flags2_IsSet => _DATALocation.HasValue;
         partial void Flags2CustomParse(
             OverlayStream stream,
             int offset);
