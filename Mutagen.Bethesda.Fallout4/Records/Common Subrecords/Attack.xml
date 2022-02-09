@@ -9,7 +9,7 @@
       <String name="Description" recordType="ATKT" />
     </Fields>
   </Object>
-  <Object name="AttackData" objType="Subrecord" recordType="ATKD" GUID="0c15032d-73fc-4558-99e8-1260e998d241" ID="241">
+  <Object name="AttackData" objType="Subrecord" recordType="ATKD" GUID="4f5d011a-a0bf-45d4-919b-120d2f1e085a" ID="266">
     <Fields>
       <Float name="DamageMult" />
       <Float name="Chance" />

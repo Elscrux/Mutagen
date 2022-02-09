@@ -400,7 +400,6 @@ namespace Mutagen.Bethesda.Fallout4
         #endregion
 
         #region Mutagen
-        public static readonly RecordType GrupRecordType = ResistanceArmor_Registration.TriggeringRecordType;
         public IEnumerable<IFormLinkGetter> ContainedFormLinks => ResistanceArmorCommon.Instance.GetContainedFormLinks(this);
         public void RemapLinks(IReadOnlyDictionary<FormKey, FormKey> mapping) => ResistanceArmorSetterCommon.Instance.RemapLinks(this, mapping);
         #endregion
@@ -703,7 +702,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public static readonly Type? GenericRegistrationType = null;
 
-        public static readonly RecordType TriggeringRecordType = RecordTypes.DAMA;
         public static readonly Type BinaryWriteTranslation = typeof(ResistanceArmorBinaryWriteTranslation);
         #region Interface
         ProtocolKey ILoquiRegistration.ProtocolKey => ProtocolKey;
@@ -764,10 +762,6 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
-            frame = frame.SpawnWithFinalPosition(HeaderTranslation.ParseSubrecord(
-                frame.Reader,
-                translationParams.ConvertToCustom(RecordTypes.DAMA),
-                translationParams?.LengthOverride));
             PluginUtilityTranslation.SubrecordParse(
                 record: item,
                 frame: frame,
@@ -1032,16 +1026,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             IResistanceArmorGetter item,
             TypedWriteParams? translationParams = null)
         {
-            using (HeaderExport.Subrecord(
-                writer: writer,
-                record: translationParams.ConvertToCustom(RecordTypes.DAMA),
-                overflowRecord: translationParams?.OverflowRecordType,
-                out var writerToUse))
-            {
-                WriteEmbedded(
-                    item: item,
-                    writer: writerToUse);
-            }
+            WriteEmbedded(
+                item: item,
+                writer: writer);
         }
 
         public void Write(
@@ -1157,11 +1144,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TypedParseParams? parseParams = null)
         {
             var ret = new ResistanceArmorBinaryOverlay(
-                bytes: HeaderTranslation.ExtractSubrecordMemory(stream.RemainingMemory, package.MetaData.Constants, parseParams),
+                bytes: stream.RemainingMemory.Slice(0, 0x8),
                 package: package);
-            var finalPos = checked((int)(stream.Position + stream.GetSubrecord().TotalLength));
-            int offset = stream.Position + package.MetaData.Constants.SubConstants.TypeAndLengthLength;
-            stream.Position += 0x8 + package.MetaData.Constants.SubConstants.HeaderLength;
+            int offset = stream.Position;
+            stream.Position += 0x8;
             ret.CustomFactoryEnd(
                 stream: stream,
                 finalPos: stream.Length,

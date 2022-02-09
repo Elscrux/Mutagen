@@ -3,7 +3,7 @@
   <Object name="Destructible" objType="Subrecord" GUID="4cbfc6ca-72eb-48e2-9b76-578e8078efff" ID="105">
     <Fields>
       <RefDirect name="Data" refName="DestructableData" />
-      <RefList name="Resistances" refName="ResistanceDestructible" />
+      <RefList name="Resistances" refName="ResistanceDestructible" recordType="DAMC" />
       <RefList name="Stages" refName="DestructionStage" />
     </Fields>
   </Object>
@@ -15,7 +15,7 @@
       <Int16 name="Unknown" />
     </Fields>
   </Object>
-  <Object name="ResistanceDestructible" objType="Subrecord" recordType="DAMC" GUID="53c2a9a0-bd8e-461e-92c5-ef7f9daafce5" ID="143">
+  <Object name="ResistanceDestructible" objType="Subrecord" GUID="53c2a9a0-bd8e-461e-92c5-ef7f9daafce5" ID="143">
     <Fields>
       <!--DMGT-->
       <FormLink name="DamageType" refName="DamageType" />

@@ -256,6 +256,8 @@ public partial class RecordTypeInts
     public const int INDX = 0x58444E49;
     public const int INFO = 0x4F464E49;
     public const int INGR = 0x52474E49;
+    public const int INNR = 0x524E4E49;
+    public const int INRD = 0x44524E49;
     public const int INTV = 0x56544E49;
     public const int IPCT = 0x54435049;
     public const int IPDS = 0x53445049;
@@ -372,6 +374,9 @@ public partial class RecordTypeInts
     public const int NVPP = 0x5050564E;
     public const int NVSI = 0x4953564E;
     public const int OBND = 0x444E424F;
+    public const int OBTE = 0x4554424F;
+    public const int OBTF = 0x4654424F;
+    public const int OBTS = 0x5354424F;
     public const int OCOR = 0x524F434F;
     public const int OFST = 0x5453464F;
     public const int OIAD = 0x4441494F;
@@ -520,6 +525,7 @@ public partial class RecordTypeInts
     public const int STCP = 0x50435453;
     public const int STKD = 0x444B5453;
     public const int STOL = 0x4C4F5453;
+    public const int STOP = 0x504F5453;
     public const int SWMV = 0x564D5753;
     public const int TACT = 0x54434154;
     public const int TCLF = 0x464C4354;

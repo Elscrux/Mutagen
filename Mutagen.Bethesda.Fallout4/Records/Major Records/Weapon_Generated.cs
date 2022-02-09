@@ -624,10 +624,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public static readonly ObjectKey ObjectKey = new ObjectKey(
             protocolKey: ProtocolDefinition_Fallout4.ProtocolKey,
-            msgID: 229,
+            msgID: 271,
             version: 0);
 
-        public const string GUID = "f44322c4-c4ca-432c-a5e1-9d5938dcf19d";
+        public const string GUID = "9d2ef57a-a4f1-4d87-99bc-a24e773c90e0";
 
         public const ushort AdditionalFieldCount = 0;
 

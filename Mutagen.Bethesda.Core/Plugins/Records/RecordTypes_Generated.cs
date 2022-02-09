@@ -258,6 +258,8 @@ public partial class RecordTypes
     public static readonly RecordType INDX = new(0x58444E49);
     public static readonly RecordType INFO = new(0x4F464E49);
     public static readonly RecordType INGR = new(0x52474E49);
+    public static readonly RecordType INNR = new(0x524E4E49);
+    public static readonly RecordType INRD = new(0x44524E49);
     public static readonly RecordType INTV = new(0x56544E49);
     public static readonly RecordType IPCT = new(0x54435049);
     public static readonly RecordType IPDS = new(0x53445049);
@@ -374,6 +376,9 @@ public partial class RecordTypes
     public static readonly RecordType NVPP = new(0x5050564E);
     public static readonly RecordType NVSI = new(0x4953564E);
     public static readonly RecordType OBND = new(0x444E424F);
+    public static readonly RecordType OBTE = new(0x4554424F);
+    public static readonly RecordType OBTF = new(0x4654424F);
+    public static readonly RecordType OBTS = new(0x5354424F);
     public static readonly RecordType OCOR = new(0x524F434F);
     public static readonly RecordType OFST = new(0x5453464F);
     public static readonly RecordType OIAD = new(0x4441494F);
@@ -522,6 +527,7 @@ public partial class RecordTypes
     public static readonly RecordType STCP = new(0x50435453);
     public static readonly RecordType STKD = new(0x444B5453);
     public static readonly RecordType STOL = new(0x4C4F5453);
+    public static readonly RecordType STOP = new(0x504F5453);
     public static readonly RecordType SWMV = new(0x564D5753);
     public static readonly RecordType TACT = new(0x54434154);
     public static readonly RecordType TCLF = new(0x464C4354);

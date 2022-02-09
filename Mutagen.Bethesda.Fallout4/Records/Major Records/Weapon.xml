@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="us-ascii"?>
 <Loqui xmlns="http://tempuri.org/LoquiSource.xsd">
-  <Object name="Weapon" recordType="WEAP" baseClass="Fallout4MajorRecord" objType="Record" GUID="f44322c4-c4ca-432c-a5e1-9d5938dcf19d" ID="229">
+  <Object name="Weapon" recordType="WEAP" baseClass="Fallout4MajorRecord" objType="Record" GUID="9d2ef57a-a4f1-4d87-99bc-a24e773c90e0" ID="271">
     <LinkInterface>IObjectId</LinkInterface>
   </Object>
 </Loqui>

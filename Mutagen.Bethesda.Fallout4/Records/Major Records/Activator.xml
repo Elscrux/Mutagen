@@ -34,6 +34,7 @@
       <Float name="Frequency" />
       <Float name="Volume" />
       <Bool name="StartsActive" byteLength="1" />
+	  <Break />
       <Bool name="NoSignalStatic" byteLength="1" />
     </Fields>
   </Object>

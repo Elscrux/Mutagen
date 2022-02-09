@@ -33,6 +33,7 @@ A `FormLink<IItem>` could then point to all those record types by pointing to th
 - MiscItem
 ### IIdleRelation
 - ActionRecord
+- IdleAnimation
 ### IItem
 - Armor
 - Book
@@ -82,6 +83,9 @@ A `FormLink<IItem>` could then point to all those record types by pointing to th
 - LeveledItem
 ### IOwner
 - Faction
+### IPlacedTrapTarget
+- Hazard
+- Projectile
 ### IRegionTarget
 - Flora
 - LandscapeTexture
@@ -130,6 +134,10 @@ A `FormLink<IItem>` could then point to all those record types by pointing to th
 ### Furniture
 - IConstructible
 - IObjectId
+### Hazard
+- IPlacedTrapTarget
+### IdleAnimation
+- IIdleRelation
 ### IdleMarker
 - IObjectId
 ### Ingestible
@@ -187,6 +195,7 @@ A `FormLink<IItem>` could then point to all those record types by pointing to th
 - ILocationTargetable
 ### Projectile
 - IObjectId
+- IPlacedTrapTarget
 ### Race
 - IRelatable
 ### Region

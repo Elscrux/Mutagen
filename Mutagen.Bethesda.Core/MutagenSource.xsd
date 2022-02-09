@@ -372,6 +372,13 @@
               </xs:documentation>
             </xs:annotation>
           </xs:attribute>
+          <xs:attribute name="allowNoCounter" type="xs:boolean" >
+            <xs:annotation>
+              <xs:documentation>
+                Whether to expect/allow a list to have no counter when one is defined
+              </xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>

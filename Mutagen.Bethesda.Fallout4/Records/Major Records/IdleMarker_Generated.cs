@@ -11,10 +11,13 @@ using Mutagen.Bethesda.Fallout4;
 using Mutagen.Bethesda.Fallout4.Internals;
 using Mutagen.Bethesda.Internals;
 using Mutagen.Bethesda.Plugins;
+using Mutagen.Bethesda.Plugins.Aspects;
 using Mutagen.Bethesda.Plugins.Binary.Overlay;
 using Mutagen.Bethesda.Plugins.Binary.Streams;
 using Mutagen.Bethesda.Plugins.Binary.Translations;
+using Mutagen.Bethesda.Plugins.Cache;
 using Mutagen.Bethesda.Plugins.Exceptions;
+using Mutagen.Bethesda.Plugins.Internals;
 using Mutagen.Bethesda.Plugins.Records;
 using Mutagen.Bethesda.Plugins.Records.Internals;
 using Mutagen.Bethesda.Plugins.RecordTypeMapping;
@@ -51,6 +54,99 @@ namespace Mutagen.Bethesda.Fallout4
         partial void CustomCtor();
         #endregion
 
+        #region ObjectBounds
+        /// <summary>
+        /// Aspects: IObjectBounded, IObjectBoundedOptional
+        /// </summary>
+        public ObjectBounds ObjectBounds { get; set; } = new ObjectBounds();
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IObjectBoundsGetter IIdleMarkerGetter.ObjectBounds => ObjectBounds;
+        #region Aspects
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        ObjectBounds? IObjectBoundedOptional.ObjectBounds
+        {
+            get => this.ObjectBounds;
+            set => this.ObjectBounds = value ?? new ObjectBounds();
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IObjectBoundsGetter IObjectBoundedGetter.ObjectBounds => this.ObjectBounds;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IObjectBoundsGetter? IObjectBoundedOptionalGetter.ObjectBounds => this.ObjectBounds;
+        #endregion
+        #endregion
+        #region Keywords
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ExtendedList<IFormLinkGetter<IKeywordGetter>>? _Keywords;
+        /// <summary>
+        /// Aspects: IKeyworded&lt;IKeywordGetter&gt;
+        /// </summary>
+        public ExtendedList<IFormLinkGetter<IKeywordGetter>>? Keywords
+        {
+            get => this._Keywords;
+            set => this._Keywords = value;
+        }
+        #region Interface Members
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? IIdleMarkerGetter.Keywords => _Keywords;
+        #endregion
+
+        #region Aspects
+        IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? IKeywordedGetter<IKeywordGetter>.Keywords => this.Keywords;
+        IReadOnlyList<IFormLinkGetter<IKeywordCommonGetter>>? IKeywordedGetter.Keywords => this.Keywords;
+        #endregion
+        #endregion
+        #region Flags
+        public IdleMarker.Flag? Flags { get; set; }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IdleMarker.Flag? IIdleMarkerGetter.Flags => this.Flags;
+        #endregion
+        #region IdleTimer
+        public Single? IdleTimer { get; set; }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        Single? IIdleMarkerGetter.IdleTimer => this.IdleTimer;
+        #endregion
+        #region Animations
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ExtendedList<IFormLinkGetter<IIdleAnimationGetter>>? _Animations;
+        public ExtendedList<IFormLinkGetter<IIdleAnimationGetter>>? Animations
+        {
+            get => this._Animations;
+            set => this._Animations = value;
+        }
+        #region Interface Members
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IReadOnlyList<IFormLinkGetter<IIdleAnimationGetter>>? IIdleMarkerGetter.Animations => _Animations;
+        #endregion
+
+        #endregion
+        #region Unknown
+        private readonly IFormLinkNullable<IKeywordGetter> _Unknown = new FormLinkNullable<IKeywordGetter>();
+        public IFormLinkNullable<IKeywordGetter> Unknown
+        {
+            get => _Unknown;
+            set => _Unknown.SetTo(value);
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFormLinkNullableGetter<IKeywordGetter> IIdleMarkerGetter.Unknown => this.Unknown;
+        #endregion
+        #region Model
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Model? _Model;
+        /// <summary>
+        /// Aspects: IModeled
+        /// </summary>
+        public Model? Model
+        {
+            get => _Model;
+            set => _Model = value;
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IModelGetter? IIdleMarkerGetter.Model => this.Model;
+        #region Aspects
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IModelGetter? IModeledGetter.Model => this.Model;
+        #endregion
+        #endregion
 
         #region To String
 
@@ -75,6 +171,13 @@ namespace Mutagen.Bethesda.Fallout4
             public Mask(TItem initialValue)
             : base(initialValue)
             {
+                this.ObjectBounds = new MaskItem<TItem, ObjectBounds.Mask<TItem>?>(initialValue, new ObjectBounds.Mask<TItem>(initialValue));
+                this.Keywords = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(initialValue, Enumerable.Empty<(int Index, TItem Value)>());
+                this.Flags = initialValue;
+                this.IdleTimer = initialValue;
+                this.Animations = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(initialValue, Enumerable.Empty<(int Index, TItem Value)>());
+                this.Unknown = initialValue;
+                this.Model = new MaskItem<TItem, Model.Mask<TItem>?>(initialValue, new Model.Mask<TItem>(initialValue));
             }
 
             public Mask(
@@ -83,7 +186,14 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem VersionControl,
                 TItem EditorID,
                 TItem FormVersion,
-                TItem Version2)
+                TItem Version2,
+                TItem ObjectBounds,
+                TItem Keywords,
+                TItem Flags,
+                TItem IdleTimer,
+                TItem Animations,
+                TItem Unknown,
+                TItem Model)
             : base(
                 MajorRecordFlagsRaw: MajorRecordFlagsRaw,
                 FormKey: FormKey,
@@ -92,6 +202,13 @@ namespace Mutagen.Bethesda.Fallout4
                 FormVersion: FormVersion,
                 Version2: Version2)
             {
+                this.ObjectBounds = new MaskItem<TItem, ObjectBounds.Mask<TItem>?>(ObjectBounds, new ObjectBounds.Mask<TItem>(ObjectBounds));
+                this.Keywords = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(Keywords, Enumerable.Empty<(int Index, TItem Value)>());
+                this.Flags = Flags;
+                this.IdleTimer = IdleTimer;
+                this.Animations = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(Animations, Enumerable.Empty<(int Index, TItem Value)>());
+                this.Unknown = Unknown;
+                this.Model = new MaskItem<TItem, Model.Mask<TItem>?>(Model, new Model.Mask<TItem>(Model));
             }
 
             #pragma warning disable CS8618
@@ -100,6 +217,16 @@ namespace Mutagen.Bethesda.Fallout4
             }
             #pragma warning restore CS8618
 
+            #endregion
+
+            #region Members
+            public MaskItem<TItem, ObjectBounds.Mask<TItem>?>? ObjectBounds { get; set; }
+            public MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>? Keywords;
+            public TItem Flags;
+            public TItem IdleTimer;
+            public MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>? Animations;
+            public TItem Unknown;
+            public MaskItem<TItem, Model.Mask<TItem>?>? Model { get; set; }
             #endregion
 
             #region Equals
@@ -113,11 +240,25 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 if (rhs == null) return false;
                 if (!base.Equals(rhs)) return false;
+                if (!object.Equals(this.ObjectBounds, rhs.ObjectBounds)) return false;
+                if (!object.Equals(this.Keywords, rhs.Keywords)) return false;
+                if (!object.Equals(this.Flags, rhs.Flags)) return false;
+                if (!object.Equals(this.IdleTimer, rhs.IdleTimer)) return false;
+                if (!object.Equals(this.Animations, rhs.Animations)) return false;
+                if (!object.Equals(this.Unknown, rhs.Unknown)) return false;
+                if (!object.Equals(this.Model, rhs.Model)) return false;
                 return true;
             }
             public override int GetHashCode()
             {
                 var hash = new HashCode();
+                hash.Add(this.ObjectBounds);
+                hash.Add(this.Keywords);
+                hash.Add(this.Flags);
+                hash.Add(this.IdleTimer);
+                hash.Add(this.Animations);
+                hash.Add(this.Unknown);
+                hash.Add(this.Model);
                 hash.Add(base.GetHashCode());
                 return hash.ToHashCode();
             }
@@ -128,6 +269,41 @@ namespace Mutagen.Bethesda.Fallout4
             public override bool All(Func<TItem, bool> eval)
             {
                 if (!base.All(eval)) return false;
+                if (ObjectBounds != null)
+                {
+                    if (!eval(this.ObjectBounds.Overall)) return false;
+                    if (this.ObjectBounds.Specific != null && !this.ObjectBounds.Specific.All(eval)) return false;
+                }
+                if (this.Keywords != null)
+                {
+                    if (!eval(this.Keywords.Overall)) return false;
+                    if (this.Keywords.Specific != null)
+                    {
+                        foreach (var item in this.Keywords.Specific)
+                        {
+                            if (!eval(item.Value)) return false;
+                        }
+                    }
+                }
+                if (!eval(this.Flags)) return false;
+                if (!eval(this.IdleTimer)) return false;
+                if (this.Animations != null)
+                {
+                    if (!eval(this.Animations.Overall)) return false;
+                    if (this.Animations.Specific != null)
+                    {
+                        foreach (var item in this.Animations.Specific)
+                        {
+                            if (!eval(item.Value)) return false;
+                        }
+                    }
+                }
+                if (!eval(this.Unknown)) return false;
+                if (Model != null)
+                {
+                    if (!eval(this.Model.Overall)) return false;
+                    if (this.Model.Specific != null && !this.Model.Specific.All(eval)) return false;
+                }
                 return true;
             }
             #endregion
@@ -136,6 +312,41 @@ namespace Mutagen.Bethesda.Fallout4
             public override bool Any(Func<TItem, bool> eval)
             {
                 if (base.Any(eval)) return true;
+                if (ObjectBounds != null)
+                {
+                    if (eval(this.ObjectBounds.Overall)) return true;
+                    if (this.ObjectBounds.Specific != null && this.ObjectBounds.Specific.Any(eval)) return true;
+                }
+                if (this.Keywords != null)
+                {
+                    if (eval(this.Keywords.Overall)) return true;
+                    if (this.Keywords.Specific != null)
+                    {
+                        foreach (var item in this.Keywords.Specific)
+                        {
+                            if (!eval(item.Value)) return false;
+                        }
+                    }
+                }
+                if (eval(this.Flags)) return true;
+                if (eval(this.IdleTimer)) return true;
+                if (this.Animations != null)
+                {
+                    if (eval(this.Animations.Overall)) return true;
+                    if (this.Animations.Specific != null)
+                    {
+                        foreach (var item in this.Animations.Specific)
+                        {
+                            if (!eval(item.Value)) return false;
+                        }
+                    }
+                }
+                if (eval(this.Unknown)) return true;
+                if (Model != null)
+                {
+                    if (eval(this.Model.Overall)) return true;
+                    if (this.Model.Specific != null && this.Model.Specific.Any(eval)) return true;
+                }
                 return false;
             }
             #endregion
@@ -151,6 +362,39 @@ namespace Mutagen.Bethesda.Fallout4
             protected void Translate_InternalFill<R>(Mask<R> obj, Func<TItem, R> eval)
             {
                 base.Translate_InternalFill(obj, eval);
+                obj.ObjectBounds = this.ObjectBounds == null ? null : new MaskItem<R, ObjectBounds.Mask<R>?>(eval(this.ObjectBounds.Overall), this.ObjectBounds.Specific?.Translate(eval));
+                if (Keywords != null)
+                {
+                    obj.Keywords = new MaskItem<R, IEnumerable<(int Index, R Value)>?>(eval(this.Keywords.Overall), Enumerable.Empty<(int Index, R Value)>());
+                    if (Keywords.Specific != null)
+                    {
+                        var l = new List<(int Index, R Item)>();
+                        obj.Keywords.Specific = l;
+                        foreach (var item in Keywords.Specific.WithIndex())
+                        {
+                            R mask = eval(item.Item.Value);
+                            l.Add((item.Index, mask));
+                        }
+                    }
+                }
+                obj.Flags = eval(this.Flags);
+                obj.IdleTimer = eval(this.IdleTimer);
+                if (Animations != null)
+                {
+                    obj.Animations = new MaskItem<R, IEnumerable<(int Index, R Value)>?>(eval(this.Animations.Overall), Enumerable.Empty<(int Index, R Value)>());
+                    if (Animations.Specific != null)
+                    {
+                        var l = new List<(int Index, R Item)>();
+                        obj.Animations.Specific = l;
+                        foreach (var item in Animations.Specific.WithIndex())
+                        {
+                            R mask = eval(item.Item.Value);
+                            l.Add((item.Index, mask));
+                        }
+                    }
+                }
+                obj.Unknown = eval(this.Unknown);
+                obj.Model = this.Model == null ? null : new MaskItem<R, Model.Mask<R>?>(eval(this.Model.Overall), this.Model.Specific?.Translate(eval));
             }
             #endregion
 
@@ -173,6 +417,72 @@ namespace Mutagen.Bethesda.Fallout4
                 fg.AppendLine("[");
                 using (new DepthWrapper(fg))
                 {
+                    if (printMask?.ObjectBounds?.Overall ?? true)
+                    {
+                        ObjectBounds?.ToString(fg);
+                    }
+                    if ((printMask?.Keywords?.Overall ?? true)
+                        && Keywords is {} KeywordsItem)
+                    {
+                        fg.AppendLine("Keywords =>");
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            fg.AppendItem(KeywordsItem.Overall);
+                            if (KeywordsItem.Specific != null)
+                            {
+                                foreach (var subItem in KeywordsItem.Specific)
+                                {
+                                    fg.AppendLine("[");
+                                    using (new DepthWrapper(fg))
+                                    {
+                                        fg.AppendItem(subItem);
+                                    }
+                                    fg.AppendLine("]");
+                                }
+                            }
+                        }
+                        fg.AppendLine("]");
+                    }
+                    if (printMask?.Flags ?? true)
+                    {
+                        fg.AppendItem(Flags, "Flags");
+                    }
+                    if (printMask?.IdleTimer ?? true)
+                    {
+                        fg.AppendItem(IdleTimer, "IdleTimer");
+                    }
+                    if ((printMask?.Animations?.Overall ?? true)
+                        && Animations is {} AnimationsItem)
+                    {
+                        fg.AppendLine("Animations =>");
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            fg.AppendItem(AnimationsItem.Overall);
+                            if (AnimationsItem.Specific != null)
+                            {
+                                foreach (var subItem in AnimationsItem.Specific)
+                                {
+                                    fg.AppendLine("[");
+                                    using (new DepthWrapper(fg))
+                                    {
+                                        fg.AppendItem(subItem);
+                                    }
+                                    fg.AppendLine("]");
+                                }
+                            }
+                        }
+                        fg.AppendLine("]");
+                    }
+                    if (printMask?.Unknown ?? true)
+                    {
+                        fg.AppendItem(Unknown, "Unknown");
+                    }
+                    if (printMask?.Model?.Overall ?? true)
+                    {
+                        Model?.ToString(fg);
+                    }
                 }
                 fg.AppendLine("]");
             }
@@ -184,12 +494,36 @@ namespace Mutagen.Bethesda.Fallout4
             Fallout4MajorRecord.ErrorMask,
             IErrorMask<ErrorMask>
         {
+            #region Members
+            public MaskItem<Exception?, ObjectBounds.ErrorMask?>? ObjectBounds;
+            public MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>? Keywords;
+            public Exception? Flags;
+            public Exception? IdleTimer;
+            public MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>? Animations;
+            public Exception? Unknown;
+            public MaskItem<Exception?, Model.ErrorMask?>? Model;
+            #endregion
+
             #region IErrorMask
             public override object? GetNthMask(int index)
             {
                 IdleMarker_FieldIndex enu = (IdleMarker_FieldIndex)index;
                 switch (enu)
                 {
+                    case IdleMarker_FieldIndex.ObjectBounds:
+                        return ObjectBounds;
+                    case IdleMarker_FieldIndex.Keywords:
+                        return Keywords;
+                    case IdleMarker_FieldIndex.Flags:
+                        return Flags;
+                    case IdleMarker_FieldIndex.IdleTimer:
+                        return IdleTimer;
+                    case IdleMarker_FieldIndex.Animations:
+                        return Animations;
+                    case IdleMarker_FieldIndex.Unknown:
+                        return Unknown;
+                    case IdleMarker_FieldIndex.Model:
+                        return Model;
                     default:
                         return base.GetNthMask(index);
                 }
@@ -200,6 +534,27 @@ namespace Mutagen.Bethesda.Fallout4
                 IdleMarker_FieldIndex enu = (IdleMarker_FieldIndex)index;
                 switch (enu)
                 {
+                    case IdleMarker_FieldIndex.ObjectBounds:
+                        this.ObjectBounds = new MaskItem<Exception?, ObjectBounds.ErrorMask?>(ex, null);
+                        break;
+                    case IdleMarker_FieldIndex.Keywords:
+                        this.Keywords = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ex, null);
+                        break;
+                    case IdleMarker_FieldIndex.Flags:
+                        this.Flags = ex;
+                        break;
+                    case IdleMarker_FieldIndex.IdleTimer:
+                        this.IdleTimer = ex;
+                        break;
+                    case IdleMarker_FieldIndex.Animations:
+                        this.Animations = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ex, null);
+                        break;
+                    case IdleMarker_FieldIndex.Unknown:
+                        this.Unknown = ex;
+                        break;
+                    case IdleMarker_FieldIndex.Model:
+                        this.Model = new MaskItem<Exception?, Model.ErrorMask?>(ex, null);
+                        break;
                     default:
                         base.SetNthException(index, ex);
                         break;
@@ -211,6 +566,27 @@ namespace Mutagen.Bethesda.Fallout4
                 IdleMarker_FieldIndex enu = (IdleMarker_FieldIndex)index;
                 switch (enu)
                 {
+                    case IdleMarker_FieldIndex.ObjectBounds:
+                        this.ObjectBounds = (MaskItem<Exception?, ObjectBounds.ErrorMask?>?)obj;
+                        break;
+                    case IdleMarker_FieldIndex.Keywords:
+                        this.Keywords = (MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>)obj;
+                        break;
+                    case IdleMarker_FieldIndex.Flags:
+                        this.Flags = (Exception?)obj;
+                        break;
+                    case IdleMarker_FieldIndex.IdleTimer:
+                        this.IdleTimer = (Exception?)obj;
+                        break;
+                    case IdleMarker_FieldIndex.Animations:
+                        this.Animations = (MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>)obj;
+                        break;
+                    case IdleMarker_FieldIndex.Unknown:
+                        this.Unknown = (Exception?)obj;
+                        break;
+                    case IdleMarker_FieldIndex.Model:
+                        this.Model = (MaskItem<Exception?, Model.ErrorMask?>?)obj;
+                        break;
                     default:
                         base.SetNthMask(index, obj);
                         break;
@@ -220,6 +596,13 @@ namespace Mutagen.Bethesda.Fallout4
             public override bool IsInError()
             {
                 if (Overall != null) return true;
+                if (ObjectBounds != null) return true;
+                if (Keywords != null) return true;
+                if (Flags != null) return true;
+                if (IdleTimer != null) return true;
+                if (Animations != null) return true;
+                if (Unknown != null) return true;
+                if (Model != null) return true;
                 return false;
             }
             #endregion
@@ -255,6 +638,55 @@ namespace Mutagen.Bethesda.Fallout4
             protected override void ToString_FillInternal(FileGeneration fg)
             {
                 base.ToString_FillInternal(fg);
+                ObjectBounds?.ToString(fg);
+                if (Keywords is {} KeywordsItem)
+                {
+                    fg.AppendLine("Keywords =>");
+                    fg.AppendLine("[");
+                    using (new DepthWrapper(fg))
+                    {
+                        fg.AppendItem(KeywordsItem.Overall);
+                        if (KeywordsItem.Specific != null)
+                        {
+                            foreach (var subItem in KeywordsItem.Specific)
+                            {
+                                fg.AppendLine("[");
+                                using (new DepthWrapper(fg))
+                                {
+                                    fg.AppendItem(subItem);
+                                }
+                                fg.AppendLine("]");
+                            }
+                        }
+                    }
+                    fg.AppendLine("]");
+                }
+                fg.AppendItem(Flags, "Flags");
+                fg.AppendItem(IdleTimer, "IdleTimer");
+                if (Animations is {} AnimationsItem)
+                {
+                    fg.AppendLine("Animations =>");
+                    fg.AppendLine("[");
+                    using (new DepthWrapper(fg))
+                    {
+                        fg.AppendItem(AnimationsItem.Overall);
+                        if (AnimationsItem.Specific != null)
+                        {
+                            foreach (var subItem in AnimationsItem.Specific)
+                            {
+                                fg.AppendLine("[");
+                                using (new DepthWrapper(fg))
+                                {
+                                    fg.AppendItem(subItem);
+                                }
+                                fg.AppendLine("]");
+                            }
+                        }
+                    }
+                    fg.AppendLine("]");
+                }
+                fg.AppendItem(Unknown, "Unknown");
+                Model?.ToString(fg);
             }
             #endregion
 
@@ -263,6 +695,13 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 if (rhs == null) return this;
                 var ret = new ErrorMask();
+                ret.ObjectBounds = this.ObjectBounds.Combine(rhs.ObjectBounds, (l, r) => l.Combine(r));
+                ret.Keywords = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ExceptionExt.Combine(this.Keywords?.Overall, rhs.Keywords?.Overall), ExceptionExt.Combine(this.Keywords?.Specific, rhs.Keywords?.Specific));
+                ret.Flags = this.Flags.Combine(rhs.Flags);
+                ret.IdleTimer = this.IdleTimer.Combine(rhs.IdleTimer);
+                ret.Animations = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ExceptionExt.Combine(this.Animations?.Overall, rhs.Animations?.Overall), ExceptionExt.Combine(this.Animations?.Specific, rhs.Animations?.Specific));
+                ret.Unknown = this.Unknown.Combine(rhs.Unknown);
+                ret.Model = this.Model.Combine(rhs.Model, (l, r) => l.Combine(r));
                 return ret;
             }
             public static ErrorMask? Combine(ErrorMask? lhs, ErrorMask? rhs)
@@ -284,15 +723,42 @@ namespace Mutagen.Bethesda.Fallout4
             Fallout4MajorRecord.TranslationMask,
             ITranslationMask
         {
+            #region Members
+            public ObjectBounds.TranslationMask? ObjectBounds;
+            public bool Keywords;
+            public bool Flags;
+            public bool IdleTimer;
+            public bool Animations;
+            public bool Unknown;
+            public Model.TranslationMask? Model;
+            #endregion
+
             #region Ctors
             public TranslationMask(
                 bool defaultOn,
                 bool onOverall = true)
                 : base(defaultOn, onOverall)
             {
+                this.Keywords = defaultOn;
+                this.Flags = defaultOn;
+                this.IdleTimer = defaultOn;
+                this.Animations = defaultOn;
+                this.Unknown = defaultOn;
             }
 
             #endregion
+
+            protected override void GetCrystal(List<(bool On, TranslationCrystal? SubCrystal)> ret)
+            {
+                base.GetCrystal(ret);
+                ret.Add((ObjectBounds != null ? ObjectBounds.OnOverall : DefaultOn, ObjectBounds?.GetCrystal()));
+                ret.Add((Keywords, null));
+                ret.Add((Flags, null));
+                ret.Add((IdleTimer, null));
+                ret.Add((Animations, null));
+                ret.Add((Unknown, null));
+                ret.Add((Model != null ? Model.OnOverall : DefaultOn, Model?.GetCrystal()));
+            }
 
             public static implicit operator TranslationMask(bool defaultOn)
             {
@@ -304,6 +770,8 @@ namespace Mutagen.Bethesda.Fallout4
 
         #region Mutagen
         public static readonly RecordType GrupRecordType = IdleMarker_Registration.TriggeringRecordType;
+        public override IEnumerable<IFormLinkGetter> ContainedFormLinks => IdleMarkerCommon.Instance.GetContainedFormLinks(this);
+        public override void RemapLinks(IReadOnlyDictionary<FormKey, FormKey> mapping) => IdleMarkerSetterCommon.Instance.RemapLinks(this, mapping);
         public IdleMarker(FormKey formKey)
         {
             this.FormKey = formKey;
@@ -346,6 +814,11 @@ namespace Mutagen.Bethesda.Fallout4
 
         protected override Type LinkType => typeof(IIdleMarker);
 
+        public MajorFlag MajorFlags
+        {
+            get => (MajorFlag)this.MajorRecordFlagsRaw;
+            set => this.MajorRecordFlagsRaw = (int)value;
+        }
         #region Equals and Hash
         public override bool Equals(object? obj)
         {
@@ -426,10 +899,35 @@ namespace Mutagen.Bethesda.Fallout4
     #region Interface
     public partial interface IIdleMarker :
         IFallout4MajorRecordInternal,
+        IFormLinkContainer,
         IIdleMarkerGetter,
+        IKeyworded<IKeywordGetter>,
         ILoquiObjectSetter<IIdleMarkerInternal>,
+        IModeled,
+        IObjectBounded,
+        IObjectBoundedOptional,
         IObjectId
     {
+        /// <summary>
+        /// Aspects: IObjectBounded, IObjectBoundedOptional
+        /// </summary>
+        new ObjectBounds ObjectBounds { get; set; }
+        /// <summary>
+        /// Aspects: IKeyworded&lt;IKeywordGetter&gt;
+        /// </summary>
+        new ExtendedList<IFormLinkGetter<IKeywordGetter>>? Keywords { get; set; }
+        new IdleMarker.Flag? Flags { get; set; }
+        new Single? IdleTimer { get; set; }
+        new ExtendedList<IFormLinkGetter<IIdleAnimationGetter>>? Animations { get; set; }
+        new IFormLinkNullable<IKeywordGetter> Unknown { get; set; }
+        /// <summary>
+        /// Aspects: IModeled
+        /// </summary>
+        new Model? Model { get; set; }
+        #region Mutagen
+        new IdleMarker.MajorFlag MajorFlags { get; set; }
+        #endregion
+
     }
 
     public partial interface IIdleMarkerInternal :
@@ -443,11 +941,42 @@ namespace Mutagen.Bethesda.Fallout4
     public partial interface IIdleMarkerGetter :
         IFallout4MajorRecordGetter,
         IBinaryItem,
+        IFormLinkContainerGetter,
+        IKeywordedGetter<IKeywordGetter>,
         ILoquiObject<IIdleMarkerGetter>,
         IMapsToGetter<IIdleMarkerGetter>,
+        IModeledGetter,
+        IObjectBoundedGetter,
+        IObjectBoundedOptionalGetter,
         IObjectIdGetter
     {
         static new ILoquiRegistration StaticRegistration => IdleMarker_Registration.Instance;
+        #region ObjectBounds
+        /// <summary>
+        /// Aspects: IObjectBoundedGetter, IObjectBoundedOptionalGetter
+        /// </summary>
+        IObjectBoundsGetter ObjectBounds { get; }
+        #endregion
+        #region Keywords
+        /// <summary>
+        /// Aspects: IKeywordedGetter&lt;IKeywordGetter&gt;
+        /// </summary>
+        IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? Keywords { get; }
+        #endregion
+        IdleMarker.Flag? Flags { get; }
+        Single? IdleTimer { get; }
+        IReadOnlyList<IFormLinkGetter<IIdleAnimationGetter>>? Animations { get; }
+        IFormLinkNullableGetter<IKeywordGetter> Unknown { get; }
+        #region Model
+        /// <summary>
+        /// Aspects: IModeledGetter
+        /// </summary>
+        IModelGetter? Model { get; }
+        #endregion
+
+        #region Mutagen
+        IdleMarker.MajorFlag MajorFlags { get; }
+        #endregion
 
     }
 
@@ -612,6 +1141,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         EditorID = 3,
         FormVersion = 4,
         Version2 = 5,
+        ObjectBounds = 6,
+        Keywords = 7,
+        Flags = 8,
+        IdleTimer = 9,
+        Animations = 10,
+        Unknown = 11,
+        Model = 12,
     }
     #endregion
 
@@ -624,14 +1160,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public static readonly ObjectKey ObjectKey = new ObjectKey(
             protocolKey: ProtocolDefinition_Fallout4.ProtocolKey,
-            msgID: 232,
+            msgID: 233,
             version: 0);
 
-        public const string GUID = "cd13f861-e1bc-4d00-860c-477d1c5ad2bf";
+        public const string GUID = "50c1215a-a33e-41ac-87a8-9b94874cb2ef";
 
-        public const ushort AdditionalFieldCount = 0;
+        public const ushort AdditionalFieldCount = 7;
 
-        public const ushort FieldCount = 6;
+        public const ushort FieldCount = 13;
 
         public static readonly Type MaskType = typeof(IdleMarker.Mask<>);
 
@@ -700,6 +1236,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public void Clear(IIdleMarkerInternal item)
         {
             ClearPartial();
+            item.ObjectBounds.Clear();
+            item.Keywords = null;
+            item.Flags = default;
+            item.IdleTimer = default;
+            item.Animations = null;
+            item.Unknown.Clear();
+            item.Model = null;
             base.Clear(item);
         }
         
@@ -717,6 +1260,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public void RemapLinks(IIdleMarker obj, IReadOnlyDictionary<FormKey, FormKey> mapping)
         {
             base.RemapLinks(obj, mapping);
+            obj.Keywords?.RemapLinks(mapping);
+            obj.Animations?.RemapLinks(mapping);
+            obj.Unknown.Relink(mapping);
+            obj.Model?.RemapLinks(mapping);
         }
         
         #endregion
@@ -785,6 +1332,23 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             EqualsMaskHelper.Include include = EqualsMaskHelper.Include.All)
         {
             if (rhs == null) return;
+            ret.ObjectBounds = MaskItemExt.Factory(item.ObjectBounds.GetEqualsMask(rhs.ObjectBounds, include), include);
+            ret.Keywords = item.Keywords.CollectionEqualsHelper(
+                rhs.Keywords,
+                (l, r) => object.Equals(l, r),
+                include);
+            ret.Flags = item.Flags == rhs.Flags;
+            ret.IdleTimer = item.IdleTimer.EqualsWithin(rhs.IdleTimer);
+            ret.Animations = item.Animations.CollectionEqualsHelper(
+                rhs.Animations,
+                (l, r) => object.Equals(l, r),
+                include);
+            ret.Unknown = item.Unknown.Equals(rhs.Unknown);
+            ret.Model = EqualsMaskHelper.EqualsHelper(
+                item.Model,
+                rhs.Model,
+                (loqLhs, loqRhs, incl) => loqLhs.GetEqualsMask(loqRhs, incl),
+                include);
             base.FillEqualsMask(item, rhs, ret, include);
         }
         
@@ -836,6 +1400,67 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 item: item,
                 fg: fg,
                 printMask: printMask);
+            if (printMask?.ObjectBounds?.Overall ?? true)
+            {
+                item.ObjectBounds?.ToString(fg, "ObjectBounds");
+            }
+            if ((printMask?.Keywords?.Overall ?? true)
+                && item.Keywords is {} KeywordsItem)
+            {
+                fg.AppendLine("Keywords =>");
+                fg.AppendLine("[");
+                using (new DepthWrapper(fg))
+                {
+                    foreach (var subItem in KeywordsItem)
+                    {
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            fg.AppendItem(subItem.FormKey);
+                        }
+                        fg.AppendLine("]");
+                    }
+                }
+                fg.AppendLine("]");
+            }
+            if ((printMask?.Flags ?? true)
+                && item.Flags is {} FlagsItem)
+            {
+                fg.AppendItem(FlagsItem, "Flags");
+            }
+            if ((printMask?.IdleTimer ?? true)
+                && item.IdleTimer is {} IdleTimerItem)
+            {
+                fg.AppendItem(IdleTimerItem, "IdleTimer");
+            }
+            if ((printMask?.Animations?.Overall ?? true)
+                && item.Animations is {} AnimationsItem)
+            {
+                fg.AppendLine("Animations =>");
+                fg.AppendLine("[");
+                using (new DepthWrapper(fg))
+                {
+                    foreach (var subItem in AnimationsItem)
+                    {
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            fg.AppendItem(subItem.FormKey);
+                        }
+                        fg.AppendLine("]");
+                    }
+                }
+                fg.AppendLine("]");
+            }
+            if (printMask?.Unknown ?? true)
+            {
+                fg.AppendItem(item.Unknown.FormKeyNullable, "Unknown");
+            }
+            if ((printMask?.Model?.Overall ?? true)
+                && item.Model is {} ModelItem)
+            {
+                ModelItem?.ToString(fg, "Model");
+            }
         }
         
         public static IdleMarker_FieldIndex ConvertFieldIndex(Fallout4MajorRecord_FieldIndex index)
@@ -884,6 +1509,42 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         {
             if (!EqualsMaskHelper.RefEquality(lhs, rhs, out var isEqual)) return isEqual;
             if (!base.Equals((IFallout4MajorRecordGetter)lhs, (IFallout4MajorRecordGetter)rhs, crystal)) return false;
+            if ((crystal?.GetShouldTranslate((int)IdleMarker_FieldIndex.ObjectBounds) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.ObjectBounds, rhs.ObjectBounds, out var lhsObjectBounds, out var rhsObjectBounds, out var isObjectBoundsEqual))
+                {
+                    if (!((ObjectBoundsCommon)((IObjectBoundsGetter)lhsObjectBounds).CommonInstance()!).Equals(lhsObjectBounds, rhsObjectBounds, crystal?.GetSubCrystal((int)IdleMarker_FieldIndex.ObjectBounds))) return false;
+                }
+                else if (!isObjectBoundsEqual) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)IdleMarker_FieldIndex.Keywords) ?? true))
+            {
+                if (!lhs.Keywords.SequenceEqualNullable(rhs.Keywords)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)IdleMarker_FieldIndex.Flags) ?? true))
+            {
+                if (lhs.Flags != rhs.Flags) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)IdleMarker_FieldIndex.IdleTimer) ?? true))
+            {
+                if (!lhs.IdleTimer.EqualsWithin(rhs.IdleTimer)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)IdleMarker_FieldIndex.Animations) ?? true))
+            {
+                if (!lhs.Animations.SequenceEqualNullable(rhs.Animations)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)IdleMarker_FieldIndex.Unknown) ?? true))
+            {
+                if (!lhs.Unknown.Equals(rhs.Unknown)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)IdleMarker_FieldIndex.Model) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.Model, rhs.Model, out var lhsModel, out var rhsModel, out var isModelEqual))
+                {
+                    if (!((ModelCommon)((IModelGetter)lhsModel).CommonInstance()!).Equals(lhsModel, rhsModel, crystal?.GetSubCrystal((int)IdleMarker_FieldIndex.Model))) return false;
+                }
+                else if (!isModelEqual) return false;
+            }
             return true;
         }
         
@@ -912,6 +1573,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public virtual int GetHashCode(IIdleMarkerGetter item)
         {
             var hash = new HashCode();
+            hash.Add(item.ObjectBounds);
+            hash.Add(item.Keywords);
+            if (item.Flags is {} Flagsitem)
+            {
+                hash.Add(Flagsitem);
+            }
+            if (item.IdleTimer is {} IdleTimeritem)
+            {
+                hash.Add(IdleTimeritem);
+            }
+            hash.Add(item.Animations);
+            hash.Add(item.Unknown);
+            if (item.Model is {} Modelitem)
+            {
+                hash.Add(Modelitem);
+            }
             hash.Add(base.GetHashCode());
             return hash.ToHashCode();
         }
@@ -940,6 +1617,31 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             foreach (var item in base.GetContainedFormLinks(obj))
             {
                 yield return item;
+            }
+            if (obj.Keywords is {} KeywordsItem)
+            {
+                foreach (var item in KeywordsItem)
+                {
+                    yield return FormLinkInformation.Factory(item);
+                }
+            }
+            if (obj.Animations is {} AnimationsItem)
+            {
+                foreach (var item in AnimationsItem)
+                {
+                    yield return FormLinkInformation.Factory(item);
+                }
+            }
+            if (obj.Unknown.FormKeyNullable.HasValue)
+            {
+                yield return FormLinkInformation.Factory(obj.Unknown);
+            }
+            if (obj.Model is {} ModelItems)
+            {
+                foreach (var item in ModelItems.ContainedFormLinks)
+                {
+                    yield return item;
+                }
             }
             yield break;
         }
@@ -1015,6 +1717,120 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 errorMask,
                 copyMask,
                 deepCopy: deepCopy);
+            if ((copyMask?.GetShouldTranslate((int)IdleMarker_FieldIndex.ObjectBounds) ?? true))
+            {
+                errorMask?.PushIndex((int)IdleMarker_FieldIndex.ObjectBounds);
+                try
+                {
+                    if ((copyMask?.GetShouldTranslate((int)IdleMarker_FieldIndex.ObjectBounds) ?? true))
+                    {
+                        item.ObjectBounds = rhs.ObjectBounds.DeepCopy(
+                            copyMask: copyMask?.GetSubCrystal((int)IdleMarker_FieldIndex.ObjectBounds),
+                            errorMask: errorMask);
+                    }
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)IdleMarker_FieldIndex.Keywords) ?? true))
+            {
+                errorMask?.PushIndex((int)IdleMarker_FieldIndex.Keywords);
+                try
+                {
+                    if ((rhs.Keywords != null))
+                    {
+                        item.Keywords = 
+                            rhs.Keywords
+                            .Select(r => (IFormLinkGetter<IKeywordGetter>)new FormLink<IKeywordGetter>(r.FormKey))
+                            .ToExtendedList<IFormLinkGetter<IKeywordGetter>>();
+                    }
+                    else
+                    {
+                        item.Keywords = null;
+                    }
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)IdleMarker_FieldIndex.Flags) ?? true))
+            {
+                item.Flags = rhs.Flags;
+            }
+            if ((copyMask?.GetShouldTranslate((int)IdleMarker_FieldIndex.IdleTimer) ?? true))
+            {
+                item.IdleTimer = rhs.IdleTimer;
+            }
+            if ((copyMask?.GetShouldTranslate((int)IdleMarker_FieldIndex.Animations) ?? true))
+            {
+                errorMask?.PushIndex((int)IdleMarker_FieldIndex.Animations);
+                try
+                {
+                    if ((rhs.Animations != null))
+                    {
+                        item.Animations = 
+                            rhs.Animations
+                            .Select(r => (IFormLinkGetter<IIdleAnimationGetter>)new FormLink<IIdleAnimationGetter>(r.FormKey))
+                            .ToExtendedList<IFormLinkGetter<IIdleAnimationGetter>>();
+                    }
+                    else
+                    {
+                        item.Animations = null;
+                    }
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)IdleMarker_FieldIndex.Unknown) ?? true))
+            {
+                item.Unknown.SetTo(rhs.Unknown.FormKeyNullable);
+            }
+            if ((copyMask?.GetShouldTranslate((int)IdleMarker_FieldIndex.Model) ?? true))
+            {
+                errorMask?.PushIndex((int)IdleMarker_FieldIndex.Model);
+                try
+                {
+                    if(rhs.Model is {} rhsModel)
+                    {
+                        item.Model = rhsModel.DeepCopy(
+                            errorMask: errorMask,
+                            copyMask?.GetSubCrystal((int)IdleMarker_FieldIndex.Model));
+                    }
+                    else
+                    {
+                        item.Model = default;
+                    }
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
         }
         
         public override void DeepCopyIn(
@@ -1163,6 +1979,86 @@ namespace Mutagen.Bethesda.Fallout4.Internals
     {
         public new readonly static IdleMarkerBinaryWriteTranslation Instance = new IdleMarkerBinaryWriteTranslation();
 
+        public static void WriteRecordTypes(
+            IIdleMarkerGetter item,
+            MutagenWriter writer,
+            TypedWriteParams? translationParams)
+        {
+            MajorRecordBinaryWriteTranslation.WriteRecordTypes(
+                item: item,
+                writer: writer,
+                translationParams: translationParams);
+            var ObjectBoundsItem = item.ObjectBounds;
+            ((ObjectBoundsBinaryWriteTranslation)((IBinaryItem)ObjectBoundsItem).BinaryWriteTranslator).Write(
+                item: ObjectBoundsItem,
+                writer: writer,
+                translationParams: translationParams);
+            Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IFormLinkGetter<IKeywordGetter>>.Instance.WriteWithCounter(
+                writer: writer,
+                items: item.Keywords,
+                counterType: RecordTypes.KSIZ,
+                counterLength: 4,
+                recordType: translationParams.ConvertToCustom(RecordTypes.KWDA),
+                transl: (MutagenWriter subWriter, IFormLinkGetter<IKeywordGetter> subItem, TypedWriteParams? conv) =>
+                {
+                    FormLinkBinaryTranslation.Instance.Write(
+                        writer: subWriter,
+                        item: subItem);
+                });
+            EnumBinaryTranslation<IdleMarker.Flag, MutagenFrame, MutagenWriter>.Instance.WriteNullable(
+                writer,
+                item.Flags,
+                length: 1,
+                header: translationParams.ConvertToCustom(RecordTypes.IDLF));
+            IdleMarkerBinaryWriteTranslation.WriteBinaryAnimationCount(
+                writer: writer,
+                item: item);
+            FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.WriteNullable(
+                writer: writer,
+                item: item.IdleTimer,
+                header: translationParams.ConvertToCustom(RecordTypes.IDLT));
+            IdleMarkerBinaryWriteTranslation.WriteBinaryAnimations(
+                writer: writer,
+                item: item);
+            FormLinkBinaryTranslation.Instance.WriteNullable(
+                writer: writer,
+                item: item.Unknown,
+                header: translationParams.ConvertToCustom(RecordTypes.QNAM));
+            if (item.Model is {} ModelItem)
+            {
+                ((ModelBinaryWriteTranslation)((IBinaryItem)ModelItem).BinaryWriteTranslator).Write(
+                    item: ModelItem,
+                    writer: writer,
+                    translationParams: translationParams);
+            }
+        }
+
+        public static partial void WriteBinaryAnimationCountCustom(
+            MutagenWriter writer,
+            IIdleMarkerGetter item);
+
+        public static void WriteBinaryAnimationCount(
+            MutagenWriter writer,
+            IIdleMarkerGetter item)
+        {
+            WriteBinaryAnimationCountCustom(
+                writer: writer,
+                item: item);
+        }
+
+        public static partial void WriteBinaryAnimationsCustom(
+            MutagenWriter writer,
+            IIdleMarkerGetter item);
+
+        public static void WriteBinaryAnimations(
+            MutagenWriter writer,
+            IIdleMarkerGetter item)
+        {
+            WriteBinaryAnimationsCustom(
+                writer: writer,
+                item: item);
+        }
+
         public void Write(
             MutagenWriter writer,
             IIdleMarkerGetter item,
@@ -1177,10 +2073,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     Fallout4MajorRecordBinaryWriteTranslation.WriteEmbedded(
                         item: item,
                         writer: writer);
-                    MajorRecordBinaryWriteTranslation.WriteRecordTypes(
+                    writer.MetaData.FormVersion = item.FormVersion;
+                    WriteRecordTypes(
                         item: item,
                         writer: writer,
                         translationParams: translationParams);
+                    writer.MetaData.FormVersion = null;
                 }
                 catch (Exception ex)
                 {
@@ -1238,6 +2136,95 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 frame: frame);
         }
 
+        public static ParseResult FillBinaryRecordTypes(
+            IIdleMarkerInternal item,
+            MutagenFrame frame,
+            PreviousParse lastParsed,
+            Dictionary<RecordType, int>? recordParseCount,
+            RecordType nextRecordType,
+            int contentLength,
+            TypedParseParams? translationParams = null)
+        {
+            nextRecordType = translationParams.ConvertToStandard(nextRecordType);
+            switch (nextRecordType.TypeInt)
+            {
+                case RecordTypeInts.OBND:
+                {
+                    item.ObjectBounds = Mutagen.Bethesda.Fallout4.ObjectBounds.CreateFromBinary(frame: frame);
+                    return (int)IdleMarker_FieldIndex.ObjectBounds;
+                }
+                case RecordTypeInts.KWDA:
+                case RecordTypeInts.KSIZ:
+                {
+                    item.Keywords = 
+                        Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IFormLinkGetter<IKeywordGetter>>.Instance.Parse(
+                            reader: frame,
+                            countLengthLength: 4,
+                            countRecord: translationParams.ConvertToCustom(RecordTypes.KSIZ),
+                            triggeringRecord: translationParams.ConvertToCustom(RecordTypes.KWDA),
+                            transl: FormLinkBinaryTranslation.Instance.Parse)
+                        .CastExtendedList<IFormLinkGetter<IKeywordGetter>>();
+                    return (int)IdleMarker_FieldIndex.Keywords;
+                }
+                case RecordTypeInts.IDLF:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.Flags = EnumBinaryTranslation<IdleMarker.Flag, MutagenFrame, MutagenWriter>.Instance.Parse(
+                        reader: frame,
+                        length: contentLength);
+                    return (int)IdleMarker_FieldIndex.Flags;
+                }
+                case RecordTypeInts.IDLC:
+                {
+                    return IdleMarkerBinaryCreateTranslation.FillBinaryAnimationCountCustom(
+                        frame: frame.SpawnWithLength(frame.MetaData.Constants.SubConstants.HeaderLength + contentLength),
+                        item: item);
+                }
+                case RecordTypeInts.IDLT:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.IdleTimer = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: frame.SpawnWithLength(contentLength));
+                    return (int)IdleMarker_FieldIndex.IdleTimer;
+                }
+                case RecordTypeInts.IDLA:
+                {
+                    IdleMarkerBinaryCreateTranslation.FillBinaryAnimationsCustom(
+                        frame: frame.SpawnWithLength(frame.MetaData.Constants.SubConstants.HeaderLength + contentLength),
+                        item: item);
+                    return (int)IdleMarker_FieldIndex.Animations;
+                }
+                case RecordTypeInts.QNAM:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.Unknown.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    return (int)IdleMarker_FieldIndex.Unknown;
+                }
+                case RecordTypeInts.MODL:
+                {
+                    item.Model = Mutagen.Bethesda.Fallout4.Model.CreateFromBinary(
+                        frame: frame,
+                        translationParams: translationParams);
+                    return (int)IdleMarker_FieldIndex.Model;
+                }
+                default:
+                    return Fallout4MajorRecordBinaryCreateTranslation.FillBinaryRecordTypes(
+                        item: item,
+                        frame: frame,
+                        lastParsed: lastParsed,
+                        recordParseCount: recordParseCount,
+                        nextRecordType: nextRecordType,
+                        contentLength: contentLength);
+            }
+        }
+
+        public static partial ParseResult FillBinaryAnimationCountCustom(
+            MutagenFrame frame,
+            IIdleMarkerInternal item);
+
+        public static partial void FillBinaryAnimationsCustom(
+            MutagenFrame frame,
+            IIdleMarkerInternal item);
+
     }
 
 }
@@ -1270,6 +2257,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         void IPrintable.ToString(FileGeneration fg, string? name) => this.ToString(fg, name);
 
+        public override IEnumerable<IFormLinkGetter> ContainedFormLinks => IdleMarkerCommon.Instance.GetContainedFormLinks(this);
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override object BinaryWriteTranslator => IdleMarkerBinaryWriteTranslation.Instance;
         void IBinaryItem.WriteToBinary(
@@ -1283,7 +2271,43 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         protected override Type LinkType => typeof(IIdleMarker);
 
+        public IdleMarker.MajorFlag MajorFlags => (IdleMarker.MajorFlag)this.MajorRecordFlagsRaw;
 
+        #region ObjectBounds
+        private RangeInt32? _ObjectBoundsLocation;
+        private IObjectBoundsGetter? _ObjectBounds => _ObjectBoundsLocation.HasValue ? ObjectBoundsBinaryOverlay.ObjectBoundsFactory(new OverlayStream(_data.Slice(_ObjectBoundsLocation!.Value.Min), _package), _package) : default;
+        public IObjectBoundsGetter ObjectBounds => _ObjectBounds ?? new ObjectBounds();
+        #endregion
+        #region Keywords
+        public IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? Keywords { get; private set; }
+        IReadOnlyList<IFormLinkGetter<IKeywordCommonGetter>>? IKeywordedGetter.Keywords => this.Keywords;
+        #endregion
+        #region Flags
+        private int? _FlagsLocation;
+        public IdleMarker.Flag? Flags => _FlagsLocation.HasValue ? (IdleMarker.Flag)HeaderTranslation.ExtractSubrecordMemory(_data, _FlagsLocation!.Value, _package.MetaData.Constants)[0] : default(IdleMarker.Flag?);
+        #endregion
+        #region AnimationCount
+        public partial ParseResult AnimationCountCustomParse(
+            OverlayStream stream,
+            int offset);
+        #endregion
+        #region IdleTimer
+        private int? _IdleTimerLocation;
+        public Single? IdleTimer => _IdleTimerLocation.HasValue ? HeaderTranslation.ExtractSubrecordMemory(_data, _IdleTimerLocation.Value, _package.MetaData.Constants).Float() : default(Single?);
+        #endregion
+        #region Animations
+        partial void AnimationsCustomParse(
+            OverlayStream stream,
+            long finalPos,
+            int offset,
+            RecordType type,
+            PreviousParse lastParsed);
+        #endregion
+        #region Unknown
+        private int? _UnknownLocation;
+        public IFormLinkNullableGetter<IKeywordGetter> Unknown => _UnknownLocation.HasValue ? new FormLinkNullable<IKeywordGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _UnknownLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<IKeywordGetter>.Null;
+        #endregion
+        public IModelGetter? Model { get; private set; }
         partial void CustomFactoryEnd(
             OverlayStream stream,
             int finalPos,
@@ -1338,6 +2362,85 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 parseParams: parseParams);
         }
 
+        public override ParseResult FillRecordType(
+            OverlayStream stream,
+            int finalPos,
+            int offset,
+            RecordType type,
+            PreviousParse lastParsed,
+            Dictionary<RecordType, int>? recordParseCount,
+            TypedParseParams? parseParams = null)
+        {
+            type = parseParams.ConvertToStandard(type);
+            switch (type.TypeInt)
+            {
+                case RecordTypeInts.OBND:
+                {
+                    _ObjectBoundsLocation = new RangeInt32((stream.Position - offset), finalPos - offset);
+                    return (int)IdleMarker_FieldIndex.ObjectBounds;
+                }
+                case RecordTypeInts.KWDA:
+                case RecordTypeInts.KSIZ:
+                {
+                    this.Keywords = BinaryOverlayList.FactoryByCount<IFormLinkGetter<IKeywordGetter>>(
+                        stream: stream,
+                        package: _package,
+                        itemLength: 0x4,
+                        countLength: 4,
+                        countType: RecordTypes.KSIZ,
+                        subrecordType: RecordTypes.KWDA,
+                        getter: (s, p) => new FormLink<IKeywordGetter>(FormKey.Factory(p.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(s))));
+                    return (int)IdleMarker_FieldIndex.Keywords;
+                }
+                case RecordTypeInts.IDLF:
+                {
+                    _FlagsLocation = (stream.Position - offset);
+                    return (int)IdleMarker_FieldIndex.Flags;
+                }
+                case RecordTypeInts.IDLC:
+                {
+                    return AnimationCountCustomParse(
+                        stream,
+                        offset);
+                }
+                case RecordTypeInts.IDLT:
+                {
+                    _IdleTimerLocation = (stream.Position - offset);
+                    return (int)IdleMarker_FieldIndex.IdleTimer;
+                }
+                case RecordTypeInts.IDLA:
+                {
+                    AnimationsCustomParse(
+                        stream: stream,
+                        finalPos: finalPos,
+                        offset: offset,
+                        type: type,
+                        lastParsed: lastParsed);
+                    return (int)IdleMarker_FieldIndex.Animations;
+                }
+                case RecordTypeInts.QNAM:
+                {
+                    _UnknownLocation = (stream.Position - offset);
+                    return (int)IdleMarker_FieldIndex.Unknown;
+                }
+                case RecordTypeInts.MODL:
+                {
+                    this.Model = ModelBinaryOverlay.ModelFactory(
+                        stream: stream,
+                        package: _package,
+                        parseParams: parseParams);
+                    return (int)IdleMarker_FieldIndex.Model;
+                }
+                default:
+                    return base.FillRecordType(
+                        stream: stream,
+                        finalPos: finalPos,
+                        offset: offset,
+                        type: type,
+                        lastParsed: lastParsed,
+                        recordParseCount: recordParseCount);
+            }
+        }
         #region To String
 
         public override void ToString(
