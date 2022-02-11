@@ -17,8 +17,6 @@ using Mutagen.Bethesda.Plugins.Binary.Translations;
 using Mutagen.Bethesda.Plugins.Exceptions;
 using Mutagen.Bethesda.Plugins.Records;
 using Mutagen.Bethesda.Plugins.Records.Internals;
-using Mutagen.Bethesda.Plugins.RecordTypeMapping;
-using Mutagen.Bethesda.Plugins.Utility;
 using Mutagen.Bethesda.Translations.Binary;
 using Noggog;
 using System;
@@ -37,20 +35,12 @@ using System.Text;
 namespace Mutagen.Bethesda.Fallout4
 {
     #region Class
-    public partial class Weapon :
-        Fallout4MajorRecord,
-        IEquatable<IWeaponGetter>,
-        ILoquiObjectSetter<Weapon>,
-        IWeaponInternal
+    public partial class MagicEffectPeakValueModArchetype :
+        MagicEffectArchetype,
+        IEquatable<IMagicEffectPeakValueModArchetypeGetter>,
+        ILoquiObjectSetter<MagicEffectPeakValueModArchetype>,
+        IMagicEffectPeakValueModArchetypeInternal
     {
-        #region Ctor
-        protected Weapon()
-        {
-            CustomCtor();
-        }
-        partial void CustomCtor();
-        #endregion
-
 
         #region To String
 
@@ -58,16 +48,32 @@ namespace Mutagen.Bethesda.Fallout4
             FileGeneration fg,
             string? name = null)
         {
-            WeaponMixIn.ToString(
+            MagicEffectPeakValueModArchetypeMixIn.ToString(
                 item: this,
                 name: name);
         }
 
         #endregion
 
+        #region Equals and Hash
+        public override bool Equals(object? obj)
+        {
+            if (obj is not IMagicEffectPeakValueModArchetypeGetter rhs) return false;
+            return ((MagicEffectPeakValueModArchetypeCommon)((IMagicEffectPeakValueModArchetypeGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
+        }
+
+        public bool Equals(IMagicEffectPeakValueModArchetypeGetter? obj)
+        {
+            return ((MagicEffectPeakValueModArchetypeCommon)((IMagicEffectPeakValueModArchetypeGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
+        }
+
+        public override int GetHashCode() => ((MagicEffectPeakValueModArchetypeCommon)((IMagicEffectPeakValueModArchetypeGetter)this).CommonInstance()!).GetHashCode(this);
+
+        #endregion
+
         #region Mask
         public new class Mask<TItem> :
-            Fallout4MajorRecord.Mask<TItem>,
+            MagicEffectArchetype.Mask<TItem>,
             IEquatable<Mask<TItem>>,
             IMask<TItem>
         {
@@ -78,19 +84,13 @@ namespace Mutagen.Bethesda.Fallout4
             }
 
             public Mask(
-                TItem MajorRecordFlagsRaw,
-                TItem FormKey,
-                TItem VersionControl,
-                TItem EditorID,
-                TItem FormVersion,
-                TItem Version2)
+                TItem Type,
+                TItem AssociationKey,
+                TItem ActorValue)
             : base(
-                MajorRecordFlagsRaw: MajorRecordFlagsRaw,
-                FormKey: FormKey,
-                VersionControl: VersionControl,
-                EditorID: EditorID,
-                FormVersion: FormVersion,
-                Version2: Version2)
+                Type: Type,
+                AssociationKey: AssociationKey,
+                ActorValue: ActorValue)
             {
             }
 
@@ -143,7 +143,7 @@ namespace Mutagen.Bethesda.Fallout4
             #region Translate
             public new Mask<R> Translate<R>(Func<TItem, R> eval)
             {
-                var ret = new Weapon.Mask<R>();
+                var ret = new MagicEffectPeakValueModArchetype.Mask<R>();
                 this.Translate_InternalFill(ret, eval);
                 return ret;
             }
@@ -160,16 +160,16 @@ namespace Mutagen.Bethesda.Fallout4
                 return ToString(printMask: null);
             }
 
-            public string ToString(Weapon.Mask<bool>? printMask = null)
+            public string ToString(MagicEffectPeakValueModArchetype.Mask<bool>? printMask = null)
             {
                 var fg = new FileGeneration();
                 ToString(fg, printMask);
                 return fg.ToString();
             }
 
-            public void ToString(FileGeneration fg, Weapon.Mask<bool>? printMask = null)
+            public void ToString(FileGeneration fg, MagicEffectPeakValueModArchetype.Mask<bool>? printMask = null)
             {
-                fg.AppendLine($"{nameof(Weapon.Mask<TItem>)} =>");
+                fg.AppendLine($"{nameof(MagicEffectPeakValueModArchetype.Mask<TItem>)} =>");
                 fg.AppendLine("[");
                 using (new DepthWrapper(fg))
                 {
@@ -181,13 +181,13 @@ namespace Mutagen.Bethesda.Fallout4
         }
 
         public new class ErrorMask :
-            Fallout4MajorRecord.ErrorMask,
+            MagicEffectArchetype.ErrorMask,
             IErrorMask<ErrorMask>
         {
             #region IErrorMask
             public override object? GetNthMask(int index)
             {
-                Weapon_FieldIndex enu = (Weapon_FieldIndex)index;
+                MagicEffectPeakValueModArchetype_FieldIndex enu = (MagicEffectPeakValueModArchetype_FieldIndex)index;
                 switch (enu)
                 {
                     default:
@@ -197,7 +197,7 @@ namespace Mutagen.Bethesda.Fallout4
 
             public override void SetNthException(int index, Exception ex)
             {
-                Weapon_FieldIndex enu = (Weapon_FieldIndex)index;
+                MagicEffectPeakValueModArchetype_FieldIndex enu = (MagicEffectPeakValueModArchetype_FieldIndex)index;
                 switch (enu)
                 {
                     default:
@@ -208,7 +208,7 @@ namespace Mutagen.Bethesda.Fallout4
 
             public override void SetNthMask(int index, object obj)
             {
-                Weapon_FieldIndex enu = (Weapon_FieldIndex)index;
+                MagicEffectPeakValueModArchetype_FieldIndex enu = (MagicEffectPeakValueModArchetype_FieldIndex)index;
                 switch (enu)
                 {
                     default:
@@ -281,7 +281,7 @@ namespace Mutagen.Bethesda.Fallout4
 
         }
         public new class TranslationMask :
-            Fallout4MajorRecord.TranslationMask,
+            MagicEffectArchetype.TranslationMask,
             ITranslationMask
         {
             #region Ctors
@@ -303,90 +303,29 @@ namespace Mutagen.Bethesda.Fallout4
         #endregion
 
         #region Mutagen
-        public static readonly RecordType GrupRecordType = Weapon_Registration.TriggeringRecordType;
-        public Weapon(FormKey formKey)
-        {
-            this.FormKey = formKey;
-            CustomCtor();
-        }
-
-        private Weapon(
-            FormKey formKey,
-            GameRelease gameRelease)
-        {
-            this.FormKey = formKey;
-            this.FormVersion = gameRelease.GetDefaultFormVersion()!.Value;
-            CustomCtor();
-        }
-
-        internal Weapon(
-            FormKey formKey,
-            ushort formVersion)
-        {
-            this.FormKey = formKey;
-            this.FormVersion = formVersion;
-            CustomCtor();
-        }
-
-        public Weapon(IFallout4Mod mod)
-            : this(mod.GetNextFormKey())
-        {
-        }
-
-        public Weapon(IFallout4Mod mod, string editorID)
-            : this(mod.GetNextFormKey(editorID))
-        {
-            this.EditorID = editorID;
-        }
-
-        public override string ToString()
-        {
-            return MajorRecordPrinter<Weapon>.ToString(this);
-        }
-
-        protected override Type LinkType => typeof(IWeapon);
-
-        #region Equals and Hash
-        public override bool Equals(object? obj)
-        {
-            if (obj is IFormLinkGetter formLink)
-            {
-                return formLink.Equals(this);
-            }
-            if (obj is not IWeaponGetter rhs) return false;
-            return ((WeaponCommon)((IWeaponGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
-        }
-
-        public bool Equals(IWeaponGetter? obj)
-        {
-            return ((WeaponCommon)((IWeaponGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
-        }
-
-        public override int GetHashCode() => ((WeaponCommon)((IWeaponGetter)this).CommonInstance()!).GetHashCode(this);
-
-        #endregion
-
+        public override IEnumerable<IFormLinkGetter> ContainedFormLinks => MagicEffectPeakValueModArchetypeCommon.Instance.GetContainedFormLinks(this);
+        public override void RemapLinks(IReadOnlyDictionary<FormKey, FormKey> mapping) => MagicEffectPeakValueModArchetypeSetterCommon.Instance.RemapLinks(this, mapping);
         #endregion
 
         #region Binary Translation
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected override object BinaryWriteTranslator => WeaponBinaryWriteTranslation.Instance;
+        protected override object BinaryWriteTranslator => MagicEffectPeakValueModArchetypeBinaryWriteTranslation.Instance;
         void IBinaryItem.WriteToBinary(
             MutagenWriter writer,
             TypedWriteParams? translationParams = null)
         {
-            ((WeaponBinaryWriteTranslation)this.BinaryWriteTranslator).Write(
+            ((MagicEffectPeakValueModArchetypeBinaryWriteTranslation)this.BinaryWriteTranslator).Write(
                 item: this,
                 writer: writer,
                 translationParams: translationParams);
         }
         #region Binary Create
-        public new static Weapon CreateFromBinary(
+        public new static MagicEffectPeakValueModArchetype CreateFromBinary(
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
-            var ret = new Weapon();
-            ((WeaponSetterCommon)((IWeaponGetter)ret).CommonSetterInstance()!).CopyInFromBinary(
+            var ret = new MagicEffectPeakValueModArchetype();
+            ((MagicEffectPeakValueModArchetypeSetterCommon)((IMagicEffectPeakValueModArchetypeGetter)ret).CommonSetterInstance()!).CopyInFromBinary(
                 item: ret,
                 frame: frame,
                 translationParams: translationParams);
@@ -397,7 +336,7 @@ namespace Mutagen.Bethesda.Fallout4
 
         public static bool TryCreateFromBinary(
             MutagenFrame frame,
-            out Weapon item,
+            out MagicEffectPeakValueModArchetype item,
             TypedParseParams? translationParams = null)
         {
             var startPos = frame.Position;
@@ -412,84 +351,80 @@ namespace Mutagen.Bethesda.Fallout4
 
         void IClearable.Clear()
         {
-            ((WeaponSetterCommon)((IWeaponGetter)this).CommonSetterInstance()!).Clear(this);
+            ((MagicEffectPeakValueModArchetypeSetterCommon)((IMagicEffectPeakValueModArchetypeGetter)this).CommonSetterInstance()!).Clear(this);
         }
 
-        internal static new Weapon GetNew()
+        internal static new MagicEffectPeakValueModArchetype GetNew()
         {
-            return new Weapon();
+            return new MagicEffectPeakValueModArchetype();
         }
 
     }
     #endregion
 
     #region Interface
-    public partial interface IWeapon :
-        IFallout4MajorRecordInternal,
-        ILoquiObjectSetter<IWeaponInternal>,
-        IObjectId,
-        IWeaponGetter
+    public partial interface IMagicEffectPeakValueModArchetype :
+        ILoquiObjectSetter<IMagicEffectPeakValueModArchetypeInternal>,
+        IMagicEffectArchetypeInternal,
+        IMagicEffectPeakValueModArchetypeGetter
     {
     }
 
-    public partial interface IWeaponInternal :
-        IFallout4MajorRecordInternal,
-        IWeapon,
-        IWeaponGetter
+    public partial interface IMagicEffectPeakValueModArchetypeInternal :
+        IMagicEffectArchetypeInternal,
+        IMagicEffectPeakValueModArchetype,
+        IMagicEffectPeakValueModArchetypeGetter
     {
     }
 
-    [AssociatedRecordTypesAttribute(Mutagen.Bethesda.Fallout4.Internals.RecordTypeInts.WEAP)]
-    public partial interface IWeaponGetter :
-        IFallout4MajorRecordGetter,
+    public partial interface IMagicEffectPeakValueModArchetypeGetter :
+        IMagicEffectArchetypeGetter,
         IBinaryItem,
-        ILoquiObject<IWeaponGetter>,
-        IMapsToGetter<IWeaponGetter>,
-        IObjectIdGetter
+        ILoquiObject<IMagicEffectPeakValueModArchetypeGetter>
     {
-        static new ILoquiRegistration StaticRegistration => Weapon_Registration.Instance;
+        static new ILoquiRegistration StaticRegistration => MagicEffectPeakValueModArchetype_Registration.Instance;
 
     }
 
     #endregion
 
     #region Common MixIn
-    public static partial class WeaponMixIn
+    public static partial class MagicEffectPeakValueModArchetypeMixIn
     {
-        public static void Clear(this IWeaponInternal item)
+        public static void Clear(this IMagicEffectPeakValueModArchetypeInternal item)
         {
-            ((WeaponSetterCommon)((IWeaponGetter)item).CommonSetterInstance()!).Clear(item: item);
+            ((MagicEffectPeakValueModArchetypeSetterCommon)((IMagicEffectPeakValueModArchetypeGetter)item).CommonSetterInstance()!).Clear(item: item);
         }
 
-        public static Weapon.Mask<bool> GetEqualsMask(
-            this IWeaponGetter item,
-            IWeaponGetter rhs,
+        public static MagicEffectPeakValueModArchetype.Mask<bool> GetEqualsMask(
+            this IMagicEffectPeakValueModArchetypeGetter item,
+            IMagicEffectPeakValueModArchetypeGetter rhs,
             EqualsMaskHelper.Include include = EqualsMaskHelper.Include.All)
         {
-            return ((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).GetEqualsMask(
+            return ((MagicEffectPeakValueModArchetypeCommon)((IMagicEffectPeakValueModArchetypeGetter)item).CommonInstance()!).GetEqualsMask(
                 item: item,
                 rhs: rhs,
                 include: include);
         }
 
         public static string ToString(
-            this IWeaponGetter item,
+            this IMagicEffectPeakValueModArchetypeGetter item,
             string? name = null,
-            Weapon.Mask<bool>? printMask = null)
+            MagicEffectPeakValueModArchetype.Mask<bool>? printMask = null)
         {
-            return ((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).ToString(
+            return ((MagicEffectPeakValueModArchetypeCommon)((IMagicEffectPeakValueModArchetypeGetter)item).CommonInstance()!).ToString(
                 item: item,
                 name: name,
                 printMask: printMask);
         }
 
         public static void ToString(
-            this IWeaponGetter item,
+            this IMagicEffectPeakValueModArchetypeGetter item,
             FileGeneration fg,
             string? name = null,
-            Weapon.Mask<bool>? printMask = null)
+            MagicEffectPeakValueModArchetype.Mask<bool>? printMask = null)
         {
-            ((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).ToString(
+            ((MagicEffectPeakValueModArchetypeCommon)((IMagicEffectPeakValueModArchetypeGetter)item).CommonInstance()!).ToString(
                 item: item,
                 fg: fg,
                 name: name,
@@ -497,39 +432,39 @@ namespace Mutagen.Bethesda.Fallout4
         }
 
         public static bool Equals(
-            this IWeaponGetter item,
-            IWeaponGetter rhs,
-            Weapon.TranslationMask? equalsMask = null)
+            this IMagicEffectPeakValueModArchetypeGetter item,
+            IMagicEffectPeakValueModArchetypeGetter rhs,
+            MagicEffectPeakValueModArchetype.TranslationMask? equalsMask = null)
         {
-            return ((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).Equals(
+            return ((MagicEffectPeakValueModArchetypeCommon)((IMagicEffectPeakValueModArchetypeGetter)item).CommonInstance()!).Equals(
                 lhs: item,
                 rhs: rhs,
                 crystal: equalsMask?.GetCrystal());
         }
 
         public static void DeepCopyIn(
-            this IWeaponInternal lhs,
-            IWeaponGetter rhs,
-            out Weapon.ErrorMask errorMask,
-            Weapon.TranslationMask? copyMask = null)
+            this IMagicEffectPeakValueModArchetypeInternal lhs,
+            IMagicEffectPeakValueModArchetypeGetter rhs,
+            out MagicEffectPeakValueModArchetype.ErrorMask errorMask,
+            MagicEffectPeakValueModArchetype.TranslationMask? copyMask = null)
         {
             var errorMaskBuilder = new ErrorMaskBuilder();
-            ((WeaponSetterTranslationCommon)((IWeaponGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
+            ((MagicEffectPeakValueModArchetypeSetterTranslationCommon)((IMagicEffectPeakValueModArchetypeGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: lhs,
                 rhs: rhs,
                 errorMask: errorMaskBuilder,
                 copyMask: copyMask?.GetCrystal(),
                 deepCopy: false);
-            errorMask = Weapon.ErrorMask.Factory(errorMaskBuilder);
+            errorMask = MagicEffectPeakValueModArchetype.ErrorMask.Factory(errorMaskBuilder);
         }
 
         public static void DeepCopyIn(
-            this IWeaponInternal lhs,
-            IWeaponGetter rhs,
+            this IMagicEffectPeakValueModArchetypeInternal lhs,
+            IMagicEffectPeakValueModArchetypeGetter rhs,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask)
         {
-            ((WeaponSetterTranslationCommon)((IWeaponGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
+            ((MagicEffectPeakValueModArchetypeSetterTranslationCommon)((IMagicEffectPeakValueModArchetypeGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: lhs,
                 rhs: rhs,
                 errorMask: errorMask,
@@ -537,58 +472,44 @@ namespace Mutagen.Bethesda.Fallout4
                 deepCopy: false);
         }
 
-        public static Weapon DeepCopy(
-            this IWeaponGetter item,
-            Weapon.TranslationMask? copyMask = null)
+        public static MagicEffectPeakValueModArchetype DeepCopy(
+            this IMagicEffectPeakValueModArchetypeGetter item,
+            MagicEffectPeakValueModArchetype.TranslationMask? copyMask = null)
         {
-            return ((WeaponSetterTranslationCommon)((IWeaponGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
+            return ((MagicEffectPeakValueModArchetypeSetterTranslationCommon)((IMagicEffectPeakValueModArchetypeGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
                 item: item,
                 copyMask: copyMask);
         }
 
-        public static Weapon DeepCopy(
-            this IWeaponGetter item,
-            out Weapon.ErrorMask errorMask,
-            Weapon.TranslationMask? copyMask = null)
+        public static MagicEffectPeakValueModArchetype DeepCopy(
+            this IMagicEffectPeakValueModArchetypeGetter item,
+            out MagicEffectPeakValueModArchetype.ErrorMask errorMask,
+            MagicEffectPeakValueModArchetype.TranslationMask? copyMask = null)
         {
-            return ((WeaponSetterTranslationCommon)((IWeaponGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
+            return ((MagicEffectPeakValueModArchetypeSetterTranslationCommon)((IMagicEffectPeakValueModArchetypeGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
                 item: item,
                 copyMask: copyMask,
                 errorMask: out errorMask);
         }
 
-        public static Weapon DeepCopy(
-            this IWeaponGetter item,
+        public static MagicEffectPeakValueModArchetype DeepCopy(
+            this IMagicEffectPeakValueModArchetypeGetter item,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask = null)
         {
-            return ((WeaponSetterTranslationCommon)((IWeaponGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
+            return ((MagicEffectPeakValueModArchetypeSetterTranslationCommon)((IMagicEffectPeakValueModArchetypeGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
                 item: item,
                 copyMask: copyMask,
                 errorMask: errorMask);
         }
 
-        #region Mutagen
-        public static Weapon Duplicate(
-            this IWeaponGetter item,
-            FormKey formKey,
-            Weapon.TranslationMask? copyMask = null)
-        {
-            return ((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).Duplicate(
-                item: item,
-                formKey: formKey,
-                copyMask: copyMask?.GetCrystal());
-        }
-
-        #endregion
-
         #region Binary Translation
         public static void CopyInFromBinary(
-            this IWeaponInternal item,
+            this IMagicEffectPeakValueModArchetypeInternal item,
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
-            ((WeaponSetterCommon)((IWeaponGetter)item).CommonSetterInstance()!).CopyInFromBinary(
+            ((MagicEffectPeakValueModArchetypeSetterCommon)((IMagicEffectPeakValueModArchetypeGetter)item).CommonSetterInstance()!).CopyInFromBinary(
                 item: item,
                 frame: frame,
                 translationParams: translationParams);
@@ -604,52 +525,49 @@ namespace Mutagen.Bethesda.Fallout4
 namespace Mutagen.Bethesda.Fallout4.Internals
 {
     #region Field Index
-    public enum Weapon_FieldIndex
+    public enum MagicEffectPeakValueModArchetype_FieldIndex
     {
-        MajorRecordFlagsRaw = 0,
-        FormKey = 1,
-        VersionControl = 2,
-        EditorID = 3,
-        FormVersion = 4,
-        Version2 = 5,
+        Type = 0,
+        AssociationKey = 1,
+        ActorValue = 2,
     }
     #endregion
 
     #region Registration
-    public partial class Weapon_Registration : ILoquiRegistration
+    public partial class MagicEffectPeakValueModArchetype_Registration : ILoquiRegistration
     {
-        public static readonly Weapon_Registration Instance = new Weapon_Registration();
+        public static readonly MagicEffectPeakValueModArchetype_Registration Instance = new MagicEffectPeakValueModArchetype_Registration();
 
         public static ProtocolKey ProtocolKey => ProtocolDefinition_Fallout4.ProtocolKey;
 
         public static readonly ObjectKey ObjectKey = new ObjectKey(
             protocolKey: ProtocolDefinition_Fallout4.ProtocolKey,
-            msgID: 286,
+            msgID: 284,
             version: 0);
 
-        public const string GUID = "ea1189a0-716d-4099-ad06-721ccd313caa";
+        public const string GUID = "ae5a75cd-21d8-4dfa-867b-198d88fec23b";
 
         public const ushort AdditionalFieldCount = 0;
 
-        public const ushort FieldCount = 6;
+        public const ushort FieldCount = 3;
 
-        public static readonly Type MaskType = typeof(Weapon.Mask<>);
+        public static readonly Type MaskType = typeof(MagicEffectPeakValueModArchetype.Mask<>);
 
-        public static readonly Type ErrorMaskType = typeof(Weapon.ErrorMask);
+        public static readonly Type ErrorMaskType = typeof(MagicEffectPeakValueModArchetype.ErrorMask);
 
-        public static readonly Type ClassType = typeof(Weapon);
+        public static readonly Type ClassType = typeof(MagicEffectPeakValueModArchetype);
 
-        public static readonly Type GetterType = typeof(IWeaponGetter);
+        public static readonly Type GetterType = typeof(IMagicEffectPeakValueModArchetypeGetter);
 
         public static readonly Type? InternalGetterType = null;
 
-        public static readonly Type SetterType = typeof(IWeapon);
+        public static readonly Type SetterType = typeof(IMagicEffectPeakValueModArchetype);
 
-        public static readonly Type? InternalSetterType = typeof(IWeaponInternal);
+        public static readonly Type? InternalSetterType = typeof(IMagicEffectPeakValueModArchetypeInternal);
 
-        public const string FullName = "Mutagen.Bethesda.Fallout4.Weapon";
+        public const string FullName = "Mutagen.Bethesda.Fallout4.MagicEffectPeakValueModArchetype";
 
-        public const string Name = "Weapon";
+        public const string Name = "MagicEffectPeakValueModArchetype";
 
         public const string Namespace = "Mutagen.Bethesda.Fallout4";
 
@@ -657,8 +575,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public static readonly Type? GenericRegistrationType = null;
 
-        public static readonly RecordType TriggeringRecordType = RecordTypes.WEAP;
-        public static readonly Type BinaryWriteTranslation = typeof(WeaponBinaryWriteTranslation);
+        public static readonly Type BinaryWriteTranslation = typeof(MagicEffectPeakValueModArchetypeBinaryWriteTranslation);
         #region Interface
         ProtocolKey ILoquiRegistration.ProtocolKey => ProtocolKey;
         ObjectKey ILoquiRegistration.ObjectKey => ObjectKey;
@@ -691,30 +608,25 @@ namespace Mutagen.Bethesda.Fallout4.Internals
     #endregion
 
     #region Common
-    public partial class WeaponSetterCommon : Fallout4MajorRecordSetterCommon
+    public partial class MagicEffectPeakValueModArchetypeSetterCommon : MagicEffectArchetypeSetterCommon
     {
-        public new static readonly WeaponSetterCommon Instance = new WeaponSetterCommon();
+        public new static readonly MagicEffectPeakValueModArchetypeSetterCommon Instance = new MagicEffectPeakValueModArchetypeSetterCommon();
 
         partial void ClearPartial();
         
-        public void Clear(IWeaponInternal item)
+        public void Clear(IMagicEffectPeakValueModArchetypeInternal item)
         {
             ClearPartial();
             base.Clear(item);
         }
         
-        public override void Clear(IFallout4MajorRecordInternal item)
+        public override void Clear(IMagicEffectArchetypeInternal item)
         {
-            Clear(item: (IWeaponInternal)item);
-        }
-        
-        public override void Clear(IMajorRecordInternal item)
-        {
-            Clear(item: (IWeaponInternal)item);
+            Clear(item: (IMagicEffectPeakValueModArchetypeInternal)item);
         }
         
         #region Mutagen
-        public void RemapLinks(IWeapon obj, IReadOnlyDictionary<FormKey, FormKey> mapping)
+        public void RemapLinks(IMagicEffectPeakValueModArchetype obj, IReadOnlyDictionary<FormKey, FormKey> mapping)
         {
             base.RemapLinks(obj, mapping);
         }
@@ -723,36 +635,24 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         
         #region Binary Translation
         public virtual void CopyInFromBinary(
-            IWeaponInternal item,
+            IMagicEffectPeakValueModArchetypeInternal item,
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
-            PluginUtilityTranslation.MajorRecordParse<IWeaponInternal>(
+            PluginUtilityTranslation.SubrecordParse(
                 record: item,
                 frame: frame,
                 translationParams: translationParams,
-                fillStructs: WeaponBinaryCreateTranslation.FillBinaryStructs,
-                fillTyped: WeaponBinaryCreateTranslation.FillBinaryRecordTypes);
+                fillStructs: MagicEffectPeakValueModArchetypeBinaryCreateTranslation.FillBinaryStructs);
         }
         
         public override void CopyInFromBinary(
-            IFallout4MajorRecordInternal item,
+            IMagicEffectArchetypeInternal item,
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
             CopyInFromBinary(
-                item: (Weapon)item,
-                frame: frame,
-                translationParams: translationParams);
-        }
-        
-        public override void CopyInFromBinary(
-            IMajorRecordInternal item,
-            MutagenFrame frame,
-            TypedParseParams? translationParams = null)
-        {
-            CopyInFromBinary(
-                item: (Weapon)item,
+                item: (MagicEffectPeakValueModArchetype)item,
                 frame: frame,
                 translationParams: translationParams);
         }
@@ -760,17 +660,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         #endregion
         
     }
-    public partial class WeaponCommon : Fallout4MajorRecordCommon
+    public partial class MagicEffectPeakValueModArchetypeCommon : MagicEffectArchetypeCommon
     {
-        public new static readonly WeaponCommon Instance = new WeaponCommon();
+        public new static readonly MagicEffectPeakValueModArchetypeCommon Instance = new MagicEffectPeakValueModArchetypeCommon();
 
-        public Weapon.Mask<bool> GetEqualsMask(
-            IWeaponGetter item,
-            IWeaponGetter rhs,
+        public MagicEffectPeakValueModArchetype.Mask<bool> GetEqualsMask(
+            IMagicEffectPeakValueModArchetypeGetter item,
+            IMagicEffectPeakValueModArchetypeGetter rhs,
             EqualsMaskHelper.Include include = EqualsMaskHelper.Include.All)
         {
-            var ret = new Weapon.Mask<bool>(false);
-            ((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).FillEqualsMask(
+            var ret = new MagicEffectPeakValueModArchetype.Mask<bool>(false);
+            ((MagicEffectPeakValueModArchetypeCommon)((IMagicEffectPeakValueModArchetypeGetter)item).CommonInstance()!).FillEqualsMask(
                 item: item,
                 rhs: rhs,
                 ret: ret,
@@ -779,9 +679,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         public void FillEqualsMask(
-            IWeaponGetter item,
-            IWeaponGetter rhs,
-            Weapon.Mask<bool> ret,
+            IMagicEffectPeakValueModArchetypeGetter item,
+            IMagicEffectPeakValueModArchetypeGetter rhs,
+            MagicEffectPeakValueModArchetype.Mask<bool> ret,
             EqualsMaskHelper.Include include = EqualsMaskHelper.Include.All)
         {
             if (rhs == null) return;
@@ -789,9 +689,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         public string ToString(
-            IWeaponGetter item,
+            IMagicEffectPeakValueModArchetypeGetter item,
             string? name = null,
-            Weapon.Mask<bool>? printMask = null)
+            MagicEffectPeakValueModArchetype.Mask<bool>? printMask = null)
         {
             var fg = new FileGeneration();
             ToString(
@@ -803,18 +703,18 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         public void ToString(
-            IWeaponGetter item,
+            IMagicEffectPeakValueModArchetypeGetter item,
             FileGeneration fg,
             string? name = null,
-            Weapon.Mask<bool>? printMask = null)
+            MagicEffectPeakValueModArchetype.Mask<bool>? printMask = null)
         {
             if (name == null)
             {
-                fg.AppendLine($"Weapon =>");
+                fg.AppendLine($"MagicEffectPeakValueModArchetype =>");
             }
             else
             {
-                fg.AppendLine($"{name} (Weapon) =>");
+                fg.AppendLine($"{name} (MagicEffectPeakValueModArchetype) =>");
             }
             fg.AppendLine("[");
             using (new DepthWrapper(fg))
@@ -828,49 +728,26 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         protected static void ToStringFields(
-            IWeaponGetter item,
+            IMagicEffectPeakValueModArchetypeGetter item,
             FileGeneration fg,
-            Weapon.Mask<bool>? printMask = null)
+            MagicEffectPeakValueModArchetype.Mask<bool>? printMask = null)
         {
-            Fallout4MajorRecordCommon.ToStringFields(
+            MagicEffectArchetypeCommon.ToStringFields(
                 item: item,
                 fg: fg,
                 printMask: printMask);
         }
         
-        public static Weapon_FieldIndex ConvertFieldIndex(Fallout4MajorRecord_FieldIndex index)
+        public static MagicEffectPeakValueModArchetype_FieldIndex ConvertFieldIndex(MagicEffectArchetype_FieldIndex index)
         {
             switch (index)
             {
-                case Fallout4MajorRecord_FieldIndex.MajorRecordFlagsRaw:
-                    return (Weapon_FieldIndex)((int)index);
-                case Fallout4MajorRecord_FieldIndex.FormKey:
-                    return (Weapon_FieldIndex)((int)index);
-                case Fallout4MajorRecord_FieldIndex.VersionControl:
-                    return (Weapon_FieldIndex)((int)index);
-                case Fallout4MajorRecord_FieldIndex.EditorID:
-                    return (Weapon_FieldIndex)((int)index);
-                case Fallout4MajorRecord_FieldIndex.FormVersion:
-                    return (Weapon_FieldIndex)((int)index);
-                case Fallout4MajorRecord_FieldIndex.Version2:
-                    return (Weapon_FieldIndex)((int)index);
-                default:
-                    throw new ArgumentException($"Index is out of range: {index.ToStringFast_Enum_Only()}");
-            }
-        }
-        
-        public static new Weapon_FieldIndex ConvertFieldIndex(MajorRecord_FieldIndex index)
-        {
-            switch (index)
-            {
-                case MajorRecord_FieldIndex.MajorRecordFlagsRaw:
-                    return (Weapon_FieldIndex)((int)index);
-                case MajorRecord_FieldIndex.FormKey:
-                    return (Weapon_FieldIndex)((int)index);
-                case MajorRecord_FieldIndex.VersionControl:
-                    return (Weapon_FieldIndex)((int)index);
-                case MajorRecord_FieldIndex.EditorID:
-                    return (Weapon_FieldIndex)((int)index);
+                case MagicEffectArchetype_FieldIndex.Type:
+                    return (MagicEffectPeakValueModArchetype_FieldIndex)((int)index);
+                case MagicEffectArchetype_FieldIndex.AssociationKey:
+                    return (MagicEffectPeakValueModArchetype_FieldIndex)((int)index);
+                case MagicEffectArchetype_FieldIndex.ActorValue:
+                    return (MagicEffectPeakValueModArchetype_FieldIndex)((int)index);
                 default:
                     throw new ArgumentException($"Index is out of range: {index.ToStringFast_Enum_Only()}");
             }
@@ -878,52 +755,36 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         
         #region Equals and Hash
         public virtual bool Equals(
-            IWeaponGetter? lhs,
-            IWeaponGetter? rhs,
+            IMagicEffectPeakValueModArchetypeGetter? lhs,
+            IMagicEffectPeakValueModArchetypeGetter? rhs,
             TranslationCrystal? crystal)
         {
             if (!EqualsMaskHelper.RefEquality(lhs, rhs, out var isEqual)) return isEqual;
-            if (!base.Equals((IFallout4MajorRecordGetter)lhs, (IFallout4MajorRecordGetter)rhs, crystal)) return false;
+            if (!base.Equals((IMagicEffectArchetypeGetter)lhs, (IMagicEffectArchetypeGetter)rhs, crystal)) return false;
             return true;
         }
         
         public override bool Equals(
-            IFallout4MajorRecordGetter? lhs,
-            IFallout4MajorRecordGetter? rhs,
+            IMagicEffectArchetypeGetter? lhs,
+            IMagicEffectArchetypeGetter? rhs,
             TranslationCrystal? crystal)
         {
             return Equals(
-                lhs: (IWeaponGetter?)lhs,
-                rhs: rhs as IWeaponGetter,
+                lhs: (IMagicEffectPeakValueModArchetypeGetter?)lhs,
+                rhs: rhs as IMagicEffectPeakValueModArchetypeGetter,
                 crystal: crystal);
         }
         
-        public override bool Equals(
-            IMajorRecordGetter? lhs,
-            IMajorRecordGetter? rhs,
-            TranslationCrystal? crystal)
-        {
-            return Equals(
-                lhs: (IWeaponGetter?)lhs,
-                rhs: rhs as IWeaponGetter,
-                crystal: crystal);
-        }
-        
-        public virtual int GetHashCode(IWeaponGetter item)
+        public virtual int GetHashCode(IMagicEffectPeakValueModArchetypeGetter item)
         {
             var hash = new HashCode();
             hash.Add(base.GetHashCode());
             return hash.ToHashCode();
         }
         
-        public override int GetHashCode(IFallout4MajorRecordGetter item)
+        public override int GetHashCode(IMagicEffectArchetypeGetter item)
         {
-            return GetHashCode(item: (IWeaponGetter)item);
-        }
-        
-        public override int GetHashCode(IMajorRecordGetter item)
-        {
-            return GetHashCode(item: (IWeaponGetter)item);
+            return GetHashCode(item: (IMagicEffectPeakValueModArchetypeGetter)item);
         }
         
         #endregion
@@ -931,11 +792,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         
         public override object GetNew()
         {
-            return Weapon.GetNew();
+            return MagicEffectPeakValueModArchetype.GetNew();
         }
         
         #region Mutagen
-        public IEnumerable<IFormLinkGetter> GetContainedFormLinks(IWeaponGetter obj)
+        public IEnumerable<IFormLinkGetter> GetContainedFormLinks(IMagicEffectPeakValueModArchetypeGetter obj)
         {
             foreach (var item in base.GetContainedFormLinks(obj))
             {
@@ -944,52 +805,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             yield break;
         }
         
-        #region Duplicate
-        public Weapon Duplicate(
-            IWeaponGetter item,
-            FormKey formKey,
-            TranslationCrystal? copyMask)
-        {
-            var newRec = new Weapon(formKey);
-            newRec.DeepCopyIn(item, default(ErrorMaskBuilder?), copyMask);
-            return newRec;
-        }
-        
-        public override Fallout4MajorRecord Duplicate(
-            IFallout4MajorRecordGetter item,
-            FormKey formKey,
-            TranslationCrystal? copyMask)
-        {
-            return this.Duplicate(
-                item: (IWeaponGetter)item,
-                formKey: formKey,
-                copyMask: copyMask);
-        }
-        
-        public override MajorRecord Duplicate(
-            IMajorRecordGetter item,
-            FormKey formKey,
-            TranslationCrystal? copyMask)
-        {
-            return this.Duplicate(
-                item: (IWeaponGetter)item,
-                formKey: formKey,
-                copyMask: copyMask);
-        }
-        
-        #endregion
-        
         #endregion
         
     }
-    public partial class WeaponSetterTranslationCommon : Fallout4MajorRecordSetterTranslationCommon
+    public partial class MagicEffectPeakValueModArchetypeSetterTranslationCommon : MagicEffectArchetypeSetterTranslationCommon
     {
-        public new static readonly WeaponSetterTranslationCommon Instance = new WeaponSetterTranslationCommon();
+        public new static readonly MagicEffectPeakValueModArchetypeSetterTranslationCommon Instance = new MagicEffectPeakValueModArchetypeSetterTranslationCommon();
 
         #region DeepCopyIn
         public void DeepCopyIn(
-            IWeaponInternal item,
-            IWeaponGetter rhs,
+            IMagicEffectPeakValueModArchetypeInternal item,
+            IMagicEffectPeakValueModArchetypeGetter rhs,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask,
             bool deepCopy)
@@ -1003,75 +829,45 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         public void DeepCopyIn(
-            IWeapon item,
-            IWeaponGetter rhs,
+            IMagicEffectPeakValueModArchetype item,
+            IMagicEffectPeakValueModArchetypeGetter rhs,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask,
             bool deepCopy)
         {
             base.DeepCopyIn(
-                (IFallout4MajorRecord)item,
-                (IFallout4MajorRecordGetter)rhs,
+                (IMagicEffectArchetype)item,
+                (IMagicEffectArchetypeGetter)rhs,
                 errorMask,
                 copyMask,
                 deepCopy: deepCopy);
         }
         
         public override void DeepCopyIn(
-            IFallout4MajorRecordInternal item,
-            IFallout4MajorRecordGetter rhs,
+            IMagicEffectArchetypeInternal item,
+            IMagicEffectArchetypeGetter rhs,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask,
             bool deepCopy)
         {
             this.DeepCopyIn(
-                item: (IWeaponInternal)item,
-                rhs: (IWeaponGetter)rhs,
+                item: (IMagicEffectPeakValueModArchetypeInternal)item,
+                rhs: (IMagicEffectPeakValueModArchetypeGetter)rhs,
                 errorMask: errorMask,
                 copyMask: copyMask,
                 deepCopy: deepCopy);
         }
         
         public override void DeepCopyIn(
-            IFallout4MajorRecord item,
-            IFallout4MajorRecordGetter rhs,
+            IMagicEffectArchetype item,
+            IMagicEffectArchetypeGetter rhs,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask,
             bool deepCopy)
         {
             this.DeepCopyIn(
-                item: (IWeapon)item,
-                rhs: (IWeaponGetter)rhs,
-                errorMask: errorMask,
-                copyMask: copyMask,
-                deepCopy: deepCopy);
-        }
-        
-        public override void DeepCopyIn(
-            IMajorRecordInternal item,
-            IMajorRecordGetter rhs,
-            ErrorMaskBuilder? errorMask,
-            TranslationCrystal? copyMask,
-            bool deepCopy)
-        {
-            this.DeepCopyIn(
-                item: (IWeaponInternal)item,
-                rhs: (IWeaponGetter)rhs,
-                errorMask: errorMask,
-                copyMask: copyMask,
-                deepCopy: deepCopy);
-        }
-        
-        public override void DeepCopyIn(
-            IMajorRecord item,
-            IMajorRecordGetter rhs,
-            ErrorMaskBuilder? errorMask,
-            TranslationCrystal? copyMask,
-            bool deepCopy)
-        {
-            this.DeepCopyIn(
-                item: (IWeapon)item,
-                rhs: (IWeaponGetter)rhs,
+                item: (IMagicEffectPeakValueModArchetype)item,
+                rhs: (IMagicEffectPeakValueModArchetypeGetter)rhs,
                 errorMask: errorMask,
                 copyMask: copyMask,
                 deepCopy: deepCopy);
@@ -1079,12 +875,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         
         #endregion
         
-        public Weapon DeepCopy(
-            IWeaponGetter item,
-            Weapon.TranslationMask? copyMask = null)
+        public MagicEffectPeakValueModArchetype DeepCopy(
+            IMagicEffectPeakValueModArchetypeGetter item,
+            MagicEffectPeakValueModArchetype.TranslationMask? copyMask = null)
         {
-            Weapon ret = (Weapon)((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).GetNew();
-            ((WeaponSetterTranslationCommon)((IWeaponGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
+            MagicEffectPeakValueModArchetype ret = (MagicEffectPeakValueModArchetype)((MagicEffectPeakValueModArchetypeCommon)((IMagicEffectPeakValueModArchetypeGetter)item).CommonInstance()!).GetNew();
+            ((MagicEffectPeakValueModArchetypeSetterTranslationCommon)((IMagicEffectPeakValueModArchetypeGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: ret,
                 rhs: item,
                 errorMask: null,
@@ -1093,30 +889,30 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             return ret;
         }
         
-        public Weapon DeepCopy(
-            IWeaponGetter item,
-            out Weapon.ErrorMask errorMask,
-            Weapon.TranslationMask? copyMask = null)
+        public MagicEffectPeakValueModArchetype DeepCopy(
+            IMagicEffectPeakValueModArchetypeGetter item,
+            out MagicEffectPeakValueModArchetype.ErrorMask errorMask,
+            MagicEffectPeakValueModArchetype.TranslationMask? copyMask = null)
         {
             var errorMaskBuilder = new ErrorMaskBuilder();
-            Weapon ret = (Weapon)((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).GetNew();
-            ((WeaponSetterTranslationCommon)((IWeaponGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
+            MagicEffectPeakValueModArchetype ret = (MagicEffectPeakValueModArchetype)((MagicEffectPeakValueModArchetypeCommon)((IMagicEffectPeakValueModArchetypeGetter)item).CommonInstance()!).GetNew();
+            ((MagicEffectPeakValueModArchetypeSetterTranslationCommon)((IMagicEffectPeakValueModArchetypeGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
                 ret,
                 item,
                 errorMask: errorMaskBuilder,
                 copyMask: copyMask?.GetCrystal(),
                 deepCopy: true);
-            errorMask = Weapon.ErrorMask.Factory(errorMaskBuilder);
+            errorMask = MagicEffectPeakValueModArchetype.ErrorMask.Factory(errorMaskBuilder);
             return ret;
         }
         
-        public Weapon DeepCopy(
-            IWeaponGetter item,
+        public MagicEffectPeakValueModArchetype DeepCopy(
+            IMagicEffectPeakValueModArchetypeGetter item,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask = null)
         {
-            Weapon ret = (Weapon)((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).GetNew();
-            ((WeaponSetterTranslationCommon)((IWeaponGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
+            MagicEffectPeakValueModArchetype ret = (MagicEffectPeakValueModArchetype)((MagicEffectPeakValueModArchetypeCommon)((IMagicEffectPeakValueModArchetypeGetter)item).CommonInstance()!).GetNew();
+            ((MagicEffectPeakValueModArchetypeSetterTranslationCommon)((IMagicEffectPeakValueModArchetypeGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: ret,
                 rhs: item,
                 errorMask: errorMask,
@@ -1132,21 +928,21 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
 namespace Mutagen.Bethesda.Fallout4
 {
-    public partial class Weapon
+    public partial class MagicEffectPeakValueModArchetype
     {
         #region Common Routing
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        ILoquiRegistration ILoquiObject.Registration => Weapon_Registration.Instance;
-        public new static Weapon_Registration StaticRegistration => Weapon_Registration.Instance;
+        ILoquiRegistration ILoquiObject.Registration => MagicEffectPeakValueModArchetype_Registration.Instance;
+        public new static MagicEffectPeakValueModArchetype_Registration StaticRegistration => MagicEffectPeakValueModArchetype_Registration.Instance;
         [DebuggerStepThrough]
-        protected override object CommonInstance() => WeaponCommon.Instance;
+        protected override object CommonInstance() => MagicEffectPeakValueModArchetypeCommon.Instance;
         [DebuggerStepThrough]
         protected override object CommonSetterInstance()
         {
-            return WeaponSetterCommon.Instance;
+            return MagicEffectPeakValueModArchetypeSetterCommon.Instance;
         }
         [DebuggerStepThrough]
-        protected override object CommonSetterTranslationInstance() => WeaponSetterTranslationCommon.Instance;
+        protected override object CommonSetterTranslationInstance() => MagicEffectPeakValueModArchetypeSetterTranslationCommon.Instance;
 
         #endregion
 
@@ -1157,36 +953,20 @@ namespace Mutagen.Bethesda.Fallout4
 #region Binary Translation
 namespace Mutagen.Bethesda.Fallout4.Internals
 {
-    public partial class WeaponBinaryWriteTranslation :
-        Fallout4MajorRecordBinaryWriteTranslation,
+    public partial class MagicEffectPeakValueModArchetypeBinaryWriteTranslation :
+        MagicEffectArchetypeBinaryWriteTranslation,
         IBinaryWriteTranslator
     {
-        public new readonly static WeaponBinaryWriteTranslation Instance = new WeaponBinaryWriteTranslation();
+        public new readonly static MagicEffectPeakValueModArchetypeBinaryWriteTranslation Instance = new MagicEffectPeakValueModArchetypeBinaryWriteTranslation();
 
         public void Write(
             MutagenWriter writer,
-            IWeaponGetter item,
+            IMagicEffectPeakValueModArchetypeGetter item,
             TypedWriteParams? translationParams = null)
         {
-            using (HeaderExport.Record(
-                writer: writer,
-                record: translationParams.ConvertToCustom(RecordTypes.WEAP)))
-            {
-                try
-                {
-                    Fallout4MajorRecordBinaryWriteTranslation.WriteEmbedded(
-                        item: item,
-                        writer: writer);
-                    MajorRecordBinaryWriteTranslation.WriteRecordTypes(
-                        item: item,
-                        writer: writer,
-                        translationParams: translationParams);
-                }
-                catch (Exception ex)
-                {
-                    throw RecordException.Enrich(ex, item);
-                }
-            }
+            MagicEffectArchetypeBinaryWriteTranslation.WriteEmbedded(
+                item: item,
+                writer: writer);
         }
 
         public override void Write(
@@ -1195,48 +975,27 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TypedWriteParams? translationParams = null)
         {
             Write(
-                item: (IWeaponGetter)item,
+                item: (IMagicEffectPeakValueModArchetypeGetter)item,
                 writer: writer,
                 translationParams: translationParams);
         }
 
         public override void Write(
             MutagenWriter writer,
-            IFallout4MajorRecordGetter item,
+            IMagicEffectArchetypeGetter item,
             TypedWriteParams? translationParams = null)
         {
             Write(
-                item: (IWeaponGetter)item,
-                writer: writer,
-                translationParams: translationParams);
-        }
-
-        public override void Write(
-            MutagenWriter writer,
-            IMajorRecordGetter item,
-            TypedWriteParams? translationParams = null)
-        {
-            Write(
-                item: (IWeaponGetter)item,
+                item: (IMagicEffectPeakValueModArchetypeGetter)item,
                 writer: writer,
                 translationParams: translationParams);
         }
 
     }
 
-    public partial class WeaponBinaryCreateTranslation : Fallout4MajorRecordBinaryCreateTranslation
+    public partial class MagicEffectPeakValueModArchetypeBinaryCreateTranslation : MagicEffectArchetypeBinaryCreateTranslation
     {
-        public new readonly static WeaponBinaryCreateTranslation Instance = new WeaponBinaryCreateTranslation();
-
-        public override RecordType RecordType => RecordTypes.WEAP;
-        public static void FillBinaryStructs(
-            IWeaponInternal item,
-            MutagenFrame frame)
-        {
-            Fallout4MajorRecordBinaryCreateTranslation.FillBinaryStructs(
-                item: item,
-                frame: frame);
-        }
+        public new readonly static MagicEffectPeakValueModArchetypeBinaryCreateTranslation Instance = new MagicEffectPeakValueModArchetypeBinaryCreateTranslation();
 
     }
 
@@ -1244,7 +1003,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 namespace Mutagen.Bethesda.Fallout4
 {
     #region Binary Write Mixins
-    public static class WeaponBinaryTranslationMixIn
+    public static class MagicEffectPeakValueModArchetypeBinaryTranslationMixIn
     {
     }
     #endregion
@@ -1253,36 +1012,34 @@ namespace Mutagen.Bethesda.Fallout4
 }
 namespace Mutagen.Bethesda.Fallout4.Internals
 {
-    public partial class WeaponBinaryOverlay :
-        Fallout4MajorRecordBinaryOverlay,
-        IWeaponGetter
+    public partial class MagicEffectPeakValueModArchetypeBinaryOverlay :
+        MagicEffectArchetypeBinaryOverlay,
+        IMagicEffectPeakValueModArchetypeGetter
     {
         #region Common Routing
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        ILoquiRegistration ILoquiObject.Registration => Weapon_Registration.Instance;
-        public new static Weapon_Registration StaticRegistration => Weapon_Registration.Instance;
+        ILoquiRegistration ILoquiObject.Registration => MagicEffectPeakValueModArchetype_Registration.Instance;
+        public new static MagicEffectPeakValueModArchetype_Registration StaticRegistration => MagicEffectPeakValueModArchetype_Registration.Instance;
         [DebuggerStepThrough]
-        protected override object CommonInstance() => WeaponCommon.Instance;
+        protected override object CommonInstance() => MagicEffectPeakValueModArchetypeCommon.Instance;
         [DebuggerStepThrough]
-        protected override object CommonSetterTranslationInstance() => WeaponSetterTranslationCommon.Instance;
+        protected override object CommonSetterTranslationInstance() => MagicEffectPeakValueModArchetypeSetterTranslationCommon.Instance;
 
         #endregion
 
         void IPrintable.ToString(FileGeneration fg, string? name) => this.ToString(fg, name);
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected override object BinaryWriteTranslator => WeaponBinaryWriteTranslation.Instance;
+        protected override object BinaryWriteTranslator => MagicEffectPeakValueModArchetypeBinaryWriteTranslation.Instance;
         void IBinaryItem.WriteToBinary(
             MutagenWriter writer,
             TypedWriteParams? translationParams = null)
         {
-            ((WeaponBinaryWriteTranslation)this.BinaryWriteTranslator).Write(
+            ((MagicEffectPeakValueModArchetypeBinaryWriteTranslation)this.BinaryWriteTranslator).Write(
                 item: this,
                 writer: writer,
                 translationParams: translationParams);
         }
-        protected override Type LinkType => typeof(IWeapon);
-
 
         partial void CustomFactoryEnd(
             OverlayStream stream,
@@ -1290,7 +1047,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             int offset);
 
         partial void CustomCtor();
-        protected WeaponBinaryOverlay(
+        protected MagicEffectPeakValueModArchetypeBinaryOverlay(
             ReadOnlyMemorySlice<byte> bytes,
             BinaryOverlayFactoryPackage package)
             : base(
@@ -1300,39 +1057,28 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             this.CustomCtor();
         }
 
-        public static WeaponBinaryOverlay WeaponFactory(
+        public static MagicEffectPeakValueModArchetypeBinaryOverlay MagicEffectPeakValueModArchetypeFactory(
             OverlayStream stream,
             BinaryOverlayFactoryPackage package,
             TypedParseParams? parseParams = null)
         {
-            stream = PluginUtilityTranslation.DecompressStream(stream);
-            var ret = new WeaponBinaryOverlay(
-                bytes: HeaderTranslation.ExtractRecordMemory(stream.RemainingMemory, package.MetaData.Constants),
+            var ret = new MagicEffectPeakValueModArchetypeBinaryOverlay(
+                bytes: stream.RemainingMemory,
                 package: package);
-            var finalPos = checked((int)(stream.Position + stream.GetMajorRecord().TotalLength));
-            int offset = stream.Position + package.MetaData.Constants.MajorConstants.TypeAndLengthLength;
-            ret._package.FormVersion = ret;
-            stream.Position += 0x10 + package.MetaData.Constants.MajorConstants.TypeAndLengthLength;
+            int offset = stream.Position;
             ret.CustomFactoryEnd(
                 stream: stream,
-                finalPos: finalPos,
+                finalPos: stream.Length,
                 offset: offset);
-            ret.FillSubrecordTypes(
-                majorReference: ret,
-                stream: stream,
-                finalPos: finalPos,
-                offset: offset,
-                parseParams: parseParams,
-                fill: ret.FillRecordType);
             return ret;
         }
 
-        public static WeaponBinaryOverlay WeaponFactory(
+        public static MagicEffectPeakValueModArchetypeBinaryOverlay MagicEffectPeakValueModArchetypeFactory(
             ReadOnlyMemorySlice<byte> slice,
             BinaryOverlayFactoryPackage package,
             TypedParseParams? parseParams = null)
         {
-            return WeaponFactory(
+            return MagicEffectPeakValueModArchetypeFactory(
                 stream: new OverlayStream(slice, package),
                 package: package,
                 parseParams: parseParams);
@@ -1344,35 +1090,26 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             FileGeneration fg,
             string? name = null)
         {
-            WeaponMixIn.ToString(
+            MagicEffectPeakValueModArchetypeMixIn.ToString(
                 item: this,
                 name: name);
         }
 
         #endregion
 
-        public override string ToString()
-        {
-            return MajorRecordPrinter<Weapon>.ToString(this);
-        }
-
         #region Equals and Hash
         public override bool Equals(object? obj)
         {
-            if (obj is IFormLinkGetter formLink)
-            {
-                return formLink.Equals(this);
-            }
-            if (obj is not IWeaponGetter rhs) return false;
-            return ((WeaponCommon)((IWeaponGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
+            if (obj is not IMagicEffectPeakValueModArchetypeGetter rhs) return false;
+            return ((MagicEffectPeakValueModArchetypeCommon)((IMagicEffectPeakValueModArchetypeGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
         }
 
-        public bool Equals(IWeaponGetter? obj)
+        public bool Equals(IMagicEffectPeakValueModArchetypeGetter? obj)
         {
-            return ((WeaponCommon)((IWeaponGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
+            return ((MagicEffectPeakValueModArchetypeCommon)((IMagicEffectPeakValueModArchetypeGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
         }
 
-        public override int GetHashCode() => ((WeaponCommon)((IWeaponGetter)this).CommonInstance()!).GetHashCode(this);
+        public override int GetHashCode() => ((MagicEffectPeakValueModArchetypeCommon)((IMagicEffectPeakValueModArchetypeGetter)this).CommonInstance()!).GetHashCode(this);
 
         #endregion
 

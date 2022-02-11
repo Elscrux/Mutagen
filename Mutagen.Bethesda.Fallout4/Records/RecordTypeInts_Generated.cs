@@ -77,14 +77,17 @@ public partial class RecordTypeInts
     public const int DSTA = 0x41545344;
     public const int DSTD = 0x44545344;
     public const int DSTF = 0x46545344;
+    public const int DUAL = 0x4C415544;
     public const int EFID = 0x44494645;
     public const int EFIT = 0x54494645;
+    public const int EFSH = 0x48534645;
     public const int EIAD = 0x44414945;
     public const int EITM = 0x4D544945;
     public const int ENAM = 0x4D414E45;
     public const int ENCH = 0x48434E45;
     public const int ENIT = 0x54494E45;
     public const int EQUP = 0x50555145;
+    public const int ESCE = 0x45435345;
     public const int ETYP = 0x50595445;
     public const int EXPL = 0x4C505845;
     public const int FACT = 0x54434146;
@@ -182,6 +185,7 @@ public partial class RecordTypeInts
     public const int LVSP = 0x5053564C;
     public const int MAST = 0x5453414D;
     public const int MATT = 0x5454414D;
+    public const int MDOB = 0x424F444D;
     public const int MESG = 0x4753454D;
     public const int MGEF = 0x4645474D;
     public const int MIAD = 0x4441494D;
@@ -272,6 +276,7 @@ public partial class RecordTypeInts
     public const int REGN = 0x4E474552;
     public const int REPT = 0x54504552;
     public const int REVB = 0x42564552;
+    public const int RFCT = 0x54434652;
     public const int RIAD = 0x44414952;
     public const int RLDM = 0x4D444C52;
     public const int RNAM = 0x4D414E52;

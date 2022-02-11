@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="us-ascii"?>
 <Loqui xmlns="http://tempuri.org/LoquiSource.xsd">
-  <Object name="ImageSpaceAdapter" objType="Record" recordType="IMAD" baseClass="Fallout4MajorRecord" GUID="f7768b9c-c4b7-4fbd-b7c7-dccf2510fe97" ID="268">
+  <Object name="ImageSpaceAdapter" objType="Record" recordType="IMAD" baseClass="Fallout4MajorRecord" GUID="41703d5d-cf96-4b22-9b54-6bbdbb24fabb" ID="273">
     <Fields>
       <Data recordType="DNAM">
         <Fields>

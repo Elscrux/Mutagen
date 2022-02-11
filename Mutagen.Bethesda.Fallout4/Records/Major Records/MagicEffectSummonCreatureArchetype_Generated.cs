@@ -17,8 +17,6 @@ using Mutagen.Bethesda.Plugins.Binary.Translations;
 using Mutagen.Bethesda.Plugins.Exceptions;
 using Mutagen.Bethesda.Plugins.Records;
 using Mutagen.Bethesda.Plugins.Records.Internals;
-using Mutagen.Bethesda.Plugins.RecordTypeMapping;
-using Mutagen.Bethesda.Plugins.Utility;
 using Mutagen.Bethesda.Translations.Binary;
 using Noggog;
 using System;
@@ -37,20 +35,12 @@ using System.Text;
 namespace Mutagen.Bethesda.Fallout4
 {
     #region Class
-    public partial class Weapon :
-        Fallout4MajorRecord,
-        IEquatable<IWeaponGetter>,
-        ILoquiObjectSetter<Weapon>,
-        IWeaponInternal
+    public partial class MagicEffectSummonCreatureArchetype :
+        MagicEffectArchetype,
+        IEquatable<IMagicEffectSummonCreatureArchetypeGetter>,
+        ILoquiObjectSetter<MagicEffectSummonCreatureArchetype>,
+        IMagicEffectSummonCreatureArchetypeInternal
     {
-        #region Ctor
-        protected Weapon()
-        {
-            CustomCtor();
-        }
-        partial void CustomCtor();
-        #endregion
-
 
         #region To String
 
@@ -58,16 +48,32 @@ namespace Mutagen.Bethesda.Fallout4
             FileGeneration fg,
             string? name = null)
         {
-            WeaponMixIn.ToString(
+            MagicEffectSummonCreatureArchetypeMixIn.ToString(
                 item: this,
                 name: name);
         }
 
         #endregion
 
+        #region Equals and Hash
+        public override bool Equals(object? obj)
+        {
+            if (obj is not IMagicEffectSummonCreatureArchetypeGetter rhs) return false;
+            return ((MagicEffectSummonCreatureArchetypeCommon)((IMagicEffectSummonCreatureArchetypeGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
+        }
+
+        public bool Equals(IMagicEffectSummonCreatureArchetypeGetter? obj)
+        {
+            return ((MagicEffectSummonCreatureArchetypeCommon)((IMagicEffectSummonCreatureArchetypeGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
+        }
+
+        public override int GetHashCode() => ((MagicEffectSummonCreatureArchetypeCommon)((IMagicEffectSummonCreatureArchetypeGetter)this).CommonInstance()!).GetHashCode(this);
+
+        #endregion
+
         #region Mask
         public new class Mask<TItem> :
-            Fallout4MajorRecord.Mask<TItem>,
+            MagicEffectArchetype.Mask<TItem>,
             IEquatable<Mask<TItem>>,
             IMask<TItem>
         {
@@ -78,19 +84,13 @@ namespace Mutagen.Bethesda.Fallout4
             }
 
             public Mask(
-                TItem MajorRecordFlagsRaw,
-                TItem FormKey,
-                TItem VersionControl,
-                TItem EditorID,
-                TItem FormVersion,
-                TItem Version2)
+                TItem Type,
+                TItem AssociationKey,
+                TItem ActorValue)
             : base(
-                MajorRecordFlagsRaw: MajorRecordFlagsRaw,
-                FormKey: FormKey,
-                VersionControl: VersionControl,
-                EditorID: EditorID,
-                FormVersion: FormVersion,
-                Version2: Version2)
+                Type: Type,
+                AssociationKey: AssociationKey,
+                ActorValue: ActorValue)
             {
             }
 
@@ -143,7 +143,7 @@ namespace Mutagen.Bethesda.Fallout4
             #region Translate
             public new Mask<R> Translate<R>(Func<TItem, R> eval)
             {
-                var ret = new Weapon.Mask<R>();
+                var ret = new MagicEffectSummonCreatureArchetype.Mask<R>();
                 this.Translate_InternalFill(ret, eval);
                 return ret;
             }
@@ -160,16 +160,16 @@ namespace Mutagen.Bethesda.Fallout4
                 return ToString(printMask: null);
             }
 
-            public string ToString(Weapon.Mask<bool>? printMask = null)
+            public string ToString(MagicEffectSummonCreatureArchetype.Mask<bool>? printMask = null)
             {
                 var fg = new FileGeneration();
                 ToString(fg, printMask);
                 return fg.ToString();
             }
 
-            public void ToString(FileGeneration fg, Weapon.Mask<bool>? printMask = null)
+            public void ToString(FileGeneration fg, MagicEffectSummonCreatureArchetype.Mask<bool>? printMask = null)
             {
-                fg.AppendLine($"{nameof(Weapon.Mask<TItem>)} =>");
+                fg.AppendLine($"{nameof(MagicEffectSummonCreatureArchetype.Mask<TItem>)} =>");
                 fg.AppendLine("[");
                 using (new DepthWrapper(fg))
                 {
@@ -181,13 +181,13 @@ namespace Mutagen.Bethesda.Fallout4
         }
 
         public new class ErrorMask :
-            Fallout4MajorRecord.ErrorMask,
+            MagicEffectArchetype.ErrorMask,
             IErrorMask<ErrorMask>
         {
             #region IErrorMask
             public override object? GetNthMask(int index)
             {
-                Weapon_FieldIndex enu = (Weapon_FieldIndex)index;
+                MagicEffectSummonCreatureArchetype_FieldIndex enu = (MagicEffectSummonCreatureArchetype_FieldIndex)index;
                 switch (enu)
                 {
                     default:
@@ -197,7 +197,7 @@ namespace Mutagen.Bethesda.Fallout4
 
             public override void SetNthException(int index, Exception ex)
             {
-                Weapon_FieldIndex enu = (Weapon_FieldIndex)index;
+                MagicEffectSummonCreatureArchetype_FieldIndex enu = (MagicEffectSummonCreatureArchetype_FieldIndex)index;
                 switch (enu)
                 {
                     default:
@@ -208,7 +208,7 @@ namespace Mutagen.Bethesda.Fallout4
 
             public override void SetNthMask(int index, object obj)
             {
-                Weapon_FieldIndex enu = (Weapon_FieldIndex)index;
+                MagicEffectSummonCreatureArchetype_FieldIndex enu = (MagicEffectSummonCreatureArchetype_FieldIndex)index;
                 switch (enu)
                 {
                     default:
@@ -281,7 +281,7 @@ namespace Mutagen.Bethesda.Fallout4
 
         }
         public new class TranslationMask :
-            Fallout4MajorRecord.TranslationMask,
+            MagicEffectArchetype.TranslationMask,
             ITranslationMask
         {
             #region Ctors
@@ -303,90 +303,29 @@ namespace Mutagen.Bethesda.Fallout4
         #endregion
 
         #region Mutagen
-        public static readonly RecordType GrupRecordType = Weapon_Registration.TriggeringRecordType;
-        public Weapon(FormKey formKey)
-        {
-            this.FormKey = formKey;
-            CustomCtor();
-        }
-
-        private Weapon(
-            FormKey formKey,
-            GameRelease gameRelease)
-        {
-            this.FormKey = formKey;
-            this.FormVersion = gameRelease.GetDefaultFormVersion()!.Value;
-            CustomCtor();
-        }
-
-        internal Weapon(
-            FormKey formKey,
-            ushort formVersion)
-        {
-            this.FormKey = formKey;
-            this.FormVersion = formVersion;
-            CustomCtor();
-        }
-
-        public Weapon(IFallout4Mod mod)
-            : this(mod.GetNextFormKey())
-        {
-        }
-
-        public Weapon(IFallout4Mod mod, string editorID)
-            : this(mod.GetNextFormKey(editorID))
-        {
-            this.EditorID = editorID;
-        }
-
-        public override string ToString()
-        {
-            return MajorRecordPrinter<Weapon>.ToString(this);
-        }
-
-        protected override Type LinkType => typeof(IWeapon);
-
-        #region Equals and Hash
-        public override bool Equals(object? obj)
-        {
-            if (obj is IFormLinkGetter formLink)
-            {
-                return formLink.Equals(this);
-            }
-            if (obj is not IWeaponGetter rhs) return false;
-            return ((WeaponCommon)((IWeaponGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
-        }
-
-        public bool Equals(IWeaponGetter? obj)
-        {
-            return ((WeaponCommon)((IWeaponGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
-        }
-
-        public override int GetHashCode() => ((WeaponCommon)((IWeaponGetter)this).CommonInstance()!).GetHashCode(this);
-
-        #endregion
-
+        public override IEnumerable<IFormLinkGetter> ContainedFormLinks => MagicEffectSummonCreatureArchetypeCommon.Instance.GetContainedFormLinks(this);
+        public override void RemapLinks(IReadOnlyDictionary<FormKey, FormKey> mapping) => MagicEffectSummonCreatureArchetypeSetterCommon.Instance.RemapLinks(this, mapping);
         #endregion
 
         #region Binary Translation
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected override object BinaryWriteTranslator => WeaponBinaryWriteTranslation.Instance;
+        protected override object BinaryWriteTranslator => MagicEffectSummonCreatureArchetypeBinaryWriteTranslation.Instance;
         void IBinaryItem.WriteToBinary(
             MutagenWriter writer,
             TypedWriteParams? translationParams = null)
         {
-            ((WeaponBinaryWriteTranslation)this.BinaryWriteTranslator).Write(
+            ((MagicEffectSummonCreatureArchetypeBinaryWriteTranslation)this.BinaryWriteTranslator).Write(
                 item: this,
                 writer: writer,
                 translationParams: translationParams);
         }
         #region Binary Create
-        public new static Weapon CreateFromBinary(
+        public new static MagicEffectSummonCreatureArchetype CreateFromBinary(
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
-            var ret = new Weapon();
-            ((WeaponSetterCommon)((IWeaponGetter)ret).CommonSetterInstance()!).CopyInFromBinary(
+            var ret = new MagicEffectSummonCreatureArchetype();
+            ((MagicEffectSummonCreatureArchetypeSetterCommon)((IMagicEffectSummonCreatureArchetypeGetter)ret).CommonSetterInstance()!).CopyInFromBinary(
                 item: ret,
                 frame: frame,
                 translationParams: translationParams);
@@ -397,7 +336,7 @@ namespace Mutagen.Bethesda.Fallout4
 
         public static bool TryCreateFromBinary(
             MutagenFrame frame,
-            out Weapon item,
+            out MagicEffectSummonCreatureArchetype item,
             TypedParseParams? translationParams = null)
         {
             var startPos = frame.Position;
@@ -412,84 +351,80 @@ namespace Mutagen.Bethesda.Fallout4
 
         void IClearable.Clear()
         {
-            ((WeaponSetterCommon)((IWeaponGetter)this).CommonSetterInstance()!).Clear(this);
+            ((MagicEffectSummonCreatureArchetypeSetterCommon)((IMagicEffectSummonCreatureArchetypeGetter)this).CommonSetterInstance()!).Clear(this);
         }
 
-        internal static new Weapon GetNew()
+        internal static new MagicEffectSummonCreatureArchetype GetNew()
         {
-            return new Weapon();
+            return new MagicEffectSummonCreatureArchetype();
         }
 
     }
     #endregion
 
     #region Interface
-    public partial interface IWeapon :
-        IFallout4MajorRecordInternal,
-        ILoquiObjectSetter<IWeaponInternal>,
-        IObjectId,
-        IWeaponGetter
+    public partial interface IMagicEffectSummonCreatureArchetype :
+        ILoquiObjectSetter<IMagicEffectSummonCreatureArchetypeInternal>,
+        IMagicEffectArchetypeInternal,
+        IMagicEffectSummonCreatureArchetypeGetter
     {
     }
 
-    public partial interface IWeaponInternal :
-        IFallout4MajorRecordInternal,
-        IWeapon,
-        IWeaponGetter
+    public partial interface IMagicEffectSummonCreatureArchetypeInternal :
+        IMagicEffectArchetypeInternal,
+        IMagicEffectSummonCreatureArchetype,
+        IMagicEffectSummonCreatureArchetypeGetter
     {
     }
 
-    [AssociatedRecordTypesAttribute(Mutagen.Bethesda.Fallout4.Internals.RecordTypeInts.WEAP)]
-    public partial interface IWeaponGetter :
-        IFallout4MajorRecordGetter,
+    public partial interface IMagicEffectSummonCreatureArchetypeGetter :
+        IMagicEffectArchetypeGetter,
         IBinaryItem,
-        ILoquiObject<IWeaponGetter>,
-        IMapsToGetter<IWeaponGetter>,
-        IObjectIdGetter
+        ILoquiObject<IMagicEffectSummonCreatureArchetypeGetter>
     {
-        static new ILoquiRegistration StaticRegistration => Weapon_Registration.Instance;
+        static new ILoquiRegistration StaticRegistration => MagicEffectSummonCreatureArchetype_Registration.Instance;
 
     }
 
     #endregion
 
     #region Common MixIn
-    public static partial class WeaponMixIn
+    public static partial class MagicEffectSummonCreatureArchetypeMixIn
     {
-        public static void Clear(this IWeaponInternal item)
+        public static void Clear(this IMagicEffectSummonCreatureArchetypeInternal item)
         {
-            ((WeaponSetterCommon)((IWeaponGetter)item).CommonSetterInstance()!).Clear(item: item);
+            ((MagicEffectSummonCreatureArchetypeSetterCommon)((IMagicEffectSummonCreatureArchetypeGetter)item).CommonSetterInstance()!).Clear(item: item);
         }
 
-        public static Weapon.Mask<bool> GetEqualsMask(
-            this IWeaponGetter item,
-            IWeaponGetter rhs,
+        public static MagicEffectSummonCreatureArchetype.Mask<bool> GetEqualsMask(
+            this IMagicEffectSummonCreatureArchetypeGetter item,
+            IMagicEffectSummonCreatureArchetypeGetter rhs,
             EqualsMaskHelper.Include include = EqualsMaskHelper.Include.All)
         {
-            return ((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).GetEqualsMask(
+            return ((MagicEffectSummonCreatureArchetypeCommon)((IMagicEffectSummonCreatureArchetypeGetter)item).CommonInstance()!).GetEqualsMask(
                 item: item,
                 rhs: rhs,
                 include: include);
         }
 
         public static string ToString(
-            this IWeaponGetter item,
+            this IMagicEffectSummonCreatureArchetypeGetter item,
             string? name = null,
-            Weapon.Mask<bool>? printMask = null)
+            MagicEffectSummonCreatureArchetype.Mask<bool>? printMask = null)
         {
-            return ((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).ToString(
+            return ((MagicEffectSummonCreatureArchetypeCommon)((IMagicEffectSummonCreatureArchetypeGetter)item).CommonInstance()!).ToString(
                 item: item,
                 name: name,
                 printMask: printMask);
         }
 
         public static void ToString(
-            this IWeaponGetter item,
+            this IMagicEffectSummonCreatureArchetypeGetter item,
             FileGeneration fg,
             string? name = null,
-            Weapon.Mask<bool>? printMask = null)
+            MagicEffectSummonCreatureArchetype.Mask<bool>? printMask = null)
         {
-            ((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).ToString(
+            ((MagicEffectSummonCreatureArchetypeCommon)((IMagicEffectSummonCreatureArchetypeGetter)item).CommonInstance()!).ToString(
                 item: item,
                 fg: fg,
                 name: name,
@@ -497,39 +432,39 @@ namespace Mutagen.Bethesda.Fallout4
         }
 
         public static bool Equals(
-            this IWeaponGetter item,
-            IWeaponGetter rhs,
-            Weapon.TranslationMask? equalsMask = null)
+            this IMagicEffectSummonCreatureArchetypeGetter item,
+            IMagicEffectSummonCreatureArchetypeGetter rhs,
+            MagicEffectSummonCreatureArchetype.TranslationMask? equalsMask = null)
         {
-            return ((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).Equals(
+            return ((MagicEffectSummonCreatureArchetypeCommon)((IMagicEffectSummonCreatureArchetypeGetter)item).CommonInstance()!).Equals(
                 lhs: item,
                 rhs: rhs,
                 crystal: equalsMask?.GetCrystal());
         }
 
         public static void DeepCopyIn(
-            this IWeaponInternal lhs,
-            IWeaponGetter rhs,
-            out Weapon.ErrorMask errorMask,
-            Weapon.TranslationMask? copyMask = null)
+            this IMagicEffectSummonCreatureArchetypeInternal lhs,
+            IMagicEffectSummonCreatureArchetypeGetter rhs,
+            out MagicEffectSummonCreatureArchetype.ErrorMask errorMask,
+            MagicEffectSummonCreatureArchetype.TranslationMask? copyMask = null)
         {
             var errorMaskBuilder = new ErrorMaskBuilder();
-            ((WeaponSetterTranslationCommon)((IWeaponGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
+            ((MagicEffectSummonCreatureArchetypeSetterTranslationCommon)((IMagicEffectSummonCreatureArchetypeGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: lhs,
                 rhs: rhs,
                 errorMask: errorMaskBuilder,
                 copyMask: copyMask?.GetCrystal(),
                 deepCopy: false);
-            errorMask = Weapon.ErrorMask.Factory(errorMaskBuilder);
+            errorMask = MagicEffectSummonCreatureArchetype.ErrorMask.Factory(errorMaskBuilder);
         }
 
         public static void DeepCopyIn(
-            this IWeaponInternal lhs,
-            IWeaponGetter rhs,
+            this IMagicEffectSummonCreatureArchetypeInternal lhs,
+            IMagicEffectSummonCreatureArchetypeGetter rhs,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask)
         {
-            ((WeaponSetterTranslationCommon)((IWeaponGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
+            ((MagicEffectSummonCreatureArchetypeSetterTranslationCommon)((IMagicEffectSummonCreatureArchetypeGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: lhs,
                 rhs: rhs,
                 errorMask: errorMask,
@@ -537,58 +472,44 @@ namespace Mutagen.Bethesda.Fallout4
                 deepCopy: false);
         }
 
-        public static Weapon DeepCopy(
-            this IWeaponGetter item,
-            Weapon.TranslationMask? copyMask = null)
+        public static MagicEffectSummonCreatureArchetype DeepCopy(
+            this IMagicEffectSummonCreatureArchetypeGetter item,
+            MagicEffectSummonCreatureArchetype.TranslationMask? copyMask = null)
         {
-            return ((WeaponSetterTranslationCommon)((IWeaponGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
+            return ((MagicEffectSummonCreatureArchetypeSetterTranslationCommon)((IMagicEffectSummonCreatureArchetypeGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
                 item: item,
                 copyMask: copyMask);
         }
 
-        public static Weapon DeepCopy(
-            this IWeaponGetter item,
-            out Weapon.ErrorMask errorMask,
-            Weapon.TranslationMask? copyMask = null)
+        public static MagicEffectSummonCreatureArchetype DeepCopy(
+            this IMagicEffectSummonCreatureArchetypeGetter item,
+            out MagicEffectSummonCreatureArchetype.ErrorMask errorMask,
+            MagicEffectSummonCreatureArchetype.TranslationMask? copyMask = null)
         {
-            return ((WeaponSetterTranslationCommon)((IWeaponGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
+            return ((MagicEffectSummonCreatureArchetypeSetterTranslationCommon)((IMagicEffectSummonCreatureArchetypeGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
                 item: item,
                 copyMask: copyMask,
                 errorMask: out errorMask);
         }
 
-        public static Weapon DeepCopy(
-            this IWeaponGetter item,
+        public static MagicEffectSummonCreatureArchetype DeepCopy(
+            this IMagicEffectSummonCreatureArchetypeGetter item,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask = null)
         {
-            return ((WeaponSetterTranslationCommon)((IWeaponGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
+            return ((MagicEffectSummonCreatureArchetypeSetterTranslationCommon)((IMagicEffectSummonCreatureArchetypeGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
                 item: item,
                 copyMask: copyMask,
                 errorMask: errorMask);
         }
 
-        #region Mutagen
-        public static Weapon Duplicate(
-            this IWeaponGetter item,
-            FormKey formKey,
-            Weapon.TranslationMask? copyMask = null)
-        {
-            return ((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).Duplicate(
-                item: item,
-                formKey: formKey,
-                copyMask: copyMask?.GetCrystal());
-        }
-
-        #endregion
-
         #region Binary Translation
         public static void CopyInFromBinary(
-            this IWeaponInternal item,
+            this IMagicEffectSummonCreatureArchetypeInternal item,
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
-            ((WeaponSetterCommon)((IWeaponGetter)item).CommonSetterInstance()!).CopyInFromBinary(
+            ((MagicEffectSummonCreatureArchetypeSetterCommon)((IMagicEffectSummonCreatureArchetypeGetter)item).CommonSetterInstance()!).CopyInFromBinary(
                 item: item,
                 frame: frame,
                 translationParams: translationParams);
@@ -604,52 +525,49 @@ namespace Mutagen.Bethesda.Fallout4
 namespace Mutagen.Bethesda.Fallout4.Internals
 {
     #region Field Index
-    public enum Weapon_FieldIndex
+    public enum MagicEffectSummonCreatureArchetype_FieldIndex
     {
-        MajorRecordFlagsRaw = 0,
-        FormKey = 1,
-        VersionControl = 2,
-        EditorID = 3,
-        FormVersion = 4,
-        Version2 = 5,
+        Type = 0,
+        AssociationKey = 1,
+        ActorValue = 2,
     }
     #endregion
 
     #region Registration
-    public partial class Weapon_Registration : ILoquiRegistration
+    public partial class MagicEffectSummonCreatureArchetype_Registration : ILoquiRegistration
     {
-        public static readonly Weapon_Registration Instance = new Weapon_Registration();
+        public static readonly MagicEffectSummonCreatureArchetype_Registration Instance = new MagicEffectSummonCreatureArchetype_Registration();
 
         public static ProtocolKey ProtocolKey => ProtocolDefinition_Fallout4.ProtocolKey;
 
         public static readonly ObjectKey ObjectKey = new ObjectKey(
             protocolKey: ProtocolDefinition_Fallout4.ProtocolKey,
-            msgID: 286,
+            msgID: 277,
             version: 0);
 
-        public const string GUID = "ea1189a0-716d-4099-ad06-721ccd313caa";
+        public const string GUID = "8269ac1b-2ec3-4c19-96ce-a7d7d1e33e2f";
 
         public const ushort AdditionalFieldCount = 0;
 
-        public const ushort FieldCount = 6;
+        public const ushort FieldCount = 3;
 
-        public static readonly Type MaskType = typeof(Weapon.Mask<>);
+        public static readonly Type MaskType = typeof(MagicEffectSummonCreatureArchetype.Mask<>);
 
-        public static readonly Type ErrorMaskType = typeof(Weapon.ErrorMask);
+        public static readonly Type ErrorMaskType = typeof(MagicEffectSummonCreatureArchetype.ErrorMask);
 
-        public static readonly Type ClassType = typeof(Weapon);
+        public static readonly Type ClassType = typeof(MagicEffectSummonCreatureArchetype);
 
-        public static readonly Type GetterType = typeof(IWeaponGetter);
+        public static readonly Type GetterType = typeof(IMagicEffectSummonCreatureArchetypeGetter);
 
         public static readonly Type? InternalGetterType = null;
 
-        public static readonly Type SetterType = typeof(IWeapon);
+        public static readonly Type SetterType = typeof(IMagicEffectSummonCreatureArchetype);
 
-        public static readonly Type? InternalSetterType = typeof(IWeaponInternal);
+        public static readonly Type? InternalSetterType = typeof(IMagicEffectSummonCreatureArchetypeInternal);
 
-        public const string FullName = "Mutagen.Bethesda.Fallout4.Weapon";
+        public const string FullName = "Mutagen.Bethesda.Fallout4.MagicEffectSummonCreatureArchetype";
 
-        public const string Name = "Weapon";
+        public const string Name = "MagicEffectSummonCreatureArchetype";
 
         public const string Namespace = "Mutagen.Bethesda.Fallout4";
 
@@ -657,8 +575,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public static readonly Type? GenericRegistrationType = null;
 
-        public static readonly RecordType TriggeringRecordType = RecordTypes.WEAP;
-        public static readonly Type BinaryWriteTranslation = typeof(WeaponBinaryWriteTranslation);
+        public static readonly Type BinaryWriteTranslation = typeof(MagicEffectSummonCreatureArchetypeBinaryWriteTranslation);
         #region Interface
         ProtocolKey ILoquiRegistration.ProtocolKey => ProtocolKey;
         ObjectKey ILoquiRegistration.ObjectKey => ObjectKey;
@@ -691,30 +608,25 @@ namespace Mutagen.Bethesda.Fallout4.Internals
     #endregion
 
     #region Common
-    public partial class WeaponSetterCommon : Fallout4MajorRecordSetterCommon
+    public partial class MagicEffectSummonCreatureArchetypeSetterCommon : MagicEffectArchetypeSetterCommon
     {
-        public new static readonly WeaponSetterCommon Instance = new WeaponSetterCommon();
+        public new static readonly MagicEffectSummonCreatureArchetypeSetterCommon Instance = new MagicEffectSummonCreatureArchetypeSetterCommon();
 
         partial void ClearPartial();
         
-        public void Clear(IWeaponInternal item)
+        public void Clear(IMagicEffectSummonCreatureArchetypeInternal item)
         {
             ClearPartial();
             base.Clear(item);
         }
         
-        public override void Clear(IFallout4MajorRecordInternal item)
+        public override void Clear(IMagicEffectArchetypeInternal item)
         {
-            Clear(item: (IWeaponInternal)item);
-        }
-        
-        public override void Clear(IMajorRecordInternal item)
-        {
-            Clear(item: (IWeaponInternal)item);
+            Clear(item: (IMagicEffectSummonCreatureArchetypeInternal)item);
         }
         
         #region Mutagen
-        public void RemapLinks(IWeapon obj, IReadOnlyDictionary<FormKey, FormKey> mapping)
+        public void RemapLinks(IMagicEffectSummonCreatureArchetype obj, IReadOnlyDictionary<FormKey, FormKey> mapping)
         {
             base.RemapLinks(obj, mapping);
         }
@@ -723,36 +635,24 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         
         #region Binary Translation
         public virtual void CopyInFromBinary(
-            IWeaponInternal item,
+            IMagicEffectSummonCreatureArchetypeInternal item,
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
-            PluginUtilityTranslation.MajorRecordParse<IWeaponInternal>(
+            PluginUtilityTranslation.SubrecordParse(
                 record: item,
                 frame: frame,
                 translationParams: translationParams,
-                fillStructs: WeaponBinaryCreateTranslation.FillBinaryStructs,
-                fillTyped: WeaponBinaryCreateTranslation.FillBinaryRecordTypes);
+                fillStructs: MagicEffectSummonCreatureArchetypeBinaryCreateTranslation.FillBinaryStructs);
         }
         
         public override void CopyInFromBinary(
-            IFallout4MajorRecordInternal item,
+            IMagicEffectArchetypeInternal item,
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
             CopyInFromBinary(
-                item: (Weapon)item,
-                frame: frame,
-                translationParams: translationParams);
-        }
-        
-        public override void CopyInFromBinary(
-            IMajorRecordInternal item,
-            MutagenFrame frame,
-            TypedParseParams? translationParams = null)
-        {
-            CopyInFromBinary(
-                item: (Weapon)item,
+                item: (MagicEffectSummonCreatureArchetype)item,
                 frame: frame,
                 translationParams: translationParams);
         }
@@ -760,17 +660,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         #endregion
         
     }
-    public partial class WeaponCommon : Fallout4MajorRecordCommon
+    public partial class MagicEffectSummonCreatureArchetypeCommon : MagicEffectArchetypeCommon
     {
-        public new static readonly WeaponCommon Instance = new WeaponCommon();
+        public new static readonly MagicEffectSummonCreatureArchetypeCommon Instance = new MagicEffectSummonCreatureArchetypeCommon();
 
-        public Weapon.Mask<bool> GetEqualsMask(
-            IWeaponGetter item,
-            IWeaponGetter rhs,
+        public MagicEffectSummonCreatureArchetype.Mask<bool> GetEqualsMask(
+            IMagicEffectSummonCreatureArchetypeGetter item,
+            IMagicEffectSummonCreatureArchetypeGetter rhs,
             EqualsMaskHelper.Include include = EqualsMaskHelper.Include.All)
         {
-            var ret = new Weapon.Mask<bool>(false);
-            ((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).FillEqualsMask(
+            var ret = new MagicEffectSummonCreatureArchetype.Mask<bool>(false);
+            ((MagicEffectSummonCreatureArchetypeCommon)((IMagicEffectSummonCreatureArchetypeGetter)item).CommonInstance()!).FillEqualsMask(
                 item: item,
                 rhs: rhs,
                 ret: ret,
@@ -779,9 +679,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         public void FillEqualsMask(
-            IWeaponGetter item,
-            IWeaponGetter rhs,
-            Weapon.Mask<bool> ret,
+            IMagicEffectSummonCreatureArchetypeGetter item,
+            IMagicEffectSummonCreatureArchetypeGetter rhs,
+            MagicEffectSummonCreatureArchetype.Mask<bool> ret,
             EqualsMaskHelper.Include include = EqualsMaskHelper.Include.All)
         {
             if (rhs == null) return;
@@ -789,9 +689,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         public string ToString(
-            IWeaponGetter item,
+            IMagicEffectSummonCreatureArchetypeGetter item,
             string? name = null,
-            Weapon.Mask<bool>? printMask = null)
+            MagicEffectSummonCreatureArchetype.Mask<bool>? printMask = null)
         {
             var fg = new FileGeneration();
             ToString(
@@ -803,18 +703,18 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         public void ToString(
-            IWeaponGetter item,
+            IMagicEffectSummonCreatureArchetypeGetter item,
             FileGeneration fg,
             string? name = null,
-            Weapon.Mask<bool>? printMask = null)
+            MagicEffectSummonCreatureArchetype.Mask<bool>? printMask = null)
         {
             if (name == null)
             {
-                fg.AppendLine($"Weapon =>");
+                fg.AppendLine($"MagicEffectSummonCreatureArchetype =>");
             }
             else
             {
-                fg.AppendLine($"{name} (Weapon) =>");
+                fg.AppendLine($"{name} (MagicEffectSummonCreatureArchetype) =>");
             }
             fg.AppendLine("[");
             using (new DepthWrapper(fg))
@@ -828,49 +728,26 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         protected static void ToStringFields(
-            IWeaponGetter item,
+            IMagicEffectSummonCreatureArchetypeGetter item,
             FileGeneration fg,
-            Weapon.Mask<bool>? printMask = null)
+            MagicEffectSummonCreatureArchetype.Mask<bool>? printMask = null)
         {
-            Fallout4MajorRecordCommon.ToStringFields(
+            MagicEffectArchetypeCommon.ToStringFields(
                 item: item,
                 fg: fg,
                 printMask: printMask);
         }
         
-        public static Weapon_FieldIndex ConvertFieldIndex(Fallout4MajorRecord_FieldIndex index)
+        public static MagicEffectSummonCreatureArchetype_FieldIndex ConvertFieldIndex(MagicEffectArchetype_FieldIndex index)
         {
             switch (index)
             {
-                case Fallout4MajorRecord_FieldIndex.MajorRecordFlagsRaw:
-                    return (Weapon_FieldIndex)((int)index);
-                case Fallout4MajorRecord_FieldIndex.FormKey:
-                    return (Weapon_FieldIndex)((int)index);
-                case Fallout4MajorRecord_FieldIndex.VersionControl:
-                    return (Weapon_FieldIndex)((int)index);
-                case Fallout4MajorRecord_FieldIndex.EditorID:
-                    return (Weapon_FieldIndex)((int)index);
-                case Fallout4MajorRecord_FieldIndex.FormVersion:
-                    return (Weapon_FieldIndex)((int)index);
-                case Fallout4MajorRecord_FieldIndex.Version2:
-                    return (Weapon_FieldIndex)((int)index);
-                default:
-                    throw new ArgumentException($"Index is out of range: {index.ToStringFast_Enum_Only()}");
-            }
-        }
-        
-        public static new Weapon_FieldIndex ConvertFieldIndex(MajorRecord_FieldIndex index)
-        {
-            switch (index)
-            {
-                case MajorRecord_FieldIndex.MajorRecordFlagsRaw:
-                    return (Weapon_FieldIndex)((int)index);
-                case MajorRecord_FieldIndex.FormKey:
-                    return (Weapon_FieldIndex)((int)index);
-                case MajorRecord_FieldIndex.VersionControl:
-                    return (Weapon_FieldIndex)((int)index);
-                case MajorRecord_FieldIndex.EditorID:
-                    return (Weapon_FieldIndex)((int)index);
+                case MagicEffectArchetype_FieldIndex.Type:
+                    return (MagicEffectSummonCreatureArchetype_FieldIndex)((int)index);
+                case MagicEffectArchetype_FieldIndex.AssociationKey:
+                    return (MagicEffectSummonCreatureArchetype_FieldIndex)((int)index);
+                case MagicEffectArchetype_FieldIndex.ActorValue:
+                    return (MagicEffectSummonCreatureArchetype_FieldIndex)((int)index);
                 default:
                     throw new ArgumentException($"Index is out of range: {index.ToStringFast_Enum_Only()}");
             }
@@ -878,52 +755,36 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         
         #region Equals and Hash
         public virtual bool Equals(
-            IWeaponGetter? lhs,
-            IWeaponGetter? rhs,
+            IMagicEffectSummonCreatureArchetypeGetter? lhs,
+            IMagicEffectSummonCreatureArchetypeGetter? rhs,
             TranslationCrystal? crystal)
         {
             if (!EqualsMaskHelper.RefEquality(lhs, rhs, out var isEqual)) return isEqual;
-            if (!base.Equals((IFallout4MajorRecordGetter)lhs, (IFallout4MajorRecordGetter)rhs, crystal)) return false;
+            if (!base.Equals((IMagicEffectArchetypeGetter)lhs, (IMagicEffectArchetypeGetter)rhs, crystal)) return false;
             return true;
         }
         
         public override bool Equals(
-            IFallout4MajorRecordGetter? lhs,
-            IFallout4MajorRecordGetter? rhs,
+            IMagicEffectArchetypeGetter? lhs,
+            IMagicEffectArchetypeGetter? rhs,
             TranslationCrystal? crystal)
         {
             return Equals(
-                lhs: (IWeaponGetter?)lhs,
-                rhs: rhs as IWeaponGetter,
+                lhs: (IMagicEffectSummonCreatureArchetypeGetter?)lhs,
+                rhs: rhs as IMagicEffectSummonCreatureArchetypeGetter,
                 crystal: crystal);
         }
         
-        public override bool Equals(
-            IMajorRecordGetter? lhs,
-            IMajorRecordGetter? rhs,
-            TranslationCrystal? crystal)
-        {
-            return Equals(
-                lhs: (IWeaponGetter?)lhs,
-                rhs: rhs as IWeaponGetter,
-                crystal: crystal);
-        }
-        
-        public virtual int GetHashCode(IWeaponGetter item)
+        public virtual int GetHashCode(IMagicEffectSummonCreatureArchetypeGetter item)
         {
             var hash = new HashCode();
             hash.Add(base.GetHashCode());
             return hash.ToHashCode();
         }
         
-        public override int GetHashCode(IFallout4MajorRecordGetter item)
+        public override int GetHashCode(IMagicEffectArchetypeGetter item)
         {
-            return GetHashCode(item: (IWeaponGetter)item);
-        }
-        
-        public override int GetHashCode(IMajorRecordGetter item)
-        {
-            return GetHashCode(item: (IWeaponGetter)item);
+            return GetHashCode(item: (IMagicEffectSummonCreatureArchetypeGetter)item);
         }
         
         #endregion
@@ -931,11 +792,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         
         public override object GetNew()
         {
-            return Weapon.GetNew();
+            return MagicEffectSummonCreatureArchetype.GetNew();
         }
         
         #region Mutagen
-        public IEnumerable<IFormLinkGetter> GetContainedFormLinks(IWeaponGetter obj)
+        public IEnumerable<IFormLinkGetter> GetContainedFormLinks(IMagicEffectSummonCreatureArchetypeGetter obj)
         {
             foreach (var item in base.GetContainedFormLinks(obj))
             {
@@ -944,52 +805,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             yield break;
         }
         
-        #region Duplicate
-        public Weapon Duplicate(
-            IWeaponGetter item,
-            FormKey formKey,
-            TranslationCrystal? copyMask)
-        {
-            var newRec = new Weapon(formKey);
-            newRec.DeepCopyIn(item, default(ErrorMaskBuilder?), copyMask);
-            return newRec;
-        }
-        
-        public override Fallout4MajorRecord Duplicate(
-            IFallout4MajorRecordGetter item,
-            FormKey formKey,
-            TranslationCrystal? copyMask)
-        {
-            return this.Duplicate(
-                item: (IWeaponGetter)item,
-                formKey: formKey,
-                copyMask: copyMask);
-        }
-        
-        public override MajorRecord Duplicate(
-            IMajorRecordGetter item,
-            FormKey formKey,
-            TranslationCrystal? copyMask)
-        {
-            return this.Duplicate(
-                item: (IWeaponGetter)item,
-                formKey: formKey,
-                copyMask: copyMask);
-        }
-        
-        #endregion
-        
         #endregion
         
     }
-    public partial class WeaponSetterTranslationCommon : Fallout4MajorRecordSetterTranslationCommon
+    public partial class MagicEffectSummonCreatureArchetypeSetterTranslationCommon : MagicEffectArchetypeSetterTranslationCommon
     {
-        public new static readonly WeaponSetterTranslationCommon Instance = new WeaponSetterTranslationCommon();
+        public new static readonly MagicEffectSummonCreatureArchetypeSetterTranslationCommon Instance = new MagicEffectSummonCreatureArchetypeSetterTranslationCommon();
 
         #region DeepCopyIn
         public void DeepCopyIn(
-            IWeaponInternal item,
-            IWeaponGetter rhs,
+            IMagicEffectSummonCreatureArchetypeInternal item,
+            IMagicEffectSummonCreatureArchetypeGetter rhs,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask,
             bool deepCopy)
@@ -1003,75 +829,45 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         public void DeepCopyIn(
-            IWeapon item,
-            IWeaponGetter rhs,
+            IMagicEffectSummonCreatureArchetype item,
+            IMagicEffectSummonCreatureArchetypeGetter rhs,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask,
             bool deepCopy)
         {
             base.DeepCopyIn(
-                (IFallout4MajorRecord)item,
-                (IFallout4MajorRecordGetter)rhs,
+                (IMagicEffectArchetype)item,
+                (IMagicEffectArchetypeGetter)rhs,
                 errorMask,
                 copyMask,
                 deepCopy: deepCopy);
         }
         
         public override void DeepCopyIn(
-            IFallout4MajorRecordInternal item,
-            IFallout4MajorRecordGetter rhs,
+            IMagicEffectArchetypeInternal item,
+            IMagicEffectArchetypeGetter rhs,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask,
             bool deepCopy)
         {
             this.DeepCopyIn(
-                item: (IWeaponInternal)item,
-                rhs: (IWeaponGetter)rhs,
+                item: (IMagicEffectSummonCreatureArchetypeInternal)item,
+                rhs: (IMagicEffectSummonCreatureArchetypeGetter)rhs,
                 errorMask: errorMask,
                 copyMask: copyMask,
                 deepCopy: deepCopy);
         }
         
         public override void DeepCopyIn(
-            IFallout4MajorRecord item,
-            IFallout4MajorRecordGetter rhs,
+            IMagicEffectArchetype item,
+            IMagicEffectArchetypeGetter rhs,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask,
             bool deepCopy)
         {
             this.DeepCopyIn(
-                item: (IWeapon)item,
-                rhs: (IWeaponGetter)rhs,
-                errorMask: errorMask,
-                copyMask: copyMask,
-                deepCopy: deepCopy);
-        }
-        
-        public override void DeepCopyIn(
-            IMajorRecordInternal item,
-            IMajorRecordGetter rhs,
-            ErrorMaskBuilder? errorMask,
-            TranslationCrystal? copyMask,
-            bool deepCopy)
-        {
-            this.DeepCopyIn(
-                item: (IWeaponInternal)item,
-                rhs: (IWeaponGetter)rhs,
-                errorMask: errorMask,
-                copyMask: copyMask,
-                deepCopy: deepCopy);
-        }
-        
-        public override void DeepCopyIn(
-            IMajorRecord item,
-            IMajorRecordGetter rhs,
-            ErrorMaskBuilder? errorMask,
-            TranslationCrystal? copyMask,
-            bool deepCopy)
-        {
-            this.DeepCopyIn(
-                item: (IWeapon)item,
-                rhs: (IWeaponGetter)rhs,
+                item: (IMagicEffectSummonCreatureArchetype)item,
+                rhs: (IMagicEffectSummonCreatureArchetypeGetter)rhs,
                 errorMask: errorMask,
                 copyMask: copyMask,
                 deepCopy: deepCopy);
@@ -1079,12 +875,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         
         #endregion
         
-        public Weapon DeepCopy(
-            IWeaponGetter item,
-            Weapon.TranslationMask? copyMask = null)
+        public MagicEffectSummonCreatureArchetype DeepCopy(
+            IMagicEffectSummonCreatureArchetypeGetter item,
+            MagicEffectSummonCreatureArchetype.TranslationMask? copyMask = null)
         {
-            Weapon ret = (Weapon)((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).GetNew();
-            ((WeaponSetterTranslationCommon)((IWeaponGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
+            MagicEffectSummonCreatureArchetype ret = (MagicEffectSummonCreatureArchetype)((MagicEffectSummonCreatureArchetypeCommon)((IMagicEffectSummonCreatureArchetypeGetter)item).CommonInstance()!).GetNew();
+            ((MagicEffectSummonCreatureArchetypeSetterTranslationCommon)((IMagicEffectSummonCreatureArchetypeGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: ret,
                 rhs: item,
                 errorMask: null,
@@ -1093,30 +889,30 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             return ret;
         }
         
-        public Weapon DeepCopy(
-            IWeaponGetter item,
-            out Weapon.ErrorMask errorMask,
-            Weapon.TranslationMask? copyMask = null)
+        public MagicEffectSummonCreatureArchetype DeepCopy(
+            IMagicEffectSummonCreatureArchetypeGetter item,
+            out MagicEffectSummonCreatureArchetype.ErrorMask errorMask,
+            MagicEffectSummonCreatureArchetype.TranslationMask? copyMask = null)
         {
             var errorMaskBuilder = new ErrorMaskBuilder();
-            Weapon ret = (Weapon)((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).GetNew();
-            ((WeaponSetterTranslationCommon)((IWeaponGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
+            MagicEffectSummonCreatureArchetype ret = (MagicEffectSummonCreatureArchetype)((MagicEffectSummonCreatureArchetypeCommon)((IMagicEffectSummonCreatureArchetypeGetter)item).CommonInstance()!).GetNew();
+            ((MagicEffectSummonCreatureArchetypeSetterTranslationCommon)((IMagicEffectSummonCreatureArchetypeGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
                 ret,
                 item,
                 errorMask: errorMaskBuilder,
                 copyMask: copyMask?.GetCrystal(),
                 deepCopy: true);
-            errorMask = Weapon.ErrorMask.Factory(errorMaskBuilder);
+            errorMask = MagicEffectSummonCreatureArchetype.ErrorMask.Factory(errorMaskBuilder);
             return ret;
         }
         
-        public Weapon DeepCopy(
-            IWeaponGetter item,
+        public MagicEffectSummonCreatureArchetype DeepCopy(
+            IMagicEffectSummonCreatureArchetypeGetter item,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask = null)
         {
-            Weapon ret = (Weapon)((WeaponCommon)((IWeaponGetter)item).CommonInstance()!).GetNew();
-            ((WeaponSetterTranslationCommon)((IWeaponGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
+            MagicEffectSummonCreatureArchetype ret = (MagicEffectSummonCreatureArchetype)((MagicEffectSummonCreatureArchetypeCommon)((IMagicEffectSummonCreatureArchetypeGetter)item).CommonInstance()!).GetNew();
+            ((MagicEffectSummonCreatureArchetypeSetterTranslationCommon)((IMagicEffectSummonCreatureArchetypeGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: ret,
                 rhs: item,
                 errorMask: errorMask,
@@ -1132,21 +928,21 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
 namespace Mutagen.Bethesda.Fallout4
 {
-    public partial class Weapon
+    public partial class MagicEffectSummonCreatureArchetype
     {
         #region Common Routing
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        ILoquiRegistration ILoquiObject.Registration => Weapon_Registration.Instance;
-        public new static Weapon_Registration StaticRegistration => Weapon_Registration.Instance;
+        ILoquiRegistration ILoquiObject.Registration => MagicEffectSummonCreatureArchetype_Registration.Instance;
+        public new static MagicEffectSummonCreatureArchetype_Registration StaticRegistration => MagicEffectSummonCreatureArchetype_Registration.Instance;
         [DebuggerStepThrough]
-        protected override object CommonInstance() => WeaponCommon.Instance;
+        protected override object CommonInstance() => MagicEffectSummonCreatureArchetypeCommon.Instance;
         [DebuggerStepThrough]
         protected override object CommonSetterInstance()
         {
-            return WeaponSetterCommon.Instance;
+            return MagicEffectSummonCreatureArchetypeSetterCommon.Instance;
         }
         [DebuggerStepThrough]
-        protected override object CommonSetterTranslationInstance() => WeaponSetterTranslationCommon.Instance;
+        protected override object CommonSetterTranslationInstance() => MagicEffectSummonCreatureArchetypeSetterTranslationCommon.Instance;
 
         #endregion
 
@@ -1157,36 +953,20 @@ namespace Mutagen.Bethesda.Fallout4
 #region Binary Translation
 namespace Mutagen.Bethesda.Fallout4.Internals
 {
-    public partial class WeaponBinaryWriteTranslation :
-        Fallout4MajorRecordBinaryWriteTranslation,
+    public partial class MagicEffectSummonCreatureArchetypeBinaryWriteTranslation :
+        MagicEffectArchetypeBinaryWriteTranslation,
         IBinaryWriteTranslator
     {
-        public new readonly static WeaponBinaryWriteTranslation Instance = new WeaponBinaryWriteTranslation();
+        public new readonly static MagicEffectSummonCreatureArchetypeBinaryWriteTranslation Instance = new MagicEffectSummonCreatureArchetypeBinaryWriteTranslation();
 
         public void Write(
             MutagenWriter writer,
-            IWeaponGetter item,
+            IMagicEffectSummonCreatureArchetypeGetter item,
             TypedWriteParams? translationParams = null)
         {
-            using (HeaderExport.Record(
-                writer: writer,
-                record: translationParams.ConvertToCustom(RecordTypes.WEAP)))
-            {
-                try
-                {
-                    Fallout4MajorRecordBinaryWriteTranslation.WriteEmbedded(
-                        item: item,
-                        writer: writer);
-                    MajorRecordBinaryWriteTranslation.WriteRecordTypes(
-                        item: item,
-                        writer: writer,
-                        translationParams: translationParams);
-                }
-                catch (Exception ex)
-                {
-                    throw RecordException.Enrich(ex, item);
-                }
-            }
+            MagicEffectArchetypeBinaryWriteTranslation.WriteEmbedded(
+                item: item,
+                writer: writer);
         }
 
         public override void Write(
@@ -1195,48 +975,27 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TypedWriteParams? translationParams = null)
         {
             Write(
-                item: (IWeaponGetter)item,
+                item: (IMagicEffectSummonCreatureArchetypeGetter)item,
                 writer: writer,
                 translationParams: translationParams);
         }
 
         public override void Write(
             MutagenWriter writer,
-            IFallout4MajorRecordGetter item,
+            IMagicEffectArchetypeGetter item,
             TypedWriteParams? translationParams = null)
         {
             Write(
-                item: (IWeaponGetter)item,
-                writer: writer,
-                translationParams: translationParams);
-        }
-
-        public override void Write(
-            MutagenWriter writer,
-            IMajorRecordGetter item,
-            TypedWriteParams? translationParams = null)
-        {
-            Write(
-                item: (IWeaponGetter)item,
+                item: (IMagicEffectSummonCreatureArchetypeGetter)item,
                 writer: writer,
                 translationParams: translationParams);
         }
 
     }
 
-    public partial class WeaponBinaryCreateTranslation : Fallout4MajorRecordBinaryCreateTranslation
+    public partial class MagicEffectSummonCreatureArchetypeBinaryCreateTranslation : MagicEffectArchetypeBinaryCreateTranslation
     {
-        public new readonly static WeaponBinaryCreateTranslation Instance = new WeaponBinaryCreateTranslation();
-
-        public override RecordType RecordType => RecordTypes.WEAP;
-        public static void FillBinaryStructs(
-            IWeaponInternal item,
-            MutagenFrame frame)
-        {
-            Fallout4MajorRecordBinaryCreateTranslation.FillBinaryStructs(
-                item: item,
-                frame: frame);
-        }
+        public new readonly static MagicEffectSummonCreatureArchetypeBinaryCreateTranslation Instance = new MagicEffectSummonCreatureArchetypeBinaryCreateTranslation();
 
     }
 
@@ -1244,7 +1003,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 namespace Mutagen.Bethesda.Fallout4
 {
     #region Binary Write Mixins
-    public static class WeaponBinaryTranslationMixIn
+    public static class MagicEffectSummonCreatureArchetypeBinaryTranslationMixIn
     {
     }
     #endregion
@@ -1253,36 +1012,34 @@ namespace Mutagen.Bethesda.Fallout4
 }
 namespace Mutagen.Bethesda.Fallout4.Internals
 {
-    public partial class WeaponBinaryOverlay :
-        Fallout4MajorRecordBinaryOverlay,
-        IWeaponGetter
+    public partial class MagicEffectSummonCreatureArchetypeBinaryOverlay :
+        MagicEffectArchetypeBinaryOverlay,
+        IMagicEffectSummonCreatureArchetypeGetter
     {
         #region Common Routing
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        ILoquiRegistration ILoquiObject.Registration => Weapon_Registration.Instance;
-        public new static Weapon_Registration StaticRegistration => Weapon_Registration.Instance;
+        ILoquiRegistration ILoquiObject.Registration => MagicEffectSummonCreatureArchetype_Registration.Instance;
+        public new static MagicEffectSummonCreatureArchetype_Registration StaticRegistration => MagicEffectSummonCreatureArchetype_Registration.Instance;
         [DebuggerStepThrough]
-        protected override object CommonInstance() => WeaponCommon.Instance;
+        protected override object CommonInstance() => MagicEffectSummonCreatureArchetypeCommon.Instance;
         [DebuggerStepThrough]
-        protected override object CommonSetterTranslationInstance() => WeaponSetterTranslationCommon.Instance;
+        protected override object CommonSetterTranslationInstance() => MagicEffectSummonCreatureArchetypeSetterTranslationCommon.Instance;
 
         #endregion
 
         void IPrintable.ToString(FileGeneration fg, string? name) => this.ToString(fg, name);
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected override object BinaryWriteTranslator => WeaponBinaryWriteTranslation.Instance;
+        protected override object BinaryWriteTranslator => MagicEffectSummonCreatureArchetypeBinaryWriteTranslation.Instance;
         void IBinaryItem.WriteToBinary(
             MutagenWriter writer,
             TypedWriteParams? translationParams = null)
         {
-            ((WeaponBinaryWriteTranslation)this.BinaryWriteTranslator).Write(
+            ((MagicEffectSummonCreatureArchetypeBinaryWriteTranslation)this.BinaryWriteTranslator).Write(
                 item: this,
                 writer: writer,
                 translationParams: translationParams);
         }
-        protected override Type LinkType => typeof(IWeapon);
-
 
         partial void CustomFactoryEnd(
             OverlayStream stream,
@@ -1290,7 +1047,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             int offset);
 
         partial void CustomCtor();
-        protected WeaponBinaryOverlay(
+        protected MagicEffectSummonCreatureArchetypeBinaryOverlay(
             ReadOnlyMemorySlice<byte> bytes,
             BinaryOverlayFactoryPackage package)
             : base(
@@ -1300,39 +1057,28 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             this.CustomCtor();
         }
 
-        public static WeaponBinaryOverlay WeaponFactory(
+        public static MagicEffectSummonCreatureArchetypeBinaryOverlay MagicEffectSummonCreatureArchetypeFactory(
             OverlayStream stream,
             BinaryOverlayFactoryPackage package,
             TypedParseParams? parseParams = null)
         {
-            stream = PluginUtilityTranslation.DecompressStream(stream);
-            var ret = new WeaponBinaryOverlay(
-                bytes: HeaderTranslation.ExtractRecordMemory(stream.RemainingMemory, package.MetaData.Constants),
+            var ret = new MagicEffectSummonCreatureArchetypeBinaryOverlay(
+                bytes: stream.RemainingMemory,
                 package: package);
-            var finalPos = checked((int)(stream.Position + stream.GetMajorRecord().TotalLength));
-            int offset = stream.Position + package.MetaData.Constants.MajorConstants.TypeAndLengthLength;
-            ret._package.FormVersion = ret;
-            stream.Position += 0x10 + package.MetaData.Constants.MajorConstants.TypeAndLengthLength;
+            int offset = stream.Position;
             ret.CustomFactoryEnd(
                 stream: stream,
-                finalPos: finalPos,
+                finalPos: stream.Length,
                 offset: offset);
-            ret.FillSubrecordTypes(
-                majorReference: ret,
-                stream: stream,
-                finalPos: finalPos,
-                offset: offset,
-                parseParams: parseParams,
-                fill: ret.FillRecordType);
             return ret;
         }
 
-        public static WeaponBinaryOverlay WeaponFactory(
+        public static MagicEffectSummonCreatureArchetypeBinaryOverlay MagicEffectSummonCreatureArchetypeFactory(
             ReadOnlyMemorySlice<byte> slice,
             BinaryOverlayFactoryPackage package,
             TypedParseParams? parseParams = null)
         {
-            return WeaponFactory(
+            return MagicEffectSummonCreatureArchetypeFactory(
                 stream: new OverlayStream(slice, package),
                 package: package,
                 parseParams: parseParams);
@@ -1344,35 +1090,26 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             FileGeneration fg,
             string? name = null)
         {
-            WeaponMixIn.ToString(
+            MagicEffectSummonCreatureArchetypeMixIn.ToString(
                 item: this,
                 name: name);
         }
 
         #endregion
 
-        public override string ToString()
-        {
-            return MajorRecordPrinter<Weapon>.ToString(this);
-        }
-
         #region Equals and Hash
         public override bool Equals(object? obj)
         {
-            if (obj is IFormLinkGetter formLink)
-            {
-                return formLink.Equals(this);
-            }
-            if (obj is not IWeaponGetter rhs) return false;
-            return ((WeaponCommon)((IWeaponGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
+            if (obj is not IMagicEffectSummonCreatureArchetypeGetter rhs) return false;
+            return ((MagicEffectSummonCreatureArchetypeCommon)((IMagicEffectSummonCreatureArchetypeGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
         }
 
-        public bool Equals(IWeaponGetter? obj)
+        public bool Equals(IMagicEffectSummonCreatureArchetypeGetter? obj)
         {
-            return ((WeaponCommon)((IWeaponGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
+            return ((MagicEffectSummonCreatureArchetypeCommon)((IMagicEffectSummonCreatureArchetypeGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
         }
 
-        public override int GetHashCode() => ((WeaponCommon)((IWeaponGetter)this).CommonInstance()!).GetHashCode(this);
+        public override int GetHashCode() => ((MagicEffectSummonCreatureArchetypeCommon)((IMagicEffectSummonCreatureArchetypeGetter)this).CommonInstance()!).GetHashCode(this);
 
         #endregion
 

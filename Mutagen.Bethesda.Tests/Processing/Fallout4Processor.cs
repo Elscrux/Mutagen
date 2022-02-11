@@ -154,6 +154,7 @@ public class Fallout4Processor : Processor
                         new RecordType[] { "KYWD", "FULL" },
                         new RecordType[] { "ENCH", "FULL" },
                         new RecordType[] { "SPEL", "FULL" },
+                        new RecordType[] { "MGEF", "FULL", "DNAM" },
                         new RecordType[] { "ACTI", "FULL", "ATTX" },
                         new RecordType[] { "RACE", "TTGP", "MPPN" },
                         new RecordType[] { "ACTI", "FULL", "ATTX" },

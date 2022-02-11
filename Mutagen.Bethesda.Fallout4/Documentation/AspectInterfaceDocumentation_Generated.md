@@ -27,6 +27,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Ingredient
 - Key
 - Light
+- MagicEffect
 - MiscItem
 - MoveableStatic
 - ObjectModTemplateItem
@@ -82,6 +83,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Key
 - Keyword
 - Light
+- MagicEffect
 - MaterialType
 - Message
 - MiscItem
@@ -157,6 +159,7 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - Ingredient
 - Key
 - Light
+- MagicEffect
 - MiscItem
 - MoveableStatic
 - TalkingActivator
@@ -286,6 +289,10 @@ Functions can then be written that take in `INamed`, allowing any record that ha
 - IObjectBounded
 - IScripted
 - IWeightValue
+### MagicEffect
+- IKeyworded
+- INamed
+- IScripted
 ### MaterialType
 - INamed
 ### Message

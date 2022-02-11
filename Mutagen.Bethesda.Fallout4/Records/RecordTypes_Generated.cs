@@ -79,14 +79,17 @@ public partial class RecordTypes
     public static readonly RecordType DSTA = new(0x41545344);
     public static readonly RecordType DSTD = new(0x44545344);
     public static readonly RecordType DSTF = new(0x46545344);
+    public static readonly RecordType DUAL = new(0x4C415544);
     public static readonly RecordType EFID = new(0x44494645);
     public static readonly RecordType EFIT = new(0x54494645);
+    public static readonly RecordType EFSH = new(0x48534645);
     public static readonly RecordType EIAD = new(0x44414945);
     public static readonly RecordType EITM = new(0x4D544945);
     public static readonly RecordType ENAM = new(0x4D414E45);
     public static readonly RecordType ENCH = new(0x48434E45);
     public static readonly RecordType ENIT = new(0x54494E45);
     public static readonly RecordType EQUP = new(0x50555145);
+    public static readonly RecordType ESCE = new(0x45435345);
     public static readonly RecordType ETYP = new(0x50595445);
     public static readonly RecordType EXPL = new(0x4C505845);
     public static readonly RecordType FACT = new(0x54434146);
@@ -184,6 +187,7 @@ public partial class RecordTypes
     public static readonly RecordType LVSP = new(0x5053564C);
     public static readonly RecordType MAST = new(0x5453414D);
     public static readonly RecordType MATT = new(0x5454414D);
+    public static readonly RecordType MDOB = new(0x424F444D);
     public static readonly RecordType MESG = new(0x4753454D);
     public static readonly RecordType MGEF = new(0x4645474D);
     public static readonly RecordType MIAD = new(0x4441494D);
@@ -274,6 +278,7 @@ public partial class RecordTypes
     public static readonly RecordType REGN = new(0x4E474552);
     public static readonly RecordType REPT = new(0x54504552);
     public static readonly RecordType REVB = new(0x42564552);
+    public static readonly RecordType RFCT = new(0x54434652);
     public static readonly RecordType RIAD = new(0x44414952);
     public static readonly RecordType RLDM = new(0x4D444C52);
     public static readonly RecordType RNAM = new(0x4D414E52);
