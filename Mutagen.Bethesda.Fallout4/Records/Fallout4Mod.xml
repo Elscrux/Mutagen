@@ -19,9 +19,9 @@
 			<Group name="SoundMarkers" refName="SoundMarker" />
 			<Group name="AcousticSpaces" refName="AcousticSpace" />
 			<Group name="MagicEffects" refName="MagicEffect" />
-<!--			<Group name="LandscapeTextures" refName="LandscapeTexture" />-->
-<!--			<Group name="ObjectEffects" refName="ObjectEffect" />-->
-<!--			<Group name="Spells" refName="Spell" />-->
+			<Group name="LandscapeTextures" refName="LandscapeTexture" />
+			<Group name="ObjectEffects" refName="ObjectEffect" />
+			<Group name="Spells" refName="Spell" />
 <!--			<Group name="Activators" refName="Activator" />-->
 <!--			<Group name="TalkingActivators" refName="TalkingActivator" />-->
 <!--			<Group name="Armors" refName="Armor" />-->

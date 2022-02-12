@@ -1168,6 +1168,12 @@
     <Compile Include="Records\Major Records\MagicEffectSound_Generated.cs">
       <DependentUpon>MagicEffect.xml</DependentUpon>
     </Compile>
+    <Compile Include="Records\Common Subrecords\FunctionConditionData_Generated.cs">
+      <DependentUpon>Condition.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\GetEventData_Generated.cs">
+      <DependentUpon>Condition.xml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="GitInfo" Version="2.2.0">

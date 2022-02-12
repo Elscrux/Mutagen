@@ -170,15 +170,15 @@ namespace Mutagen.Bethesda.Fallout4
         #region Range
         public Single Range { get; set; } = default;
         #endregion
-        #region HalfCostPerk
-        private readonly IFormLink<IPerkGetter> _HalfCostPerk = new FormLink<IPerkGetter>();
-        public IFormLink<IPerkGetter> HalfCostPerk
+        #region CastingPerk
+        private readonly IFormLink<IPerkGetter> _CastingPerk = new FormLink<IPerkGetter>();
+        public IFormLink<IPerkGetter> CastingPerk
         {
-            get => _HalfCostPerk;
-            set => _HalfCostPerk.SetTo(value);
+            get => _CastingPerk;
+            set => _CastingPerk.SetTo(value);
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IFormLinkGetter<IPerkGetter> ISpellGetter.HalfCostPerk => this.HalfCostPerk;
+        IFormLinkGetter<IPerkGetter> ISpellGetter.CastingPerk => this.CastingPerk;
         #endregion
         #region Effects
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -234,7 +234,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.TargetType = initialValue;
                 this.CastDuration = initialValue;
                 this.Range = initialValue;
-                this.HalfCostPerk = initialValue;
+                this.CastingPerk = initialValue;
                 this.Effects = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, Effect.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, Effect.Mask<TItem>?>>());
                 this.SPITDataTypeState = initialValue;
             }
@@ -259,7 +259,7 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem TargetType,
                 TItem CastDuration,
                 TItem Range,
-                TItem HalfCostPerk,
+                TItem CastingPerk,
                 TItem Effects,
                 TItem SPITDataTypeState)
             : base(
@@ -283,7 +283,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.TargetType = TargetType;
                 this.CastDuration = CastDuration;
                 this.Range = Range;
-                this.HalfCostPerk = HalfCostPerk;
+                this.CastingPerk = CastingPerk;
                 this.Effects = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, Effect.Mask<TItem>?>>?>(Effects, Enumerable.Empty<MaskItemIndexed<TItem, Effect.Mask<TItem>?>>());
                 this.SPITDataTypeState = SPITDataTypeState;
             }
@@ -310,7 +310,7 @@ namespace Mutagen.Bethesda.Fallout4
             public TItem TargetType;
             public TItem CastDuration;
             public TItem Range;
-            public TItem HalfCostPerk;
+            public TItem CastingPerk;
             public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, Effect.Mask<TItem>?>>?>? Effects;
             public TItem SPITDataTypeState;
             #endregion
@@ -339,7 +339,7 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!object.Equals(this.TargetType, rhs.TargetType)) return false;
                 if (!object.Equals(this.CastDuration, rhs.CastDuration)) return false;
                 if (!object.Equals(this.Range, rhs.Range)) return false;
-                if (!object.Equals(this.HalfCostPerk, rhs.HalfCostPerk)) return false;
+                if (!object.Equals(this.CastingPerk, rhs.CastingPerk)) return false;
                 if (!object.Equals(this.Effects, rhs.Effects)) return false;
                 if (!object.Equals(this.SPITDataTypeState, rhs.SPITDataTypeState)) return false;
                 return true;
@@ -360,7 +360,7 @@ namespace Mutagen.Bethesda.Fallout4
                 hash.Add(this.TargetType);
                 hash.Add(this.CastDuration);
                 hash.Add(this.Range);
-                hash.Add(this.HalfCostPerk);
+                hash.Add(this.CastingPerk);
                 hash.Add(this.Effects);
                 hash.Add(this.SPITDataTypeState);
                 hash.Add(base.GetHashCode());
@@ -400,7 +400,7 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!eval(this.TargetType)) return false;
                 if (!eval(this.CastDuration)) return false;
                 if (!eval(this.Range)) return false;
-                if (!eval(this.HalfCostPerk)) return false;
+                if (!eval(this.CastingPerk)) return false;
                 if (this.Effects != null)
                 {
                     if (!eval(this.Effects.Overall)) return false;
@@ -449,7 +449,7 @@ namespace Mutagen.Bethesda.Fallout4
                 if (eval(this.TargetType)) return true;
                 if (eval(this.CastDuration)) return true;
                 if (eval(this.Range)) return true;
-                if (eval(this.HalfCostPerk)) return true;
+                if (eval(this.CastingPerk)) return true;
                 if (this.Effects != null)
                 {
                     if (eval(this.Effects.Overall)) return true;
@@ -504,7 +504,7 @@ namespace Mutagen.Bethesda.Fallout4
                 obj.TargetType = eval(this.TargetType);
                 obj.CastDuration = eval(this.CastDuration);
                 obj.Range = eval(this.Range);
-                obj.HalfCostPerk = eval(this.HalfCostPerk);
+                obj.CastingPerk = eval(this.CastingPerk);
                 if (Effects != null)
                 {
                     obj.Effects = new MaskItem<R, IEnumerable<MaskItemIndexed<R, Effect.Mask<R>?>>?>(eval(this.Effects.Overall), Enumerable.Empty<MaskItemIndexed<R, Effect.Mask<R>?>>());
@@ -614,9 +614,9 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         fg.AppendItem(Range, "Range");
                     }
-                    if (printMask?.HalfCostPerk ?? true)
+                    if (printMask?.CastingPerk ?? true)
                     {
-                        fg.AppendItem(HalfCostPerk, "HalfCostPerk");
+                        fg.AppendItem(CastingPerk, "CastingPerk");
                     }
                     if ((printMask?.Effects?.Overall ?? true)
                         && Effects is {} EffectsItem)
@@ -670,7 +670,7 @@ namespace Mutagen.Bethesda.Fallout4
             public Exception? TargetType;
             public Exception? CastDuration;
             public Exception? Range;
-            public Exception? HalfCostPerk;
+            public Exception? CastingPerk;
             public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, Effect.ErrorMask?>>?>? Effects;
             public Exception? SPITDataTypeState;
             #endregion
@@ -707,8 +707,8 @@ namespace Mutagen.Bethesda.Fallout4
                         return CastDuration;
                     case Spell_FieldIndex.Range:
                         return Range;
-                    case Spell_FieldIndex.HalfCostPerk:
-                        return HalfCostPerk;
+                    case Spell_FieldIndex.CastingPerk:
+                        return CastingPerk;
                     case Spell_FieldIndex.Effects:
                         return Effects;
                     case Spell_FieldIndex.SPITDataTypeState:
@@ -762,8 +762,8 @@ namespace Mutagen.Bethesda.Fallout4
                     case Spell_FieldIndex.Range:
                         this.Range = ex;
                         break;
-                    case Spell_FieldIndex.HalfCostPerk:
-                        this.HalfCostPerk = ex;
+                    case Spell_FieldIndex.CastingPerk:
+                        this.CastingPerk = ex;
                         break;
                     case Spell_FieldIndex.Effects:
                         this.Effects = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, Effect.ErrorMask?>>?>(ex, null);
@@ -821,8 +821,8 @@ namespace Mutagen.Bethesda.Fallout4
                     case Spell_FieldIndex.Range:
                         this.Range = (Exception?)obj;
                         break;
-                    case Spell_FieldIndex.HalfCostPerk:
-                        this.HalfCostPerk = (Exception?)obj;
+                    case Spell_FieldIndex.CastingPerk:
+                        this.CastingPerk = (Exception?)obj;
                         break;
                     case Spell_FieldIndex.Effects:
                         this.Effects = (MaskItem<Exception?, IEnumerable<MaskItem<Exception?, Effect.ErrorMask?>>?>)obj;
@@ -852,7 +852,7 @@ namespace Mutagen.Bethesda.Fallout4
                 if (TargetType != null) return true;
                 if (CastDuration != null) return true;
                 if (Range != null) return true;
-                if (HalfCostPerk != null) return true;
+                if (CastingPerk != null) return true;
                 if (Effects != null) return true;
                 if (SPITDataTypeState != null) return true;
                 return false;
@@ -924,7 +924,7 @@ namespace Mutagen.Bethesda.Fallout4
                 fg.AppendItem(TargetType, "TargetType");
                 fg.AppendItem(CastDuration, "CastDuration");
                 fg.AppendItem(Range, "Range");
-                fg.AppendItem(HalfCostPerk, "HalfCostPerk");
+                fg.AppendItem(CastingPerk, "CastingPerk");
                 if (Effects is {} EffectsItem)
                 {
                     fg.AppendLine("Effects =>");
@@ -969,7 +969,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.TargetType = this.TargetType.Combine(rhs.TargetType);
                 ret.CastDuration = this.CastDuration.Combine(rhs.CastDuration);
                 ret.Range = this.Range.Combine(rhs.Range);
-                ret.HalfCostPerk = this.HalfCostPerk.Combine(rhs.HalfCostPerk);
+                ret.CastingPerk = this.CastingPerk.Combine(rhs.CastingPerk);
                 ret.Effects = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, Effect.ErrorMask?>>?>(ExceptionExt.Combine(this.Effects?.Overall, rhs.Effects?.Overall), ExceptionExt.Combine(this.Effects?.Specific, rhs.Effects?.Specific));
                 ret.SPITDataTypeState = this.SPITDataTypeState.Combine(rhs.SPITDataTypeState);
                 return ret;
@@ -1007,7 +1007,7 @@ namespace Mutagen.Bethesda.Fallout4
             public bool TargetType;
             public bool CastDuration;
             public bool Range;
-            public bool HalfCostPerk;
+            public bool CastingPerk;
             public Effect.TranslationMask? Effects;
             public bool SPITDataTypeState;
             #endregion
@@ -1030,7 +1030,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.TargetType = defaultOn;
                 this.CastDuration = defaultOn;
                 this.Range = defaultOn;
-                this.HalfCostPerk = defaultOn;
+                this.CastingPerk = defaultOn;
                 this.SPITDataTypeState = defaultOn;
             }
 
@@ -1052,7 +1052,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((TargetType, null));
                 ret.Add((CastDuration, null));
                 ret.Add((Range, null));
-                ret.Add((HalfCostPerk, null));
+                ret.Add((CastingPerk, null));
                 ret.Add((Effects == null ? DefaultOn : !Effects.GetCrystal().CopyNothing, Effects?.GetCrystal()));
                 ret.Add((SPITDataTypeState, null));
             }
@@ -1231,7 +1231,7 @@ namespace Mutagen.Bethesda.Fallout4
         new TargetType TargetType { get; set; }
         new Single CastDuration { get; set; }
         new Single Range { get; set; }
-        new IFormLink<IPerkGetter> HalfCostPerk { get; set; }
+        new IFormLink<IPerkGetter> CastingPerk { get; set; }
         new ExtendedList<Effect> Effects { get; }
         new Spell.SPITDataType SPITDataTypeState { get; set; }
     }
@@ -1290,7 +1290,7 @@ namespace Mutagen.Bethesda.Fallout4
         TargetType TargetType { get; }
         Single CastDuration { get; }
         Single Range { get; }
-        IFormLinkGetter<IPerkGetter> HalfCostPerk { get; }
+        IFormLinkGetter<IPerkGetter> CastingPerk { get; }
         IReadOnlyList<IEffectGetter> Effects { get; }
         Spell.SPITDataType SPITDataTypeState { get; }
 
@@ -1470,7 +1470,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         TargetType = 16,
         CastDuration = 17,
         Range = 18,
-        HalfCostPerk = 19,
+        CastingPerk = 19,
         Effects = 20,
         SPITDataTypeState = 21,
     }
@@ -1574,7 +1574,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.TargetType = default;
             item.CastDuration = default;
             item.Range = default;
-            item.HalfCostPerk.Clear();
+            item.CastingPerk.Clear();
             item.Effects.Clear();
             item.SPITDataTypeState = default;
             base.Clear(item);
@@ -1596,7 +1596,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             base.RemapLinks(obj, mapping);
             obj.Keywords?.RemapLinks(mapping);
             obj.EquipmentType.Relink(mapping);
-            obj.HalfCostPerk.Relink(mapping);
+            obj.CastingPerk.Relink(mapping);
             obj.Effects.RemapLinks(mapping);
         }
         
@@ -1682,7 +1682,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ret.TargetType = item.TargetType == rhs.TargetType;
             ret.CastDuration = item.CastDuration.EqualsWithin(rhs.CastDuration);
             ret.Range = item.Range.EqualsWithin(rhs.Range);
-            ret.HalfCostPerk = item.HalfCostPerk.Equals(rhs.HalfCostPerk);
+            ret.CastingPerk = item.CastingPerk.Equals(rhs.CastingPerk);
             ret.Effects = item.Effects.CollectionEqualsHelper(
                 rhs.Effects,
                 (loqLhs, loqRhs) => loqLhs.GetEqualsMask(loqRhs, include),
@@ -1807,9 +1807,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 fg.AppendItem(item.Range, "Range");
             }
-            if (printMask?.HalfCostPerk ?? true)
+            if (printMask?.CastingPerk ?? true)
             {
-                fg.AppendItem(item.HalfCostPerk.FormKey, "HalfCostPerk");
+                fg.AppendItem(item.CastingPerk.FormKey, "CastingPerk");
             }
             if (printMask?.Effects?.Overall ?? true)
             {
@@ -1937,9 +1937,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 if (!lhs.Range.EqualsWithin(rhs.Range)) return false;
             }
-            if ((crystal?.GetShouldTranslate((int)Spell_FieldIndex.HalfCostPerk) ?? true))
+            if ((crystal?.GetShouldTranslate((int)Spell_FieldIndex.CastingPerk) ?? true))
             {
-                if (!lhs.HalfCostPerk.Equals(rhs.HalfCostPerk)) return false;
+                if (!lhs.CastingPerk.Equals(rhs.CastingPerk)) return false;
             }
             if ((crystal?.GetShouldTranslate((int)Spell_FieldIndex.Effects) ?? true))
             {
@@ -1993,7 +1993,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             hash.Add(item.TargetType);
             hash.Add(item.CastDuration);
             hash.Add(item.Range);
-            hash.Add(item.HalfCostPerk);
+            hash.Add(item.CastingPerk);
             hash.Add(item.Effects);
             hash.Add(item.SPITDataTypeState);
             hash.Add(base.GetHashCode());
@@ -2036,7 +2036,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 yield return FormLinkInformation.Factory(obj.EquipmentType);
             }
-            yield return FormLinkInformation.Factory(obj.HalfCostPerk);
+            yield return FormLinkInformation.Factory(obj.CastingPerk);
             foreach (var item in obj.Effects.SelectMany(f => f.ContainedFormLinks))
             {
                 yield return FormLinkInformation.Factory(item);
@@ -2208,9 +2208,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 item.Range = rhs.Range;
             }
-            if ((copyMask?.GetShouldTranslate((int)Spell_FieldIndex.HalfCostPerk) ?? true))
+            if ((copyMask?.GetShouldTranslate((int)Spell_FieldIndex.CastingPerk) ?? true))
             {
-                item.HalfCostPerk.SetTo(rhs.HalfCostPerk.FormKey);
+                item.CastingPerk.SetTo(rhs.CastingPerk.FormKey);
             }
             if ((copyMask?.GetShouldTranslate((int)Spell_FieldIndex.Effects) ?? true))
             {
@@ -2469,7 +2469,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     item: item.Range);
                 FormLinkBinaryTranslation.Instance.Write(
                     writer: writer,
-                    item: item.HalfCostPerk);
+                    item: item.CastingPerk);
             }
             Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IEffectGetter>.Instance.Write(
                 writer: writer,
@@ -2635,8 +2635,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         length: 4);
                     item.CastDuration = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
                     item.Range = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
-                    item.HalfCostPerk.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
-                    return (int)Spell_FieldIndex.HalfCostPerk;
+                    item.CastingPerk.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    return (int)Spell_FieldIndex.CastingPerk;
                 }
                 case RecordTypeInts.EFID:
                 case RecordTypeInts.EFIT:
@@ -2779,10 +2779,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private bool _Range_IsSet => _SPITLocation.HasValue;
         public Single Range => _Range_IsSet ? _data.Slice(_RangeLocation, 4).Float() : default;
         #endregion
-        #region HalfCostPerk
-        private int _HalfCostPerkLocation => _SPITLocation!.Value + 0x20;
-        private bool _HalfCostPerk_IsSet => _SPITLocation.HasValue;
-        public IFormLinkGetter<IPerkGetter> HalfCostPerk => _HalfCostPerk_IsSet ? new FormLink<IPerkGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(_data.Span.Slice(_HalfCostPerkLocation, 0x4)))) : FormLink<IPerkGetter>.Null;
+        #region CastingPerk
+        private int _CastingPerkLocation => _SPITLocation!.Value + 0x20;
+        private bool _CastingPerk_IsSet => _SPITLocation.HasValue;
+        public IFormLinkGetter<IPerkGetter> CastingPerk => _CastingPerk_IsSet ? new FormLink<IPerkGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(_data.Span.Slice(_CastingPerkLocation, 0x4)))) : FormLink<IPerkGetter>.Null;
         #endregion
         public IReadOnlyList<IEffectGetter> Effects { get; private set; } = ListExt.Empty<EffectBinaryOverlay>();
         partial void CustomFactoryEnd(
@@ -2887,7 +2887,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case RecordTypeInts.SPIT:
                 {
                     _SPITLocation = (stream.Position - offset) + _package.MetaData.Constants.SubConstants.TypeAndLengthLength;
-                    return (int)Spell_FieldIndex.HalfCostPerk;
+                    return (int)Spell_FieldIndex.CastingPerk;
                 }
                 case RecordTypeInts.EFID:
                 case RecordTypeInts.EFIT:

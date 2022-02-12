@@ -19,13 +19,13 @@
           <Enum name="TargetType" enumName="TargetType" byteLength="4" />
           <Float name="CastDuration" />
           <Float name="Range" />
-          <FormLink name="HalfCostPerk" refName="Perk" />
+          <FormLink name="CastingPerk" refName="Perk" />
         </Fields>
       </Data>
       <RefList name="Effects" refName="Effect" nullable="False" />
     </Fields>
     <LinkInterface>IObjectId</LinkInterface>
-    <LinkInterface>IEffectRecord</LinkInterface>
+    <LinkInterface>IEffectRecord</LinkInterface>1
     <LinkInterface>ISpellRecord</LinkInterface>
   </Object>
 </Loqui>

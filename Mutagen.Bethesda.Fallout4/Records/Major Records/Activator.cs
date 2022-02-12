@@ -11,9 +11,14 @@ namespace Mutagen.Bethesda.Fallout4
         [Flags]
         public enum MajorFlag
         {
-            HasTreeLOD = 0x0000_0040,
+            NeverFades = 0x0000_0002,
+            NonOccluder = 0x0000_0002,
+            HeadingMarker = 0x0000_0080,
             MustUpdateAnims = 0x0000_0100,
             HiddenFromLocalMap = 0x0000_0200,
+            HeadtrackMarker = 0x0000_0400,
+            UsedAsPlatform = 0x0000_0800,
+            PackInUseOnly = 0x0000_100,
             HasDistantLOD = 0x0000_8000,
             RandomAnimStart = 0x0001_0000,
             Dangerous = 0x0002_0000,
