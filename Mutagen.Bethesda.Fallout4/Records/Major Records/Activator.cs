@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Mutagen.Bethesda.Plugins;
+using Mutagen.Bethesda.Plugins.Binary.Overlay;
+using Mutagen.Bethesda.Plugins.Binary.Translations;
+using Noggog;
 
 namespace Mutagen.Bethesda.Fallout4
 {
@@ -12,13 +16,13 @@ namespace Mutagen.Bethesda.Fallout4
         public enum MajorFlag
         {
             NeverFades = 0x0000_0002,
-            NonOccluder = 0x0000_0002,
+            NonOccluder = 0x0000_0004,
             HeadingMarker = 0x0000_0080,
             MustUpdateAnims = 0x0000_0100,
             HiddenFromLocalMap = 0x0000_0200,
             HeadtrackMarker = 0x0000_0400,
             UsedAsPlatform = 0x0000_0800,
-            PackInUseOnly = 0x0000_100,
+            PackInUseOnly = 0x0000_1000,
             HasDistantLOD = 0x0000_8000,
             RandomAnimStart = 0x0001_0000,
             Dangerous = 0x0002_0000,
@@ -35,10 +39,8 @@ namespace Mutagen.Bethesda.Fallout4
         public enum Flag
         {
             NoDisplacement = 0x01,
-            IgnoredBySandbox = 0x02,
-            /*'Unknown 2',
-              'Unknown 3',*/
-            IsARadio = 0x04,//?
+            IgnoredBySandbox = 0x02, 
+            IsARadio = 0x10,
         }
     }
 
@@ -46,7 +48,12 @@ namespace Mutagen.Bethesda.Fallout4
     {
         public partial class ActivatorBinaryOverlay
         {
-            public IReadOnlyList<IConditionGetter>? Conditions { get; } 
+            public IReadOnlyList<IConditionGetter>? Conditions { get; private set; }
+
+            partial void ConditionsCustomParse(OverlayStream stream, long finalPos, int offset, RecordType type, PreviousParse lastParsed)
+            {
+                Conditions = ConditionBinaryOverlay.ConstructBinayOverlayCountedList(stream, _package);
+            }
         }
     }
 }
