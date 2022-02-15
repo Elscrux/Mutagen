@@ -1588,37 +1588,32 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public static readonly Type? GenericRegistrationType = null;
 
-        public static ICollectionGetter<RecordType> TriggeringRecordTypes => _TriggeringRecordTypes.Value;
-        private static readonly Lazy<ICollectionGetter<RecordType>> _TriggeringRecordTypes = new Lazy<ICollectionGetter<RecordType>>(() =>
+        public static TriggeringRecordCollection TriggeringRecordTypes => _TriggeringRecordTypes.Value;
+        private static readonly Lazy<TriggeringRecordCollection> _TriggeringRecordTypes = new Lazy<TriggeringRecordCollection>(() =>
         {
-            return new CollectionGetterWrapper<RecordType>(
-                new HashSet<RecordType>(
-                    new RecordType[]
-                    {
-                        RecordTypes.NNAM,
-                        RecordTypes.INDX,
-                        RecordTypes.HEAD,
-                        RecordTypes.RPRM,
-                        RecordTypes.AHCM,
-                        RecordTypes.FTSM,
-                        RecordTypes.DFTM,
-                        RecordTypes.TTGP,
-                        RecordTypes.TETI,
-                        RecordTypes.TTGE,
-                        RecordTypes.MPGN,
-                        RecordTypes.MPPI,
-                        RecordTypes.MPPN,
-                        RecordTypes.MPPM,
-                        RecordTypes.MPPT,
-                        RecordTypes.MPPF,
-                        RecordTypes.MPPC,
-                        RecordTypes.MPPK,
-                        RecordTypes.MPGS,
-                        RecordTypes.FMRI,
-                        RecordTypes.FMRN,
-                        RecordTypes.WMAP
-                    })
-            );
+            return new TriggeringRecordCollection(
+                RecordTypes.NNAM,
+                RecordTypes.INDX,
+                RecordTypes.HEAD,
+                RecordTypes.RPRM,
+                RecordTypes.AHCM,
+                RecordTypes.FTSM,
+                RecordTypes.DFTM,
+                RecordTypes.TTGP,
+                RecordTypes.TETI,
+                RecordTypes.TTGE,
+                RecordTypes.MPGN,
+                RecordTypes.MPPI,
+                RecordTypes.MPPN,
+                RecordTypes.MPPM,
+                RecordTypes.MPPT,
+                RecordTypes.MPPF,
+                RecordTypes.MPPC,
+                RecordTypes.MPPK,
+                RecordTypes.MPGS,
+                RecordTypes.FMRI,
+                RecordTypes.FMRN,
+                RecordTypes.WMAP);
         });
         public static readonly Type BinaryWriteTranslation = typeof(HeadDataBinaryWriteTranslation);
         #region Interface

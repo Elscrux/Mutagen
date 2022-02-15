@@ -917,20 +917,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public static readonly Type? GenericRegistrationType = null;
 
-        public static ICollectionGetter<RecordType> TriggeringRecordTypes => _TriggeringRecordTypes.Value;
-        private static readonly Lazy<ICollectionGetter<RecordType>> _TriggeringRecordTypes = new Lazy<ICollectionGetter<RecordType>>(() =>
+        public static TriggeringRecordCollection TriggeringRecordTypes => _TriggeringRecordTypes.Value;
+        private static readonly Lazy<TriggeringRecordCollection> _TriggeringRecordTypes = new Lazy<TriggeringRecordCollection>(() =>
         {
-            return new CollectionGetterWrapper<RecordType>(
-                new HashSet<RecordType>(
-                    new RecordType[]
-                    {
-                        RecordTypes.DEST,
-                        RecordTypes.DAMC,
-                        RecordTypes.DSTD,
-                        RecordTypes.DSTA,
-                        RecordTypes.DMDL
-                    })
-            );
+            return new TriggeringRecordCollection(
+                RecordTypes.DEST,
+                RecordTypes.DAMC,
+                RecordTypes.DSTD,
+                RecordTypes.DSTA,
+                RecordTypes.DMDL);
         });
         public static readonly Type BinaryWriteTranslation = typeof(DestructibleBinaryWriteTranslation);
         #region Interface
