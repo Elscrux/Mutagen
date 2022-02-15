@@ -77,6 +77,8 @@ namespace Mutagen.Bethesda.Fallout4
             _ObjectEffects_Object = new Fallout4Group<ObjectEffect>(this);
             _Spells_Object = new Fallout4Group<Spell>(this);
             _Activators_Object = new Fallout4Group<Activator>(this);
+            _TalkingActivators_Object = new Fallout4Group<TalkingActivator>(this);
+            _Armors_Object = new Fallout4Group<Armor>(this);
             CustomCtor();
         }
         partial void CustomCtor();
@@ -229,6 +231,20 @@ namespace Mutagen.Bethesda.Fallout4
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IFallout4GroupGetter<IActivatorGetter> IFallout4ModGetter.Activators => _Activators_Object;
         #endregion
+        #region TalkingActivators
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Fallout4Group<TalkingActivator> _TalkingActivators_Object;
+        public Fallout4Group<TalkingActivator> TalkingActivators => _TalkingActivators_Object;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFallout4GroupGetter<ITalkingActivatorGetter> IFallout4ModGetter.TalkingActivators => _TalkingActivators_Object;
+        #endregion
+        #region Armors
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Fallout4Group<Armor> _Armors_Object;
+        public Fallout4Group<Armor> Armors => _Armors_Object;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFallout4GroupGetter<IArmorGetter> IFallout4ModGetter.Armors => _Armors_Object;
+        #endregion
 
         #region To String
 
@@ -288,6 +304,8 @@ namespace Mutagen.Bethesda.Fallout4
                 this.ObjectEffects = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Spells = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Activators = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
+                this.TalkingActivators = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
+                this.Armors = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
             }
 
             public Mask(
@@ -311,7 +329,9 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem LandscapeTextures,
                 TItem ObjectEffects,
                 TItem Spells,
-                TItem Activators)
+                TItem Activators,
+                TItem TalkingActivators,
+                TItem Armors)
             {
                 this.ModHeader = new MaskItem<TItem, Fallout4ModHeader.Mask<TItem>?>(ModHeader, new Fallout4ModHeader.Mask<TItem>(ModHeader));
                 this.GameSettings = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(GameSettings, new Fallout4Group.Mask<TItem>(GameSettings));
@@ -334,6 +354,8 @@ namespace Mutagen.Bethesda.Fallout4
                 this.ObjectEffects = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(ObjectEffects, new Fallout4Group.Mask<TItem>(ObjectEffects));
                 this.Spells = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Spells, new Fallout4Group.Mask<TItem>(Spells));
                 this.Activators = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Activators, new Fallout4Group.Mask<TItem>(Activators));
+                this.TalkingActivators = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(TalkingActivators, new Fallout4Group.Mask<TItem>(TalkingActivators));
+                this.Armors = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Armors, new Fallout4Group.Mask<TItem>(Armors));
             }
 
             #pragma warning disable CS8618
@@ -366,6 +388,8 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? ObjectEffects { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Spells { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Activators { get; set; }
+            public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? TalkingActivators { get; set; }
+            public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Armors { get; set; }
             #endregion
 
             #region Equals
@@ -399,6 +423,8 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!object.Equals(this.ObjectEffects, rhs.ObjectEffects)) return false;
                 if (!object.Equals(this.Spells, rhs.Spells)) return false;
                 if (!object.Equals(this.Activators, rhs.Activators)) return false;
+                if (!object.Equals(this.TalkingActivators, rhs.TalkingActivators)) return false;
+                if (!object.Equals(this.Armors, rhs.Armors)) return false;
                 return true;
             }
             public override int GetHashCode()
@@ -425,6 +451,8 @@ namespace Mutagen.Bethesda.Fallout4
                 hash.Add(this.ObjectEffects);
                 hash.Add(this.Spells);
                 hash.Add(this.Activators);
+                hash.Add(this.TalkingActivators);
+                hash.Add(this.Armors);
                 return hash.ToHashCode();
             }
 
@@ -538,6 +566,16 @@ namespace Mutagen.Bethesda.Fallout4
                     if (!eval(this.Activators.Overall)) return false;
                     if (this.Activators.Specific != null && !this.Activators.Specific.All(eval)) return false;
                 }
+                if (TalkingActivators != null)
+                {
+                    if (!eval(this.TalkingActivators.Overall)) return false;
+                    if (this.TalkingActivators.Specific != null && !this.TalkingActivators.Specific.All(eval)) return false;
+                }
+                if (Armors != null)
+                {
+                    if (!eval(this.Armors.Overall)) return false;
+                    if (this.Armors.Specific != null && !this.Armors.Specific.All(eval)) return false;
+                }
                 return true;
             }
             #endregion
@@ -650,6 +688,16 @@ namespace Mutagen.Bethesda.Fallout4
                     if (eval(this.Activators.Overall)) return true;
                     if (this.Activators.Specific != null && this.Activators.Specific.Any(eval)) return true;
                 }
+                if (TalkingActivators != null)
+                {
+                    if (eval(this.TalkingActivators.Overall)) return true;
+                    if (this.TalkingActivators.Specific != null && this.TalkingActivators.Specific.Any(eval)) return true;
+                }
+                if (Armors != null)
+                {
+                    if (eval(this.Armors.Overall)) return true;
+                    if (this.Armors.Specific != null && this.Armors.Specific.Any(eval)) return true;
+                }
                 return false;
             }
             #endregion
@@ -685,6 +733,8 @@ namespace Mutagen.Bethesda.Fallout4
                 obj.ObjectEffects = this.ObjectEffects == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.ObjectEffects.Overall), this.ObjectEffects.Specific?.Translate(eval));
                 obj.Spells = this.Spells == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Spells.Overall), this.Spells.Specific?.Translate(eval));
                 obj.Activators = this.Activators == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Activators.Overall), this.Activators.Specific?.Translate(eval));
+                obj.TalkingActivators = this.TalkingActivators == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.TalkingActivators.Overall), this.TalkingActivators.Specific?.Translate(eval));
+                obj.Armors = this.Armors == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Armors.Overall), this.Armors.Specific?.Translate(eval));
             }
             #endregion
 
@@ -791,6 +841,14 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         Activators?.ToString(fg);
                     }
+                    if (printMask?.TalkingActivators?.Overall ?? true)
+                    {
+                        TalkingActivators?.ToString(fg);
+                    }
+                    if (printMask?.Armors?.Overall ?? true)
+                    {
+                        Armors?.ToString(fg);
+                    }
                 }
                 fg.AppendLine("]");
             }
@@ -837,6 +895,8 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<Exception?, Fallout4Group.ErrorMask<ObjectEffect.ErrorMask>?>? ObjectEffects;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Spell.ErrorMask>?>? Spells;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Activator.ErrorMask>?>? Activators;
+            public MaskItem<Exception?, Fallout4Group.ErrorMask<TalkingActivator.ErrorMask>?>? TalkingActivators;
+            public MaskItem<Exception?, Fallout4Group.ErrorMask<Armor.ErrorMask>?>? Armors;
             #endregion
 
             #region IErrorMask
@@ -887,6 +947,10 @@ namespace Mutagen.Bethesda.Fallout4
                         return Spells;
                     case Fallout4Mod_FieldIndex.Activators:
                         return Activators;
+                    case Fallout4Mod_FieldIndex.TalkingActivators:
+                        return TalkingActivators;
+                    case Fallout4Mod_FieldIndex.Armors:
+                        return Armors;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
                 }
@@ -959,6 +1023,12 @@ namespace Mutagen.Bethesda.Fallout4
                         break;
                     case Fallout4Mod_FieldIndex.Activators:
                         this.Activators = new MaskItem<Exception?, Fallout4Group.ErrorMask<Activator.ErrorMask>?>(ex, null);
+                        break;
+                    case Fallout4Mod_FieldIndex.TalkingActivators:
+                        this.TalkingActivators = new MaskItem<Exception?, Fallout4Group.ErrorMask<TalkingActivator.ErrorMask>?>(ex, null);
+                        break;
+                    case Fallout4Mod_FieldIndex.Armors:
+                        this.Armors = new MaskItem<Exception?, Fallout4Group.ErrorMask<Armor.ErrorMask>?>(ex, null);
                         break;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
@@ -1033,6 +1103,12 @@ namespace Mutagen.Bethesda.Fallout4
                     case Fallout4Mod_FieldIndex.Activators:
                         this.Activators = (MaskItem<Exception?, Fallout4Group.ErrorMask<Activator.ErrorMask>?>?)obj;
                         break;
+                    case Fallout4Mod_FieldIndex.TalkingActivators:
+                        this.TalkingActivators = (MaskItem<Exception?, Fallout4Group.ErrorMask<TalkingActivator.ErrorMask>?>?)obj;
+                        break;
+                    case Fallout4Mod_FieldIndex.Armors:
+                        this.Armors = (MaskItem<Exception?, Fallout4Group.ErrorMask<Armor.ErrorMask>?>?)obj;
+                        break;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
                 }
@@ -1062,6 +1138,8 @@ namespace Mutagen.Bethesda.Fallout4
                 if (ObjectEffects != null) return true;
                 if (Spells != null) return true;
                 if (Activators != null) return true;
+                if (TalkingActivators != null) return true;
+                if (Armors != null) return true;
                 return false;
             }
             #endregion
@@ -1117,6 +1195,8 @@ namespace Mutagen.Bethesda.Fallout4
                 ObjectEffects?.ToString(fg);
                 Spells?.ToString(fg);
                 Activators?.ToString(fg);
+                TalkingActivators?.ToString(fg);
+                Armors?.ToString(fg);
             }
             #endregion
 
@@ -1146,6 +1226,8 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.ObjectEffects = this.ObjectEffects.Combine(rhs.ObjectEffects, (l, r) => l.Combine(r));
                 ret.Spells = this.Spells.Combine(rhs.Spells, (l, r) => l.Combine(r));
                 ret.Activators = this.Activators.Combine(rhs.Activators, (l, r) => l.Combine(r));
+                ret.TalkingActivators = this.TalkingActivators.Combine(rhs.TalkingActivators, (l, r) => l.Combine(r));
+                ret.Armors = this.Armors.Combine(rhs.Armors, (l, r) => l.Combine(r));
                 return ret;
             }
             public static ErrorMask? Combine(ErrorMask? lhs, ErrorMask? rhs)
@@ -1190,6 +1272,8 @@ namespace Mutagen.Bethesda.Fallout4
             public Fallout4Group.TranslationMask<ObjectEffect.TranslationMask>? ObjectEffects;
             public Fallout4Group.TranslationMask<Spell.TranslationMask>? Spells;
             public Fallout4Group.TranslationMask<Activator.TranslationMask>? Activators;
+            public Fallout4Group.TranslationMask<TalkingActivator.TranslationMask>? TalkingActivators;
+            public Fallout4Group.TranslationMask<Armor.TranslationMask>? Armors;
             #endregion
 
             #region Ctors
@@ -1235,6 +1319,8 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((ObjectEffects != null ? ObjectEffects.OnOverall : DefaultOn, ObjectEffects?.GetCrystal()));
                 ret.Add((Spells != null ? Spells.OnOverall : DefaultOn, Spells?.GetCrystal()));
                 ret.Add((Activators != null ? Activators.OnOverall : DefaultOn, Activators?.GetCrystal()));
+                ret.Add((TalkingActivators != null ? TalkingActivators.OnOverall : DefaultOn, TalkingActivators?.GetCrystal()));
+                ret.Add((Armors != null ? Armors.OnOverall : DefaultOn, Armors?.GetCrystal()));
             }
 
             public static implicit operator TranslationMask(bool defaultOn)
@@ -1297,6 +1383,8 @@ namespace Mutagen.Bethesda.Fallout4
             _ObjectEffects_Object = new Fallout4Group<ObjectEffect>(this);
             _Spells_Object = new Fallout4Group<Spell>(this);
             _Activators_Object = new Fallout4Group<Activator>(this);
+            _TalkingActivators_Object = new Fallout4Group<TalkingActivator>(this);
+            _Armors_Object = new Fallout4Group<Armor>(this);
             CustomCtor();
         }
         public void AddRecords(
@@ -1383,6 +1471,14 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 this.Activators.RecordCache.Set(rhsMod.Activators.RecordCache.Items);
             }
+            if (mask?.TalkingActivators ?? true)
+            {
+                this.TalkingActivators.RecordCache.Set(rhsMod.TalkingActivators.RecordCache.Items);
+            }
+            if (mask?.Armors ?? true)
+            {
+                this.Armors.RecordCache.Set(rhsMod.Armors.RecordCache.Items);
+            }
         }
 
         public override void SyncRecordCount()
@@ -1413,6 +1509,8 @@ namespace Mutagen.Bethesda.Fallout4
             count += ObjectEffects.RecordCache.Count > 0 ? 1 : default(uint);
             count += Spells.RecordCache.Count > 0 ? 1 : default(uint);
             count += Activators.RecordCache.Count > 0 ? 1 : default(uint);
+            count += TalkingActivators.RecordCache.Count > 0 ? 1 : default(uint);
+            count += Armors.RecordCache.Count > 0 ? 1 : default(uint);
             GetCustomRecordCount((customCount) => count += customCount);
             return count;
         }
@@ -1682,6 +1780,8 @@ namespace Mutagen.Bethesda.Fallout4
         new Fallout4Group<ObjectEffect> ObjectEffects { get; }
         new Fallout4Group<Spell> Spells { get; }
         new Fallout4Group<Activator> Activators { get; }
+        new Fallout4Group<TalkingActivator> TalkingActivators { get; }
+        new Fallout4Group<Armor> Armors { get; }
     }
 
     public partial interface IFallout4ModGetter :
@@ -1721,6 +1821,8 @@ namespace Mutagen.Bethesda.Fallout4
         IFallout4GroupGetter<IObjectEffectGetter> ObjectEffects { get; }
         IFallout4GroupGetter<ISpellGetter> Spells { get; }
         IFallout4GroupGetter<IActivatorGetter> Activators { get; }
+        IFallout4GroupGetter<ITalkingActivatorGetter> TalkingActivators { get; }
+        IFallout4GroupGetter<IArmorGetter> Armors { get; }
 
     }
 
@@ -2304,6 +2406,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         ObjectEffects = 18,
         Spells = 19,
         Activators = 20,
+        TalkingActivators = 21,
+        Armors = 22,
     }
     #endregion
 
@@ -2321,9 +2425,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public const string GUID = "9cae6baa-1084-4862-ae0a-07c79b9f2a3a";
 
-        public const ushort AdditionalFieldCount = 21;
+        public const ushort AdditionalFieldCount = 23;
 
-        public const ushort FieldCount = 21;
+        public const ushort FieldCount = 23;
 
         public static readonly Type MaskType = typeof(Fallout4Mod.Mask<>);
 
@@ -2412,6 +2516,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.ObjectEffects.Clear();
             item.Spells.Clear();
             item.Activators.Clear();
+            item.TalkingActivators.Clear();
+            item.Armors.Clear();
         }
         
         #region Mutagen
@@ -2438,6 +2544,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.ObjectEffects.RemapLinks(mapping);
             obj.Spells.RemapLinks(mapping);
             obj.Activators.RemapLinks(mapping);
+            obj.TalkingActivators.RemapLinks(mapping);
+            obj.Armors.RemapLinks(mapping);
         }
         
         public IEnumerable<IMajorRecord> EnumerateMajorRecords(IFallout4Mod obj)
@@ -2492,6 +2600,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.ObjectEffects.Remove(keys);
             obj.Spells.Remove(keys);
             obj.Activators.Remove(keys);
+            obj.TalkingActivators.Remove(keys);
+            obj.Armors.Remove(keys);
         }
         
         public void Remove(
@@ -2671,6 +2781,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         type: type,
                         keys: keys);
                     break;
+                case "TalkingActivator":
+                case "ITalkingActivatorGetter":
+                case "ITalkingActivator":
+                case "ITalkingActivatorInternal":
+                    obj.TalkingActivators.Remove(
+                        type: type,
+                        keys: keys);
+                    break;
+                case "Armor":
+                case "IArmorGetter":
+                case "IArmor":
+                case "IArmorInternal":
+                    obj.Armors.Remove(
+                        type: type,
+                        keys: keys);
+                    break;
                 case "IIdleRelation":
                 case "IIdleRelationGetter":
                     Remove(obj, keys, typeof(IActionRecordGetter), throwIfUnknown: throwIfUnknown);
@@ -2678,9 +2804,30 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IObjectId":
                 case "IObjectIdGetter":
                     Remove(obj, keys, typeof(IActivatorGetter), throwIfUnknown: throwIfUnknown);
+                    Remove(obj, keys, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IFactionGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(ISpellGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(ITextureSetGetter), throwIfUnknown: throwIfUnknown);
+                    break;
+                case "IItem":
+                case "IItemGetter":
+                    Remove(obj, keys, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown);
+                    break;
+                case "IOutfitTarget":
+                case "IOutfitTargetGetter":
+                    Remove(obj, keys, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown);
+                    break;
+                case "IConstructible":
+                case "IConstructibleGetter":
+                    Remove(obj, keys, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown);
+                    break;
+                case "IBindableEquipment":
+                case "IBindableEquipmentGetter":
+                    Remove(obj, keys, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown);
+                    break;
+                case "IFurnitureAssociation":
+                case "IFurnitureAssociationGetter":
+                    Remove(obj, keys, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown);
                     break;
                 case "IOwner":
                 case "IOwnerGetter":
@@ -2789,6 +2936,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ret.ObjectEffects = MaskItemExt.Factory(item.ObjectEffects.GetEqualsMask(rhs.ObjectEffects, include), include);
             ret.Spells = MaskItemExt.Factory(item.Spells.GetEqualsMask(rhs.Spells, include), include);
             ret.Activators = MaskItemExt.Factory(item.Activators.GetEqualsMask(rhs.Activators, include), include);
+            ret.TalkingActivators = MaskItemExt.Factory(item.TalkingActivators.GetEqualsMask(rhs.TalkingActivators, include), include);
+            ret.Armors = MaskItemExt.Factory(item.Armors.GetEqualsMask(rhs.Armors, include), include);
         }
         
         public string ToString(
@@ -2918,6 +3067,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             if (printMask?.Activators?.Overall ?? true)
             {
                 item.Activators?.ToString(fg, "Activators");
+            }
+            if (printMask?.TalkingActivators?.Overall ?? true)
+            {
+                item.TalkingActivators?.ToString(fg, "TalkingActivators");
+            }
+            if (printMask?.Armors?.Overall ?? true)
+            {
+                item.Armors?.ToString(fg, "Armors");
             }
         }
         
@@ -3096,6 +3253,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 else if (!isActivatorsEqual) return false;
             }
+            if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.TalkingActivators) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.TalkingActivators, rhs.TalkingActivators, out var lhsTalkingActivators, out var rhsTalkingActivators, out var isTalkingActivatorsEqual))
+                {
+                    if (!object.Equals(lhsTalkingActivators, rhsTalkingActivators)) return false;
+                }
+                else if (!isTalkingActivatorsEqual) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.Armors) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.Armors, rhs.Armors, out var lhsArmors, out var rhsArmors, out var isArmorsEqual))
+                {
+                    if (!object.Equals(lhsArmors, rhsArmors)) return false;
+                }
+                else if (!isArmorsEqual) return false;
+            }
             return true;
         }
         
@@ -3123,6 +3296,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             hash.Add(item.ObjectEffects);
             hash.Add(item.Spells);
             hash.Add(item.Activators);
+            hash.Add(item.TalkingActivators);
+            hash.Add(item.Armors);
             return hash.ToHashCode();
         }
         
@@ -3241,6 +3416,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IActivator":
                 case "IActivatorInternal":
                     return obj.Activators;
+                case "TalkingActivator":
+                case "ITalkingActivatorGetter":
+                case "ITalkingActivator":
+                case "ITalkingActivatorInternal":
+                    return obj.TalkingActivators;
+                case "Armor":
+                case "IArmorGetter":
+                case "IArmor":
+                case "IArmorInternal":
+                    return obj.Armors;
                 default:
                     throw new ArgumentException($"Unknown major record type: {type}");
             }
@@ -3265,7 +3450,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 mod: item,
                 modHeader: item.ModHeader.DeepCopy(),
                 modKey: modKey);
-            Stream[] outputStreams = new Stream[20];
+            Stream[] outputStreams = new Stream[22];
             List<Action> toDo = new List<Action>();
             toDo.Add(() => WriteGroupParallel(item.GameSettings, 0, outputStreams, bundle, parallelParam));
             toDo.Add(() => WriteGroupParallel(item.Keywords, 1, outputStreams, bundle, parallelParam));
@@ -3287,6 +3472,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             toDo.Add(() => WriteGroupParallel(item.ObjectEffects, 17, outputStreams, bundle, parallelParam));
             toDo.Add(() => WriteGroupParallel(item.Spells, 18, outputStreams, bundle, parallelParam));
             toDo.Add(() => WriteGroupParallel(item.Activators, 19, outputStreams, bundle, parallelParam));
+            toDo.Add(() => WriteGroupParallel(item.TalkingActivators, 20, outputStreams, bundle, parallelParam));
+            toDo.Add(() => WriteGroupParallel(item.Armors, 21, outputStreams, bundle, parallelParam));
             Parallel.Invoke(parallelParam.ParallelOptions, toDo.ToArray());
             PluginUtilityTranslation.CompileStreamsInto(
                 outputStreams.NotNull(),
@@ -3475,6 +3662,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     yield return item;
                 }
             }
+            if (obj.TalkingActivators is IFormLinkContainerGetter TalkingActivatorslinkCont)
+            {
+                foreach (var item in TalkingActivatorslinkCont.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
+            if (obj.Armors is IFormLinkContainerGetter ArmorslinkCont)
+            {
+                foreach (var item in ArmorslinkCont.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
             yield break;
         }
         
@@ -3557,6 +3758,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 yield return item;
             }
             foreach (var item in obj.Activators.EnumerateMajorRecords())
+            {
+                yield return item;
+            }
+            foreach (var item in obj.TalkingActivators.EnumerateMajorRecords())
+            {
+                yield return item;
+            }
+            foreach (var item in obj.Armors.EnumerateMajorRecords())
             {
                 yield return item;
             }
@@ -3775,6 +3984,24 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         yield return item;
                     }
                     yield break;
+                case "TalkingActivator":
+                case "ITalkingActivatorGetter":
+                case "ITalkingActivator":
+                case "ITalkingActivatorInternal":
+                    foreach (var item in obj.TalkingActivators.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                case "Armor":
+                case "IArmorGetter":
+                case "IArmor":
+                case "IArmorInternal":
+                    foreach (var item in obj.Armors.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
                 case "IIdleRelation":
                 {
                     if (!Fallout4Mod_Registration.SetterType.IsAssignableFrom(obj.GetType())) yield break;
@@ -3799,6 +4026,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IFactionGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -3819,6 +4050,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IFactionGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -3828,6 +4063,91 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         yield return item;
                     }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(ITextureSetGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "IItem":
+                {
+                    if (!Fallout4Mod_Registration.SetterType.IsAssignableFrom(obj.GetType())) yield break;
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "IItemGetter":
+                {
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "IOutfitTarget":
+                {
+                    if (!Fallout4Mod_Registration.SetterType.IsAssignableFrom(obj.GetType())) yield break;
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "IOutfitTargetGetter":
+                {
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "IConstructible":
+                {
+                    if (!Fallout4Mod_Registration.SetterType.IsAssignableFrom(obj.GetType())) yield break;
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "IConstructibleGetter":
+                {
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "IBindableEquipment":
+                {
+                    if (!Fallout4Mod_Registration.SetterType.IsAssignableFrom(obj.GetType())) yield break;
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "IBindableEquipmentGetter":
+                {
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "IFurnitureAssociation":
+                {
+                    if (!Fallout4Mod_Registration.SetterType.IsAssignableFrom(obj.GetType())) yield break;
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "IFurnitureAssociationGetter":
+                {
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -4144,6 +4464,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     group: (m) => m.Activators,
                     groupGetter: (m) => m.Activators);
             }
+            foreach (var item in obj.TalkingActivators)
+            {
+                yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, TalkingActivator, ITalkingActivatorGetter>(
+                    modKey: obj.ModKey,
+                    record: item,
+                    group: (m) => m.TalkingActivators,
+                    groupGetter: (m) => m.TalkingActivators);
+            }
+            foreach (var item in obj.Armors)
+            {
+                yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, Armor, IArmorGetter>(
+                    modKey: obj.ModKey,
+                    record: item,
+                    group: (m) => m.Armors,
+                    groupGetter: (m) => m.Armors);
+            }
         }
         
         public IEnumerable<IModContext<IFallout4Mod, IFallout4ModGetter, IMajorRecord, IMajorRecordGetter>> EnumerateMajorRecordContexts(
@@ -4435,6 +4771,32 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                             groupGetter: (m) => m.Activators);
                     }
                     yield break;
+                case "TalkingActivator":
+                case "ITalkingActivatorGetter":
+                case "ITalkingActivator":
+                case "ITalkingActivatorInternal":
+                    foreach (var item in obj.TalkingActivators)
+                    {
+                        yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, TalkingActivator, ITalkingActivatorGetter>(
+                            modKey: obj.ModKey,
+                            record: item,
+                            group: (m) => m.TalkingActivators,
+                            groupGetter: (m) => m.TalkingActivators);
+                    }
+                    yield break;
+                case "Armor":
+                case "IArmorGetter":
+                case "IArmor":
+                case "IArmorInternal":
+                    foreach (var item in obj.Armors)
+                    {
+                        yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, Armor, IArmorGetter>(
+                            modKey: obj.ModKey,
+                            record: item,
+                            group: (m) => m.Armors,
+                            groupGetter: (m) => m.Armors);
+                    }
+                    yield break;
                 case "IIdleRelation":
                 case "IIdleRelationGetter":
                 {
@@ -4462,6 +4824,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     foreach (var item in EnumerateMajorRecordContexts(
                         obj,
                         linkCache: linkCache,
+                        type: typeof(IArmorGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
                         type: typeof(IFactionGetter),
                         throwIfUnknown: throwIfUnknown))
                     {
@@ -4479,6 +4849,71 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         obj,
                         linkCache: linkCache,
                         type: typeof(ITextureSetGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "IItem":
+                case "IItemGetter":
+                {
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
+                        type: typeof(IArmorGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "IOutfitTarget":
+                case "IOutfitTargetGetter":
+                {
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
+                        type: typeof(IArmorGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "IConstructible":
+                case "IConstructibleGetter":
+                {
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
+                        type: typeof(IArmorGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "IBindableEquipment":
+                case "IBindableEquipmentGetter":
+                {
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
+                        type: typeof(IArmorGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
+                }
+                case "IFurnitureAssociation":
+                case "IFurnitureAssociationGetter":
+                {
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
+                        type: typeof(IArmorGetter),
                         throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -5039,6 +5474,46 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     errorMask?.PopIndex();
                 }
             }
+            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.TalkingActivators) ?? true))
+            {
+                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.TalkingActivators);
+                try
+                {
+                    item.TalkingActivators.DeepCopyIn(
+                        rhs: rhs.TalkingActivators,
+                        errorMask: errorMask,
+                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.TalkingActivators));
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
+            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.Armors) ?? true))
+            {
+                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.Armors);
+                try
+                {
+                    item.Armors.DeepCopyIn(
+                        rhs: rhs.Armors,
+                        errorMask: errorMask,
+                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.Armors));
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
         }
         
         #endregion
@@ -5149,6 +5624,8 @@ namespace Mutagen.Bethesda.Fallout4
         public bool ObjectEffects;
         public bool Spells;
         public bool Activators;
+        public bool TalkingActivators;
+        public bool Armors;
         public GroupMask()
         {
         }
@@ -5174,6 +5651,8 @@ namespace Mutagen.Bethesda.Fallout4
             ObjectEffects = defaultValue;
             Spells = defaultValue;
             Activators = defaultValue;
+            TalkingActivators = defaultValue;
+            Armors = defaultValue;
         }
     }
 
@@ -5421,6 +5900,28 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 {
                     ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)ActivatorsItem).BinaryWriteTranslator).Write<IActivatorGetter>(
                         item: ActivatorsItem,
+                        writer: writer,
+                        translationParams: translationParams);
+                }
+            }
+            if (importMask?.TalkingActivators ?? true)
+            {
+                var TalkingActivatorsItem = item.TalkingActivators;
+                if (TalkingActivatorsItem.RecordCache.Count > 0)
+                {
+                    ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)TalkingActivatorsItem).BinaryWriteTranslator).Write<ITalkingActivatorGetter>(
+                        item: TalkingActivatorsItem,
+                        writer: writer,
+                        translationParams: translationParams);
+                }
+            }
+            if (importMask?.Armors ?? true)
+            {
+                var ArmorsItem = item.Armors;
+                if (ArmorsItem.RecordCache.Count > 0)
+                {
+                    ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)ArmorsItem).BinaryWriteTranslator).Write<IArmorGetter>(
+                        item: ArmorsItem,
                         writer: writer,
                         translationParams: translationParams);
                 }
@@ -5771,6 +6272,34 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     }
                     return (int)Fallout4Mod_FieldIndex.Activators;
                 }
+                case RecordTypeInts.TACT:
+                {
+                    if (importMask?.TalkingActivators ?? true)
+                    {
+                        item.TalkingActivators.CopyInFromBinary(
+                            frame: frame,
+                            translationParams: null);
+                    }
+                    else
+                    {
+                        frame.Position += contentLength;
+                    }
+                    return (int)Fallout4Mod_FieldIndex.TalkingActivators;
+                }
+                case RecordTypeInts.ARMO:
+                {
+                    if (importMask?.Armors ?? true)
+                    {
+                        item.Armors.CopyInFromBinary(
+                            frame: frame,
+                            translationParams: null);
+                    }
+                    else
+                    {
+                        frame.Position += contentLength;
+                    }
+                    return (int)Fallout4Mod_FieldIndex.Armors;
+                }
                 default:
                     frame.Position += contentLength;
                     return default(int?);
@@ -6032,6 +6561,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private IFallout4GroupGetter<IActivatorGetter>? _Activators => _ActivatorsLocations != null ? Fallout4GroupBinaryOverlay<IActivatorGetter>.Fallout4GroupFactory(_data, _ActivatorsLocations, _package) : default;
         public IFallout4GroupGetter<IActivatorGetter> Activators => _Activators ?? new Fallout4Group<Activator>(this);
         #endregion
+        #region TalkingActivators
+        private List<RangeInt64>? _TalkingActivatorsLocations;
+        private IFallout4GroupGetter<ITalkingActivatorGetter>? _TalkingActivators => _TalkingActivatorsLocations != null ? Fallout4GroupBinaryOverlay<ITalkingActivatorGetter>.Fallout4GroupFactory(_data, _TalkingActivatorsLocations, _package) : default;
+        public IFallout4GroupGetter<ITalkingActivatorGetter> TalkingActivators => _TalkingActivators ?? new Fallout4Group<TalkingActivator>(this);
+        #endregion
+        #region Armors
+        private List<RangeInt64>? _ArmorsLocations;
+        private IFallout4GroupGetter<IArmorGetter>? _Armors => _ArmorsLocations != null ? Fallout4GroupBinaryOverlay<IArmorGetter>.Fallout4GroupFactory(_data, _ArmorsLocations, _package) : default;
+        public IFallout4GroupGetter<IArmorGetter> Armors => _Armors ?? new Fallout4Group<Armor>(this);
+        #endregion
         protected Fallout4ModBinaryOverlay(
             IMutagenReadStream stream,
             ModKey modKey,
@@ -6239,6 +6778,18 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     _ActivatorsLocations ??= new();
                     _ActivatorsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Activators;
+                }
+                case RecordTypeInts.TACT:
+                {
+                    _TalkingActivatorsLocations ??= new();
+                    _TalkingActivatorsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
+                    return (int)Fallout4Mod_FieldIndex.TalkingActivators;
+                }
+                case RecordTypeInts.ARMO:
+                {
+                    _ArmorsLocations ??= new();
+                    _ArmorsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
+                    return (int)Fallout4Mod_FieldIndex.Armors;
                 }
                 default:
                     return default(int?);

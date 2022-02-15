@@ -347,15 +347,15 @@ namespace Mutagen.Bethesda.Fallout4
         #endregion
         #region ObjectTemplates
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private ExtendedList<ObjectTemplate>? _ObjectTemplates;
-        public ExtendedList<ObjectTemplate>? ObjectTemplates
+        private ExtendedList<ArmorObjectTemplate>? _ObjectTemplates;
+        public ExtendedList<ArmorObjectTemplate>? ObjectTemplates
         {
             get => this._ObjectTemplates;
             set => this._ObjectTemplates = value;
         }
         #region Interface Members
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IReadOnlyList<IObjectTemplateGetter>? IArmorGetter.ObjectTemplates => _ObjectTemplates;
+        IReadOnlyList<IArmorObjectTemplateGetter>? IArmorGetter.ObjectTemplates => _ObjectTemplates;
         #endregion
 
         #endregion
@@ -428,7 +428,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Resistances = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ResistanceArmor.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, ResistanceArmor.Mask<TItem>?>>());
                 this.TemplateArmor = initialValue;
                 this.AttachParentSlots = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(initialValue, Enumerable.Empty<(int Index, TItem Value)>());
-                this.ObjectTemplates = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ObjectTemplate.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, ObjectTemplate.Mask<TItem>?>>());
+                this.ObjectTemplates = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ArmorObjectTemplate.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, ArmorObjectTemplate.Mask<TItem>?>>());
                 this.EndMarker = initialValue;
                 this.DATADataTypeState = initialValue;
                 this.FNAMDataTypeState = initialValue;
@@ -509,7 +509,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Resistances = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ResistanceArmor.Mask<TItem>?>>?>(Resistances, Enumerable.Empty<MaskItemIndexed<TItem, ResistanceArmor.Mask<TItem>?>>());
                 this.TemplateArmor = TemplateArmor;
                 this.AttachParentSlots = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(AttachParentSlots, Enumerable.Empty<(int Index, TItem Value)>());
-                this.ObjectTemplates = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ObjectTemplate.Mask<TItem>?>>?>(ObjectTemplates, Enumerable.Empty<MaskItemIndexed<TItem, ObjectTemplate.Mask<TItem>?>>());
+                this.ObjectTemplates = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ArmorObjectTemplate.Mask<TItem>?>>?>(ObjectTemplates, Enumerable.Empty<MaskItemIndexed<TItem, ArmorObjectTemplate.Mask<TItem>?>>());
                 this.EndMarker = EndMarker;
                 this.DATADataTypeState = DATADataTypeState;
                 this.FNAMDataTypeState = FNAMDataTypeState;
@@ -552,7 +552,7 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ResistanceArmor.Mask<TItem>?>>?>? Resistances;
             public TItem TemplateArmor;
             public MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>? AttachParentSlots;
-            public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ObjectTemplate.Mask<TItem>?>>?>? ObjectTemplates;
+            public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ArmorObjectTemplate.Mask<TItem>?>>?>? ObjectTemplates;
             public TItem EndMarker;
             public TItem DATADataTypeState;
             public TItem FNAMDataTypeState;
@@ -972,14 +972,14 @@ namespace Mutagen.Bethesda.Fallout4
                 }
                 if (ObjectTemplates != null)
                 {
-                    obj.ObjectTemplates = new MaskItem<R, IEnumerable<MaskItemIndexed<R, ObjectTemplate.Mask<R>?>>?>(eval(this.ObjectTemplates.Overall), Enumerable.Empty<MaskItemIndexed<R, ObjectTemplate.Mask<R>?>>());
+                    obj.ObjectTemplates = new MaskItem<R, IEnumerable<MaskItemIndexed<R, ArmorObjectTemplate.Mask<R>?>>?>(eval(this.ObjectTemplates.Overall), Enumerable.Empty<MaskItemIndexed<R, ArmorObjectTemplate.Mask<R>?>>());
                     if (ObjectTemplates.Specific != null)
                     {
-                        var l = new List<MaskItemIndexed<R, ObjectTemplate.Mask<R>?>>();
+                        var l = new List<MaskItemIndexed<R, ArmorObjectTemplate.Mask<R>?>>();
                         obj.ObjectTemplates.Specific = l;
                         foreach (var item in ObjectTemplates.Specific.WithIndex())
                         {
-                            MaskItemIndexed<R, ObjectTemplate.Mask<R>?>? mask = item.Item == null ? null : new MaskItemIndexed<R, ObjectTemplate.Mask<R>?>(item.Item.Index, eval(item.Item.Overall), item.Item.Specific?.Translate(eval));
+                            MaskItemIndexed<R, ArmorObjectTemplate.Mask<R>?>? mask = item.Item == null ? null : new MaskItemIndexed<R, ArmorObjectTemplate.Mask<R>?>(item.Item.Index, eval(item.Item.Overall), item.Item.Specific?.Translate(eval));
                             if (mask == null) continue;
                             l.Add(mask);
                         }
@@ -1274,7 +1274,7 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ResistanceArmor.ErrorMask?>>?>? Resistances;
             public Exception? TemplateArmor;
             public MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>? AttachParentSlots;
-            public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ObjectTemplate.ErrorMask?>>?>? ObjectTemplates;
+            public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ArmorObjectTemplate.ErrorMask?>>?>? ObjectTemplates;
             public Exception? EndMarker;
             public Exception? DATADataTypeState;
             public Exception? FNAMDataTypeState;
@@ -1445,7 +1445,7 @@ namespace Mutagen.Bethesda.Fallout4
                         this.AttachParentSlots = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ex, null);
                         break;
                     case Armor_FieldIndex.ObjectTemplates:
-                        this.ObjectTemplates = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ObjectTemplate.ErrorMask?>>?>(ex, null);
+                        this.ObjectTemplates = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ArmorObjectTemplate.ErrorMask?>>?>(ex, null);
                         break;
                     case Armor_FieldIndex.EndMarker:
                         this.EndMarker = ex;
@@ -1552,7 +1552,7 @@ namespace Mutagen.Bethesda.Fallout4
                         this.AttachParentSlots = (MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>)obj;
                         break;
                     case Armor_FieldIndex.ObjectTemplates:
-                        this.ObjectTemplates = (MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ObjectTemplate.ErrorMask?>>?>)obj;
+                        this.ObjectTemplates = (MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ArmorObjectTemplate.ErrorMask?>>?>)obj;
                         break;
                     case Armor_FieldIndex.EndMarker:
                         this.EndMarker = (Exception?)obj;
@@ -1815,7 +1815,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Resistances = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ResistanceArmor.ErrorMask?>>?>(ExceptionExt.Combine(this.Resistances?.Overall, rhs.Resistances?.Overall), ExceptionExt.Combine(this.Resistances?.Specific, rhs.Resistances?.Specific));
                 ret.TemplateArmor = this.TemplateArmor.Combine(rhs.TemplateArmor);
                 ret.AttachParentSlots = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ExceptionExt.Combine(this.AttachParentSlots?.Overall, rhs.AttachParentSlots?.Overall), ExceptionExt.Combine(this.AttachParentSlots?.Specific, rhs.AttachParentSlots?.Specific));
-                ret.ObjectTemplates = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ObjectTemplate.ErrorMask?>>?>(ExceptionExt.Combine(this.ObjectTemplates?.Overall, rhs.ObjectTemplates?.Overall), ExceptionExt.Combine(this.ObjectTemplates?.Specific, rhs.ObjectTemplates?.Specific));
+                ret.ObjectTemplates = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ArmorObjectTemplate.ErrorMask?>>?>(ExceptionExt.Combine(this.ObjectTemplates?.Overall, rhs.ObjectTemplates?.Overall), ExceptionExt.Combine(this.ObjectTemplates?.Specific, rhs.ObjectTemplates?.Specific));
                 ret.EndMarker = this.EndMarker.Combine(rhs.EndMarker);
                 ret.DATADataTypeState = this.DATADataTypeState.Combine(rhs.DATADataTypeState);
                 ret.FNAMDataTypeState = this.FNAMDataTypeState.Combine(rhs.FNAMDataTypeState);
@@ -1869,7 +1869,7 @@ namespace Mutagen.Bethesda.Fallout4
             public ResistanceArmor.TranslationMask? Resistances;
             public bool TemplateArmor;
             public bool AttachParentSlots;
-            public ObjectTemplate.TranslationMask? ObjectTemplates;
+            public ArmorObjectTemplate.TranslationMask? ObjectTemplates;
             public bool EndMarker;
             public bool DATADataTypeState;
             public bool FNAMDataTypeState;
@@ -2150,7 +2150,7 @@ namespace Mutagen.Bethesda.Fallout4
         new ExtendedList<ResistanceArmor>? Resistances { get; set; }
         new IFormLinkNullable<IArmorGetter> TemplateArmor { get; set; }
         new ExtendedList<IFormLinkGetter<IKeywordGetter>>? AttachParentSlots { get; set; }
-        new ExtendedList<ObjectTemplate>? ObjectTemplates { get; set; }
+        new ExtendedList<ArmorObjectTemplate>? ObjectTemplates { get; set; }
         new MemorySlice<Byte>? EndMarker { get; set; }
         new Armor.DATADataType DATADataTypeState { get; set; }
         new Armor.FNAMDataType FNAMDataTypeState { get; set; }
@@ -2239,7 +2239,7 @@ namespace Mutagen.Bethesda.Fallout4
         IReadOnlyList<IResistanceArmorGetter>? Resistances { get; }
         IFormLinkNullableGetter<IArmorGetter> TemplateArmor { get; }
         IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? AttachParentSlots { get; }
-        IReadOnlyList<IObjectTemplateGetter>? ObjectTemplates { get; }
+        IReadOnlyList<IArmorObjectTemplateGetter>? ObjectTemplates { get; }
         ReadOnlyMemorySlice<Byte>? EndMarker { get; }
         Armor.DATADataType DATADataTypeState { get; }
         Armor.FNAMDataType FNAMDataTypeState { get; }
@@ -3836,7 +3836,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                                     errorMask: errorMask,
                                     default(TranslationCrystal));
                             })
-                            .ToExtendedList<ObjectTemplate>();
+                            .ToExtendedList<ArmorObjectTemplate>();
                     }
                     else
                     {
@@ -4194,15 +4194,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         writer: subWriter,
                         item: subItem);
                 });
-            Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IObjectTemplateGetter>.Instance.WriteWithCounter(
+            Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IArmorObjectTemplateGetter>.Instance.WriteWithCounter(
                 writer: writer,
                 items: item.ObjectTemplates,
                 counterType: RecordTypes.OBTE,
                 counterLength: 4,
-                transl: (MutagenWriter subWriter, IObjectTemplateGetter subItem, TypedWriteParams? conv) =>
+                transl: (MutagenWriter subWriter, IArmorObjectTemplateGetter subItem, TypedWriteParams? conv) =>
                 {
                     var Item = subItem;
-                    ((ObjectTemplateBinaryWriteTranslation)((IBinaryItem)Item).BinaryWriteTranslator).Write(
+                    ((ArmorObjectTemplateBinaryWriteTranslation)((IBinaryItem)Item).BinaryWriteTranslator).Write(
                         item: Item,
                         writer: subWriter,
                         translationParams: conv);
@@ -4483,14 +4483,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case RecordTypeInts.OBTE:
                 {
                     item.ObjectTemplates = 
-                        Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<ObjectTemplate>.Instance.ParsePerItem(
+                        Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<ArmorObjectTemplate>.Instance.ParsePerItem(
                             reader: frame,
                             countLengthLength: 4,
                             countRecord: RecordTypes.OBTE,
-                            triggeringRecord: ObjectTemplate_Registration.TriggeringRecordTypes,
+                            triggeringRecord: ArmorObjectTemplate_Registration.TriggeringRecordTypes,
                             translationParams: translationParams,
-                            transl: ObjectTemplate.TryCreateFromBinary)
-                        .CastExtendedList<ObjectTemplate>();
+                            transl: ArmorObjectTemplate.TryCreateFromBinary)
+                        .CastExtendedList<ArmorObjectTemplate>();
                     return (int)Armor_FieldIndex.ObjectTemplates;
                 }
                 case RecordTypeInts.STOP:
@@ -4678,7 +4678,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public IFormLinkNullableGetter<IArmorGetter> TemplateArmor => _TemplateArmorLocation.HasValue ? new FormLinkNullable<IArmorGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _TemplateArmorLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<IArmorGetter>.Null;
         #endregion
         public IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? AttachParentSlots { get; private set; }
-        public IReadOnlyList<IObjectTemplateGetter>? ObjectTemplates { get; private set; }
+        public IReadOnlyList<IArmorObjectTemplateGetter>? ObjectTemplates { get; private set; }
         #region EndMarker
         private int? _EndMarkerLocation;
         public ReadOnlyMemorySlice<Byte>? EndMarker => _EndMarkerLocation.HasValue ? HeaderTranslation.ExtractSubrecordMemory(_data, _EndMarkerLocation.Value, _package.MetaData.Constants) : default(ReadOnlyMemorySlice<byte>?);
@@ -4908,14 +4908,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.OBTE:
                 {
-                    this.ObjectTemplates = BinaryOverlayList.FactoryByCountPerItem<ObjectTemplateBinaryOverlay>(
+                    this.ObjectTemplates = BinaryOverlayList.FactoryByCountPerItem<ArmorObjectTemplateBinaryOverlay>(
                         stream: stream,
                         package: _package,
                         countLength: 4,
-                        subrecordType: ObjectTemplate_Registration.TriggeringRecordTypes,
+                        subrecordType: ArmorObjectTemplate_Registration.TriggeringRecordTypes,
                         countType: RecordTypes.OBTE,
                         parseParams: parseParams,
-                        getter: (s, p, recConv) => ObjectTemplateBinaryOverlay.ObjectTemplateFactory(new OverlayStream(s, p), p, recConv),
+                        getter: (s, p, recConv) => ArmorObjectTemplateBinaryOverlay.ArmorObjectTemplateFactory(new OverlayStream(s, p), p, recConv),
                         skipHeader: false);
                     return (int)Armor_FieldIndex.ObjectTemplates;
                 }
