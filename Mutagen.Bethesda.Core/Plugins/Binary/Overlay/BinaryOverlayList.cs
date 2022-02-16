@@ -203,7 +203,7 @@ namespace Mutagen.Bethesda.Plugins.Binary.Overlay
                     locs: PluginBinaryOverlay.ParseRecordLocations(
                         stream: stream,
                         constants: package.MetaData.Constants.SubConstants,
-                        triggers: subrecordType,
+                        trigger: subrecordType,
                         skipHeader: skipHeader,
                         parseParams: parseParams?.RecordTypeConverter));
             }
