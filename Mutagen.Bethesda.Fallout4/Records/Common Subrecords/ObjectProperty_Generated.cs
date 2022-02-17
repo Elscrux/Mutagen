@@ -13,6 +13,7 @@ using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Plugins.Binary.Overlay;
 using Mutagen.Bethesda.Plugins.Binary.Streams;
 using Mutagen.Bethesda.Plugins.Binary.Translations;
+using Mutagen.Bethesda.Plugins.Cache;
 using Mutagen.Bethesda.Plugins.Exceptions;
 using Mutagen.Bethesda.Plugins.Internals;
 using Mutagen.Bethesda.Plugins.Records;
@@ -35,32 +36,31 @@ using System.Text;
 namespace Mutagen.Bethesda.Fallout4
 {
     #region Class
-    public partial class Properties :
-        IEquatable<IPropertiesGetter>,
-        ILoquiObjectSetter<Properties>,
-        IProperties
+    public partial class ObjectProperty :
+        IEquatable<IObjectPropertyGetter>,
+        ILoquiObjectSetter<ObjectProperty>,
+        IObjectProperty
     {
         #region Ctor
-        public Properties()
+        public ObjectProperty()
         {
             CustomCtor();
         }
         partial void CustomCtor();
         #endregion
 
-        #region PropertyList
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private ExtendedList<Single> _PropertyList = new ExtendedList<Single>();
-        public ExtendedList<Single> PropertyList
+        #region ActorValue
+        private readonly IFormLink<IActorValueInformationGetter> _ActorValue = new FormLink<IActorValueInformationGetter>();
+        public IFormLink<IActorValueInformationGetter> ActorValue
         {
-            get => this._PropertyList;
-            init => this._PropertyList = value;
+            get => _ActorValue;
+            set => _ActorValue.SetTo(value);
         }
-        #region Interface Members
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IReadOnlyList<Single> IPropertiesGetter.PropertyList => _PropertyList;
+        IFormLinkGetter<IActorValueInformationGetter> IObjectPropertyGetter.ActorValue => this.ActorValue;
         #endregion
-
+        #region Value
+        public Single Value { get; set; } = default;
         #endregion
 
         #region To String
@@ -69,7 +69,7 @@ namespace Mutagen.Bethesda.Fallout4
             FileGeneration fg,
             string? name = null)
         {
-            PropertiesMixIn.ToString(
+            ObjectPropertyMixIn.ToString(
                 item: this,
                 name: name);
         }
@@ -79,16 +79,16 @@ namespace Mutagen.Bethesda.Fallout4
         #region Equals and Hash
         public override bool Equals(object? obj)
         {
-            if (obj is not IPropertiesGetter rhs) return false;
-            return ((PropertiesCommon)((IPropertiesGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
+            if (obj is not IObjectPropertyGetter rhs) return false;
+            return ((ObjectPropertyCommon)((IObjectPropertyGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
         }
 
-        public bool Equals(IPropertiesGetter? obj)
+        public bool Equals(IObjectPropertyGetter? obj)
         {
-            return ((PropertiesCommon)((IPropertiesGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
+            return ((ObjectPropertyCommon)((IObjectPropertyGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
         }
 
-        public override int GetHashCode() => ((PropertiesCommon)((IPropertiesGetter)this).CommonInstance()!).GetHashCode(this);
+        public override int GetHashCode() => ((ObjectPropertyCommon)((IObjectPropertyGetter)this).CommonInstance()!).GetHashCode(this);
 
         #endregion
 
@@ -98,9 +98,18 @@ namespace Mutagen.Bethesda.Fallout4
             IMask<TItem>
         {
             #region Ctors
-            public Mask(TItem PropertyList)
+            public Mask(TItem initialValue)
             {
-                this.PropertyList = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(PropertyList, Enumerable.Empty<(int Index, TItem Value)>());
+                this.ActorValue = initialValue;
+                this.Value = initialValue;
+            }
+
+            public Mask(
+                TItem ActorValue,
+                TItem Value)
+            {
+                this.ActorValue = ActorValue;
+                this.Value = Value;
             }
 
             #pragma warning disable CS8618
@@ -112,7 +121,8 @@ namespace Mutagen.Bethesda.Fallout4
             #endregion
 
             #region Members
-            public MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>? PropertyList;
+            public TItem ActorValue;
+            public TItem Value;
             #endregion
 
             #region Equals
@@ -125,13 +135,15 @@ namespace Mutagen.Bethesda.Fallout4
             public bool Equals(Mask<TItem>? rhs)
             {
                 if (rhs == null) return false;
-                if (!object.Equals(this.PropertyList, rhs.PropertyList)) return false;
+                if (!object.Equals(this.ActorValue, rhs.ActorValue)) return false;
+                if (!object.Equals(this.Value, rhs.Value)) return false;
                 return true;
             }
             public override int GetHashCode()
             {
                 var hash = new HashCode();
-                hash.Add(this.PropertyList);
+                hash.Add(this.ActorValue);
+                hash.Add(this.Value);
                 return hash.ToHashCode();
             }
 
@@ -140,17 +152,8 @@ namespace Mutagen.Bethesda.Fallout4
             #region All
             public bool All(Func<TItem, bool> eval)
             {
-                if (this.PropertyList != null)
-                {
-                    if (!eval(this.PropertyList.Overall)) return false;
-                    if (this.PropertyList.Specific != null)
-                    {
-                        foreach (var item in this.PropertyList.Specific)
-                        {
-                            if (!eval(item.Value)) return false;
-                        }
-                    }
-                }
+                if (!eval(this.ActorValue)) return false;
+                if (!eval(this.Value)) return false;
                 return true;
             }
             #endregion
@@ -158,17 +161,8 @@ namespace Mutagen.Bethesda.Fallout4
             #region Any
             public bool Any(Func<TItem, bool> eval)
             {
-                if (this.PropertyList != null)
-                {
-                    if (eval(this.PropertyList.Overall)) return true;
-                    if (this.PropertyList.Specific != null)
-                    {
-                        foreach (var item in this.PropertyList.Specific)
-                        {
-                            if (!eval(item.Value)) return false;
-                        }
-                    }
-                }
+                if (eval(this.ActorValue)) return true;
+                if (eval(this.Value)) return true;
                 return false;
             }
             #endregion
@@ -176,27 +170,15 @@ namespace Mutagen.Bethesda.Fallout4
             #region Translate
             public Mask<R> Translate<R>(Func<TItem, R> eval)
             {
-                var ret = new Properties.Mask<R>();
+                var ret = new ObjectProperty.Mask<R>();
                 this.Translate_InternalFill(ret, eval);
                 return ret;
             }
 
             protected void Translate_InternalFill<R>(Mask<R> obj, Func<TItem, R> eval)
             {
-                if (PropertyList != null)
-                {
-                    obj.PropertyList = new MaskItem<R, IEnumerable<(int Index, R Value)>?>(eval(this.PropertyList.Overall), Enumerable.Empty<(int Index, R Value)>());
-                    if (PropertyList.Specific != null)
-                    {
-                        var l = new List<(int Index, R Item)>();
-                        obj.PropertyList.Specific = l;
-                        foreach (var item in PropertyList.Specific.WithIndex())
-                        {
-                            R mask = eval(item.Item.Value);
-                            l.Add((item.Index, mask));
-                        }
-                    }
-                }
+                obj.ActorValue = eval(this.ActorValue);
+                obj.Value = eval(this.Value);
             }
             #endregion
 
@@ -206,41 +188,26 @@ namespace Mutagen.Bethesda.Fallout4
                 return ToString(printMask: null);
             }
 
-            public string ToString(Properties.Mask<bool>? printMask = null)
+            public string ToString(ObjectProperty.Mask<bool>? printMask = null)
             {
                 var fg = new FileGeneration();
                 ToString(fg, printMask);
                 return fg.ToString();
             }
 
-            public void ToString(FileGeneration fg, Properties.Mask<bool>? printMask = null)
+            public void ToString(FileGeneration fg, ObjectProperty.Mask<bool>? printMask = null)
             {
-                fg.AppendLine($"{nameof(Properties.Mask<TItem>)} =>");
+                fg.AppendLine($"{nameof(ObjectProperty.Mask<TItem>)} =>");
                 fg.AppendLine("[");
                 using (new DepthWrapper(fg))
                 {
-                    if ((printMask?.PropertyList?.Overall ?? true)
-                        && PropertyList is {} PropertyListItem)
+                    if (printMask?.ActorValue ?? true)
                     {
-                        fg.AppendLine("PropertyList =>");
-                        fg.AppendLine("[");
-                        using (new DepthWrapper(fg))
-                        {
-                            fg.AppendItem(PropertyListItem.Overall);
-                            if (PropertyListItem.Specific != null)
-                            {
-                                foreach (var subItem in PropertyListItem.Specific)
-                                {
-                                    fg.AppendLine("[");
-                                    using (new DepthWrapper(fg))
-                                    {
-                                        fg.AppendItem(subItem, "Value");
-                                    }
-                                    fg.AppendLine("]");
-                                }
-                            }
-                        }
-                        fg.AppendLine("]");
+                        fg.AppendItem(ActorValue, "ActorValue");
+                    }
+                    if (printMask?.Value ?? true)
+                    {
+                        fg.AppendItem(Value, "Value");
                     }
                 }
                 fg.AppendLine("]");
@@ -267,17 +234,20 @@ namespace Mutagen.Bethesda.Fallout4
                     return _warnings;
                 }
             }
-            public MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>? PropertyList;
+            public Exception? ActorValue;
+            public Exception? Value;
             #endregion
 
             #region IErrorMask
             public object? GetNthMask(int index)
             {
-                Properties_FieldIndex enu = (Properties_FieldIndex)index;
+                ObjectProperty_FieldIndex enu = (ObjectProperty_FieldIndex)index;
                 switch (enu)
                 {
-                    case Properties_FieldIndex.PropertyList:
-                        return PropertyList;
+                    case ObjectProperty_FieldIndex.ActorValue:
+                        return ActorValue;
+                    case ObjectProperty_FieldIndex.Value:
+                        return Value;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
                 }
@@ -285,11 +255,14 @@ namespace Mutagen.Bethesda.Fallout4
 
             public void SetNthException(int index, Exception ex)
             {
-                Properties_FieldIndex enu = (Properties_FieldIndex)index;
+                ObjectProperty_FieldIndex enu = (ObjectProperty_FieldIndex)index;
                 switch (enu)
                 {
-                    case Properties_FieldIndex.PropertyList:
-                        this.PropertyList = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ex, null);
+                    case ObjectProperty_FieldIndex.ActorValue:
+                        this.ActorValue = ex;
+                        break;
+                    case ObjectProperty_FieldIndex.Value:
+                        this.Value = ex;
                         break;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
@@ -298,11 +271,14 @@ namespace Mutagen.Bethesda.Fallout4
 
             public void SetNthMask(int index, object obj)
             {
-                Properties_FieldIndex enu = (Properties_FieldIndex)index;
+                ObjectProperty_FieldIndex enu = (ObjectProperty_FieldIndex)index;
                 switch (enu)
                 {
-                    case Properties_FieldIndex.PropertyList:
-                        this.PropertyList = (MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>)obj;
+                    case ObjectProperty_FieldIndex.ActorValue:
+                        this.ActorValue = (Exception?)obj;
+                        break;
+                    case ObjectProperty_FieldIndex.Value:
+                        this.Value = (Exception?)obj;
                         break;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
@@ -312,7 +288,8 @@ namespace Mutagen.Bethesda.Fallout4
             public bool IsInError()
             {
                 if (Overall != null) return true;
-                if (PropertyList != null) return true;
+                if (ActorValue != null) return true;
+                if (Value != null) return true;
                 return false;
             }
             #endregion
@@ -347,28 +324,8 @@ namespace Mutagen.Bethesda.Fallout4
             }
             protected void ToString_FillInternal(FileGeneration fg)
             {
-                if (PropertyList is {} PropertyListItem)
-                {
-                    fg.AppendLine("PropertyList =>");
-                    fg.AppendLine("[");
-                    using (new DepthWrapper(fg))
-                    {
-                        fg.AppendItem(PropertyListItem.Overall);
-                        if (PropertyListItem.Specific != null)
-                        {
-                            foreach (var subItem in PropertyListItem.Specific)
-                            {
-                                fg.AppendLine("[");
-                                using (new DepthWrapper(fg))
-                                {
-                                    fg.AppendItem(subItem, "Value");
-                                }
-                                fg.AppendLine("]");
-                            }
-                        }
-                    }
-                    fg.AppendLine("]");
-                }
+                fg.AppendItem(ActorValue, "ActorValue");
+                fg.AppendItem(Value, "Value");
             }
             #endregion
 
@@ -377,7 +334,8 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 if (rhs == null) return this;
                 var ret = new ErrorMask();
-                ret.PropertyList = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ExceptionExt.Combine(this.PropertyList?.Overall, rhs.PropertyList?.Overall), ExceptionExt.Combine(this.PropertyList?.Specific, rhs.PropertyList?.Specific));
+                ret.ActorValue = this.ActorValue.Combine(rhs.ActorValue);
+                ret.Value = this.Value.Combine(rhs.Value);
                 return ret;
             }
             public static ErrorMask? Combine(ErrorMask? lhs, ErrorMask? rhs)
@@ -401,7 +359,8 @@ namespace Mutagen.Bethesda.Fallout4
             private TranslationCrystal? _crystal;
             public readonly bool DefaultOn;
             public bool OnOverall;
-            public bool PropertyList;
+            public bool ActorValue;
+            public bool Value;
             #endregion
 
             #region Ctors
@@ -411,7 +370,8 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 this.DefaultOn = defaultOn;
                 this.OnOverall = onOverall;
-                this.PropertyList = defaultOn;
+                this.ActorValue = defaultOn;
+                this.Value = defaultOn;
             }
 
             #endregion
@@ -427,7 +387,8 @@ namespace Mutagen.Bethesda.Fallout4
 
             protected void GetCrystal(List<(bool On, TranslationCrystal? SubCrystal)> ret)
             {
-                ret.Add((PropertyList, null));
+                ret.Add((ActorValue, null));
+                ret.Add((Value, null));
             }
 
             public static implicit operator TranslationMask(bool defaultOn)
@@ -439,30 +400,31 @@ namespace Mutagen.Bethesda.Fallout4
         #endregion
 
         #region Mutagen
-        public static readonly RecordType GrupRecordType = Properties_Registration.TriggeringRecordType;
+        public IEnumerable<IFormLinkGetter> ContainedFormLinks => ObjectPropertyCommon.Instance.GetContainedFormLinks(this);
+        public void RemapLinks(IReadOnlyDictionary<FormKey, FormKey> mapping) => ObjectPropertySetterCommon.Instance.RemapLinks(this, mapping);
         #endregion
 
         #region Binary Translation
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected object BinaryWriteTranslator => PropertiesBinaryWriteTranslation.Instance;
+        protected object BinaryWriteTranslator => ObjectPropertyBinaryWriteTranslation.Instance;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         object IBinaryItem.BinaryWriteTranslator => this.BinaryWriteTranslator;
         void IBinaryItem.WriteToBinary(
             MutagenWriter writer,
             TypedWriteParams? translationParams = null)
         {
-            ((PropertiesBinaryWriteTranslation)this.BinaryWriteTranslator).Write(
+            ((ObjectPropertyBinaryWriteTranslation)this.BinaryWriteTranslator).Write(
                 item: this,
                 writer: writer,
                 translationParams: translationParams);
         }
         #region Binary Create
-        public static Properties CreateFromBinary(
+        public static ObjectProperty CreateFromBinary(
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
-            var ret = new Properties();
-            ((PropertiesSetterCommon)((IPropertiesGetter)ret).CommonSetterInstance()!).CopyInFromBinary(
+            var ret = new ObjectProperty();
+            ((ObjectPropertySetterCommon)((IObjectPropertyGetter)ret).CommonSetterInstance()!).CopyInFromBinary(
                 item: ret,
                 frame: frame,
                 translationParams: translationParams);
@@ -473,7 +435,7 @@ namespace Mutagen.Bethesda.Fallout4
 
         public static bool TryCreateFromBinary(
             MutagenFrame frame,
-            out Properties item,
+            out ObjectProperty item,
             TypedParseParams? translationParams = null)
         {
             var startPos = frame.Position;
@@ -488,29 +450,32 @@ namespace Mutagen.Bethesda.Fallout4
 
         void IClearable.Clear()
         {
-            ((PropertiesSetterCommon)((IPropertiesGetter)this).CommonSetterInstance()!).Clear(this);
+            ((ObjectPropertySetterCommon)((IObjectPropertyGetter)this).CommonSetterInstance()!).Clear(this);
         }
 
-        internal static Properties GetNew()
+        internal static ObjectProperty GetNew()
         {
-            return new Properties();
+            return new ObjectProperty();
         }
 
     }
     #endregion
 
     #region Interface
-    public partial interface IProperties :
-        ILoquiObjectSetter<IProperties>,
-        IPropertiesGetter
+    public partial interface IObjectProperty :
+        IFormLinkContainer,
+        ILoquiObjectSetter<IObjectProperty>,
+        IObjectPropertyGetter
     {
-        new ExtendedList<Single> PropertyList { get; }
+        new IFormLink<IActorValueInformationGetter> ActorValue { get; set; }
+        new Single Value { get; set; }
     }
 
-    public partial interface IPropertiesGetter :
+    public partial interface IObjectPropertyGetter :
         ILoquiObject,
         IBinaryItem,
-        ILoquiObject<IPropertiesGetter>
+        IFormLinkContainerGetter,
+        ILoquiObject<IObjectPropertyGetter>
     {
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         object CommonInstance();
@@ -518,50 +483,51 @@ namespace Mutagen.Bethesda.Fallout4
         object? CommonSetterInstance();
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         object CommonSetterTranslationInstance();
-        static ILoquiRegistration StaticRegistration => Properties_Registration.Instance;
-        IReadOnlyList<Single> PropertyList { get; }
+        static ILoquiRegistration StaticRegistration => ObjectProperty_Registration.Instance;
+        IFormLinkGetter<IActorValueInformationGetter> ActorValue { get; }
+        Single Value { get; }
 
     }
 
     #endregion
 
     #region Common MixIn
-    public static partial class PropertiesMixIn
+    public static partial class ObjectPropertyMixIn
     {
-        public static void Clear(this IProperties item)
+        public static void Clear(this IObjectProperty item)
         {
-            ((PropertiesSetterCommon)((IPropertiesGetter)item).CommonSetterInstance()!).Clear(item: item);
+            ((ObjectPropertySetterCommon)((IObjectPropertyGetter)item).CommonSetterInstance()!).Clear(item: item);
         }
 
-        public static Properties.Mask<bool> GetEqualsMask(
-            this IPropertiesGetter item,
-            IPropertiesGetter rhs,
+        public static ObjectProperty.Mask<bool> GetEqualsMask(
+            this IObjectPropertyGetter item,
+            IObjectPropertyGetter rhs,
             EqualsMaskHelper.Include include = EqualsMaskHelper.Include.All)
         {
-            return ((PropertiesCommon)((IPropertiesGetter)item).CommonInstance()!).GetEqualsMask(
+            return ((ObjectPropertyCommon)((IObjectPropertyGetter)item).CommonInstance()!).GetEqualsMask(
                 item: item,
                 rhs: rhs,
                 include: include);
         }
 
         public static string ToString(
-            this IPropertiesGetter item,
+            this IObjectPropertyGetter item,
             string? name = null,
-            Properties.Mask<bool>? printMask = null)
+            ObjectProperty.Mask<bool>? printMask = null)
         {
-            return ((PropertiesCommon)((IPropertiesGetter)item).CommonInstance()!).ToString(
+            return ((ObjectPropertyCommon)((IObjectPropertyGetter)item).CommonInstance()!).ToString(
                 item: item,
                 name: name,
                 printMask: printMask);
         }
 
         public static void ToString(
-            this IPropertiesGetter item,
+            this IObjectPropertyGetter item,
             FileGeneration fg,
             string? name = null,
-            Properties.Mask<bool>? printMask = null)
+            ObjectProperty.Mask<bool>? printMask = null)
         {
-            ((PropertiesCommon)((IPropertiesGetter)item).CommonInstance()!).ToString(
+            ((ObjectPropertyCommon)((IObjectPropertyGetter)item).CommonInstance()!).ToString(
                 item: item,
                 fg: fg,
                 name: name,
@@ -569,21 +535,21 @@ namespace Mutagen.Bethesda.Fallout4
         }
 
         public static bool Equals(
-            this IPropertiesGetter item,
-            IPropertiesGetter rhs,
-            Properties.TranslationMask? equalsMask = null)
+            this IObjectPropertyGetter item,
+            IObjectPropertyGetter rhs,
+            ObjectProperty.TranslationMask? equalsMask = null)
         {
-            return ((PropertiesCommon)((IPropertiesGetter)item).CommonInstance()!).Equals(
+            return ((ObjectPropertyCommon)((IObjectPropertyGetter)item).CommonInstance()!).Equals(
                 lhs: item,
                 rhs: rhs,
                 crystal: equalsMask?.GetCrystal());
         }
 
         public static void DeepCopyIn(
-            this IProperties lhs,
-            IPropertiesGetter rhs)
+            this IObjectProperty lhs,
+            IObjectPropertyGetter rhs)
         {
-            ((PropertiesSetterTranslationCommon)((IPropertiesGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
+            ((ObjectPropertySetterTranslationCommon)((IObjectPropertyGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: lhs,
                 rhs: rhs,
                 errorMask: default,
@@ -592,11 +558,11 @@ namespace Mutagen.Bethesda.Fallout4
         }
 
         public static void DeepCopyIn(
-            this IProperties lhs,
-            IPropertiesGetter rhs,
-            Properties.TranslationMask? copyMask = null)
+            this IObjectProperty lhs,
+            IObjectPropertyGetter rhs,
+            ObjectProperty.TranslationMask? copyMask = null)
         {
-            ((PropertiesSetterTranslationCommon)((IPropertiesGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
+            ((ObjectPropertySetterTranslationCommon)((IObjectPropertyGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: lhs,
                 rhs: rhs,
                 errorMask: default,
@@ -605,28 +571,28 @@ namespace Mutagen.Bethesda.Fallout4
         }
 
         public static void DeepCopyIn(
-            this IProperties lhs,
-            IPropertiesGetter rhs,
-            out Properties.ErrorMask errorMask,
-            Properties.TranslationMask? copyMask = null)
+            this IObjectProperty lhs,
+            IObjectPropertyGetter rhs,
+            out ObjectProperty.ErrorMask errorMask,
+            ObjectProperty.TranslationMask? copyMask = null)
         {
             var errorMaskBuilder = new ErrorMaskBuilder();
-            ((PropertiesSetterTranslationCommon)((IPropertiesGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
+            ((ObjectPropertySetterTranslationCommon)((IObjectPropertyGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: lhs,
                 rhs: rhs,
                 errorMask: errorMaskBuilder,
                 copyMask: copyMask?.GetCrystal(),
                 deepCopy: false);
-            errorMask = Properties.ErrorMask.Factory(errorMaskBuilder);
+            errorMask = ObjectProperty.ErrorMask.Factory(errorMaskBuilder);
         }
 
         public static void DeepCopyIn(
-            this IProperties lhs,
-            IPropertiesGetter rhs,
+            this IObjectProperty lhs,
+            IObjectPropertyGetter rhs,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask)
         {
-            ((PropertiesSetterTranslationCommon)((IPropertiesGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
+            ((ObjectPropertySetterTranslationCommon)((IObjectPropertyGetter)lhs).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: lhs,
                 rhs: rhs,
                 errorMask: errorMask,
@@ -634,32 +600,32 @@ namespace Mutagen.Bethesda.Fallout4
                 deepCopy: false);
         }
 
-        public static Properties DeepCopy(
-            this IPropertiesGetter item,
-            Properties.TranslationMask? copyMask = null)
+        public static ObjectProperty DeepCopy(
+            this IObjectPropertyGetter item,
+            ObjectProperty.TranslationMask? copyMask = null)
         {
-            return ((PropertiesSetterTranslationCommon)((IPropertiesGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
+            return ((ObjectPropertySetterTranslationCommon)((IObjectPropertyGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
                 item: item,
                 copyMask: copyMask);
         }
 
-        public static Properties DeepCopy(
-            this IPropertiesGetter item,
-            out Properties.ErrorMask errorMask,
-            Properties.TranslationMask? copyMask = null)
+        public static ObjectProperty DeepCopy(
+            this IObjectPropertyGetter item,
+            out ObjectProperty.ErrorMask errorMask,
+            ObjectProperty.TranslationMask? copyMask = null)
         {
-            return ((PropertiesSetterTranslationCommon)((IPropertiesGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
+            return ((ObjectPropertySetterTranslationCommon)((IObjectPropertyGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
                 item: item,
                 copyMask: copyMask,
                 errorMask: out errorMask);
         }
 
-        public static Properties DeepCopy(
-            this IPropertiesGetter item,
+        public static ObjectProperty DeepCopy(
+            this IObjectPropertyGetter item,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask = null)
         {
-            return ((PropertiesSetterTranslationCommon)((IPropertiesGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
+            return ((ObjectPropertySetterTranslationCommon)((IObjectPropertyGetter)item).CommonSetterTranslationInstance()!).DeepCopy(
                 item: item,
                 copyMask: copyMask,
                 errorMask: errorMask);
@@ -667,11 +633,11 @@ namespace Mutagen.Bethesda.Fallout4
 
         #region Binary Translation
         public static void CopyInFromBinary(
-            this IProperties item,
+            this IObjectProperty item,
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
-            ((PropertiesSetterCommon)((IPropertiesGetter)item).CommonSetterInstance()!).CopyInFromBinary(
+            ((ObjectPropertySetterCommon)((IObjectPropertyGetter)item).CommonSetterInstance()!).CopyInFromBinary(
                 item: item,
                 frame: frame,
                 translationParams: translationParams);
@@ -687,16 +653,17 @@ namespace Mutagen.Bethesda.Fallout4
 namespace Mutagen.Bethesda.Fallout4.Internals
 {
     #region Field Index
-    public enum Properties_FieldIndex
+    public enum ObjectProperty_FieldIndex
     {
-        PropertyList = 0,
+        ActorValue = 0,
+        Value = 1,
     }
     #endregion
 
     #region Registration
-    public partial class Properties_Registration : ILoquiRegistration
+    public partial class ObjectProperty_Registration : ILoquiRegistration
     {
-        public static readonly Properties_Registration Instance = new Properties_Registration();
+        public static readonly ObjectProperty_Registration Instance = new ObjectProperty_Registration();
 
         public static ProtocolKey ProtocolKey => ProtocolDefinition_Fallout4.ProtocolKey;
 
@@ -707,27 +674,27 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public const string GUID = "0beb0841-2461-40b8-8588-3cacf0811883";
 
-        public const ushort AdditionalFieldCount = 1;
+        public const ushort AdditionalFieldCount = 2;
 
-        public const ushort FieldCount = 1;
+        public const ushort FieldCount = 2;
 
-        public static readonly Type MaskType = typeof(Properties.Mask<>);
+        public static readonly Type MaskType = typeof(ObjectProperty.Mask<>);
 
-        public static readonly Type ErrorMaskType = typeof(Properties.ErrorMask);
+        public static readonly Type ErrorMaskType = typeof(ObjectProperty.ErrorMask);
 
-        public static readonly Type ClassType = typeof(Properties);
+        public static readonly Type ClassType = typeof(ObjectProperty);
 
-        public static readonly Type GetterType = typeof(IPropertiesGetter);
+        public static readonly Type GetterType = typeof(IObjectPropertyGetter);
 
         public static readonly Type? InternalGetterType = null;
 
-        public static readonly Type SetterType = typeof(IProperties);
+        public static readonly Type SetterType = typeof(IObjectProperty);
 
         public static readonly Type? InternalSetterType = null;
 
-        public const string FullName = "Mutagen.Bethesda.Fallout4.Properties";
+        public const string FullName = "Mutagen.Bethesda.Fallout4.ObjectProperty";
 
-        public const string Name = "Properties";
+        public const string Name = "ObjectProperty";
 
         public const string Namespace = "Mutagen.Bethesda.Fallout4";
 
@@ -735,8 +702,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public static readonly Type? GenericRegistrationType = null;
 
-        public static readonly RecordType TriggeringRecordType = RecordTypes.PRPS;
-        public static readonly Type BinaryWriteTranslation = typeof(PropertiesBinaryWriteTranslation);
+        public static readonly Type BinaryWriteTranslation = typeof(ObjectPropertyBinaryWriteTranslation);
         #region Interface
         ProtocolKey ILoquiRegistration.ProtocolKey => ProtocolKey;
         ObjectKey ILoquiRegistration.ObjectKey => ObjectKey;
@@ -769,56 +735,54 @@ namespace Mutagen.Bethesda.Fallout4.Internals
     #endregion
 
     #region Common
-    public partial class PropertiesSetterCommon
+    public partial class ObjectPropertySetterCommon
     {
-        public static readonly PropertiesSetterCommon Instance = new PropertiesSetterCommon();
+        public static readonly ObjectPropertySetterCommon Instance = new ObjectPropertySetterCommon();
 
         partial void ClearPartial();
         
-        public void Clear(IProperties item)
+        public void Clear(IObjectProperty item)
         {
             ClearPartial();
-            item.PropertyList.Clear();
+            item.ActorValue.Clear();
+            item.Value = default;
         }
         
         #region Mutagen
-        public void RemapLinks(IProperties obj, IReadOnlyDictionary<FormKey, FormKey> mapping)
+        public void RemapLinks(IObjectProperty obj, IReadOnlyDictionary<FormKey, FormKey> mapping)
         {
+            obj.ActorValue.Relink(mapping);
         }
         
         #endregion
         
         #region Binary Translation
         public virtual void CopyInFromBinary(
-            IProperties item,
+            IObjectProperty item,
             MutagenFrame frame,
             TypedParseParams? translationParams = null)
         {
-            frame = frame.SpawnWithFinalPosition(HeaderTranslation.ParseSubrecord(
-                frame.Reader,
-                translationParams.ConvertToCustom(RecordTypes.PRPS),
-                translationParams?.LengthOverride));
             PluginUtilityTranslation.SubrecordParse(
                 record: item,
                 frame: frame,
                 translationParams: translationParams,
-                fillStructs: PropertiesBinaryCreateTranslation.FillBinaryStructs);
+                fillStructs: ObjectPropertyBinaryCreateTranslation.FillBinaryStructs);
         }
         
         #endregion
         
     }
-    public partial class PropertiesCommon
+    public partial class ObjectPropertyCommon
     {
-        public static readonly PropertiesCommon Instance = new PropertiesCommon();
+        public static readonly ObjectPropertyCommon Instance = new ObjectPropertyCommon();
 
-        public Properties.Mask<bool> GetEqualsMask(
-            IPropertiesGetter item,
-            IPropertiesGetter rhs,
+        public ObjectProperty.Mask<bool> GetEqualsMask(
+            IObjectPropertyGetter item,
+            IObjectPropertyGetter rhs,
             EqualsMaskHelper.Include include = EqualsMaskHelper.Include.All)
         {
-            var ret = new Properties.Mask<bool>(false);
-            ((PropertiesCommon)((IPropertiesGetter)item).CommonInstance()!).FillEqualsMask(
+            var ret = new ObjectProperty.Mask<bool>(false);
+            ((ObjectPropertyCommon)((IObjectPropertyGetter)item).CommonInstance()!).FillEqualsMask(
                 item: item,
                 rhs: rhs,
                 ret: ret,
@@ -827,22 +791,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         public void FillEqualsMask(
-            IPropertiesGetter item,
-            IPropertiesGetter rhs,
-            Properties.Mask<bool> ret,
+            IObjectPropertyGetter item,
+            IObjectPropertyGetter rhs,
+            ObjectProperty.Mask<bool> ret,
             EqualsMaskHelper.Include include = EqualsMaskHelper.Include.All)
         {
             if (rhs == null) return;
-            ret.PropertyList = item.PropertyList.CollectionEqualsHelper(
-                rhs.PropertyList,
-                (l, r) => l.EqualsWithin(r),
-                include);
+            ret.ActorValue = item.ActorValue.Equals(rhs.ActorValue);
+            ret.Value = item.Value.EqualsWithin(rhs.Value);
         }
         
         public string ToString(
-            IPropertiesGetter item,
+            IObjectPropertyGetter item,
             string? name = null,
-            Properties.Mask<bool>? printMask = null)
+            ObjectProperty.Mask<bool>? printMask = null)
         {
             var fg = new FileGeneration();
             ToString(
@@ -854,18 +816,18 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         public void ToString(
-            IPropertiesGetter item,
+            IObjectPropertyGetter item,
             FileGeneration fg,
             string? name = null,
-            Properties.Mask<bool>? printMask = null)
+            ObjectProperty.Mask<bool>? printMask = null)
         {
             if (name == null)
             {
-                fg.AppendLine($"Properties =>");
+                fg.AppendLine($"ObjectProperty =>");
             }
             else
             {
-                fg.AppendLine($"{name} (Properties) =>");
+                fg.AppendLine($"{name} (ObjectProperty) =>");
             }
             fg.AppendLine("[");
             using (new DepthWrapper(fg))
@@ -879,48 +841,43 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         }
         
         protected static void ToStringFields(
-            IPropertiesGetter item,
+            IObjectPropertyGetter item,
             FileGeneration fg,
-            Properties.Mask<bool>? printMask = null)
+            ObjectProperty.Mask<bool>? printMask = null)
         {
-            if (printMask?.PropertyList?.Overall ?? true)
+            if (printMask?.ActorValue ?? true)
             {
-                fg.AppendLine("PropertyList =>");
-                fg.AppendLine("[");
-                using (new DepthWrapper(fg))
-                {
-                    foreach (var subItem in item.PropertyList)
-                    {
-                        fg.AppendLine("[");
-                        using (new DepthWrapper(fg))
-                        {
-                            fg.AppendItem(subItem, "Value");
-                        }
-                        fg.AppendLine("]");
-                    }
-                }
-                fg.AppendLine("]");
+                fg.AppendItem(item.ActorValue.FormKey, "ActorValue");
+            }
+            if (printMask?.Value ?? true)
+            {
+                fg.AppendItem(item.Value, "Value");
             }
         }
         
         #region Equals and Hash
         public virtual bool Equals(
-            IPropertiesGetter? lhs,
-            IPropertiesGetter? rhs,
+            IObjectPropertyGetter? lhs,
+            IObjectPropertyGetter? rhs,
             TranslationCrystal? crystal)
         {
             if (!EqualsMaskHelper.RefEquality(lhs, rhs, out var isEqual)) return isEqual;
-            if ((crystal?.GetShouldTranslate((int)Properties_FieldIndex.PropertyList) ?? true))
+            if ((crystal?.GetShouldTranslate((int)ObjectProperty_FieldIndex.ActorValue) ?? true))
             {
-                if (!lhs.PropertyList.SequenceEqualNullable(rhs.PropertyList)) return false;
+                if (!lhs.ActorValue.Equals(rhs.ActorValue)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)ObjectProperty_FieldIndex.Value) ?? true))
+            {
+                if (!lhs.Value.EqualsWithin(rhs.Value)) return false;
             }
             return true;
         }
         
-        public virtual int GetHashCode(IPropertiesGetter item)
+        public virtual int GetHashCode(IObjectPropertyGetter item)
         {
             var hash = new HashCode();
-            hash.Add(item.PropertyList);
+            hash.Add(item.ActorValue);
+            hash.Add(item.Value);
             return hash.ToHashCode();
         }
         
@@ -929,57 +886,49 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         
         public object GetNew()
         {
-            return Properties.GetNew();
+            return ObjectProperty.GetNew();
         }
         
         #region Mutagen
-        public IEnumerable<IFormLinkGetter> GetContainedFormLinks(IPropertiesGetter obj)
+        public IEnumerable<IFormLinkGetter> GetContainedFormLinks(IObjectPropertyGetter obj)
         {
+            yield return FormLinkInformation.Factory(obj.ActorValue);
             yield break;
         }
         
         #endregion
         
     }
-    public partial class PropertiesSetterTranslationCommon
+    public partial class ObjectPropertySetterTranslationCommon
     {
-        public static readonly PropertiesSetterTranslationCommon Instance = new PropertiesSetterTranslationCommon();
+        public static readonly ObjectPropertySetterTranslationCommon Instance = new ObjectPropertySetterTranslationCommon();
 
         #region DeepCopyIn
         public void DeepCopyIn(
-            IProperties item,
-            IPropertiesGetter rhs,
+            IObjectProperty item,
+            IObjectPropertyGetter rhs,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask,
             bool deepCopy)
         {
-            if ((copyMask?.GetShouldTranslate((int)Properties_FieldIndex.PropertyList) ?? true))
+            if ((copyMask?.GetShouldTranslate((int)ObjectProperty_FieldIndex.ActorValue) ?? true))
             {
-                errorMask?.PushIndex((int)Properties_FieldIndex.PropertyList);
-                try
-                {
-                    item.PropertyList.SetTo(rhs.PropertyList);
-                }
-                catch (Exception ex)
-                when (errorMask != null)
-                {
-                    errorMask.ReportException(ex);
-                }
-                finally
-                {
-                    errorMask?.PopIndex();
-                }
+                item.ActorValue.SetTo(rhs.ActorValue.FormKey);
+            }
+            if ((copyMask?.GetShouldTranslate((int)ObjectProperty_FieldIndex.Value) ?? true))
+            {
+                item.Value = rhs.Value;
             }
         }
         
         #endregion
         
-        public Properties DeepCopy(
-            IPropertiesGetter item,
-            Properties.TranslationMask? copyMask = null)
+        public ObjectProperty DeepCopy(
+            IObjectPropertyGetter item,
+            ObjectProperty.TranslationMask? copyMask = null)
         {
-            Properties ret = (Properties)((PropertiesCommon)((IPropertiesGetter)item).CommonInstance()!).GetNew();
-            ((PropertiesSetterTranslationCommon)((IPropertiesGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
+            ObjectProperty ret = (ObjectProperty)((ObjectPropertyCommon)((IObjectPropertyGetter)item).CommonInstance()!).GetNew();
+            ((ObjectPropertySetterTranslationCommon)((IObjectPropertyGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: ret,
                 rhs: item,
                 errorMask: null,
@@ -988,30 +937,30 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             return ret;
         }
         
-        public Properties DeepCopy(
-            IPropertiesGetter item,
-            out Properties.ErrorMask errorMask,
-            Properties.TranslationMask? copyMask = null)
+        public ObjectProperty DeepCopy(
+            IObjectPropertyGetter item,
+            out ObjectProperty.ErrorMask errorMask,
+            ObjectProperty.TranslationMask? copyMask = null)
         {
             var errorMaskBuilder = new ErrorMaskBuilder();
-            Properties ret = (Properties)((PropertiesCommon)((IPropertiesGetter)item).CommonInstance()!).GetNew();
-            ((PropertiesSetterTranslationCommon)((IPropertiesGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
+            ObjectProperty ret = (ObjectProperty)((ObjectPropertyCommon)((IObjectPropertyGetter)item).CommonInstance()!).GetNew();
+            ((ObjectPropertySetterTranslationCommon)((IObjectPropertyGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
                 ret,
                 item,
                 errorMask: errorMaskBuilder,
                 copyMask: copyMask?.GetCrystal(),
                 deepCopy: true);
-            errorMask = Properties.ErrorMask.Factory(errorMaskBuilder);
+            errorMask = ObjectProperty.ErrorMask.Factory(errorMaskBuilder);
             return ret;
         }
         
-        public Properties DeepCopy(
-            IPropertiesGetter item,
+        public ObjectProperty DeepCopy(
+            IObjectPropertyGetter item,
             ErrorMaskBuilder? errorMask,
             TranslationCrystal? copyMask = null)
         {
-            Properties ret = (Properties)((PropertiesCommon)((IPropertiesGetter)item).CommonInstance()!).GetNew();
-            ((PropertiesSetterTranslationCommon)((IPropertiesGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
+            ObjectProperty ret = (ObjectProperty)((ObjectPropertyCommon)((IObjectPropertyGetter)item).CommonInstance()!).GetNew();
+            ((ObjectPropertySetterTranslationCommon)((IObjectPropertyGetter)ret).CommonSetterTranslationInstance()!).DeepCopyIn(
                 item: ret,
                 rhs: item,
                 errorMask: errorMask,
@@ -1027,27 +976,27 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
 namespace Mutagen.Bethesda.Fallout4
 {
-    public partial class Properties
+    public partial class ObjectProperty
     {
         #region Common Routing
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        ILoquiRegistration ILoquiObject.Registration => Properties_Registration.Instance;
-        public static Properties_Registration StaticRegistration => Properties_Registration.Instance;
+        ILoquiRegistration ILoquiObject.Registration => ObjectProperty_Registration.Instance;
+        public static ObjectProperty_Registration StaticRegistration => ObjectProperty_Registration.Instance;
         [DebuggerStepThrough]
-        protected object CommonInstance() => PropertiesCommon.Instance;
+        protected object CommonInstance() => ObjectPropertyCommon.Instance;
         [DebuggerStepThrough]
         protected object CommonSetterInstance()
         {
-            return PropertiesSetterCommon.Instance;
+            return ObjectPropertySetterCommon.Instance;
         }
         [DebuggerStepThrough]
-        protected object CommonSetterTranslationInstance() => PropertiesSetterTranslationCommon.Instance;
+        protected object CommonSetterTranslationInstance() => ObjectPropertySetterTranslationCommon.Instance;
         [DebuggerStepThrough]
-        object IPropertiesGetter.CommonInstance() => this.CommonInstance();
+        object IObjectPropertyGetter.CommonInstance() => this.CommonInstance();
         [DebuggerStepThrough]
-        object IPropertiesGetter.CommonSetterInstance() => this.CommonSetterInstance();
+        object IObjectPropertyGetter.CommonSetterInstance() => this.CommonSetterInstance();
         [DebuggerStepThrough]
-        object IPropertiesGetter.CommonSetterTranslationInstance() => this.CommonSetterTranslationInstance();
+        object IObjectPropertyGetter.CommonSetterTranslationInstance() => this.CommonSetterTranslationInstance();
 
         #endregion
 
@@ -1058,35 +1007,30 @@ namespace Mutagen.Bethesda.Fallout4
 #region Binary Translation
 namespace Mutagen.Bethesda.Fallout4.Internals
 {
-    public partial class PropertiesBinaryWriteTranslation : IBinaryWriteTranslator
+    public partial class ObjectPropertyBinaryWriteTranslation : IBinaryWriteTranslator
     {
-        public readonly static PropertiesBinaryWriteTranslation Instance = new PropertiesBinaryWriteTranslation();
+        public readonly static ObjectPropertyBinaryWriteTranslation Instance = new ObjectPropertyBinaryWriteTranslation();
 
         public static void WriteEmbedded(
-            IPropertiesGetter item,
+            IObjectPropertyGetter item,
             MutagenWriter writer)
         {
-            Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<Single>.Instance.Write(
+            FormLinkBinaryTranslation.Instance.Write(
                 writer: writer,
-                items: item.PropertyList,
-                transl: FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write);
+                item: item.ActorValue);
+            FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
+                writer: writer,
+                item: item.Value);
         }
 
         public void Write(
             MutagenWriter writer,
-            IPropertiesGetter item,
+            IObjectPropertyGetter item,
             TypedWriteParams? translationParams = null)
         {
-            using (HeaderExport.Subrecord(
-                writer: writer,
-                record: translationParams.ConvertToCustom(RecordTypes.PRPS),
-                overflowRecord: translationParams?.OverflowRecordType,
-                out var writerToUse))
-            {
-                WriteEmbedded(
-                    item: item,
-                    writer: writerToUse);
-            }
+            WriteEmbedded(
+                item: item,
+                writer: writer);
         }
 
         public void Write(
@@ -1095,25 +1039,23 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TypedWriteParams? translationParams = null)
         {
             Write(
-                item: (IPropertiesGetter)item,
+                item: (IObjectPropertyGetter)item,
                 writer: writer,
                 translationParams: translationParams);
         }
 
     }
 
-    public partial class PropertiesBinaryCreateTranslation
+    public partial class ObjectPropertyBinaryCreateTranslation
     {
-        public readonly static PropertiesBinaryCreateTranslation Instance = new PropertiesBinaryCreateTranslation();
+        public readonly static ObjectPropertyBinaryCreateTranslation Instance = new ObjectPropertyBinaryCreateTranslation();
 
         public static void FillBinaryStructs(
-            IProperties item,
+            IObjectProperty item,
             MutagenFrame frame)
         {
-            item.PropertyList.SetTo(
-                Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<Single>.Instance.Parse(
-                    reader: frame,
-                    transl: FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse));
+            item.ActorValue.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+            item.Value = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: frame);
         }
 
     }
@@ -1122,14 +1064,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 namespace Mutagen.Bethesda.Fallout4
 {
     #region Binary Write Mixins
-    public static class PropertiesBinaryTranslationMixIn
+    public static class ObjectPropertyBinaryTranslationMixIn
     {
         public static void WriteToBinary(
-            this IPropertiesGetter item,
+            this IObjectPropertyGetter item,
             MutagenWriter writer,
             TypedWriteParams? translationParams = null)
         {
-            ((PropertiesBinaryWriteTranslation)item.BinaryWriteTranslator).Write(
+            ((ObjectPropertyBinaryWriteTranslation)item.BinaryWriteTranslator).Write(
                 item: item,
                 writer: writer,
                 translationParams: translationParams);
@@ -1142,54 +1084,53 @@ namespace Mutagen.Bethesda.Fallout4
 }
 namespace Mutagen.Bethesda.Fallout4.Internals
 {
-    public partial class PropertiesBinaryOverlay :
+    public partial class ObjectPropertyBinaryOverlay :
         PluginBinaryOverlay,
-        IPropertiesGetter
+        IObjectPropertyGetter
     {
         #region Common Routing
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        ILoquiRegistration ILoquiObject.Registration => Properties_Registration.Instance;
-        public static Properties_Registration StaticRegistration => Properties_Registration.Instance;
+        ILoquiRegistration ILoquiObject.Registration => ObjectProperty_Registration.Instance;
+        public static ObjectProperty_Registration StaticRegistration => ObjectProperty_Registration.Instance;
         [DebuggerStepThrough]
-        protected object CommonInstance() => PropertiesCommon.Instance;
+        protected object CommonInstance() => ObjectPropertyCommon.Instance;
         [DebuggerStepThrough]
-        protected object CommonSetterTranslationInstance() => PropertiesSetterTranslationCommon.Instance;
+        protected object CommonSetterTranslationInstance() => ObjectPropertySetterTranslationCommon.Instance;
         [DebuggerStepThrough]
-        object IPropertiesGetter.CommonInstance() => this.CommonInstance();
+        object IObjectPropertyGetter.CommonInstance() => this.CommonInstance();
         [DebuggerStepThrough]
-        object? IPropertiesGetter.CommonSetterInstance() => null;
+        object? IObjectPropertyGetter.CommonSetterInstance() => null;
         [DebuggerStepThrough]
-        object IPropertiesGetter.CommonSetterTranslationInstance() => this.CommonSetterTranslationInstance();
+        object IObjectPropertyGetter.CommonSetterTranslationInstance() => this.CommonSetterTranslationInstance();
 
         #endregion
 
         void IPrintable.ToString(FileGeneration fg, string? name) => this.ToString(fg, name);
 
+        public IEnumerable<IFormLinkGetter> ContainedFormLinks => ObjectPropertyCommon.Instance.GetContainedFormLinks(this);
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected object BinaryWriteTranslator => PropertiesBinaryWriteTranslation.Instance;
+        protected object BinaryWriteTranslator => ObjectPropertyBinaryWriteTranslation.Instance;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         object IBinaryItem.BinaryWriteTranslator => this.BinaryWriteTranslator;
         void IBinaryItem.WriteToBinary(
             MutagenWriter writer,
             TypedWriteParams? translationParams = null)
         {
-            ((PropertiesBinaryWriteTranslation)this.BinaryWriteTranslator).Write(
+            ((ObjectPropertyBinaryWriteTranslation)this.BinaryWriteTranslator).Write(
                 item: this,
                 writer: writer,
                 translationParams: translationParams);
         }
 
-        #region PropertyList
-        public IReadOnlyList<Single> PropertyList => BinaryOverlayList.FactoryByStartIndex<Single>(_data, _package, 4, (s, p) => s.Float());
-        protected int PropertyListEndingPos;
-        #endregion
+        public IFormLinkGetter<IActorValueInformationGetter> ActorValue => new FormLink<IActorValueInformationGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(_data.Span.Slice(0x0, 0x4))));
+        public Single Value => _data.Slice(0x4, 0x4).Float();
         partial void CustomFactoryEnd(
             OverlayStream stream,
             int finalPos,
             int offset);
 
         partial void CustomCtor();
-        protected PropertiesBinaryOverlay(
+        protected ObjectPropertyBinaryOverlay(
             ReadOnlyMemorySlice<byte> bytes,
             BinaryOverlayFactoryPackage package)
             : base(
@@ -1199,17 +1140,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             this.CustomCtor();
         }
 
-        public static PropertiesBinaryOverlay PropertiesFactory(
+        public static ObjectPropertyBinaryOverlay ObjectPropertyFactory(
             OverlayStream stream,
             BinaryOverlayFactoryPackage package,
             TypedParseParams? parseParams = null)
         {
-            var ret = new PropertiesBinaryOverlay(
-                bytes: HeaderTranslation.ExtractSubrecordMemory(stream.RemainingMemory, package.MetaData.Constants, parseParams),
+            var ret = new ObjectPropertyBinaryOverlay(
+                bytes: stream.RemainingMemory.Slice(0, 0x8),
                 package: package);
-            var finalPos = checked((int)(stream.Position + stream.GetSubrecord().TotalLength));
-            int offset = stream.Position + package.MetaData.Constants.SubConstants.TypeAndLengthLength;
-            ret.PropertyListEndingPos = ret._data.Length;
+            int offset = stream.Position;
+            stream.Position += 0x8;
             ret.CustomFactoryEnd(
                 stream: stream,
                 finalPos: stream.Length,
@@ -1217,12 +1157,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             return ret;
         }
 
-        public static PropertiesBinaryOverlay PropertiesFactory(
+        public static ObjectPropertyBinaryOverlay ObjectPropertyFactory(
             ReadOnlyMemorySlice<byte> slice,
             BinaryOverlayFactoryPackage package,
             TypedParseParams? parseParams = null)
         {
-            return PropertiesFactory(
+            return ObjectPropertyFactory(
                 stream: new OverlayStream(slice, package),
                 package: package,
                 parseParams: parseParams);
@@ -1234,7 +1174,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             FileGeneration fg,
             string? name = null)
         {
-            PropertiesMixIn.ToString(
+            ObjectPropertyMixIn.ToString(
                 item: this,
                 name: name);
         }
@@ -1244,16 +1184,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         #region Equals and Hash
         public override bool Equals(object? obj)
         {
-            if (obj is not IPropertiesGetter rhs) return false;
-            return ((PropertiesCommon)((IPropertiesGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
+            if (obj is not IObjectPropertyGetter rhs) return false;
+            return ((ObjectPropertyCommon)((IObjectPropertyGetter)this).CommonInstance()!).Equals(this, rhs, crystal: null);
         }
 
-        public bool Equals(IPropertiesGetter? obj)
+        public bool Equals(IObjectPropertyGetter? obj)
         {
-            return ((PropertiesCommon)((IPropertiesGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
+            return ((ObjectPropertyCommon)((IObjectPropertyGetter)this).CommonInstance()!).Equals(this, obj, crystal: null);
         }
 
-        public override int GetHashCode() => ((PropertiesCommon)((IPropertiesGetter)this).CommonInstance()!).GetHashCode(this);
+        public override int GetHashCode() => ((ObjectPropertyCommon)((IObjectPropertyGetter)this).CommonInstance()!).GetHashCode(this);
 
         #endregion
 

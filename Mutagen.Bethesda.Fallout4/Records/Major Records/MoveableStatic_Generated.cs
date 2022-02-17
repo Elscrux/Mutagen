@@ -191,14 +191,17 @@ namespace Mutagen.Bethesda.Fallout4
         #endregion
         #region Properties
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private Properties? _Properties;
-        public Properties? Properties
+        private ExtendedList<ObjectProperty>? _Properties;
+        public ExtendedList<ObjectProperty>? Properties
         {
-            get => _Properties;
-            set => _Properties = value;
+            get => this._Properties;
+            set => this._Properties = value;
         }
+        #region Interface Members
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IPropertiesGetter? IMoveableStaticGetter.Properties => this.Properties;
+        IReadOnlyList<IObjectPropertyGetter>? IMoveableStaticGetter.Properties => _Properties;
+        #endregion
+
         #endregion
         #region OnLocalMap
         public Boolean OnLocalMap { get; set; } = default;
@@ -244,7 +247,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Model = new MaskItem<TItem, Model.Mask<TItem>?>(initialValue, new Model.Mask<TItem>(initialValue));
                 this.Destructible = new MaskItem<TItem, Destructible.Mask<TItem>?>(initialValue, new Destructible.Mask<TItem>(initialValue));
                 this.Keywords = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(initialValue, Enumerable.Empty<(int Index, TItem Value)>());
-                this.Properties = new MaskItem<TItem, Properties.Mask<TItem>?>(initialValue, new Properties.Mask<TItem>(initialValue));
+                this.Properties = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ObjectProperty.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, ObjectProperty.Mask<TItem>?>>());
                 this.OnLocalMap = initialValue;
                 this.LoopingSound = initialValue;
             }
@@ -281,7 +284,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Model = new MaskItem<TItem, Model.Mask<TItem>?>(Model, new Model.Mask<TItem>(Model));
                 this.Destructible = new MaskItem<TItem, Destructible.Mask<TItem>?>(Destructible, new Destructible.Mask<TItem>(Destructible));
                 this.Keywords = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(Keywords, Enumerable.Empty<(int Index, TItem Value)>());
-                this.Properties = new MaskItem<TItem, Properties.Mask<TItem>?>(Properties, new Properties.Mask<TItem>(Properties));
+                this.Properties = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ObjectProperty.Mask<TItem>?>>?>(Properties, Enumerable.Empty<MaskItemIndexed<TItem, ObjectProperty.Mask<TItem>?>>());
                 this.OnLocalMap = OnLocalMap;
                 this.LoopingSound = LoopingSound;
             }
@@ -302,7 +305,7 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<TItem, Model.Mask<TItem>?>? Model { get; set; }
             public MaskItem<TItem, Destructible.Mask<TItem>?>? Destructible { get; set; }
             public MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>? Keywords;
-            public MaskItem<TItem, Properties.Mask<TItem>?>? Properties { get; set; }
+            public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ObjectProperty.Mask<TItem>?>>?>? Properties;
             public TItem OnLocalMap;
             public TItem LoopingSound;
             #endregion
@@ -386,10 +389,17 @@ namespace Mutagen.Bethesda.Fallout4
                         }
                     }
                 }
-                if (Properties != null)
+                if (this.Properties != null)
                 {
                     if (!eval(this.Properties.Overall)) return false;
-                    if (this.Properties.Specific != null && !this.Properties.Specific.All(eval)) return false;
+                    if (this.Properties.Specific != null)
+                    {
+                        foreach (var item in this.Properties.Specific)
+                        {
+                            if (!eval(item.Overall)) return false;
+                            if (item.Specific != null && !item.Specific.All(eval)) return false;
+                        }
+                    }
                 }
                 if (!eval(this.OnLocalMap)) return false;
                 if (!eval(this.LoopingSound)) return false;
@@ -434,10 +444,17 @@ namespace Mutagen.Bethesda.Fallout4
                         }
                     }
                 }
-                if (Properties != null)
+                if (this.Properties != null)
                 {
                     if (eval(this.Properties.Overall)) return true;
-                    if (this.Properties.Specific != null && this.Properties.Specific.Any(eval)) return true;
+                    if (this.Properties.Specific != null)
+                    {
+                        foreach (var item in this.Properties.Specific)
+                        {
+                            if (!eval(item.Overall)) return false;
+                            if (item.Specific != null && !item.Specific.All(eval)) return false;
+                        }
+                    }
                 }
                 if (eval(this.OnLocalMap)) return true;
                 if (eval(this.LoopingSound)) return true;
@@ -476,7 +493,21 @@ namespace Mutagen.Bethesda.Fallout4
                         }
                     }
                 }
-                obj.Properties = this.Properties == null ? null : new MaskItem<R, Properties.Mask<R>?>(eval(this.Properties.Overall), this.Properties.Specific?.Translate(eval));
+                if (Properties != null)
+                {
+                    obj.Properties = new MaskItem<R, IEnumerable<MaskItemIndexed<R, ObjectProperty.Mask<R>?>>?>(eval(this.Properties.Overall), Enumerable.Empty<MaskItemIndexed<R, ObjectProperty.Mask<R>?>>());
+                    if (Properties.Specific != null)
+                    {
+                        var l = new List<MaskItemIndexed<R, ObjectProperty.Mask<R>?>>();
+                        obj.Properties.Specific = l;
+                        foreach (var item in Properties.Specific.WithIndex())
+                        {
+                            MaskItemIndexed<R, ObjectProperty.Mask<R>?>? mask = item.Item == null ? null : new MaskItemIndexed<R, ObjectProperty.Mask<R>?>(item.Item.Index, eval(item.Item.Overall), item.Item.Specific?.Translate(eval));
+                            if (mask == null) continue;
+                            l.Add(mask);
+                        }
+                    }
+                }
                 obj.OnLocalMap = eval(this.OnLocalMap);
                 obj.LoopingSound = eval(this.LoopingSound);
             }
@@ -548,9 +579,28 @@ namespace Mutagen.Bethesda.Fallout4
                         }
                         fg.AppendLine("]");
                     }
-                    if (printMask?.Properties?.Overall ?? true)
+                    if ((printMask?.Properties?.Overall ?? true)
+                        && Properties is {} PropertiesItem)
                     {
-                        Properties?.ToString(fg);
+                        fg.AppendLine("Properties =>");
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            fg.AppendItem(PropertiesItem.Overall);
+                            if (PropertiesItem.Specific != null)
+                            {
+                                foreach (var subItem in PropertiesItem.Specific)
+                                {
+                                    fg.AppendLine("[");
+                                    using (new DepthWrapper(fg))
+                                    {
+                                        subItem?.ToString(fg);
+                                    }
+                                    fg.AppendLine("]");
+                                }
+                            }
+                        }
+                        fg.AppendLine("]");
                     }
                     if (printMask?.OnLocalMap ?? true)
                     {
@@ -579,7 +629,7 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<Exception?, Model.ErrorMask?>? Model;
             public MaskItem<Exception?, Destructible.ErrorMask?>? Destructible;
             public MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>? Keywords;
-            public MaskItem<Exception?, Properties.ErrorMask?>? Properties;
+            public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ObjectProperty.ErrorMask?>>?>? Properties;
             public Exception? OnLocalMap;
             public Exception? LoopingSound;
             #endregion
@@ -642,7 +692,7 @@ namespace Mutagen.Bethesda.Fallout4
                         this.Keywords = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ex, null);
                         break;
                     case MoveableStatic_FieldIndex.Properties:
-                        this.Properties = new MaskItem<Exception?, Properties.ErrorMask?>(ex, null);
+                        this.Properties = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ObjectProperty.ErrorMask?>>?>(ex, null);
                         break;
                     case MoveableStatic_FieldIndex.OnLocalMap:
                         this.OnLocalMap = ex;
@@ -683,7 +733,7 @@ namespace Mutagen.Bethesda.Fallout4
                         this.Keywords = (MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>)obj;
                         break;
                     case MoveableStatic_FieldIndex.Properties:
-                        this.Properties = (MaskItem<Exception?, Properties.ErrorMask?>?)obj;
+                        this.Properties = (MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ObjectProperty.ErrorMask?>>?>)obj;
                         break;
                     case MoveableStatic_FieldIndex.OnLocalMap:
                         this.OnLocalMap = (Exception?)obj;
@@ -773,7 +823,28 @@ namespace Mutagen.Bethesda.Fallout4
                     }
                     fg.AppendLine("]");
                 }
-                Properties?.ToString(fg);
+                if (Properties is {} PropertiesItem)
+                {
+                    fg.AppendLine("Properties =>");
+                    fg.AppendLine("[");
+                    using (new DepthWrapper(fg))
+                    {
+                        fg.AppendItem(PropertiesItem.Overall);
+                        if (PropertiesItem.Specific != null)
+                        {
+                            foreach (var subItem in PropertiesItem.Specific)
+                            {
+                                fg.AppendLine("[");
+                                using (new DepthWrapper(fg))
+                                {
+                                    subItem?.ToString(fg);
+                                }
+                                fg.AppendLine("]");
+                            }
+                        }
+                    }
+                    fg.AppendLine("]");
+                }
                 fg.AppendItem(OnLocalMap, "OnLocalMap");
                 fg.AppendItem(LoopingSound, "LoopingSound");
             }
@@ -791,7 +862,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Model = this.Model.Combine(rhs.Model, (l, r) => l.Combine(r));
                 ret.Destructible = this.Destructible.Combine(rhs.Destructible, (l, r) => l.Combine(r));
                 ret.Keywords = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ExceptionExt.Combine(this.Keywords?.Overall, rhs.Keywords?.Overall), ExceptionExt.Combine(this.Keywords?.Specific, rhs.Keywords?.Specific));
-                ret.Properties = this.Properties.Combine(rhs.Properties, (l, r) => l.Combine(r));
+                ret.Properties = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ObjectProperty.ErrorMask?>>?>(ExceptionExt.Combine(this.Properties?.Overall, rhs.Properties?.Overall), ExceptionExt.Combine(this.Properties?.Specific, rhs.Properties?.Specific));
                 ret.OnLocalMap = this.OnLocalMap.Combine(rhs.OnLocalMap);
                 ret.LoopingSound = this.LoopingSound.Combine(rhs.LoopingSound);
                 return ret;
@@ -823,7 +894,7 @@ namespace Mutagen.Bethesda.Fallout4
             public Model.TranslationMask? Model;
             public Destructible.TranslationMask? Destructible;
             public bool Keywords;
-            public Properties.TranslationMask? Properties;
+            public ObjectProperty.TranslationMask? Properties;
             public bool OnLocalMap;
             public bool LoopingSound;
             #endregion
@@ -853,7 +924,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((Model != null ? Model.OnOverall : DefaultOn, Model?.GetCrystal()));
                 ret.Add((Destructible != null ? Destructible.OnOverall : DefaultOn, Destructible?.GetCrystal()));
                 ret.Add((Keywords, null));
-                ret.Add((Properties != null ? Properties.OnOverall : DefaultOn, Properties?.GetCrystal()));
+                ret.Add((Properties == null ? DefaultOn : !Properties.GetCrystal().CopyNothing, Properties?.GetCrystal()));
                 ret.Add((OnLocalMap, null));
                 ret.Add((LoopingSound, null));
             }
@@ -1034,7 +1105,7 @@ namespace Mutagen.Bethesda.Fallout4
         /// Aspects: IKeyworded&lt;IKeywordGetter&gt;
         /// </summary>
         new ExtendedList<IFormLinkGetter<IKeywordGetter>>? Keywords { get; set; }
-        new Properties? Properties { get; set; }
+        new ExtendedList<ObjectProperty>? Properties { get; set; }
         new Boolean OnLocalMap { get; set; }
         new IFormLinkNullable<ISoundDescriptorGetter> LoopingSound { get; set; }
         #region Mutagen
@@ -1102,7 +1173,7 @@ namespace Mutagen.Bethesda.Fallout4
         /// </summary>
         IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? Keywords { get; }
         #endregion
-        IPropertiesGetter? Properties { get; }
+        IReadOnlyList<IObjectPropertyGetter>? Properties { get; }
         Boolean OnLocalMap { get; }
         IFormLinkNullableGetter<ISoundDescriptorGetter> LoopingSound { get; }
 
@@ -1403,6 +1474,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.Model?.RemapLinks(mapping);
             obj.Destructible?.RemapLinks(mapping);
             obj.Keywords?.RemapLinks(mapping);
+            obj.Properties?.RemapLinks(mapping);
             obj.LoopingSound.Relink(mapping);
         }
         
@@ -1494,10 +1566,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 rhs.Keywords,
                 (l, r) => object.Equals(l, r),
                 include);
-            ret.Properties = EqualsMaskHelper.EqualsHelper(
-                item.Properties,
+            ret.Properties = item.Properties.CollectionEqualsHelper(
                 rhs.Properties,
-                (loqLhs, loqRhs, incl) => loqLhs.GetEqualsMask(loqRhs, incl),
+                (loqLhs, loqRhs) => loqLhs.GetEqualsMask(loqRhs, include),
                 include);
             ret.OnLocalMap = item.OnLocalMap == rhs.OnLocalMap;
             ret.LoopingSound = item.LoopingSound.Equals(rhs.LoopingSound);
@@ -1602,7 +1673,21 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             if ((printMask?.Properties?.Overall ?? true)
                 && item.Properties is {} PropertiesItem)
             {
-                PropertiesItem?.ToString(fg, "Properties");
+                fg.AppendLine("Properties =>");
+                fg.AppendLine("[");
+                using (new DepthWrapper(fg))
+                {
+                    foreach (var subItem in PropertiesItem)
+                    {
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            subItem?.ToString(fg, "Item");
+                        }
+                        fg.AppendLine("]");
+                    }
+                }
+                fg.AppendLine("]");
             }
             if (printMask?.OnLocalMap ?? true)
             {
@@ -1706,11 +1791,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             }
             if ((crystal?.GetShouldTranslate((int)MoveableStatic_FieldIndex.Properties) ?? true))
             {
-                if (EqualsMaskHelper.RefEquality(lhs.Properties, rhs.Properties, out var lhsProperties, out var rhsProperties, out var isPropertiesEqual))
-                {
-                    if (!((PropertiesCommon)((IPropertiesGetter)lhsProperties).CommonInstance()!).Equals(lhsProperties, rhsProperties, crystal?.GetSubCrystal((int)MoveableStatic_FieldIndex.Properties))) return false;
-                }
-                else if (!isPropertiesEqual) return false;
+                if (!lhs.Properties.SequenceEqualNullable(rhs.Properties)) return false;
             }
             if ((crystal?.GetShouldTranslate((int)MoveableStatic_FieldIndex.OnLocalMap) ?? true))
             {
@@ -1767,10 +1848,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 hash.Add(Destructibleitem);
             }
             hash.Add(item.Keywords);
-            if (item.Properties is {} Propertiesitem)
-            {
-                hash.Add(Propertiesitem);
-            }
+            hash.Add(item.Properties);
             hash.Add(item.OnLocalMap);
             hash.Add(item.LoopingSound);
             hash.Add(base.GetHashCode());
@@ -1830,6 +1908,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             if (obj.Keywords is {} KeywordsItem)
             {
                 foreach (var item in KeywordsItem)
+                {
+                    yield return FormLinkInformation.Factory(item);
+                }
+            }
+            if (obj.Properties is {} PropertiesItem)
+            {
+                foreach (var item in PropertiesItem.SelectMany(f => f.ContainedFormLinks))
                 {
                     yield return FormLinkInformation.Factory(item);
                 }
@@ -2052,15 +2137,21 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 errorMask?.PushIndex((int)MoveableStatic_FieldIndex.Properties);
                 try
                 {
-                    if(rhs.Properties is {} rhsProperties)
+                    if ((rhs.Properties != null))
                     {
-                        item.Properties = rhsProperties.DeepCopy(
-                            errorMask: errorMask,
-                            copyMask?.GetSubCrystal((int)MoveableStatic_FieldIndex.Properties));
+                        item.Properties = 
+                            rhs.Properties
+                            .Select(r =>
+                            {
+                                return r.DeepCopy(
+                                    errorMask: errorMask,
+                                    default(TranslationCrystal));
+                            })
+                            .ToExtendedList<ObjectProperty>();
                     }
                     else
                     {
-                        item.Properties = default;
+                        item.Properties = null;
                     }
                 }
                 catch (Exception ex)
@@ -2286,13 +2377,18 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         writer: subWriter,
                         item: subItem);
                 });
-            if (item.Properties is {} PropertiesItem)
-            {
-                ((PropertiesBinaryWriteTranslation)((IBinaryItem)PropertiesItem).BinaryWriteTranslator).Write(
-                    item: PropertiesItem,
-                    writer: writer,
-                    translationParams: translationParams);
-            }
+            Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IObjectPropertyGetter>.Instance.Write(
+                writer: writer,
+                items: item.Properties,
+                recordType: translationParams.ConvertToCustom(RecordTypes.PRPS),
+                transl: (MutagenWriter subWriter, IObjectPropertyGetter subItem, TypedWriteParams? conv) =>
+                {
+                    var Item = subItem;
+                    ((ObjectPropertyBinaryWriteTranslation)((IBinaryItem)Item).BinaryWriteTranslator).Write(
+                        item: Item,
+                        writer: subWriter,
+                        translationParams: conv);
+                });
             BooleanBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
                 writer: writer,
                 item: item.OnLocalMap,
@@ -2450,7 +2546,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.PRPS:
                 {
-                    item.Properties = Mutagen.Bethesda.Fallout4.Properties.CreateFromBinary(frame: frame);
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.Properties = 
+                        Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<ObjectProperty>.Instance.Parse(
+                            reader: frame.SpawnWithLength(contentLength),
+                            transl: ObjectProperty.TryCreateFromBinary)
+                        .CastExtendedList<ObjectProperty>();
                     return (int)MoveableStatic_FieldIndex.Properties;
                 }
                 case RecordTypeInts.DATA:
@@ -2555,10 +2656,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? Keywords { get; private set; }
         IReadOnlyList<IFormLinkGetter<IKeywordCommonGetter>>? IKeywordedGetter.Keywords => this.Keywords;
         #endregion
-        #region Properties
-        private RangeInt32? _PropertiesLocation;
-        public IPropertiesGetter? Properties => _PropertiesLocation.HasValue ? PropertiesBinaryOverlay.PropertiesFactory(new OverlayStream(_data.Slice(_PropertiesLocation!.Value.Min), _package), _package) : default;
-        #endregion
+        public IReadOnlyList<IObjectPropertyGetter>? Properties { get; private set; }
         #region OnLocalMap
         private int? _OnLocalMapLocation;
         public Boolean OnLocalMap => _OnLocalMapLocation.HasValue ? HeaderTranslation.ExtractSubrecordMemory(_data, _OnLocalMapLocation.Value, _package.MetaData.Constants)[0] == 1 : default;
@@ -2688,7 +2786,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.PRPS:
                 {
-                    _PropertiesLocation = new RangeInt32((stream.Position - offset), finalPos - offset);
+                    var subMeta = stream.ReadSubrecord();
+                    var subLen = subMeta.ContentLength;
+                    this.Properties = BinaryOverlayList.FactoryByStartIndex<ObjectPropertyBinaryOverlay>(
+                        mem: stream.RemainingMemory.Slice(0, subLen),
+                        package: _package,
+                        itemLength: 8,
+                        getter: (s, p) => ObjectPropertyBinaryOverlay.ObjectPropertyFactory(s, p));
+                    stream.Position += subLen;
                     return (int)MoveableStatic_FieldIndex.Properties;
                 }
                 case RecordTypeInts.DATA:

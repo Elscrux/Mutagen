@@ -12,7 +12,7 @@
       <List name="Keywords" counterRecType="KSIZ" recordType="KWDA">
         <FormLink refName="Keyword" />
       </List>
-      <RefDirect name="Properties" refName="Properties" />
+	  <RefList name="Properties" refName="ObjectProperty" recordType="PRPS" />
       <FormLink name="NativeTerminal" refName="Terminal" recordType="NTRM" />
       <FormLink name="ForcedLocRefType" refName="LocationReferenceType" recordType="FTYP" />
       <Color name="MarkerColor" recordType="PNAM" binaryType="Alpha" />

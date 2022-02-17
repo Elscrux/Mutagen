@@ -10,7 +10,7 @@
         <FormLink refName="Keyword" />
       </List>
       <RefDirect name="Destructible" refName="Destructible" />
-      <RefDirect name="Properties" refName="Properties" />
+	  <RefList name="Properties" refName="ObjectProperty" recordType="PRPS" />
       <String name="Name" recordType="FULL" translated="Normal" />
       <String name="InventoryImage" recordType="ICON" translated="DL" />
       <String name="MessageIcon" recordType="MICO" translated="DL" />

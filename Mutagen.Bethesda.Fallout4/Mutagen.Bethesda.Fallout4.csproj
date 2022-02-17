@@ -492,9 +492,6 @@
     <Compile Include="Records\Common Subrecords\Model_Generated.cs">
       <DependentUpon>Model.xml</DependentUpon>
     </Compile>
-    <Compile Include="Records\Common Subrecords\Properties_Generated.cs">
-      <DependentUpon>Properties.xml</DependentUpon>
-    </Compile>
     <Compile Include="Records\Common Subrecords\Relation_Generated.cs">
       <DependentUpon>Relation.xml</DependentUpon>
     </Compile>
@@ -1193,6 +1190,9 @@
     </Compile>
     <Compile Include="Records\Major Records\ArmorResistance_Generated.cs">
       <DependentUpon>Armor.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Common Subrecords\ObjectProperty_Generated.cs">
+      <DependentUpon>ObjectProperty.xml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

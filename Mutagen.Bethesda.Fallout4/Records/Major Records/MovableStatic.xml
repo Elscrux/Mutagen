@@ -11,7 +11,7 @@
       <List name="Keywords" counterRecType="KSIZ" recordType="KWDA">
         <FormLink refName="Keyword" />
       </List>
-      <RefDirect name="Properties" refName="Properties" />
+      <RefList name="Properties" refName="ObjectProperty" recordType="PRPS" />
       <Bool name="OnLocalMap" byteLength="1" recordType="DATA" nullable="False" />
       <FormLink name="LoopingSound" refName="SoundDescriptor" recordType="SNAM" />
     </Fields>

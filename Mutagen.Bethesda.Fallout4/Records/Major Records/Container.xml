@@ -19,9 +19,12 @@
         <FormLink refName="Keyword" />
       </List>
       <FormLink name="ForcedLocRefType" refName="LocationReferenceType" recordType="FTYP" />
-      <RefDirect name="Properties" refName="Properties" />
+      <RefList name="Properties" refName="ObjectProperty" recordType="PRPS" />
+	  <FormLink name="NativeTerminal" refName="Terminal" recordType="NTRM" />
       <FormLink name="OpenSound" refName="SoundDescriptor" recordType="SNAM" />
-      <FormLink name="CloseSound" refName="SoundDescriptor" recordType="QNAM" />
+	  <FormLink name="CloseSound" refName="SoundDescriptor" recordType="QNAM" />
+	  <FormLink name="TakeAllSound" refName="SoundDescriptor" recordType="TNAM" />
+	  <FormLink name="FilterList" refName="FormList" recordType="ONAM" />
     </Fields>
     <LinkInterface>IObjectId</LinkInterface>
   </Object>

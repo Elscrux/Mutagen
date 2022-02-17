@@ -11,7 +11,7 @@
       <List name="Keywords" counterRecType="KSIZ" recordType="KWDA">
         <FormLink refName="Keyword" />
       </List>
-      <RefDirect name="Properties" refName="Properties" />
+	  <RefList name="Properties" refName="ObjectProperty" recordType="PRPS" />
       <ByteArray name="PNAM" recordType="PNAM" />
       <String name="ATTXActivateTextOverride" recordType="ATTX" translated="Normal" />
       <String name="RNAMActivateTextOverride" recordType="RNAM" translated="Normal" />

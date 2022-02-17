@@ -221,14 +221,27 @@ namespace Mutagen.Bethesda.Fallout4
         #endregion
         #region Properties
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private Properties? _Properties;
-        public Properties? Properties
+        private ExtendedList<ObjectProperty>? _Properties;
+        public ExtendedList<ObjectProperty>? Properties
         {
-            get => _Properties;
-            set => _Properties = value;
+            get => this._Properties;
+            set => this._Properties = value;
+        }
+        #region Interface Members
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IReadOnlyList<IObjectPropertyGetter>? IContainerGetter.Properties => _Properties;
+        #endregion
+
+        #endregion
+        #region NativeTerminal
+        private readonly IFormLinkNullable<ITerminalGetter> _NativeTerminal = new FormLinkNullable<ITerminalGetter>();
+        public IFormLinkNullable<ITerminalGetter> NativeTerminal
+        {
+            get => _NativeTerminal;
+            set => _NativeTerminal.SetTo(value);
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IPropertiesGetter? IContainerGetter.Properties => this.Properties;
+        IFormLinkNullableGetter<ITerminalGetter> IContainerGetter.NativeTerminal => this.NativeTerminal;
         #endregion
         #region OpenSound
         private readonly IFormLinkNullable<ISoundDescriptorGetter> _OpenSound = new FormLinkNullable<ISoundDescriptorGetter>();
@@ -249,6 +262,26 @@ namespace Mutagen.Bethesda.Fallout4
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IFormLinkNullableGetter<ISoundDescriptorGetter> IContainerGetter.CloseSound => this.CloseSound;
+        #endregion
+        #region TakeAllSound
+        private readonly IFormLinkNullable<ISoundDescriptorGetter> _TakeAllSound = new FormLinkNullable<ISoundDescriptorGetter>();
+        public IFormLinkNullable<ISoundDescriptorGetter> TakeAllSound
+        {
+            get => _TakeAllSound;
+            set => _TakeAllSound.SetTo(value);
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFormLinkNullableGetter<ISoundDescriptorGetter> IContainerGetter.TakeAllSound => this.TakeAllSound;
+        #endregion
+        #region FilterList
+        private readonly IFormLinkNullable<IFormListGetter> _FilterList = new FormLinkNullable<IFormListGetter>();
+        public IFormLinkNullable<IFormListGetter> FilterList
+        {
+            get => _FilterList;
+            set => _FilterList.SetTo(value);
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFormLinkNullableGetter<IFormListGetter> IContainerGetter.FilterList => this.FilterList;
         #endregion
         #region DATADataTypeState
         public Container.DATADataType DATADataTypeState { get; set; } = default;
@@ -288,9 +321,12 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Weight = initialValue;
                 this.Keywords = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(initialValue, Enumerable.Empty<(int Index, TItem Value)>());
                 this.ForcedLocRefType = initialValue;
-                this.Properties = new MaskItem<TItem, Properties.Mask<TItem>?>(initialValue, new Properties.Mask<TItem>(initialValue));
+                this.Properties = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ObjectProperty.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, ObjectProperty.Mask<TItem>?>>());
+                this.NativeTerminal = initialValue;
                 this.OpenSound = initialValue;
                 this.CloseSound = initialValue;
+                this.TakeAllSound = initialValue;
+                this.FilterList = initialValue;
                 this.DATADataTypeState = initialValue;
             }
 
@@ -313,8 +349,11 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem Keywords,
                 TItem ForcedLocRefType,
                 TItem Properties,
+                TItem NativeTerminal,
                 TItem OpenSound,
                 TItem CloseSound,
+                TItem TakeAllSound,
+                TItem FilterList,
                 TItem DATADataTypeState)
             : base(
                 MajorRecordFlagsRaw: MajorRecordFlagsRaw,
@@ -335,9 +374,12 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Weight = Weight;
                 this.Keywords = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(Keywords, Enumerable.Empty<(int Index, TItem Value)>());
                 this.ForcedLocRefType = ForcedLocRefType;
-                this.Properties = new MaskItem<TItem, Properties.Mask<TItem>?>(Properties, new Properties.Mask<TItem>(Properties));
+                this.Properties = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ObjectProperty.Mask<TItem>?>>?>(Properties, Enumerable.Empty<MaskItemIndexed<TItem, ObjectProperty.Mask<TItem>?>>());
+                this.NativeTerminal = NativeTerminal;
                 this.OpenSound = OpenSound;
                 this.CloseSound = CloseSound;
+                this.TakeAllSound = TakeAllSound;
+                this.FilterList = FilterList;
                 this.DATADataTypeState = DATADataTypeState;
             }
 
@@ -361,9 +403,12 @@ namespace Mutagen.Bethesda.Fallout4
             public TItem Weight;
             public MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>? Keywords;
             public TItem ForcedLocRefType;
-            public MaskItem<TItem, Properties.Mask<TItem>?>? Properties { get; set; }
+            public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ObjectProperty.Mask<TItem>?>>?>? Properties;
+            public TItem NativeTerminal;
             public TItem OpenSound;
             public TItem CloseSound;
+            public TItem TakeAllSound;
+            public TItem FilterList;
             public TItem DATADataTypeState;
             #endregion
 
@@ -390,8 +435,11 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!object.Equals(this.Keywords, rhs.Keywords)) return false;
                 if (!object.Equals(this.ForcedLocRefType, rhs.ForcedLocRefType)) return false;
                 if (!object.Equals(this.Properties, rhs.Properties)) return false;
+                if (!object.Equals(this.NativeTerminal, rhs.NativeTerminal)) return false;
                 if (!object.Equals(this.OpenSound, rhs.OpenSound)) return false;
                 if (!object.Equals(this.CloseSound, rhs.CloseSound)) return false;
+                if (!object.Equals(this.TakeAllSound, rhs.TakeAllSound)) return false;
+                if (!object.Equals(this.FilterList, rhs.FilterList)) return false;
                 if (!object.Equals(this.DATADataTypeState, rhs.DATADataTypeState)) return false;
                 return true;
             }
@@ -410,8 +458,11 @@ namespace Mutagen.Bethesda.Fallout4
                 hash.Add(this.Keywords);
                 hash.Add(this.ForcedLocRefType);
                 hash.Add(this.Properties);
+                hash.Add(this.NativeTerminal);
                 hash.Add(this.OpenSound);
                 hash.Add(this.CloseSound);
+                hash.Add(this.TakeAllSound);
+                hash.Add(this.FilterList);
                 hash.Add(this.DATADataTypeState);
                 hash.Add(base.GetHashCode());
                 return hash.ToHashCode();
@@ -471,13 +522,23 @@ namespace Mutagen.Bethesda.Fallout4
                     }
                 }
                 if (!eval(this.ForcedLocRefType)) return false;
-                if (Properties != null)
+                if (this.Properties != null)
                 {
                     if (!eval(this.Properties.Overall)) return false;
-                    if (this.Properties.Specific != null && !this.Properties.Specific.All(eval)) return false;
+                    if (this.Properties.Specific != null)
+                    {
+                        foreach (var item in this.Properties.Specific)
+                        {
+                            if (!eval(item.Overall)) return false;
+                            if (item.Specific != null && !item.Specific.All(eval)) return false;
+                        }
+                    }
                 }
+                if (!eval(this.NativeTerminal)) return false;
                 if (!eval(this.OpenSound)) return false;
                 if (!eval(this.CloseSound)) return false;
+                if (!eval(this.TakeAllSound)) return false;
+                if (!eval(this.FilterList)) return false;
                 if (!eval(this.DATADataTypeState)) return false;
                 return true;
             }
@@ -535,13 +596,23 @@ namespace Mutagen.Bethesda.Fallout4
                     }
                 }
                 if (eval(this.ForcedLocRefType)) return true;
-                if (Properties != null)
+                if (this.Properties != null)
                 {
                     if (eval(this.Properties.Overall)) return true;
-                    if (this.Properties.Specific != null && this.Properties.Specific.Any(eval)) return true;
+                    if (this.Properties.Specific != null)
+                    {
+                        foreach (var item in this.Properties.Specific)
+                        {
+                            if (!eval(item.Overall)) return false;
+                            if (item.Specific != null && !item.Specific.All(eval)) return false;
+                        }
+                    }
                 }
+                if (eval(this.NativeTerminal)) return true;
                 if (eval(this.OpenSound)) return true;
                 if (eval(this.CloseSound)) return true;
+                if (eval(this.TakeAllSound)) return true;
+                if (eval(this.FilterList)) return true;
                 if (eval(this.DATADataTypeState)) return true;
                 return false;
             }
@@ -596,9 +667,26 @@ namespace Mutagen.Bethesda.Fallout4
                     }
                 }
                 obj.ForcedLocRefType = eval(this.ForcedLocRefType);
-                obj.Properties = this.Properties == null ? null : new MaskItem<R, Properties.Mask<R>?>(eval(this.Properties.Overall), this.Properties.Specific?.Translate(eval));
+                if (Properties != null)
+                {
+                    obj.Properties = new MaskItem<R, IEnumerable<MaskItemIndexed<R, ObjectProperty.Mask<R>?>>?>(eval(this.Properties.Overall), Enumerable.Empty<MaskItemIndexed<R, ObjectProperty.Mask<R>?>>());
+                    if (Properties.Specific != null)
+                    {
+                        var l = new List<MaskItemIndexed<R, ObjectProperty.Mask<R>?>>();
+                        obj.Properties.Specific = l;
+                        foreach (var item in Properties.Specific.WithIndex())
+                        {
+                            MaskItemIndexed<R, ObjectProperty.Mask<R>?>? mask = item.Item == null ? null : new MaskItemIndexed<R, ObjectProperty.Mask<R>?>(item.Item.Index, eval(item.Item.Overall), item.Item.Specific?.Translate(eval));
+                            if (mask == null) continue;
+                            l.Add(mask);
+                        }
+                    }
+                }
+                obj.NativeTerminal = eval(this.NativeTerminal);
                 obj.OpenSound = eval(this.OpenSound);
                 obj.CloseSound = eval(this.CloseSound);
+                obj.TakeAllSound = eval(this.TakeAllSound);
+                obj.FilterList = eval(this.FilterList);
                 obj.DATADataTypeState = eval(this.DATADataTypeState);
             }
             #endregion
@@ -704,9 +792,32 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         fg.AppendItem(ForcedLocRefType, "ForcedLocRefType");
                     }
-                    if (printMask?.Properties?.Overall ?? true)
+                    if ((printMask?.Properties?.Overall ?? true)
+                        && Properties is {} PropertiesItem)
                     {
-                        Properties?.ToString(fg);
+                        fg.AppendLine("Properties =>");
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            fg.AppendItem(PropertiesItem.Overall);
+                            if (PropertiesItem.Specific != null)
+                            {
+                                foreach (var subItem in PropertiesItem.Specific)
+                                {
+                                    fg.AppendLine("[");
+                                    using (new DepthWrapper(fg))
+                                    {
+                                        subItem?.ToString(fg);
+                                    }
+                                    fg.AppendLine("]");
+                                }
+                            }
+                        }
+                        fg.AppendLine("]");
+                    }
+                    if (printMask?.NativeTerminal ?? true)
+                    {
+                        fg.AppendItem(NativeTerminal, "NativeTerminal");
                     }
                     if (printMask?.OpenSound ?? true)
                     {
@@ -715,6 +826,14 @@ namespace Mutagen.Bethesda.Fallout4
                     if (printMask?.CloseSound ?? true)
                     {
                         fg.AppendItem(CloseSound, "CloseSound");
+                    }
+                    if (printMask?.TakeAllSound ?? true)
+                    {
+                        fg.AppendItem(TakeAllSound, "TakeAllSound");
+                    }
+                    if (printMask?.FilterList ?? true)
+                    {
+                        fg.AppendItem(FilterList, "FilterList");
                     }
                     if (printMask?.DATADataTypeState ?? true)
                     {
@@ -743,9 +862,12 @@ namespace Mutagen.Bethesda.Fallout4
             public Exception? Weight;
             public MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>? Keywords;
             public Exception? ForcedLocRefType;
-            public MaskItem<Exception?, Properties.ErrorMask?>? Properties;
+            public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ObjectProperty.ErrorMask?>>?>? Properties;
+            public Exception? NativeTerminal;
             public Exception? OpenSound;
             public Exception? CloseSound;
+            public Exception? TakeAllSound;
+            public Exception? FilterList;
             public Exception? DATADataTypeState;
             #endregion
 
@@ -779,10 +901,16 @@ namespace Mutagen.Bethesda.Fallout4
                         return ForcedLocRefType;
                     case Container_FieldIndex.Properties:
                         return Properties;
+                    case Container_FieldIndex.NativeTerminal:
+                        return NativeTerminal;
                     case Container_FieldIndex.OpenSound:
                         return OpenSound;
                     case Container_FieldIndex.CloseSound:
                         return CloseSound;
+                    case Container_FieldIndex.TakeAllSound:
+                        return TakeAllSound;
+                    case Container_FieldIndex.FilterList:
+                        return FilterList;
                     case Container_FieldIndex.DATADataTypeState:
                         return DATADataTypeState;
                     default:
@@ -829,13 +957,22 @@ namespace Mutagen.Bethesda.Fallout4
                         this.ForcedLocRefType = ex;
                         break;
                     case Container_FieldIndex.Properties:
-                        this.Properties = new MaskItem<Exception?, Properties.ErrorMask?>(ex, null);
+                        this.Properties = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ObjectProperty.ErrorMask?>>?>(ex, null);
+                        break;
+                    case Container_FieldIndex.NativeTerminal:
+                        this.NativeTerminal = ex;
                         break;
                     case Container_FieldIndex.OpenSound:
                         this.OpenSound = ex;
                         break;
                     case Container_FieldIndex.CloseSound:
                         this.CloseSound = ex;
+                        break;
+                    case Container_FieldIndex.TakeAllSound:
+                        this.TakeAllSound = ex;
+                        break;
+                    case Container_FieldIndex.FilterList:
+                        this.FilterList = ex;
                         break;
                     case Container_FieldIndex.DATADataTypeState:
                         this.DATADataTypeState = ex;
@@ -885,13 +1022,22 @@ namespace Mutagen.Bethesda.Fallout4
                         this.ForcedLocRefType = (Exception?)obj;
                         break;
                     case Container_FieldIndex.Properties:
-                        this.Properties = (MaskItem<Exception?, Properties.ErrorMask?>?)obj;
+                        this.Properties = (MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ObjectProperty.ErrorMask?>>?>)obj;
+                        break;
+                    case Container_FieldIndex.NativeTerminal:
+                        this.NativeTerminal = (Exception?)obj;
                         break;
                     case Container_FieldIndex.OpenSound:
                         this.OpenSound = (Exception?)obj;
                         break;
                     case Container_FieldIndex.CloseSound:
                         this.CloseSound = (Exception?)obj;
+                        break;
+                    case Container_FieldIndex.TakeAllSound:
+                        this.TakeAllSound = (Exception?)obj;
+                        break;
+                    case Container_FieldIndex.FilterList:
+                        this.FilterList = (Exception?)obj;
                         break;
                     case Container_FieldIndex.DATADataTypeState:
                         this.DATADataTypeState = (Exception?)obj;
@@ -917,8 +1063,11 @@ namespace Mutagen.Bethesda.Fallout4
                 if (Keywords != null) return true;
                 if (ForcedLocRefType != null) return true;
                 if (Properties != null) return true;
+                if (NativeTerminal != null) return true;
                 if (OpenSound != null) return true;
                 if (CloseSound != null) return true;
+                if (TakeAllSound != null) return true;
+                if (FilterList != null) return true;
                 if (DATADataTypeState != null) return true;
                 return false;
             }
@@ -1008,9 +1157,33 @@ namespace Mutagen.Bethesda.Fallout4
                     fg.AppendLine("]");
                 }
                 fg.AppendItem(ForcedLocRefType, "ForcedLocRefType");
-                Properties?.ToString(fg);
+                if (Properties is {} PropertiesItem)
+                {
+                    fg.AppendLine("Properties =>");
+                    fg.AppendLine("[");
+                    using (new DepthWrapper(fg))
+                    {
+                        fg.AppendItem(PropertiesItem.Overall);
+                        if (PropertiesItem.Specific != null)
+                        {
+                            foreach (var subItem in PropertiesItem.Specific)
+                            {
+                                fg.AppendLine("[");
+                                using (new DepthWrapper(fg))
+                                {
+                                    subItem?.ToString(fg);
+                                }
+                                fg.AppendLine("]");
+                            }
+                        }
+                    }
+                    fg.AppendLine("]");
+                }
+                fg.AppendItem(NativeTerminal, "NativeTerminal");
                 fg.AppendItem(OpenSound, "OpenSound");
                 fg.AppendItem(CloseSound, "CloseSound");
+                fg.AppendItem(TakeAllSound, "TakeAllSound");
+                fg.AppendItem(FilterList, "FilterList");
                 fg.AppendItem(DATADataTypeState, "DATADataTypeState");
             }
             #endregion
@@ -1031,9 +1204,12 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Weight = this.Weight.Combine(rhs.Weight);
                 ret.Keywords = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ExceptionExt.Combine(this.Keywords?.Overall, rhs.Keywords?.Overall), ExceptionExt.Combine(this.Keywords?.Specific, rhs.Keywords?.Specific));
                 ret.ForcedLocRefType = this.ForcedLocRefType.Combine(rhs.ForcedLocRefType);
-                ret.Properties = this.Properties.Combine(rhs.Properties, (l, r) => l.Combine(r));
+                ret.Properties = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ObjectProperty.ErrorMask?>>?>(ExceptionExt.Combine(this.Properties?.Overall, rhs.Properties?.Overall), ExceptionExt.Combine(this.Properties?.Specific, rhs.Properties?.Specific));
+                ret.NativeTerminal = this.NativeTerminal.Combine(rhs.NativeTerminal);
                 ret.OpenSound = this.OpenSound.Combine(rhs.OpenSound);
                 ret.CloseSound = this.CloseSound.Combine(rhs.CloseSound);
+                ret.TakeAllSound = this.TakeAllSound.Combine(rhs.TakeAllSound);
+                ret.FilterList = this.FilterList.Combine(rhs.FilterList);
                 ret.DATADataTypeState = this.DATADataTypeState.Combine(rhs.DATADataTypeState);
                 return ret;
             }
@@ -1068,9 +1244,12 @@ namespace Mutagen.Bethesda.Fallout4
             public bool Weight;
             public bool Keywords;
             public bool ForcedLocRefType;
-            public Properties.TranslationMask? Properties;
+            public ObjectProperty.TranslationMask? Properties;
+            public bool NativeTerminal;
             public bool OpenSound;
             public bool CloseSound;
+            public bool TakeAllSound;
+            public bool FilterList;
             public bool DATADataTypeState;
             #endregion
 
@@ -1086,8 +1265,11 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Weight = defaultOn;
                 this.Keywords = defaultOn;
                 this.ForcedLocRefType = defaultOn;
+                this.NativeTerminal = defaultOn;
                 this.OpenSound = defaultOn;
                 this.CloseSound = defaultOn;
+                this.TakeAllSound = defaultOn;
+                this.FilterList = defaultOn;
                 this.DATADataTypeState = defaultOn;
             }
 
@@ -1107,9 +1289,12 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((Weight, null));
                 ret.Add((Keywords, null));
                 ret.Add((ForcedLocRefType, null));
-                ret.Add((Properties != null ? Properties.OnOverall : DefaultOn, Properties?.GetCrystal()));
+                ret.Add((Properties == null ? DefaultOn : !Properties.GetCrystal().CopyNothing, Properties?.GetCrystal()));
+                ret.Add((NativeTerminal, null));
                 ret.Add((OpenSound, null));
                 ret.Add((CloseSound, null));
+                ret.Add((TakeAllSound, null));
+                ret.Add((FilterList, null));
                 ret.Add((DATADataTypeState, null));
             }
 
@@ -1296,9 +1481,12 @@ namespace Mutagen.Bethesda.Fallout4
         /// </summary>
         new ExtendedList<IFormLinkGetter<IKeywordGetter>>? Keywords { get; set; }
         new IFormLinkNullable<ILocationReferenceTypeGetter> ForcedLocRefType { get; set; }
-        new Properties? Properties { get; set; }
+        new ExtendedList<ObjectProperty>? Properties { get; set; }
+        new IFormLinkNullable<ITerminalGetter> NativeTerminal { get; set; }
         new IFormLinkNullable<ISoundDescriptorGetter> OpenSound { get; set; }
         new IFormLinkNullable<ISoundDescriptorGetter> CloseSound { get; set; }
+        new IFormLinkNullable<ISoundDescriptorGetter> TakeAllSound { get; set; }
+        new IFormLinkNullable<IFormListGetter> FilterList { get; set; }
         new Container.DATADataType DATADataTypeState { get; set; }
         #region Mutagen
         new Container.MajorFlag MajorFlags { get; set; }
@@ -1368,9 +1556,12 @@ namespace Mutagen.Bethesda.Fallout4
         IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? Keywords { get; }
         #endregion
         IFormLinkNullableGetter<ILocationReferenceTypeGetter> ForcedLocRefType { get; }
-        IPropertiesGetter? Properties { get; }
+        IReadOnlyList<IObjectPropertyGetter>? Properties { get; }
+        IFormLinkNullableGetter<ITerminalGetter> NativeTerminal { get; }
         IFormLinkNullableGetter<ISoundDescriptorGetter> OpenSound { get; }
         IFormLinkNullableGetter<ISoundDescriptorGetter> CloseSound { get; }
+        IFormLinkNullableGetter<ISoundDescriptorGetter> TakeAllSound { get; }
+        IFormLinkNullableGetter<IFormListGetter> FilterList { get; }
         Container.DATADataType DATADataTypeState { get; }
 
         #region Mutagen
@@ -1552,9 +1743,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         Keywords = 15,
         ForcedLocRefType = 16,
         Properties = 17,
-        OpenSound = 18,
-        CloseSound = 19,
-        DATADataTypeState = 20,
+        NativeTerminal = 18,
+        OpenSound = 19,
+        CloseSound = 20,
+        TakeAllSound = 21,
+        FilterList = 22,
+        DATADataTypeState = 23,
     }
     #endregion
 
@@ -1572,9 +1766,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public const string GUID = "d5eebb15-76fe-43cd-9ba9-7ad6eac2b785";
 
-        public const ushort AdditionalFieldCount = 15;
+        public const ushort AdditionalFieldCount = 18;
 
-        public const ushort FieldCount = 21;
+        public const ushort FieldCount = 24;
 
         public static readonly Type MaskType = typeof(Container.Mask<>);
 
@@ -1655,8 +1849,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.Keywords = null;
             item.ForcedLocRefType.Clear();
             item.Properties = null;
+            item.NativeTerminal.Clear();
             item.OpenSound.Clear();
             item.CloseSound.Clear();
+            item.TakeAllSound.Clear();
+            item.FilterList.Clear();
             item.DATADataTypeState = default;
             base.Clear(item);
         }
@@ -1682,8 +1879,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.Destructible?.RemapLinks(mapping);
             obj.Keywords?.RemapLinks(mapping);
             obj.ForcedLocRefType.Relink(mapping);
+            obj.Properties?.RemapLinks(mapping);
+            obj.NativeTerminal.Relink(mapping);
             obj.OpenSound.Relink(mapping);
             obj.CloseSound.Relink(mapping);
+            obj.TakeAllSound.Relink(mapping);
+            obj.FilterList.Relink(mapping);
         }
         
         #endregion
@@ -1781,13 +1982,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 (l, r) => object.Equals(l, r),
                 include);
             ret.ForcedLocRefType = item.ForcedLocRefType.Equals(rhs.ForcedLocRefType);
-            ret.Properties = EqualsMaskHelper.EqualsHelper(
-                item.Properties,
+            ret.Properties = item.Properties.CollectionEqualsHelper(
                 rhs.Properties,
-                (loqLhs, loqRhs, incl) => loqLhs.GetEqualsMask(loqRhs, incl),
+                (loqLhs, loqRhs) => loqLhs.GetEqualsMask(loqRhs, include),
                 include);
+            ret.NativeTerminal = item.NativeTerminal.Equals(rhs.NativeTerminal);
             ret.OpenSound = item.OpenSound.Equals(rhs.OpenSound);
             ret.CloseSound = item.CloseSound.Equals(rhs.CloseSound);
+            ret.TakeAllSound = item.TakeAllSound.Equals(rhs.TakeAllSound);
+            ret.FilterList = item.FilterList.Equals(rhs.FilterList);
             ret.DATADataTypeState = item.DATADataTypeState == rhs.DATADataTypeState;
             base.FillEqualsMask(item, rhs, ret, include);
         }
@@ -1921,7 +2124,25 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             if ((printMask?.Properties?.Overall ?? true)
                 && item.Properties is {} PropertiesItem)
             {
-                PropertiesItem?.ToString(fg, "Properties");
+                fg.AppendLine("Properties =>");
+                fg.AppendLine("[");
+                using (new DepthWrapper(fg))
+                {
+                    foreach (var subItem in PropertiesItem)
+                    {
+                        fg.AppendLine("[");
+                        using (new DepthWrapper(fg))
+                        {
+                            subItem?.ToString(fg, "Item");
+                        }
+                        fg.AppendLine("]");
+                    }
+                }
+                fg.AppendLine("]");
+            }
+            if (printMask?.NativeTerminal ?? true)
+            {
+                fg.AppendItem(item.NativeTerminal.FormKeyNullable, "NativeTerminal");
             }
             if (printMask?.OpenSound ?? true)
             {
@@ -1930,6 +2151,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             if (printMask?.CloseSound ?? true)
             {
                 fg.AppendItem(item.CloseSound.FormKeyNullable, "CloseSound");
+            }
+            if (printMask?.TakeAllSound ?? true)
+            {
+                fg.AppendItem(item.TakeAllSound.FormKeyNullable, "TakeAllSound");
+            }
+            if (printMask?.FilterList ?? true)
+            {
+                fg.AppendItem(item.FilterList.FormKeyNullable, "FilterList");
             }
             if (printMask?.DATADataTypeState ?? true)
             {
@@ -2045,11 +2274,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             }
             if ((crystal?.GetShouldTranslate((int)Container_FieldIndex.Properties) ?? true))
             {
-                if (EqualsMaskHelper.RefEquality(lhs.Properties, rhs.Properties, out var lhsProperties, out var rhsProperties, out var isPropertiesEqual))
-                {
-                    if (!((PropertiesCommon)((IPropertiesGetter)lhsProperties).CommonInstance()!).Equals(lhsProperties, rhsProperties, crystal?.GetSubCrystal((int)Container_FieldIndex.Properties))) return false;
-                }
-                else if (!isPropertiesEqual) return false;
+                if (!lhs.Properties.SequenceEqualNullable(rhs.Properties)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Container_FieldIndex.NativeTerminal) ?? true))
+            {
+                if (!lhs.NativeTerminal.Equals(rhs.NativeTerminal)) return false;
             }
             if ((crystal?.GetShouldTranslate((int)Container_FieldIndex.OpenSound) ?? true))
             {
@@ -2058,6 +2287,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             if ((crystal?.GetShouldTranslate((int)Container_FieldIndex.CloseSound) ?? true))
             {
                 if (!lhs.CloseSound.Equals(rhs.CloseSound)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Container_FieldIndex.TakeAllSound) ?? true))
+            {
+                if (!lhs.TakeAllSound.Equals(rhs.TakeAllSound)) return false;
+            }
+            if ((crystal?.GetShouldTranslate((int)Container_FieldIndex.FilterList) ?? true))
+            {
+                if (!lhs.FilterList.Equals(rhs.FilterList)) return false;
             }
             if ((crystal?.GetShouldTranslate((int)Container_FieldIndex.DATADataTypeState) ?? true))
             {
@@ -2114,12 +2351,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             hash.Add(item.Weight);
             hash.Add(item.Keywords);
             hash.Add(item.ForcedLocRefType);
-            if (item.Properties is {} Propertiesitem)
-            {
-                hash.Add(Propertiesitem);
-            }
+            hash.Add(item.Properties);
+            hash.Add(item.NativeTerminal);
             hash.Add(item.OpenSound);
             hash.Add(item.CloseSound);
+            hash.Add(item.TakeAllSound);
+            hash.Add(item.FilterList);
             hash.Add(item.DATADataTypeState);
             hash.Add(base.GetHashCode());
             return hash.ToHashCode();
@@ -2194,6 +2431,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 yield return FormLinkInformation.Factory(obj.ForcedLocRefType);
             }
+            if (obj.Properties is {} PropertiesItem)
+            {
+                foreach (var item in PropertiesItem.SelectMany(f => f.ContainedFormLinks))
+                {
+                    yield return FormLinkInformation.Factory(item);
+                }
+            }
+            if (obj.NativeTerminal.FormKeyNullable.HasValue)
+            {
+                yield return FormLinkInformation.Factory(obj.NativeTerminal);
+            }
             if (obj.OpenSound.FormKeyNullable.HasValue)
             {
                 yield return FormLinkInformation.Factory(obj.OpenSound);
@@ -2201,6 +2449,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             if (obj.CloseSound.FormKeyNullable.HasValue)
             {
                 yield return FormLinkInformation.Factory(obj.CloseSound);
+            }
+            if (obj.TakeAllSound.FormKeyNullable.HasValue)
+            {
+                yield return FormLinkInformation.Factory(obj.TakeAllSound);
+            }
+            if (obj.FilterList.FormKeyNullable.HasValue)
+            {
+                yield return FormLinkInformation.Factory(obj.FilterList);
             }
             yield break;
         }
@@ -2460,15 +2716,21 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 errorMask?.PushIndex((int)Container_FieldIndex.Properties);
                 try
                 {
-                    if(rhs.Properties is {} rhsProperties)
+                    if ((rhs.Properties != null))
                     {
-                        item.Properties = rhsProperties.DeepCopy(
-                            errorMask: errorMask,
-                            copyMask?.GetSubCrystal((int)Container_FieldIndex.Properties));
+                        item.Properties = 
+                            rhs.Properties
+                            .Select(r =>
+                            {
+                                return r.DeepCopy(
+                                    errorMask: errorMask,
+                                    default(TranslationCrystal));
+                            })
+                            .ToExtendedList<ObjectProperty>();
                     }
                     else
                     {
-                        item.Properties = default;
+                        item.Properties = null;
                     }
                 }
                 catch (Exception ex)
@@ -2481,6 +2743,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     errorMask?.PopIndex();
                 }
             }
+            if ((copyMask?.GetShouldTranslate((int)Container_FieldIndex.NativeTerminal) ?? true))
+            {
+                item.NativeTerminal.SetTo(rhs.NativeTerminal.FormKeyNullable);
+            }
             if ((copyMask?.GetShouldTranslate((int)Container_FieldIndex.OpenSound) ?? true))
             {
                 item.OpenSound.SetTo(rhs.OpenSound.FormKeyNullable);
@@ -2488,6 +2754,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             if ((copyMask?.GetShouldTranslate((int)Container_FieldIndex.CloseSound) ?? true))
             {
                 item.CloseSound.SetTo(rhs.CloseSound.FormKeyNullable);
+            }
+            if ((copyMask?.GetShouldTranslate((int)Container_FieldIndex.TakeAllSound) ?? true))
+            {
+                item.TakeAllSound.SetTo(rhs.TakeAllSound.FormKeyNullable);
+            }
+            if ((copyMask?.GetShouldTranslate((int)Container_FieldIndex.FilterList) ?? true))
+            {
+                item.FilterList.SetTo(rhs.FilterList.FormKeyNullable);
             }
             if ((copyMask?.GetShouldTranslate((int)Container_FieldIndex.DATADataTypeState) ?? true))
             {
@@ -2734,13 +3008,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 writer: writer,
                 item: item.ForcedLocRefType,
                 header: translationParams.ConvertToCustom(RecordTypes.FTYP));
-            if (item.Properties is {} PropertiesItem)
-            {
-                ((PropertiesBinaryWriteTranslation)((IBinaryItem)PropertiesItem).BinaryWriteTranslator).Write(
-                    item: PropertiesItem,
-                    writer: writer,
-                    translationParams: translationParams);
-            }
+            Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IObjectPropertyGetter>.Instance.Write(
+                writer: writer,
+                items: item.Properties,
+                recordType: translationParams.ConvertToCustom(RecordTypes.PRPS),
+                transl: (MutagenWriter subWriter, IObjectPropertyGetter subItem, TypedWriteParams? conv) =>
+                {
+                    var Item = subItem;
+                    ((ObjectPropertyBinaryWriteTranslation)((IBinaryItem)Item).BinaryWriteTranslator).Write(
+                        item: Item,
+                        writer: subWriter,
+                        translationParams: conv);
+                });
+            FormLinkBinaryTranslation.Instance.WriteNullable(
+                writer: writer,
+                item: item.NativeTerminal,
+                header: translationParams.ConvertToCustom(RecordTypes.NTRM));
             FormLinkBinaryTranslation.Instance.WriteNullable(
                 writer: writer,
                 item: item.OpenSound,
@@ -2749,6 +3032,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 writer: writer,
                 item: item.CloseSound,
                 header: translationParams.ConvertToCustom(RecordTypes.QNAM));
+            FormLinkBinaryTranslation.Instance.WriteNullable(
+                writer: writer,
+                item: item.TakeAllSound,
+                header: translationParams.ConvertToCustom(RecordTypes.TNAM));
+            FormLinkBinaryTranslation.Instance.WriteNullable(
+                writer: writer,
+                item: item.FilterList,
+                header: translationParams.ConvertToCustom(RecordTypes.ONAM));
         }
 
         public void Write(
@@ -2928,8 +3219,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.PRPS:
                 {
-                    item.Properties = Mutagen.Bethesda.Fallout4.Properties.CreateFromBinary(frame: frame);
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.Properties = 
+                        Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<ObjectProperty>.Instance.Parse(
+                            reader: frame.SpawnWithLength(contentLength),
+                            transl: ObjectProperty.TryCreateFromBinary)
+                        .CastExtendedList<ObjectProperty>();
                     return (int)Container_FieldIndex.Properties;
+                }
+                case RecordTypeInts.NTRM:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.NativeTerminal.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    return (int)Container_FieldIndex.NativeTerminal;
                 }
                 case RecordTypeInts.SNAM:
                 {
@@ -2942,6 +3244,18 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
                     item.CloseSound.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
                     return (int)Container_FieldIndex.CloseSound;
+                }
+                case RecordTypeInts.TNAM:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.TakeAllSound.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    return (int)Container_FieldIndex.TakeAllSound;
+                }
+                case RecordTypeInts.ONAM:
+                {
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.FilterList.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    return (int)Container_FieldIndex.FilterList;
                 }
                 default:
                     return Fallout4MajorRecordBinaryCreateTranslation.FillBinaryRecordTypes(
@@ -3050,9 +3364,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private int? _ForcedLocRefTypeLocation;
         public IFormLinkNullableGetter<ILocationReferenceTypeGetter> ForcedLocRefType => _ForcedLocRefTypeLocation.HasValue ? new FormLinkNullable<ILocationReferenceTypeGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _ForcedLocRefTypeLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<ILocationReferenceTypeGetter>.Null;
         #endregion
-        #region Properties
-        private RangeInt32? _PropertiesLocation;
-        public IPropertiesGetter? Properties => _PropertiesLocation.HasValue ? PropertiesBinaryOverlay.PropertiesFactory(new OverlayStream(_data.Slice(_PropertiesLocation!.Value.Min), _package), _package) : default;
+        public IReadOnlyList<IObjectPropertyGetter>? Properties { get; private set; }
+        #region NativeTerminal
+        private int? _NativeTerminalLocation;
+        public IFormLinkNullableGetter<ITerminalGetter> NativeTerminal => _NativeTerminalLocation.HasValue ? new FormLinkNullable<ITerminalGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _NativeTerminalLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<ITerminalGetter>.Null;
         #endregion
         #region OpenSound
         private int? _OpenSoundLocation;
@@ -3061,6 +3376,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         #region CloseSound
         private int? _CloseSoundLocation;
         public IFormLinkNullableGetter<ISoundDescriptorGetter> CloseSound => _CloseSoundLocation.HasValue ? new FormLinkNullable<ISoundDescriptorGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _CloseSoundLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<ISoundDescriptorGetter>.Null;
+        #endregion
+        #region TakeAllSound
+        private int? _TakeAllSoundLocation;
+        public IFormLinkNullableGetter<ISoundDescriptorGetter> TakeAllSound => _TakeAllSoundLocation.HasValue ? new FormLinkNullable<ISoundDescriptorGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _TakeAllSoundLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<ISoundDescriptorGetter>.Null;
+        #endregion
+        #region FilterList
+        private int? _FilterListLocation;
+        public IFormLinkNullableGetter<IFormListGetter> FilterList => _FilterListLocation.HasValue ? new FormLinkNullable<IFormListGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _FilterListLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<IFormListGetter>.Null;
         #endregion
         partial void CustomFactoryEnd(
             OverlayStream stream,
@@ -3207,8 +3530,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.PRPS:
                 {
-                    _PropertiesLocation = new RangeInt32((stream.Position - offset), finalPos - offset);
+                    var subMeta = stream.ReadSubrecord();
+                    var subLen = subMeta.ContentLength;
+                    this.Properties = BinaryOverlayList.FactoryByStartIndex<ObjectPropertyBinaryOverlay>(
+                        mem: stream.RemainingMemory.Slice(0, subLen),
+                        package: _package,
+                        itemLength: 8,
+                        getter: (s, p) => ObjectPropertyBinaryOverlay.ObjectPropertyFactory(s, p));
+                    stream.Position += subLen;
                     return (int)Container_FieldIndex.Properties;
+                }
+                case RecordTypeInts.NTRM:
+                {
+                    _NativeTerminalLocation = (stream.Position - offset);
+                    return (int)Container_FieldIndex.NativeTerminal;
                 }
                 case RecordTypeInts.SNAM:
                 {
@@ -3219,6 +3554,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 {
                     _CloseSoundLocation = (stream.Position - offset);
                     return (int)Container_FieldIndex.CloseSound;
+                }
+                case RecordTypeInts.TNAM:
+                {
+                    _TakeAllSoundLocation = (stream.Position - offset);
+                    return (int)Container_FieldIndex.TakeAllSound;
+                }
+                case RecordTypeInts.ONAM:
+                {
+                    _FilterListLocation = (stream.Position - offset);
+                    return (int)Container_FieldIndex.FilterList;
                 }
                 default:
                     return base.FillRecordType(
