@@ -732,7 +732,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         {
             return new TriggeringRecordCollection(
                 RecordTypes.RDAT,
-                RecordTypes.ICON);
+                RecordTypes.ICON,
+                RecordTypes.MICO);
         });
         public static readonly Type BinaryWriteTranslation = typeof(RegionDataBinaryWriteTranslation);
         #region Interface
@@ -1172,6 +1173,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     return (int)RegionData_FieldIndex.Header;
                 }
                 case RecordTypeInts.ICON:
+                case RecordTypeInts.MICO:
                 {
                     if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)RegionData_FieldIndex.Icons) return ParseResult.Stop;
                     item.Icons = Mutagen.Bethesda.Fallout4.Icons.CreateFromBinary(
@@ -1289,6 +1291,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     return (int)RegionData_FieldIndex.Header;
                 }
                 case RecordTypeInts.ICON:
+                case RecordTypeInts.MICO:
                 {
                     if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)RegionData_FieldIndex.Icons) return ParseResult.Stop;
                     this.Icons = IconsBinaryOverlay.IconsFactory(

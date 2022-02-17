@@ -48,13 +48,15 @@ namespace Mutagen.Bethesda.Fallout4
         partial void CustomCtor();
         #endregion
 
-        #region LargeIconFilename
-        public String LargeIconFilename { get; set; } = string.Empty;
-        #endregion
-        #region SmallIconFilename
-        public String? SmallIconFilename { get; set; }
+        #region InventoryImage
+        public String? InventoryImage { get; set; }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        String? IIconsGetter.SmallIconFilename => this.SmallIconFilename;
+        String? IIconsGetter.InventoryImage => this.InventoryImage;
+        #endregion
+        #region MessageIcon
+        public String? MessageIcon { get; set; }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        String? IIconsGetter.MessageIcon => this.MessageIcon;
         #endregion
 
         #region To String
@@ -94,16 +96,16 @@ namespace Mutagen.Bethesda.Fallout4
             #region Ctors
             public Mask(TItem initialValue)
             {
-                this.LargeIconFilename = initialValue;
-                this.SmallIconFilename = initialValue;
+                this.InventoryImage = initialValue;
+                this.MessageIcon = initialValue;
             }
 
             public Mask(
-                TItem LargeIconFilename,
-                TItem SmallIconFilename)
+                TItem InventoryImage,
+                TItem MessageIcon)
             {
-                this.LargeIconFilename = LargeIconFilename;
-                this.SmallIconFilename = SmallIconFilename;
+                this.InventoryImage = InventoryImage;
+                this.MessageIcon = MessageIcon;
             }
 
             #pragma warning disable CS8618
@@ -115,8 +117,8 @@ namespace Mutagen.Bethesda.Fallout4
             #endregion
 
             #region Members
-            public TItem LargeIconFilename;
-            public TItem SmallIconFilename;
+            public TItem InventoryImage;
+            public TItem MessageIcon;
             #endregion
 
             #region Equals
@@ -129,15 +131,15 @@ namespace Mutagen.Bethesda.Fallout4
             public bool Equals(Mask<TItem>? rhs)
             {
                 if (rhs == null) return false;
-                if (!object.Equals(this.LargeIconFilename, rhs.LargeIconFilename)) return false;
-                if (!object.Equals(this.SmallIconFilename, rhs.SmallIconFilename)) return false;
+                if (!object.Equals(this.InventoryImage, rhs.InventoryImage)) return false;
+                if (!object.Equals(this.MessageIcon, rhs.MessageIcon)) return false;
                 return true;
             }
             public override int GetHashCode()
             {
                 var hash = new HashCode();
-                hash.Add(this.LargeIconFilename);
-                hash.Add(this.SmallIconFilename);
+                hash.Add(this.InventoryImage);
+                hash.Add(this.MessageIcon);
                 return hash.ToHashCode();
             }
 
@@ -146,8 +148,8 @@ namespace Mutagen.Bethesda.Fallout4
             #region All
             public bool All(Func<TItem, bool> eval)
             {
-                if (!eval(this.LargeIconFilename)) return false;
-                if (!eval(this.SmallIconFilename)) return false;
+                if (!eval(this.InventoryImage)) return false;
+                if (!eval(this.MessageIcon)) return false;
                 return true;
             }
             #endregion
@@ -155,8 +157,8 @@ namespace Mutagen.Bethesda.Fallout4
             #region Any
             public bool Any(Func<TItem, bool> eval)
             {
-                if (eval(this.LargeIconFilename)) return true;
-                if (eval(this.SmallIconFilename)) return true;
+                if (eval(this.InventoryImage)) return true;
+                if (eval(this.MessageIcon)) return true;
                 return false;
             }
             #endregion
@@ -171,8 +173,8 @@ namespace Mutagen.Bethesda.Fallout4
 
             protected void Translate_InternalFill<R>(Mask<R> obj, Func<TItem, R> eval)
             {
-                obj.LargeIconFilename = eval(this.LargeIconFilename);
-                obj.SmallIconFilename = eval(this.SmallIconFilename);
+                obj.InventoryImage = eval(this.InventoryImage);
+                obj.MessageIcon = eval(this.MessageIcon);
             }
             #endregion
 
@@ -195,13 +197,13 @@ namespace Mutagen.Bethesda.Fallout4
                 fg.AppendLine("[");
                 using (new DepthWrapper(fg))
                 {
-                    if (printMask?.LargeIconFilename ?? true)
+                    if (printMask?.InventoryImage ?? true)
                     {
-                        fg.AppendItem(LargeIconFilename, "LargeIconFilename");
+                        fg.AppendItem(InventoryImage, "InventoryImage");
                     }
-                    if (printMask?.SmallIconFilename ?? true)
+                    if (printMask?.MessageIcon ?? true)
                     {
-                        fg.AppendItem(SmallIconFilename, "SmallIconFilename");
+                        fg.AppendItem(MessageIcon, "MessageIcon");
                     }
                 }
                 fg.AppendLine("]");
@@ -228,8 +230,8 @@ namespace Mutagen.Bethesda.Fallout4
                     return _warnings;
                 }
             }
-            public Exception? LargeIconFilename;
-            public Exception? SmallIconFilename;
+            public Exception? InventoryImage;
+            public Exception? MessageIcon;
             #endregion
 
             #region IErrorMask
@@ -238,10 +240,10 @@ namespace Mutagen.Bethesda.Fallout4
                 Icons_FieldIndex enu = (Icons_FieldIndex)index;
                 switch (enu)
                 {
-                    case Icons_FieldIndex.LargeIconFilename:
-                        return LargeIconFilename;
-                    case Icons_FieldIndex.SmallIconFilename:
-                        return SmallIconFilename;
+                    case Icons_FieldIndex.InventoryImage:
+                        return InventoryImage;
+                    case Icons_FieldIndex.MessageIcon:
+                        return MessageIcon;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
                 }
@@ -252,11 +254,11 @@ namespace Mutagen.Bethesda.Fallout4
                 Icons_FieldIndex enu = (Icons_FieldIndex)index;
                 switch (enu)
                 {
-                    case Icons_FieldIndex.LargeIconFilename:
-                        this.LargeIconFilename = ex;
+                    case Icons_FieldIndex.InventoryImage:
+                        this.InventoryImage = ex;
                         break;
-                    case Icons_FieldIndex.SmallIconFilename:
-                        this.SmallIconFilename = ex;
+                    case Icons_FieldIndex.MessageIcon:
+                        this.MessageIcon = ex;
                         break;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
@@ -268,11 +270,11 @@ namespace Mutagen.Bethesda.Fallout4
                 Icons_FieldIndex enu = (Icons_FieldIndex)index;
                 switch (enu)
                 {
-                    case Icons_FieldIndex.LargeIconFilename:
-                        this.LargeIconFilename = (Exception?)obj;
+                    case Icons_FieldIndex.InventoryImage:
+                        this.InventoryImage = (Exception?)obj;
                         break;
-                    case Icons_FieldIndex.SmallIconFilename:
-                        this.SmallIconFilename = (Exception?)obj;
+                    case Icons_FieldIndex.MessageIcon:
+                        this.MessageIcon = (Exception?)obj;
                         break;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
@@ -282,8 +284,8 @@ namespace Mutagen.Bethesda.Fallout4
             public bool IsInError()
             {
                 if (Overall != null) return true;
-                if (LargeIconFilename != null) return true;
-                if (SmallIconFilename != null) return true;
+                if (InventoryImage != null) return true;
+                if (MessageIcon != null) return true;
                 return false;
             }
             #endregion
@@ -318,8 +320,8 @@ namespace Mutagen.Bethesda.Fallout4
             }
             protected void ToString_FillInternal(FileGeneration fg)
             {
-                fg.AppendItem(LargeIconFilename, "LargeIconFilename");
-                fg.AppendItem(SmallIconFilename, "SmallIconFilename");
+                fg.AppendItem(InventoryImage, "InventoryImage");
+                fg.AppendItem(MessageIcon, "MessageIcon");
             }
             #endregion
 
@@ -328,8 +330,8 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 if (rhs == null) return this;
                 var ret = new ErrorMask();
-                ret.LargeIconFilename = this.LargeIconFilename.Combine(rhs.LargeIconFilename);
-                ret.SmallIconFilename = this.SmallIconFilename.Combine(rhs.SmallIconFilename);
+                ret.InventoryImage = this.InventoryImage.Combine(rhs.InventoryImage);
+                ret.MessageIcon = this.MessageIcon.Combine(rhs.MessageIcon);
                 return ret;
             }
             public static ErrorMask? Combine(ErrorMask? lhs, ErrorMask? rhs)
@@ -353,8 +355,8 @@ namespace Mutagen.Bethesda.Fallout4
             private TranslationCrystal? _crystal;
             public readonly bool DefaultOn;
             public bool OnOverall;
-            public bool LargeIconFilename;
-            public bool SmallIconFilename;
+            public bool InventoryImage;
+            public bool MessageIcon;
             #endregion
 
             #region Ctors
@@ -364,8 +366,8 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 this.DefaultOn = defaultOn;
                 this.OnOverall = onOverall;
-                this.LargeIconFilename = defaultOn;
-                this.SmallIconFilename = defaultOn;
+                this.InventoryImage = defaultOn;
+                this.MessageIcon = defaultOn;
             }
 
             #endregion
@@ -381,8 +383,8 @@ namespace Mutagen.Bethesda.Fallout4
 
             protected void GetCrystal(List<(bool On, TranslationCrystal? SubCrystal)> ret)
             {
-                ret.Add((LargeIconFilename, null));
-                ret.Add((SmallIconFilename, null));
+                ret.Add((InventoryImage, null));
+                ret.Add((MessageIcon, null));
             }
 
             public static implicit operator TranslationMask(bool defaultOn)
@@ -391,10 +393,6 @@ namespace Mutagen.Bethesda.Fallout4
             }
 
         }
-        #endregion
-
-        #region Mutagen
-        public static readonly RecordType GrupRecordType = Icons_Registration.TriggeringRecordType;
         #endregion
 
         #region Binary Translation
@@ -459,8 +457,8 @@ namespace Mutagen.Bethesda.Fallout4
         IIconsGetter,
         ILoquiObjectSetter<IIcons>
     {
-        new String LargeIconFilename { get; set; }
-        new String? SmallIconFilename { get; set; }
+        new String? InventoryImage { get; set; }
+        new String? MessageIcon { get; set; }
     }
 
     public partial interface IIconsGetter :
@@ -475,8 +473,8 @@ namespace Mutagen.Bethesda.Fallout4
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         object CommonSetterTranslationInstance();
         static ILoquiRegistration StaticRegistration => Icons_Registration.Instance;
-        String LargeIconFilename { get; }
-        String? SmallIconFilename { get; }
+        String? InventoryImage { get; }
+        String? MessageIcon { get; }
 
     }
 
@@ -646,8 +644,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
     #region Field Index
     public enum Icons_FieldIndex
     {
-        LargeIconFilename = 0,
-        SmallIconFilename = 1,
+        InventoryImage = 0,
+        MessageIcon = 1,
     }
     #endregion
 
@@ -693,7 +691,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public static readonly Type? GenericRegistrationType = null;
 
-        public static readonly RecordType TriggeringRecordType = RecordTypes.ICON;
+        public static TriggeringRecordCollection TriggeringRecordTypes => _TriggeringRecordTypes.Value;
+        private static readonly Lazy<TriggeringRecordCollection> _TriggeringRecordTypes = new Lazy<TriggeringRecordCollection>(() =>
+        {
+            return new TriggeringRecordCollection(
+                RecordTypes.ICON,
+                RecordTypes.MICO);
+        });
         public static readonly Type BinaryWriteTranslation = typeof(IconsBinaryWriteTranslation);
         #region Interface
         ProtocolKey ILoquiRegistration.ProtocolKey => ProtocolKey;
@@ -736,8 +740,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public void Clear(IIcons item)
         {
             ClearPartial();
-            item.LargeIconFilename = string.Empty;
-            item.SmallIconFilename = default;
+            item.InventoryImage = default;
+            item.MessageIcon = default;
         }
         
         #region Mutagen
@@ -789,8 +793,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             EqualsMaskHelper.Include include = EqualsMaskHelper.Include.All)
         {
             if (rhs == null) return;
-            ret.LargeIconFilename = string.Equals(item.LargeIconFilename, rhs.LargeIconFilename);
-            ret.SmallIconFilename = string.Equals(item.SmallIconFilename, rhs.SmallIconFilename);
+            ret.InventoryImage = string.Equals(item.InventoryImage, rhs.InventoryImage);
+            ret.MessageIcon = string.Equals(item.MessageIcon, rhs.MessageIcon);
         }
         
         public string ToString(
@@ -837,14 +841,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             FileGeneration fg,
             Icons.Mask<bool>? printMask = null)
         {
-            if (printMask?.LargeIconFilename ?? true)
+            if ((printMask?.InventoryImage ?? true)
+                && item.InventoryImage is {} InventoryImageItem)
             {
-                fg.AppendItem(item.LargeIconFilename, "LargeIconFilename");
+                fg.AppendItem(InventoryImageItem, "InventoryImage");
             }
-            if ((printMask?.SmallIconFilename ?? true)
-                && item.SmallIconFilename is {} SmallIconFilenameItem)
+            if ((printMask?.MessageIcon ?? true)
+                && item.MessageIcon is {} MessageIconItem)
             {
-                fg.AppendItem(SmallIconFilenameItem, "SmallIconFilename");
+                fg.AppendItem(MessageIconItem, "MessageIcon");
             }
         }
         
@@ -855,13 +860,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TranslationCrystal? crystal)
         {
             if (!EqualsMaskHelper.RefEquality(lhs, rhs, out var isEqual)) return isEqual;
-            if ((crystal?.GetShouldTranslate((int)Icons_FieldIndex.LargeIconFilename) ?? true))
+            if ((crystal?.GetShouldTranslate((int)Icons_FieldIndex.InventoryImage) ?? true))
             {
-                if (!string.Equals(lhs.LargeIconFilename, rhs.LargeIconFilename)) return false;
+                if (!string.Equals(lhs.InventoryImage, rhs.InventoryImage)) return false;
             }
-            if ((crystal?.GetShouldTranslate((int)Icons_FieldIndex.SmallIconFilename) ?? true))
+            if ((crystal?.GetShouldTranslate((int)Icons_FieldIndex.MessageIcon) ?? true))
             {
-                if (!string.Equals(lhs.SmallIconFilename, rhs.SmallIconFilename)) return false;
+                if (!string.Equals(lhs.MessageIcon, rhs.MessageIcon)) return false;
             }
             return true;
         }
@@ -869,10 +874,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public virtual int GetHashCode(IIconsGetter item)
         {
             var hash = new HashCode();
-            hash.Add(item.LargeIconFilename);
-            if (item.SmallIconFilename is {} SmallIconFilenameitem)
+            if (item.InventoryImage is {} InventoryImageitem)
             {
-                hash.Add(SmallIconFilenameitem);
+                hash.Add(InventoryImageitem);
+            }
+            if (item.MessageIcon is {} MessageIconitem)
+            {
+                hash.Add(MessageIconitem);
             }
             return hash.ToHashCode();
         }
@@ -906,13 +914,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             TranslationCrystal? copyMask,
             bool deepCopy)
         {
-            if ((copyMask?.GetShouldTranslate((int)Icons_FieldIndex.LargeIconFilename) ?? true))
+            if ((copyMask?.GetShouldTranslate((int)Icons_FieldIndex.InventoryImage) ?? true))
             {
-                item.LargeIconFilename = rhs.LargeIconFilename;
+                item.InventoryImage = rhs.InventoryImage;
             }
-            if ((copyMask?.GetShouldTranslate((int)Icons_FieldIndex.SmallIconFilename) ?? true))
+            if ((copyMask?.GetShouldTranslate((int)Icons_FieldIndex.MessageIcon) ?? true))
             {
-                item.SmallIconFilename = rhs.SmallIconFilename;
+                item.MessageIcon = rhs.MessageIcon;
             }
         }
         
@@ -1011,14 +1019,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             MutagenWriter writer,
             TypedWriteParams? translationParams)
         {
-            StringBinaryTranslation.Instance.Write(
+            StringBinaryTranslation.Instance.WriteNullable(
                 writer: writer,
-                item: item.LargeIconFilename,
+                item: item.InventoryImage,
                 header: translationParams.ConvertToCustom(RecordTypes.ICON),
                 binaryType: StringBinaryType.NullTerminate);
             StringBinaryTranslation.Instance.WriteNullable(
                 writer: writer,
-                item: item.SmallIconFilename,
+                item: item.MessageIcon,
                 header: translationParams.ConvertToCustom(RecordTypes.MICO),
                 binaryType: StringBinaryType.NullTerminate);
         }
@@ -1071,20 +1079,21 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 case RecordTypeInts.ICON:
                 {
-                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)Icons_FieldIndex.LargeIconFilename) return ParseResult.Stop;
+                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)Icons_FieldIndex.InventoryImage) return ParseResult.Stop;
                     frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
-                    item.LargeIconFilename = StringBinaryTranslation.Instance.Parse(
+                    item.InventoryImage = StringBinaryTranslation.Instance.Parse(
                         reader: frame.SpawnWithLength(contentLength),
                         stringBinaryType: StringBinaryType.NullTerminate);
-                    return (int)Icons_FieldIndex.LargeIconFilename;
+                    return (int)Icons_FieldIndex.InventoryImage;
                 }
                 case RecordTypeInts.MICO:
                 {
+                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)Icons_FieldIndex.MessageIcon) return ParseResult.Stop;
                     frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
-                    item.SmallIconFilename = StringBinaryTranslation.Instance.Parse(
+                    item.MessageIcon = StringBinaryTranslation.Instance.Parse(
                         reader: frame.SpawnWithLength(contentLength),
                         stringBinaryType: StringBinaryType.NullTerminate);
-                    return (int)Icons_FieldIndex.SmallIconFilename;
+                    return (int)Icons_FieldIndex.MessageIcon;
                 }
                 default:
                     return ParseResult.Stop;
@@ -1154,13 +1163,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 translationParams: translationParams);
         }
 
-        #region LargeIconFilename
-        private int? _LargeIconFilenameLocation;
-        public String LargeIconFilename => _LargeIconFilenameLocation.HasValue ? BinaryStringUtility.ProcessWholeToZString(HeaderTranslation.ExtractSubrecordMemory(_data, _LargeIconFilenameLocation.Value, _package.MetaData.Constants), encoding: _package.MetaData.Encodings.NonTranslated) : string.Empty;
+        #region InventoryImage
+        private int? _InventoryImageLocation;
+        public String? InventoryImage => _InventoryImageLocation.HasValue ? BinaryStringUtility.ProcessWholeToZString(HeaderTranslation.ExtractSubrecordMemory(_data, _InventoryImageLocation.Value, _package.MetaData.Constants), encoding: _package.MetaData.Encodings.NonTranslated) : default(string?);
         #endregion
-        #region SmallIconFilename
-        private int? _SmallIconFilenameLocation;
-        public String? SmallIconFilename => _SmallIconFilenameLocation.HasValue ? BinaryStringUtility.ProcessWholeToZString(HeaderTranslation.ExtractSubrecordMemory(_data, _SmallIconFilenameLocation.Value, _package.MetaData.Constants), encoding: _package.MetaData.Encodings.NonTranslated) : default(string?);
+        #region MessageIcon
+        private int? _MessageIconLocation;
+        public String? MessageIcon => _MessageIconLocation.HasValue ? BinaryStringUtility.ProcessWholeToZString(HeaderTranslation.ExtractSubrecordMemory(_data, _MessageIconLocation.Value, _package.MetaData.Constants), encoding: _package.MetaData.Encodings.NonTranslated) : default(string?);
         #endregion
         partial void CustomFactoryEnd(
             OverlayStream stream,
@@ -1221,14 +1230,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 case RecordTypeInts.ICON:
                 {
-                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)Icons_FieldIndex.LargeIconFilename) return ParseResult.Stop;
-                    _LargeIconFilenameLocation = (stream.Position - offset);
-                    return (int)Icons_FieldIndex.LargeIconFilename;
+                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)Icons_FieldIndex.InventoryImage) return ParseResult.Stop;
+                    _InventoryImageLocation = (stream.Position - offset);
+                    return (int)Icons_FieldIndex.InventoryImage;
                 }
                 case RecordTypeInts.MICO:
                 {
-                    _SmallIconFilenameLocation = (stream.Position - offset);
-                    return (int)Icons_FieldIndex.SmallIconFilename;
+                    if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)Icons_FieldIndex.MessageIcon) return ParseResult.Stop;
+                    _MessageIconLocation = (stream.Position - offset);
+                    return (int)Icons_FieldIndex.MessageIcon;
                 }
                 default:
                     return ParseResult.Stop;

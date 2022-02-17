@@ -766,7 +766,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         {
             return new TriggeringRecordCollection(
                 RecordTypes.MODL,
-                RecordTypes.ICON);
+                RecordTypes.ICON,
+                RecordTypes.MICO);
         });
         public static readonly Type BinaryWriteTranslation = typeof(ArmorModelBinaryWriteTranslation);
         #region Interface
@@ -1228,6 +1229,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     return (int)ArmorModel_FieldIndex.Model;
                 }
                 case RecordTypeInts.ICON:
+                case RecordTypeInts.MICO:
                 {
                     if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)ArmorModel_FieldIndex.Icons) return ParseResult.Stop;
                     item.Icons = Mutagen.Bethesda.Fallout4.Icons.CreateFromBinary(
@@ -1373,6 +1375,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     return (int)ArmorModel_FieldIndex.Model;
                 }
                 case RecordTypeInts.ICON:
+                case RecordTypeInts.MICO:
                 {
                     if (lastParsed.ParsedIndex.HasValue && lastParsed.ParsedIndex.Value >= (int)ArmorModel_FieldIndex.Icons) return ParseResult.Stop;
                     this.Icons = IconsBinaryOverlay.IconsFactory(

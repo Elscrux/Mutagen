@@ -4289,6 +4289,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case RecordTypeInts.MOD4:
                 case RecordTypeInts.ICO2:
                 case RecordTypeInts.ICON:
+                case RecordTypeInts.MIC2:
+                case RecordTypeInts.MICO:
                 {
                     item.WorldModel = Mutagen.Bethesda.Plugins.Binary.Translations.GenderedItemBinaryTranslation.Parse<ArmorModel>(
                         frame: frame,
@@ -4731,6 +4733,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case RecordTypeInts.MOD4:
                 case RecordTypeInts.ICO2:
                 case RecordTypeInts.ICON:
+                case RecordTypeInts.MIC2:
+                case RecordTypeInts.MICO:
                 {
                     _WorldModelOverlay = GenderedItemBinaryOverlay.Factory<IArmorModelGetter>(
                         package: _package,

@@ -191,6 +191,7 @@ public partial class RecordTypes
     public static readonly RecordType MESG = new(0x4753454D);
     public static readonly RecordType MGEF = new(0x4645474D);
     public static readonly RecordType MIAD = new(0x4441494D);
+    public static readonly RecordType MIC2 = new(0x3243494D);
     public static readonly RecordType MICO = new(0x4F43494D);
     public static readonly RecordType MISC = new(0x4353494D);
     public static readonly RecordType MNAM = new(0x4D414E4D);

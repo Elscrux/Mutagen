@@ -189,6 +189,7 @@ public partial class RecordTypeInts
     public const int MESG = 0x4753454D;
     public const int MGEF = 0x4645474D;
     public const int MIAD = 0x4441494D;
+    public const int MIC2 = 0x3243494D;
     public const int MICO = 0x4F43494D;
     public const int MISC = 0x4353494D;
     public const int MNAM = 0x4D414E4D;

@@ -577,7 +577,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         {
             return new TriggeringRecordCollection(
                 RecordTypes.RDAT,
-                RecordTypes.ICON);
+                RecordTypes.ICON,
+                RecordTypes.MICO);
         });
         public static readonly Type BinaryWriteTranslation = typeof(RegionLandBinaryWriteTranslation);
         #region Interface
