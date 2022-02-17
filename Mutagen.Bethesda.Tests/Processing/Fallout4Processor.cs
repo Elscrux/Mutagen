@@ -119,6 +119,7 @@ public class Fallout4Processor : Processor
                     new RecordType[] { "DOOR", "FULL" },
                     new RecordType[] { "INGR", "FULL" },
                     new RecordType[] { "LIGH", "FULL" },
+                    new RecordType[] { "MISC", "FULL" },
                 };
             case StringsSource.DL:
                 return new AStringsAlignment[]

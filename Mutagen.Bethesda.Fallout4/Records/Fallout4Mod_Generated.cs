@@ -84,6 +84,7 @@ namespace Mutagen.Bethesda.Fallout4
             _Doors_Object = new Fallout4Group<Door>(this);
             _Ingredients_Object = new Fallout4Group<Ingredient>(this);
             _Lights_Object = new Fallout4Group<Light>(this);
+            _MiscItems_Object = new Fallout4Group<MiscItem>(this);
             CustomCtor();
         }
         partial void CustomCtor();
@@ -285,6 +286,13 @@ namespace Mutagen.Bethesda.Fallout4
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IFallout4GroupGetter<ILightGetter> IFallout4ModGetter.Lights => _Lights_Object;
         #endregion
+        #region MiscItems
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Fallout4Group<MiscItem> _MiscItems_Object;
+        public Fallout4Group<MiscItem> MiscItems => _MiscItems_Object;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFallout4GroupGetter<IMiscItemGetter> IFallout4ModGetter.MiscItems => _MiscItems_Object;
+        #endregion
 
         #region To String
 
@@ -351,6 +359,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Doors = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Ingredients = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Lights = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
+                this.MiscItems = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
             }
 
             public Mask(
@@ -381,7 +390,8 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem Containers,
                 TItem Doors,
                 TItem Ingredients,
-                TItem Lights)
+                TItem Lights,
+                TItem MiscItems)
             {
                 this.ModHeader = new MaskItem<TItem, Fallout4ModHeader.Mask<TItem>?>(ModHeader, new Fallout4ModHeader.Mask<TItem>(ModHeader));
                 this.GameSettings = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(GameSettings, new Fallout4Group.Mask<TItem>(GameSettings));
@@ -411,6 +421,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Doors = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Doors, new Fallout4Group.Mask<TItem>(Doors));
                 this.Ingredients = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Ingredients, new Fallout4Group.Mask<TItem>(Ingredients));
                 this.Lights = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Lights, new Fallout4Group.Mask<TItem>(Lights));
+                this.MiscItems = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(MiscItems, new Fallout4Group.Mask<TItem>(MiscItems));
             }
 
             #pragma warning disable CS8618
@@ -450,6 +461,7 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Doors { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Ingredients { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Lights { get; set; }
+            public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? MiscItems { get; set; }
             #endregion
 
             #region Equals
@@ -490,6 +502,7 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!object.Equals(this.Doors, rhs.Doors)) return false;
                 if (!object.Equals(this.Ingredients, rhs.Ingredients)) return false;
                 if (!object.Equals(this.Lights, rhs.Lights)) return false;
+                if (!object.Equals(this.MiscItems, rhs.MiscItems)) return false;
                 return true;
             }
             public override int GetHashCode()
@@ -523,6 +536,7 @@ namespace Mutagen.Bethesda.Fallout4
                 hash.Add(this.Doors);
                 hash.Add(this.Ingredients);
                 hash.Add(this.Lights);
+                hash.Add(this.MiscItems);
                 return hash.ToHashCode();
             }
 
@@ -671,6 +685,11 @@ namespace Mutagen.Bethesda.Fallout4
                     if (!eval(this.Lights.Overall)) return false;
                     if (this.Lights.Specific != null && !this.Lights.Specific.All(eval)) return false;
                 }
+                if (MiscItems != null)
+                {
+                    if (!eval(this.MiscItems.Overall)) return false;
+                    if (this.MiscItems.Specific != null && !this.MiscItems.Specific.All(eval)) return false;
+                }
                 return true;
             }
             #endregion
@@ -818,6 +837,11 @@ namespace Mutagen.Bethesda.Fallout4
                     if (eval(this.Lights.Overall)) return true;
                     if (this.Lights.Specific != null && this.Lights.Specific.Any(eval)) return true;
                 }
+                if (MiscItems != null)
+                {
+                    if (eval(this.MiscItems.Overall)) return true;
+                    if (this.MiscItems.Specific != null && this.MiscItems.Specific.Any(eval)) return true;
+                }
                 return false;
             }
             #endregion
@@ -860,6 +884,7 @@ namespace Mutagen.Bethesda.Fallout4
                 obj.Doors = this.Doors == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Doors.Overall), this.Doors.Specific?.Translate(eval));
                 obj.Ingredients = this.Ingredients == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Ingredients.Overall), this.Ingredients.Specific?.Translate(eval));
                 obj.Lights = this.Lights == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Lights.Overall), this.Lights.Specific?.Translate(eval));
+                obj.MiscItems = this.MiscItems == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.MiscItems.Overall), this.MiscItems.Specific?.Translate(eval));
             }
             #endregion
 
@@ -994,6 +1019,10 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         Lights?.ToString(fg);
                     }
+                    if (printMask?.MiscItems?.Overall ?? true)
+                    {
+                        MiscItems?.ToString(fg);
+                    }
                 }
                 fg.AppendLine("]");
             }
@@ -1047,6 +1076,7 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Door.ErrorMask>?>? Doors;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Ingredient.ErrorMask>?>? Ingredients;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Light.ErrorMask>?>? Lights;
+            public MaskItem<Exception?, Fallout4Group.ErrorMask<MiscItem.ErrorMask>?>? MiscItems;
             #endregion
 
             #region IErrorMask
@@ -1111,6 +1141,8 @@ namespace Mutagen.Bethesda.Fallout4
                         return Ingredients;
                     case Fallout4Mod_FieldIndex.Lights:
                         return Lights;
+                    case Fallout4Mod_FieldIndex.MiscItems:
+                        return MiscItems;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
                 }
@@ -1204,6 +1236,9 @@ namespace Mutagen.Bethesda.Fallout4
                         break;
                     case Fallout4Mod_FieldIndex.Lights:
                         this.Lights = new MaskItem<Exception?, Fallout4Group.ErrorMask<Light.ErrorMask>?>(ex, null);
+                        break;
+                    case Fallout4Mod_FieldIndex.MiscItems:
+                        this.MiscItems = new MaskItem<Exception?, Fallout4Group.ErrorMask<MiscItem.ErrorMask>?>(ex, null);
                         break;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
@@ -1299,6 +1334,9 @@ namespace Mutagen.Bethesda.Fallout4
                     case Fallout4Mod_FieldIndex.Lights:
                         this.Lights = (MaskItem<Exception?, Fallout4Group.ErrorMask<Light.ErrorMask>?>?)obj;
                         break;
+                    case Fallout4Mod_FieldIndex.MiscItems:
+                        this.MiscItems = (MaskItem<Exception?, Fallout4Group.ErrorMask<MiscItem.ErrorMask>?>?)obj;
+                        break;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
                 }
@@ -1335,6 +1373,7 @@ namespace Mutagen.Bethesda.Fallout4
                 if (Doors != null) return true;
                 if (Ingredients != null) return true;
                 if (Lights != null) return true;
+                if (MiscItems != null) return true;
                 return false;
             }
             #endregion
@@ -1397,6 +1436,7 @@ namespace Mutagen.Bethesda.Fallout4
                 Doors?.ToString(fg);
                 Ingredients?.ToString(fg);
                 Lights?.ToString(fg);
+                MiscItems?.ToString(fg);
             }
             #endregion
 
@@ -1433,6 +1473,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Doors = this.Doors.Combine(rhs.Doors, (l, r) => l.Combine(r));
                 ret.Ingredients = this.Ingredients.Combine(rhs.Ingredients, (l, r) => l.Combine(r));
                 ret.Lights = this.Lights.Combine(rhs.Lights, (l, r) => l.Combine(r));
+                ret.MiscItems = this.MiscItems.Combine(rhs.MiscItems, (l, r) => l.Combine(r));
                 return ret;
             }
             public static ErrorMask? Combine(ErrorMask? lhs, ErrorMask? rhs)
@@ -1484,6 +1525,7 @@ namespace Mutagen.Bethesda.Fallout4
             public Fallout4Group.TranslationMask<Door.TranslationMask>? Doors;
             public Fallout4Group.TranslationMask<Ingredient.TranslationMask>? Ingredients;
             public Fallout4Group.TranslationMask<Light.TranslationMask>? Lights;
+            public Fallout4Group.TranslationMask<MiscItem.TranslationMask>? MiscItems;
             #endregion
 
             #region Ctors
@@ -1536,6 +1578,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((Doors != null ? Doors.OnOverall : DefaultOn, Doors?.GetCrystal()));
                 ret.Add((Ingredients != null ? Ingredients.OnOverall : DefaultOn, Ingredients?.GetCrystal()));
                 ret.Add((Lights != null ? Lights.OnOverall : DefaultOn, Lights?.GetCrystal()));
+                ret.Add((MiscItems != null ? MiscItems.OnOverall : DefaultOn, MiscItems?.GetCrystal()));
             }
 
             public static implicit operator TranslationMask(bool defaultOn)
@@ -1605,6 +1648,7 @@ namespace Mutagen.Bethesda.Fallout4
             _Doors_Object = new Fallout4Group<Door>(this);
             _Ingredients_Object = new Fallout4Group<Ingredient>(this);
             _Lights_Object = new Fallout4Group<Light>(this);
+            _MiscItems_Object = new Fallout4Group<MiscItem>(this);
             CustomCtor();
         }
         public void AddRecords(
@@ -1719,6 +1763,10 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 this.Lights.RecordCache.Set(rhsMod.Lights.RecordCache.Items);
             }
+            if (mask?.MiscItems ?? true)
+            {
+                this.MiscItems.RecordCache.Set(rhsMod.MiscItems.RecordCache.Items);
+            }
         }
 
         public override void SyncRecordCount()
@@ -1756,6 +1804,7 @@ namespace Mutagen.Bethesda.Fallout4
             count += Doors.RecordCache.Count > 0 ? 1 : default(uint);
             count += Ingredients.RecordCache.Count > 0 ? 1 : default(uint);
             count += Lights.RecordCache.Count > 0 ? 1 : default(uint);
+            count += MiscItems.RecordCache.Count > 0 ? 1 : default(uint);
             GetCustomRecordCount((customCount) => count += customCount);
             return count;
         }
@@ -2032,6 +2081,7 @@ namespace Mutagen.Bethesda.Fallout4
         new Fallout4Group<Door> Doors { get; }
         new Fallout4Group<Ingredient> Ingredients { get; }
         new Fallout4Group<Light> Lights { get; }
+        new Fallout4Group<MiscItem> MiscItems { get; }
     }
 
     public partial interface IFallout4ModGetter :
@@ -2078,6 +2128,7 @@ namespace Mutagen.Bethesda.Fallout4
         IFallout4GroupGetter<IDoorGetter> Doors { get; }
         IFallout4GroupGetter<IIngredientGetter> Ingredients { get; }
         IFallout4GroupGetter<ILightGetter> Lights { get; }
+        IFallout4GroupGetter<IMiscItemGetter> MiscItems { get; }
 
     }
 
@@ -2668,6 +2719,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         Doors = 25,
         Ingredients = 26,
         Lights = 27,
+        MiscItems = 28,
     }
     #endregion
 
@@ -2685,9 +2737,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public const string GUID = "9cae6baa-1084-4862-ae0a-07c79b9f2a3a";
 
-        public const ushort AdditionalFieldCount = 28;
+        public const ushort AdditionalFieldCount = 29;
 
-        public const ushort FieldCount = 28;
+        public const ushort FieldCount = 29;
 
         public static readonly Type MaskType = typeof(Fallout4Mod.Mask<>);
 
@@ -2783,6 +2835,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.Doors.Clear();
             item.Ingredients.Clear();
             item.Lights.Clear();
+            item.MiscItems.Clear();
         }
         
         #region Mutagen
@@ -2816,6 +2869,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.Doors.RemapLinks(mapping);
             obj.Ingredients.RemapLinks(mapping);
             obj.Lights.RemapLinks(mapping);
+            obj.MiscItems.RemapLinks(mapping);
         }
         
         public IEnumerable<IMajorRecord> EnumerateMajorRecords(IFallout4Mod obj)
@@ -2877,6 +2931,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.Doors.Remove(keys);
             obj.Ingredients.Remove(keys);
             obj.Lights.Remove(keys);
+            obj.MiscItems.Remove(keys);
         }
         
         public void Remove(
@@ -3112,6 +3167,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         type: type,
                         keys: keys);
                     break;
+                case "MiscItem":
+                case "IMiscItemGetter":
+                case "IMiscItem":
+                case "IMiscItemInternal":
+                    obj.MiscItems.Remove(
+                        type: type,
+                        keys: keys);
+                    break;
                 case "IIdleRelation":
                 case "IIdleRelationGetter":
                     Remove(obj, keys, typeof(IActionRecordGetter), throwIfUnknown: throwIfUnknown);
@@ -3126,6 +3189,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     Remove(obj, keys, typeof(IFactionGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IIngredientGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(ILightGetter), throwIfUnknown: throwIfUnknown);
+                    Remove(obj, keys, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(ISpellGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(ITextureSetGetter), throwIfUnknown: throwIfUnknown);
                     break;
@@ -3135,6 +3199,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     Remove(obj, keys, typeof(IBookGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IIngredientGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(ILightGetter), throwIfUnknown: throwIfUnknown);
+                    Remove(obj, keys, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown);
                     break;
                 case "IOutfitTarget":
                 case "IOutfitTargetGetter":
@@ -3146,6 +3211,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     Remove(obj, keys, typeof(IBookGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IIngredientGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(ILightGetter), throwIfUnknown: throwIfUnknown);
+                    Remove(obj, keys, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown);
                     break;
                 case "IBindableEquipment":
                 case "IBindableEquipmentGetter":
@@ -3171,6 +3237,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IHarvestTarget":
                 case "IHarvestTargetGetter":
                     Remove(obj, keys, typeof(IIngredientGetter), throwIfUnknown: throwIfUnknown);
+                    Remove(obj, keys, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown);
                     break;
                 case "IKeywordLinkedReference":
                 case "IKeywordLinkedReferenceGetter":
@@ -3277,6 +3344,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ret.Doors = MaskItemExt.Factory(item.Doors.GetEqualsMask(rhs.Doors, include), include);
             ret.Ingredients = MaskItemExt.Factory(item.Ingredients.GetEqualsMask(rhs.Ingredients, include), include);
             ret.Lights = MaskItemExt.Factory(item.Lights.GetEqualsMask(rhs.Lights, include), include);
+            ret.MiscItems = MaskItemExt.Factory(item.MiscItems.GetEqualsMask(rhs.MiscItems, include), include);
         }
         
         public string ToString(
@@ -3434,6 +3502,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             if (printMask?.Lights?.Overall ?? true)
             {
                 item.Lights?.ToString(fg, "Lights");
+            }
+            if (printMask?.MiscItems?.Overall ?? true)
+            {
+                item.MiscItems?.ToString(fg, "MiscItems");
             }
         }
         
@@ -3668,6 +3740,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 else if (!isLightsEqual) return false;
             }
+            if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.MiscItems) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.MiscItems, rhs.MiscItems, out var lhsMiscItems, out var rhsMiscItems, out var isMiscItemsEqual))
+                {
+                    if (!object.Equals(lhsMiscItems, rhsMiscItems)) return false;
+                }
+                else if (!isMiscItemsEqual) return false;
+            }
             return true;
         }
         
@@ -3702,6 +3782,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             hash.Add(item.Doors);
             hash.Add(item.Ingredients);
             hash.Add(item.Lights);
+            hash.Add(item.MiscItems);
             return hash.ToHashCode();
         }
         
@@ -3855,6 +3936,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "ILight":
                 case "ILightInternal":
                     return obj.Lights;
+                case "MiscItem":
+                case "IMiscItemGetter":
+                case "IMiscItem":
+                case "IMiscItemInternal":
+                    return obj.MiscItems;
                 default:
                     throw new ArgumentException($"Unknown major record type: {type}");
             }
@@ -3879,7 +3965,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 mod: item,
                 modHeader: item.ModHeader.DeepCopy(),
                 modKey: modKey);
-            Stream[] outputStreams = new Stream[27];
+            Stream[] outputStreams = new Stream[28];
             List<Action> toDo = new List<Action>();
             toDo.Add(() => WriteGroupParallel(item.GameSettings, 0, outputStreams, bundle, parallelParam));
             toDo.Add(() => WriteGroupParallel(item.Keywords, 1, outputStreams, bundle, parallelParam));
@@ -3908,6 +3994,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             toDo.Add(() => WriteGroupParallel(item.Doors, 24, outputStreams, bundle, parallelParam));
             toDo.Add(() => WriteGroupParallel(item.Ingredients, 25, outputStreams, bundle, parallelParam));
             toDo.Add(() => WriteGroupParallel(item.Lights, 26, outputStreams, bundle, parallelParam));
+            toDo.Add(() => WriteGroupParallel(item.MiscItems, 27, outputStreams, bundle, parallelParam));
             Parallel.Invoke(parallelParam.ParallelOptions, toDo.ToArray());
             PluginUtilityTranslation.CompileStreamsInto(
                 outputStreams.NotNull(),
@@ -4145,6 +4232,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     yield return item;
                 }
             }
+            if (obj.MiscItems is IFormLinkContainerGetter MiscItemslinkCont)
+            {
+                foreach (var item in MiscItemslinkCont.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
             yield break;
         }
         
@@ -4255,6 +4349,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 yield return item;
             }
             foreach (var item in obj.Lights.EnumerateMajorRecords())
+            {
+                yield return item;
+            }
+            foreach (var item in obj.MiscItems.EnumerateMajorRecords())
             {
                 yield return item;
             }
@@ -4536,6 +4634,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         yield return item;
                     }
                     yield break;
+                case "MiscItem":
+                case "IMiscItemGetter":
+                case "IMiscItem":
+                case "IMiscItemInternal":
+                    foreach (var item in obj.MiscItems.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
                 case "IIdleRelation":
                 {
                     if (!Fallout4Mod_Registration.SetterType.IsAssignableFrom(obj.GetType())) yield break;
@@ -4588,6 +4695,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(ISpellGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -4632,6 +4743,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(ISpellGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -4661,6 +4776,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     yield break;
                 }
                 case "IItemGetter":
@@ -4678,6 +4797,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         yield return item;
                     }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(ILightGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -4719,6 +4842,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     yield break;
                 }
                 case "IConstructibleGetter":
@@ -4736,6 +4863,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         yield return item;
                     }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(ILightGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -4841,11 +4972,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     yield break;
                 }
                 case "IHarvestTargetGetter":
                 {
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IIngredientGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IMiscItemGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -5175,6 +5314,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     record: item,
                     group: (m) => m.Lights,
                     groupGetter: (m) => m.Lights);
+            }
+            foreach (var item in obj.MiscItems)
+            {
+                yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, MiscItem, IMiscItemGetter>(
+                    modKey: obj.ModKey,
+                    record: item,
+                    group: (m) => m.MiscItems,
+                    groupGetter: (m) => m.MiscItems);
             }
         }
         
@@ -5558,6 +5705,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                             groupGetter: (m) => m.Lights);
                     }
                     yield break;
+                case "MiscItem":
+                case "IMiscItemGetter":
+                case "IMiscItem":
+                case "IMiscItemInternal":
+                    foreach (var item in obj.MiscItems)
+                    {
+                        yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, MiscItem, IMiscItemGetter>(
+                            modKey: obj.ModKey,
+                            record: item,
+                            group: (m) => m.MiscItems,
+                            groupGetter: (m) => m.MiscItems);
+                    }
+                    yield break;
                 case "IIdleRelation":
                 case "IIdleRelationGetter":
                 {
@@ -5641,6 +5801,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     foreach (var item in EnumerateMajorRecordContexts(
                         obj,
                         linkCache: linkCache,
+                        type: typeof(IMiscItemGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
                         type: typeof(ISpellGetter),
                         throwIfUnknown: throwIfUnknown))
                     {
@@ -5691,6 +5859,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
+                        type: typeof(IMiscItemGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     yield break;
                 }
                 case "IOutfitTarget":
@@ -5737,6 +5913,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         obj,
                         linkCache: linkCache,
                         type: typeof(ILightGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
+                        type: typeof(IMiscItemGetter),
                         throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -5823,6 +6007,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         obj,
                         linkCache: linkCache,
                         type: typeof(IIngredientGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
+                        type: typeof(IMiscItemGetter),
                         throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -6489,6 +6681,26 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     errorMask?.PopIndex();
                 }
             }
+            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.MiscItems) ?? true))
+            {
+                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.MiscItems);
+                try
+                {
+                    item.MiscItems.DeepCopyIn(
+                        rhs: rhs.MiscItems,
+                        errorMask: errorMask,
+                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.MiscItems));
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
         }
         
         #endregion
@@ -6606,6 +6818,7 @@ namespace Mutagen.Bethesda.Fallout4
         public bool Doors;
         public bool Ingredients;
         public bool Lights;
+        public bool MiscItems;
         public GroupMask()
         {
         }
@@ -6638,6 +6851,7 @@ namespace Mutagen.Bethesda.Fallout4
             Doors = defaultValue;
             Ingredients = defaultValue;
             Lights = defaultValue;
+            MiscItems = defaultValue;
         }
     }
 
@@ -6962,6 +7176,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 {
                     ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)LightsItem).BinaryWriteTranslator).Write<ILightGetter>(
                         item: LightsItem,
+                        writer: writer,
+                        translationParams: translationParams);
+                }
+            }
+            if (importMask?.MiscItems ?? true)
+            {
+                var MiscItemsItem = item.MiscItems;
+                if (MiscItemsItem.RecordCache.Count > 0)
+                {
+                    ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)MiscItemsItem).BinaryWriteTranslator).Write<IMiscItemGetter>(
+                        item: MiscItemsItem,
                         writer: writer,
                         translationParams: translationParams);
                 }
@@ -7410,6 +7635,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     }
                     return (int)Fallout4Mod_FieldIndex.Lights;
                 }
+                case RecordTypeInts.MISC:
+                {
+                    if (importMask?.MiscItems ?? true)
+                    {
+                        item.MiscItems.CopyInFromBinary(
+                            frame: frame,
+                            translationParams: null);
+                    }
+                    else
+                    {
+                        frame.Position += contentLength;
+                    }
+                    return (int)Fallout4Mod_FieldIndex.MiscItems;
+                }
                 default:
                     frame.Position += contentLength;
                     return default(int?);
@@ -7706,6 +7945,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private IFallout4GroupGetter<ILightGetter>? _Lights => _LightsLocations != null ? Fallout4GroupBinaryOverlay<ILightGetter>.Fallout4GroupFactory(_data, _LightsLocations, _package) : default;
         public IFallout4GroupGetter<ILightGetter> Lights => _Lights ?? new Fallout4Group<Light>(this);
         #endregion
+        #region MiscItems
+        private List<RangeInt64>? _MiscItemsLocations;
+        private IFallout4GroupGetter<IMiscItemGetter>? _MiscItems => _MiscItemsLocations != null ? Fallout4GroupBinaryOverlay<IMiscItemGetter>.Fallout4GroupFactory(_data, _MiscItemsLocations, _package) : default;
+        public IFallout4GroupGetter<IMiscItemGetter> MiscItems => _MiscItems ?? new Fallout4Group<MiscItem>(this);
+        #endregion
         protected Fallout4ModBinaryOverlay(
             IMutagenReadStream stream,
             ModKey modKey,
@@ -7955,6 +8199,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     _LightsLocations ??= new();
                     _LightsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Lights;
+                }
+                case RecordTypeInts.MISC:
+                {
+                    _MiscItemsLocations ??= new();
+                    _MiscItemsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
+                    return (int)Fallout4Mod_FieldIndex.MiscItems;
                 }
                 default:
                     return default(int?);

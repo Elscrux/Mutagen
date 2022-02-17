@@ -784,9 +784,6 @@
     <Compile Include="Records\Major Records\MiscItemComponent_Generated.cs">
       <DependentUpon>MiscItem.xml</DependentUpon>
     </Compile>
-    <Compile Include="Records\Major Records\ComponentDisplayIndex_Generated.cs">
-      <DependentUpon>MiscItem.xml</DependentUpon>
-    </Compile>
     <Compile Include="Interfaces\IHarvestTarget_Generated.cs" />
     <Compile Include="Records\Common Subrecords\WeatherType_Generated.cs">
       <DependentUpon>WeatherType.xml</DependentUpon>

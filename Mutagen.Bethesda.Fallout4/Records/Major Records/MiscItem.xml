@@ -22,23 +22,20 @@
           <Float name="Weight" />
         </Fields>
       </Data>
-      <RefList name="Components" refName="MiscItemComponent" />
-      <RefList name="ComponentDisplayIndices" refName="ComponentDisplayIndex" />
+      <RefList name="Components" refName="MiscItemComponent" recordType="CVPA" />
+      <List name="ComponentDisplayIndices" recordType="CDIX" >
+        <UInt8 />
+      </List>
     </Fields>
     <LinkInterface>IItem</LinkInterface>
     <LinkInterface>IHarvestTarget</LinkInterface>
     <LinkInterface>IObjectId</LinkInterface>
     <LinkInterface>IConstructible</LinkInterface>
   </Object>
-  <Object name="MiscItemComponent" objType="Subrecord" recordType="CVPA" GUID="2b777f92-de56-4260-a32d-5c28592a7fe8" ID="170">
+  <Object name="MiscItemComponent" objType="Subrecord" GUID="2b777f92-de56-4260-a32d-5c28592a7fe8" ID="170">
     <Fields>
       <FormLink name="Component" refName="Component" />
       <UInt32 name="Count" />
-    </Fields>
-  </Object>
-  <Object name="ComponentDisplayIndex" objType="Subrecord" recordType="CDIX" GUID="4fe3d4d9-5b25-4575-bbab-c5c5a95daed9" ID="171">
-    <Fields>
-      <UInt8 name="DisplayIndex" />
     </Fields>
   </Object>
 </Loqui>

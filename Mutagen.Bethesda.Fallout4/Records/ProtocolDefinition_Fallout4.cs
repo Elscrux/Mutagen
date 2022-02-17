@@ -146,7 +146,6 @@ namespace Loqui
             LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.NavigationMesh_Registration.Instance);
             LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.MiscItem_Registration.Instance);
             LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.MiscItemComponent_Registration.Instance);
-            LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.ComponentDisplayIndex_Registration.Instance);
             LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.WeatherType_Registration.Instance);
             LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.MusicTrack_Registration.Instance);
             LoquiRegistration.Register(Mutagen.Bethesda.Fallout4.Internals.MusicTrackLoopData_Registration.Instance);

@@ -30,7 +30,7 @@
 			<Group name="Doors" refName="Door" />
 			<Group name="Ingredients" refName="Ingredient" />
 			<Group name="Lights" refName="Light" />
-<!--			<Group name="MiscItems" refName="MiscItem" />-->
+			<Group name="MiscItems" refName="MiscItem" />
 <!--			<Group name="Statics" refName="Static" />-->
 <!--			<Group name="StaticCollections" refName="StaticCollection" />-->
 <!--			<Group name="MoveableStatics" refName="MoveableStatic" />-->

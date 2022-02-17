@@ -237,29 +237,29 @@ namespace Mutagen.Bethesda.Fallout4
         #endregion
         #region Components
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private ExtendedList<MiscItemComponent> _Components = new ExtendedList<MiscItemComponent>();
-        public ExtendedList<MiscItemComponent> Components
+        private ExtendedList<MiscItemComponent>? _Components;
+        public ExtendedList<MiscItemComponent>? Components
         {
             get => this._Components;
-            init => this._Components = value;
+            set => this._Components = value;
         }
         #region Interface Members
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IReadOnlyList<IMiscItemComponentGetter> IMiscItemGetter.Components => _Components;
+        IReadOnlyList<IMiscItemComponentGetter>? IMiscItemGetter.Components => _Components;
         #endregion
 
         #endregion
         #region ComponentDisplayIndices
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private ExtendedList<ComponentDisplayIndex> _ComponentDisplayIndices = new ExtendedList<ComponentDisplayIndex>();
-        public ExtendedList<ComponentDisplayIndex> ComponentDisplayIndices
+        private ExtendedList<Byte>? _ComponentDisplayIndices;
+        public ExtendedList<Byte>? ComponentDisplayIndices
         {
             get => this._ComponentDisplayIndices;
-            init => this._ComponentDisplayIndices = value;
+            set => this._ComponentDisplayIndices = value;
         }
         #region Interface Members
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IReadOnlyList<IComponentDisplayIndexGetter> IMiscItemGetter.ComponentDisplayIndices => _ComponentDisplayIndices;
+        IReadOnlyList<Byte>? IMiscItemGetter.ComponentDisplayIndices => _ComponentDisplayIndices;
         #endregion
 
         #endregion
@@ -305,7 +305,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Value = initialValue;
                 this.Weight = initialValue;
                 this.Components = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, MiscItemComponent.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, MiscItemComponent.Mask<TItem>?>>());
-                this.ComponentDisplayIndices = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ComponentDisplayIndex.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, ComponentDisplayIndex.Mask<TItem>?>>());
+                this.ComponentDisplayIndices = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(initialValue, Enumerable.Empty<(int Index, TItem Value)>());
                 this.DATADataTypeState = initialValue;
             }
 
@@ -356,7 +356,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Value = Value;
                 this.Weight = Weight;
                 this.Components = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, MiscItemComponent.Mask<TItem>?>>?>(Components, Enumerable.Empty<MaskItemIndexed<TItem, MiscItemComponent.Mask<TItem>?>>());
-                this.ComponentDisplayIndices = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ComponentDisplayIndex.Mask<TItem>?>>?>(ComponentDisplayIndices, Enumerable.Empty<MaskItemIndexed<TItem, ComponentDisplayIndex.Mask<TItem>?>>());
+                this.ComponentDisplayIndices = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(ComponentDisplayIndices, Enumerable.Empty<(int Index, TItem Value)>());
                 this.DATADataTypeState = DATADataTypeState;
             }
 
@@ -384,7 +384,7 @@ namespace Mutagen.Bethesda.Fallout4
             public TItem Value;
             public TItem Weight;
             public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, MiscItemComponent.Mask<TItem>?>>?>? Components;
-            public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ComponentDisplayIndex.Mask<TItem>?>>?>? ComponentDisplayIndices;
+            public MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>? ComponentDisplayIndices;
             public TItem DATADataTypeState;
             #endregion
 
@@ -507,8 +507,7 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         foreach (var item in this.ComponentDisplayIndices.Specific)
                         {
-                            if (!eval(item.Overall)) return false;
-                            if (item.Specific != null && !item.Specific.All(eval)) return false;
+                            if (!eval(item.Value)) return false;
                         }
                     }
                 }
@@ -580,8 +579,7 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         foreach (var item in this.ComponentDisplayIndices.Specific)
                         {
-                            if (!eval(item.Overall)) return false;
-                            if (item.Specific != null && !item.Specific.All(eval)) return false;
+                            if (!eval(item.Value)) return false;
                         }
                     }
                 }
@@ -645,16 +643,15 @@ namespace Mutagen.Bethesda.Fallout4
                 }
                 if (ComponentDisplayIndices != null)
                 {
-                    obj.ComponentDisplayIndices = new MaskItem<R, IEnumerable<MaskItemIndexed<R, ComponentDisplayIndex.Mask<R>?>>?>(eval(this.ComponentDisplayIndices.Overall), Enumerable.Empty<MaskItemIndexed<R, ComponentDisplayIndex.Mask<R>?>>());
+                    obj.ComponentDisplayIndices = new MaskItem<R, IEnumerable<(int Index, R Value)>?>(eval(this.ComponentDisplayIndices.Overall), Enumerable.Empty<(int Index, R Value)>());
                     if (ComponentDisplayIndices.Specific != null)
                     {
-                        var l = new List<MaskItemIndexed<R, ComponentDisplayIndex.Mask<R>?>>();
+                        var l = new List<(int Index, R Item)>();
                         obj.ComponentDisplayIndices.Specific = l;
                         foreach (var item in ComponentDisplayIndices.Specific.WithIndex())
                         {
-                            MaskItemIndexed<R, ComponentDisplayIndex.Mask<R>?>? mask = item.Item == null ? null : new MaskItemIndexed<R, ComponentDisplayIndex.Mask<R>?>(item.Item.Index, eval(item.Item.Overall), item.Item.Specific?.Translate(eval));
-                            if (mask == null) continue;
-                            l.Add(mask);
+                            R mask = eval(item.Item.Value);
+                            l.Add((item.Index, mask));
                         }
                     }
                 }
@@ -794,7 +791,7 @@ namespace Mutagen.Bethesda.Fallout4
                                     fg.AppendLine("[");
                                     using (new DepthWrapper(fg))
                                     {
-                                        subItem?.ToString(fg);
+                                        fg.AppendItem(subItem);
                                     }
                                     fg.AppendLine("]");
                                 }
@@ -833,7 +830,7 @@ namespace Mutagen.Bethesda.Fallout4
             public Exception? Value;
             public Exception? Weight;
             public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, MiscItemComponent.ErrorMask?>>?>? Components;
-            public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ComponentDisplayIndex.ErrorMask?>>?>? ComponentDisplayIndices;
+            public MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>? ComponentDisplayIndices;
             public Exception? DATADataTypeState;
             #endregion
 
@@ -933,7 +930,7 @@ namespace Mutagen.Bethesda.Fallout4
                         this.Components = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, MiscItemComponent.ErrorMask?>>?>(ex, null);
                         break;
                     case MiscItem_FieldIndex.ComponentDisplayIndices:
-                        this.ComponentDisplayIndices = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ComponentDisplayIndex.ErrorMask?>>?>(ex, null);
+                        this.ComponentDisplayIndices = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ex, null);
                         break;
                     case MiscItem_FieldIndex.DATADataTypeState:
                         this.DATADataTypeState = ex;
@@ -995,7 +992,7 @@ namespace Mutagen.Bethesda.Fallout4
                         this.Components = (MaskItem<Exception?, IEnumerable<MaskItem<Exception?, MiscItemComponent.ErrorMask?>>?>)obj;
                         break;
                     case MiscItem_FieldIndex.ComponentDisplayIndices:
-                        this.ComponentDisplayIndices = (MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ComponentDisplayIndex.ErrorMask?>>?>)obj;
+                        this.ComponentDisplayIndices = (MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>)obj;
                         break;
                     case MiscItem_FieldIndex.DATADataTypeState:
                         this.DATADataTypeState = (Exception?)obj;
@@ -1132,7 +1129,7 @@ namespace Mutagen.Bethesda.Fallout4
                                 fg.AppendLine("[");
                                 using (new DepthWrapper(fg))
                                 {
-                                    subItem?.ToString(fg);
+                                    fg.AppendItem(subItem);
                                 }
                                 fg.AppendLine("]");
                             }
@@ -1164,7 +1161,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Value = this.Value.Combine(rhs.Value);
                 ret.Weight = this.Weight.Combine(rhs.Weight);
                 ret.Components = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, MiscItemComponent.ErrorMask?>>?>(ExceptionExt.Combine(this.Components?.Overall, rhs.Components?.Overall), ExceptionExt.Combine(this.Components?.Specific, rhs.Components?.Specific));
-                ret.ComponentDisplayIndices = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ComponentDisplayIndex.ErrorMask?>>?>(ExceptionExt.Combine(this.ComponentDisplayIndices?.Overall, rhs.ComponentDisplayIndices?.Overall), ExceptionExt.Combine(this.ComponentDisplayIndices?.Specific, rhs.ComponentDisplayIndices?.Specific));
+                ret.ComponentDisplayIndices = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ExceptionExt.Combine(this.ComponentDisplayIndices?.Overall, rhs.ComponentDisplayIndices?.Overall), ExceptionExt.Combine(this.ComponentDisplayIndices?.Specific, rhs.ComponentDisplayIndices?.Specific));
                 ret.DATADataTypeState = this.DATADataTypeState.Combine(rhs.DATADataTypeState);
                 return ret;
             }
@@ -1203,7 +1200,7 @@ namespace Mutagen.Bethesda.Fallout4
             public bool Value;
             public bool Weight;
             public MiscItemComponent.TranslationMask? Components;
-            public ComponentDisplayIndex.TranslationMask? ComponentDisplayIndices;
+            public bool ComponentDisplayIndices;
             public bool DATADataTypeState;
             #endregion
 
@@ -1223,6 +1220,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.FeaturedItemMessage = defaultOn;
                 this.Value = defaultOn;
                 this.Weight = defaultOn;
+                this.ComponentDisplayIndices = defaultOn;
                 this.DATADataTypeState = defaultOn;
             }
 
@@ -1246,7 +1244,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((Value, null));
                 ret.Add((Weight, null));
                 ret.Add((Components == null ? DefaultOn : !Components.GetCrystal().CopyNothing, Components?.GetCrystal()));
-                ret.Add((ComponentDisplayIndices == null ? DefaultOn : !ComponentDisplayIndices.GetCrystal().CopyNothing, ComponentDisplayIndices?.GetCrystal()));
+                ret.Add((ComponentDisplayIndices, null));
                 ret.Add((DATADataTypeState, null));
             }
 
@@ -1439,8 +1437,8 @@ namespace Mutagen.Bethesda.Fallout4
         new IFormLinkNullable<IMessageGetter> FeaturedItemMessage { get; set; }
         new Int32 Value { get; set; }
         new Single Weight { get; set; }
-        new ExtendedList<MiscItemComponent> Components { get; }
-        new ExtendedList<ComponentDisplayIndex> ComponentDisplayIndices { get; }
+        new ExtendedList<MiscItemComponent>? Components { get; set; }
+        new ExtendedList<Byte>? ComponentDisplayIndices { get; set; }
         new MiscItem.DATADataType DATADataTypeState { get; set; }
         #region Mutagen
         new MiscItem.MajorFlag MajorFlags { get; set; }
@@ -1516,8 +1514,8 @@ namespace Mutagen.Bethesda.Fallout4
         IFormLinkNullableGetter<IMessageGetter> FeaturedItemMessage { get; }
         Int32 Value { get; }
         Single Weight { get; }
-        IReadOnlyList<IMiscItemComponentGetter> Components { get; }
-        IReadOnlyList<IComponentDisplayIndexGetter> ComponentDisplayIndices { get; }
+        IReadOnlyList<IMiscItemComponentGetter>? Components { get; }
+        IReadOnlyList<Byte>? ComponentDisplayIndices { get; }
         MiscItem.DATADataType DATADataTypeState { get; }
 
         #region Mutagen
@@ -1806,8 +1804,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.FeaturedItemMessage.Clear();
             item.Value = default;
             item.Weight = default;
-            item.Components.Clear();
-            item.ComponentDisplayIndices.Clear();
+            item.Components = null;
+            item.ComponentDisplayIndices = null;
             item.DATADataTypeState = default;
             base.Clear(item);
         }
@@ -1834,7 +1832,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.PutDownSound.Relink(mapping);
             obj.Keywords?.RemapLinks(mapping);
             obj.FeaturedItemMessage.Relink(mapping);
-            obj.Components.RemapLinks(mapping);
+            obj.Components?.RemapLinks(mapping);
         }
         
         #endregion
@@ -1938,7 +1936,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 include);
             ret.ComponentDisplayIndices = item.ComponentDisplayIndices.CollectionEqualsHelper(
                 rhs.ComponentDisplayIndices,
-                (loqLhs, loqRhs) => loqLhs.GetEqualsMask(loqRhs, include),
+                (l, r) => l == r,
                 include);
             ret.DATADataTypeState = item.DATADataTypeState == rhs.DATADataTypeState;
             base.FillEqualsMask(item, rhs, ret, include);
@@ -2069,13 +2067,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 fg.AppendItem(item.Weight, "Weight");
             }
-            if (printMask?.Components?.Overall ?? true)
+            if ((printMask?.Components?.Overall ?? true)
+                && item.Components is {} ComponentsItem)
             {
                 fg.AppendLine("Components =>");
                 fg.AppendLine("[");
                 using (new DepthWrapper(fg))
                 {
-                    foreach (var subItem in item.Components)
+                    foreach (var subItem in ComponentsItem)
                     {
                         fg.AppendLine("[");
                         using (new DepthWrapper(fg))
@@ -2087,18 +2086,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 fg.AppendLine("]");
             }
-            if (printMask?.ComponentDisplayIndices?.Overall ?? true)
+            if ((printMask?.ComponentDisplayIndices?.Overall ?? true)
+                && item.ComponentDisplayIndices is {} ComponentDisplayIndicesItem)
             {
                 fg.AppendLine("ComponentDisplayIndices =>");
                 fg.AppendLine("[");
                 using (new DepthWrapper(fg))
                 {
-                    foreach (var subItem in item.ComponentDisplayIndices)
+                    foreach (var subItem in ComponentDisplayIndicesItem)
                     {
                         fg.AppendLine("[");
                         using (new DepthWrapper(fg))
                         {
-                            subItem?.ToString(fg, "Item");
+                            fg.AppendItem(subItem);
                         }
                         fg.AppendLine("]");
                     }
@@ -2377,9 +2377,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 yield return FormLinkInformation.Factory(obj.FeaturedItemMessage);
             }
-            foreach (var item in obj.Components.SelectMany(f => f.ContainedFormLinks))
+            if (obj.Components is {} ComponentsItem)
             {
-                yield return FormLinkInformation.Factory(item);
+                foreach (var item in ComponentsItem.SelectMany(f => f.ContainedFormLinks))
+                {
+                    yield return FormLinkInformation.Factory(item);
+                }
             }
             yield break;
         }
@@ -2623,14 +2626,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 errorMask?.PushIndex((int)MiscItem_FieldIndex.Components);
                 try
                 {
-                    item.Components.SetTo(
-                        rhs.Components
-                        .Select(r =>
-                        {
-                            return r.DeepCopy(
-                                errorMask: errorMask,
-                                default(TranslationCrystal));
-                        }));
+                    if ((rhs.Components != null))
+                    {
+                        item.Components = 
+                            rhs.Components
+                            .Select(r =>
+                            {
+                                return r.DeepCopy(
+                                    errorMask: errorMask,
+                                    default(TranslationCrystal));
+                            })
+                            .ToExtendedList<MiscItemComponent>();
+                    }
+                    else
+                    {
+                        item.Components = null;
+                    }
                 }
                 catch (Exception ex)
                 when (errorMask != null)
@@ -2647,14 +2658,16 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 errorMask?.PushIndex((int)MiscItem_FieldIndex.ComponentDisplayIndices);
                 try
                 {
-                    item.ComponentDisplayIndices.SetTo(
-                        rhs.ComponentDisplayIndices
-                        .Select(r =>
-                        {
-                            return r.DeepCopy(
-                                errorMask: errorMask,
-                                default(TranslationCrystal));
-                        }));
+                    if ((rhs.ComponentDisplayIndices != null))
+                    {
+                        item.ComponentDisplayIndices = 
+                            rhs.ComponentDisplayIndices
+                            .ToExtendedList<Byte>();
+                    }
+                    else
+                    {
+                        item.ComponentDisplayIndices = null;
+                    }
                 }
                 catch (Exception ex)
                 when (errorMask != null)
@@ -2918,6 +2931,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IMiscItemComponentGetter>.Instance.Write(
                 writer: writer,
                 items: item.Components,
+                recordType: translationParams.ConvertToCustom(RecordTypes.CVPA),
                 transl: (MutagenWriter subWriter, IMiscItemComponentGetter subItem, TypedWriteParams? conv) =>
                 {
                     var Item = subItem;
@@ -2926,17 +2940,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         writer: subWriter,
                         translationParams: conv);
                 });
-            Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IComponentDisplayIndexGetter>.Instance.Write(
+            Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<Byte>.Instance.Write(
                 writer: writer,
                 items: item.ComponentDisplayIndices,
-                transl: (MutagenWriter subWriter, IComponentDisplayIndexGetter subItem, TypedWriteParams? conv) =>
-                {
-                    var Item = subItem;
-                    ((ComponentDisplayIndexBinaryWriteTranslation)((IBinaryItem)Item).BinaryWriteTranslator).Write(
-                        item: Item,
-                        writer: subWriter,
-                        translationParams: conv);
-                });
+                recordType: translationParams.ConvertToCustom(RecordTypes.CDIX),
+                transl: ByteBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write);
         }
 
         public void Write(
@@ -3130,22 +3138,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.CVPA:
                 {
-                    item.Components.SetTo(
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.Components = 
                         Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<MiscItemComponent>.Instance.Parse(
-                            reader: frame,
-                            triggeringRecord: RecordTypes.CVPA,
-                            translationParams: translationParams,
-                            transl: MiscItemComponent.TryCreateFromBinary));
+                            reader: frame.SpawnWithLength(contentLength),
+                            transl: MiscItemComponent.TryCreateFromBinary)
+                        .CastExtendedList<MiscItemComponent>();
                     return (int)MiscItem_FieldIndex.Components;
                 }
                 case RecordTypeInts.CDIX:
                 {
-                    item.ComponentDisplayIndices.SetTo(
-                        Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<ComponentDisplayIndex>.Instance.Parse(
-                            reader: frame,
-                            triggeringRecord: RecordTypes.CDIX,
-                            translationParams: translationParams,
-                            transl: ComponentDisplayIndex.TryCreateFromBinary));
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.ComponentDisplayIndices = 
+                        Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<Byte>.Instance.Parse(
+                            reader: frame.SpawnWithLength(contentLength),
+                            transl: ByteBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse)
+                        .CastExtendedList<Byte>();
                     return (int)MiscItem_FieldIndex.ComponentDisplayIndices;
                 }
                 default:
@@ -3270,8 +3278,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private bool _Weight_IsSet => _DATALocation.HasValue;
         public Single Weight => _Weight_IsSet ? _data.Slice(_WeightLocation, 4).Float() : default;
         #endregion
-        public IReadOnlyList<IMiscItemComponentGetter> Components { get; private set; } = ListExt.Empty<MiscItemComponentBinaryOverlay>();
-        public IReadOnlyList<IComponentDisplayIndexGetter> ComponentDisplayIndices { get; private set; } = ListExt.Empty<ComponentDisplayIndexBinaryOverlay>();
+        public IReadOnlyList<IMiscItemComponentGetter>? Components { get; private set; }
+        public IReadOnlyList<Byte>? ComponentDisplayIndices { get; private set; }
         partial void CustomFactoryEnd(
             OverlayStream stream,
             int finalPos,
@@ -3423,30 +3431,26 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.CVPA:
                 {
-                    this.Components = BinaryOverlayList.FactoryByArray<MiscItemComponentBinaryOverlay>(
-                        mem: stream.RemainingMemory,
+                    var subMeta = stream.ReadSubrecord();
+                    var subLen = subMeta.ContentLength;
+                    this.Components = BinaryOverlayList.FactoryByStartIndex<MiscItemComponentBinaryOverlay>(
+                        mem: stream.RemainingMemory.Slice(0, subLen),
                         package: _package,
-                        parseParams: parseParams,
-                        getter: (s, p, recConv) => MiscItemComponentBinaryOverlay.MiscItemComponentFactory(new OverlayStream(s, p), p, recConv),
-                        locs: ParseRecordLocations(
-                            stream: stream,
-                            trigger: type,
-                            constants: _package.MetaData.Constants.SubConstants,
-                            skipHeader: false));
+                        itemLength: 8,
+                        getter: (s, p) => MiscItemComponentBinaryOverlay.MiscItemComponentFactory(s, p));
+                    stream.Position += subLen;
                     return (int)MiscItem_FieldIndex.Components;
                 }
                 case RecordTypeInts.CDIX:
                 {
-                    this.ComponentDisplayIndices = BinaryOverlayList.FactoryByArray<ComponentDisplayIndexBinaryOverlay>(
-                        mem: stream.RemainingMemory,
+                    var subMeta = stream.ReadSubrecord();
+                    var subLen = subMeta.ContentLength;
+                    this.ComponentDisplayIndices = BinaryOverlayList.FactoryByStartIndex<Byte>(
+                        mem: stream.RemainingMemory.Slice(0, subLen),
                         package: _package,
-                        parseParams: parseParams,
-                        getter: (s, p, recConv) => ComponentDisplayIndexBinaryOverlay.ComponentDisplayIndexFactory(new OverlayStream(s, p), p, recConv),
-                        locs: ParseRecordLocations(
-                            stream: stream,
-                            trigger: type,
-                            constants: _package.MetaData.Constants.SubConstants,
-                            skipHeader: false));
+                        itemLength: 1,
+                        getter: (s, p) => s[0]);
+                    stream.Position += subLen;
                     return (int)MiscItem_FieldIndex.ComponentDisplayIndices;
                 }
                 default:
