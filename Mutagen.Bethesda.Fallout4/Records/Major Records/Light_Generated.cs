@@ -251,16 +251,57 @@ namespace Mutagen.Bethesda.Fallout4
         public Single Scalar { get; set; } = default;
         #endregion
         #region Exponent
-        public Single Exponent { get; set; } = default;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Single _Exponent;
+        public Single Exponent
+        {
+            get => this._Exponent;
+            set
+            {
+                this.DATADataTypeState &= ~DATADataType.Break0;
+                this._Exponent = value;
+            }
+        }
         #endregion
         #region GodRaysNearClip
-        public Single GodRaysNearClip { get; set; } = default;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Single _GodRaysNearClip;
+        public Single GodRaysNearClip
+        {
+            get => this._GodRaysNearClip;
+            set
+            {
+                this.DATADataTypeState &= ~DATADataType.Break0;
+                this._GodRaysNearClip = value;
+            }
+        }
         #endregion
         #region Value
-        public UInt32 Value { get; set; } = default;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private UInt32 _Value;
+        public UInt32 Value
+        {
+            get => this._Value;
+            set
+            {
+                this.DATADataTypeState &= ~DATADataType.Break0;
+                this._Value = value;
+            }
+        }
         #endregion
         #region Weight
-        public Single Weight { get; set; } = default;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Single _Weight;
+        public Single Weight
+        {
+            get => this._Weight;
+            set
+            {
+                this.DATADataTypeState &= ~DATADataType.Break0;
+                this.DATADataTypeState &= ~DATADataType.Break1;
+                this._Weight = value;
+            }
+        }
         #endregion
         #region FadeValue
         public Single FadeValue { get; set; } = default;
@@ -1694,6 +1735,8 @@ namespace Mutagen.Bethesda.Fallout4
         [Flags]
         public enum DATADataType
         {
+            Break0 = 1,
+            Break1 = 2
         }
         #region Equals and Hash
         public override bool Equals(object? obj)
@@ -3576,16 +3619,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
                     writer: writer,
                     item: item.Scalar);
-                FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
-                    writer: writer,
-                    item: item.Exponent);
-                FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
-                    writer: writer,
-                    item: item.GodRaysNearClip);
-                writer.Write(item.Value);
-                FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
-                    writer: writer,
-                    item: item.Weight);
+                if (!item.DATADataTypeState.HasFlag(Light.DATADataType.Break0))
+                {
+                    FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
+                        writer: writer,
+                        item: item.Exponent);
+                    FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
+                        writer: writer,
+                        item: item.GodRaysNearClip);
+                    writer.Write(item.Value);
+                    if (!item.DATADataTypeState.HasFlag(Light.DATADataType.Break1))
+                    {
+                        FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
+                            writer: writer,
+                            item: item.Weight);
+                    }
+                }
             }
             FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Write(
                 writer: writer,
@@ -3801,9 +3850,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     item.FlickerMovementAmplitude = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
                     item.Constant = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
                     item.Scalar = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
+                    if (dataFrame.Complete)
+                    {
+                        item.DATADataTypeState |= Light.DATADataType.Break0;
+                        return (int)Light_FieldIndex.Scalar;
+                    }
                     item.Exponent = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
                     item.GodRaysNearClip = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
                     item.Value = dataFrame.ReadUInt32();
+                    if (dataFrame.Complete)
+                    {
+                        item.DATADataTypeState |= Light.DATADataType.Break1;
+                        return (int)Light_FieldIndex.Value;
+                    }
                     item.Weight = FloatBinaryTranslation<MutagenFrame, MutagenWriter>.Instance.Parse(reader: dataFrame);
                     return (int)Light_FieldIndex.Weight;
                 }
@@ -4002,22 +4061,22 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         #endregion
         #region Exponent
         private int _ExponentLocation => _DATALocation!.Value + 0x30;
-        private bool _Exponent_IsSet => _DATALocation.HasValue;
+        private bool _Exponent_IsSet => _DATALocation.HasValue && !DATADataTypeState.HasFlag(Light.DATADataType.Break0);
         public Single Exponent => _Exponent_IsSet ? _data.Slice(_ExponentLocation, 4).Float() : default;
         #endregion
         #region GodRaysNearClip
         private int _GodRaysNearClipLocation => _DATALocation!.Value + 0x34;
-        private bool _GodRaysNearClip_IsSet => _DATALocation.HasValue;
+        private bool _GodRaysNearClip_IsSet => _DATALocation.HasValue && !DATADataTypeState.HasFlag(Light.DATADataType.Break0);
         public Single GodRaysNearClip => _GodRaysNearClip_IsSet ? _data.Slice(_GodRaysNearClipLocation, 4).Float() : default;
         #endregion
         #region Value
         private int _ValueLocation => _DATALocation!.Value + 0x38;
-        private bool _Value_IsSet => _DATALocation.HasValue;
+        private bool _Value_IsSet => _DATALocation.HasValue && !DATADataTypeState.HasFlag(Light.DATADataType.Break0);
         public UInt32 Value => _Value_IsSet ? BinaryPrimitives.ReadUInt32LittleEndian(_data.Slice(_ValueLocation, 4)) : default;
         #endregion
         #region Weight
         private int _WeightLocation => _DATALocation!.Value + 0x3C;
-        private bool _Weight_IsSet => _DATALocation.HasValue;
+        private bool _Weight_IsSet => _DATALocation.HasValue && !DATADataTypeState.HasFlag(Light.DATADataType.Break1);
         public Single Weight => _Weight_IsSet ? _data.Slice(_WeightLocation, 4).Float() : default;
         #endregion
         #region FadeValue
@@ -4184,6 +4243,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case RecordTypeInts.DATA:
                 {
                     _DATALocation = (stream.Position - offset) + _package.MetaData.Constants.SubConstants.TypeAndLengthLength;
+                    var subLen = _package.MetaData.Constants.Subrecord(_data.Slice((stream.Position - offset))).ContentLength;
+                    if (subLen <= 0x30)
+                    {
+                        this.DATADataTypeState |= Light.DATADataType.Break0;
+                    }
+                    if (subLen <= 0x3C)
+                    {
+                        this.DATADataTypeState |= Light.DATADataType.Break1;
+                    }
                     return (int)Light_FieldIndex.Weight;
                 }
                 case RecordTypeInts.FNAM:

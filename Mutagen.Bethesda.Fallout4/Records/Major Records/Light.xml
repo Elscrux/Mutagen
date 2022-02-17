@@ -28,9 +28,11 @@
           <Float name="FlickerMovementAmplitude" />
           <Float name="Constant" />
           <Float name="Scalar" />
+          <Break />
           <Float name="Exponent" />
           <Float name="GodRaysNearClip" />
           <UInt32 name="Value" />
+          <Break />
           <Float name="Weight" />
         </Fields>
       </Data>
