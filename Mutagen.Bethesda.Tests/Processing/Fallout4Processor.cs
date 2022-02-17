@@ -116,6 +116,7 @@ public class Fallout4Processor : Processor
                     new RecordType[] { "ARMO", "FULL", "DESC" },
                     new RecordType[] { "BOOK", "FULL" },
                     new RecordType[] { "CONT", "FULL" },
+                    new RecordType[] { "DOOR", "FULL" },
                 };
             case StringsSource.DL:
                 return new AStringsAlignment[]
@@ -123,6 +124,7 @@ public class Fallout4Processor : Processor
                     new RecordType[] { "RACE", "DESC" },
                     new RecordType[] { "SPEL", "DESC" },
                     new RecordType[] { "BOOK", "CNAM", "DESC" },
+                    new RecordType[] { "DOOR", "ONAM", "CNAM" },
                 };
             case StringsSource.IL:
                 return new AStringsAlignment[]

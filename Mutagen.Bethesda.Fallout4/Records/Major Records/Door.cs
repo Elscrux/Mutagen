@@ -24,7 +24,7 @@ namespace Mutagen.Bethesda.Fallout4
             MinimalUse = 0x08,
             Sliding = 0x10,
             DoNotOpenInCombatSearch = 0x20,
-            No_To_Text = 0x40,
+            NoToText = 0x40,
         }
     }
 }
