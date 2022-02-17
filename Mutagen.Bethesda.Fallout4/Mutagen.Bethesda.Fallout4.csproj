@@ -715,16 +715,10 @@
     <Compile Include="Interfaces\IOutfitTarget_Generated.cs" />
     <Compile Include="Interfaces\IConstructible_Generated.cs" />
     <Compile Include="Interfaces\IBindableEquipment_Generated.cs" />
-    <Compile Include="Records\Common Subrecords\PreviewTransform_Generated.cs">
-      <DependentUpon>PreviewTransform.xml</DependentUpon>
-    </Compile>
     <Compile Include="Records\Common Subrecords\ResistanceDestructible_Generated.cs">
       <DependentUpon>Destructible.xml</DependentUpon>
     </Compile>
     <Compile Include="Records\Major Records\ArmorAddonModel_Generated.cs">
-      <DependentUpon>Armor.xml</DependentUpon>
-    </Compile>
-    <Compile Include="Records\Major Records\ResistanceArmor_Generated.cs">
       <DependentUpon>Armor.xml</DependentUpon>
     </Compile>
     <Compile Include="Records\Major Records\Book_Generated.cs">
@@ -1195,6 +1189,9 @@
       <DependentUpon>Armor.xml</DependentUpon>
     </Compile>
     <Compile Include="Records\Major Records\ArmorObjectModFormLinkFloatProperty_Generated.cs">
+      <DependentUpon>Armor.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Records\Major Records\ArmorResistance_Generated.cs">
       <DependentUpon>Armor.xml</DependentUpon>
     </Compile>
   </ItemGroup>

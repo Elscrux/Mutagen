@@ -23,12 +23,20 @@ namespace Mutagen.Bethesda.Fallout4
     {
         public partial class BookBinaryCreateTranslation
         {
-            public const byte PerkFlag = 0x01;
+            public const byte AvFlag = 0x10;
+            public const byte PerkFlag = 0x10;
             public const byte SpellFlag = 0x04;
 
             public static partial void FillBinaryTeachesCustom(MutagenFrame frame, IBookInternal item)
             {
-                if ((((int)item.Flags) & SpellFlag) > 0)
+                if ((((int)item.Flags) & AvFlag) > 0)
+                {
+                    item.Teaches = new BookActorValue()
+                    {
+                        ActorValue = new FormLink<IActorValueInformationGetter>(FormLinkBinaryTranslation.Instance.Parse(frame))
+                    };
+                }
+                else if ((((int)item.Flags) & SpellFlag) > 0)
                 {
                     item.Teaches = new BookSpell()
                     {
@@ -58,13 +66,16 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 switch (item.Teaches)
                 {
-                    case BookSpell spell:
+                    case IBookActorValueGetter av:
+                        FormLinkBinaryTranslation.Instance.Write(writer, av.ActorValue);
+                        break;
+                    case IBookSpellGetter spell:
                         FormLinkBinaryTranslation.Instance.Write(writer, spell.Spell);
                         break;
-                    case BookPerk perk:
+                    case IBookPerkGetter perk:
                         FormLinkBinaryTranslation.Instance.Write(writer, perk.Perk);
                         break;
-                    case BookTeachesNothing nothing:
+                    case IBookTeachesNothingGetter nothing:
                         writer.Write(nothing.RawContent);
                         break;
                     default:
@@ -86,7 +97,14 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 if (!_DATALocation.HasValue) return default;
                 int flags = (int)this.Flags;
-                if ((flags & BookBinaryCreateTranslation.SpellFlag) > 0)
+                if ((flags & BookBinaryCreateTranslation.AvFlag) > 0)
+                {
+                    return new BookActorValue()
+                    {
+                        ActorValue = new FormLink<IActorValueInformationGetter>(FormKeyBinaryTranslation.Instance.Parse(_data.Slice(_TeachesLocation, 4), _package.MetaData.MasterReferences!))
+                    };
+                }
+                else if ((flags & BookBinaryCreateTranslation.SpellFlag) > 0)
                 {
                     return new BookSpell()
                     {

@@ -94,15 +94,14 @@ namespace Mutagen.Bethesda.Fallout4
         #endregion
         #endregion
         #region PreviewTransform
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private PreviewTransform? _PreviewTransform;
-        public PreviewTransform? PreviewTransform
+        private readonly IFormLinkNullable<ITransformGetter> _PreviewTransform = new FormLinkNullable<ITransformGetter>();
+        public IFormLinkNullable<ITransformGetter> PreviewTransform
         {
             get => _PreviewTransform;
-            set => _PreviewTransform = value;
+            set => _PreviewTransform.SetTo(value);
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IPreviewTransformGetter? IFurnitureGetter.PreviewTransform => this.PreviewTransform;
+        IFormLinkNullableGetter<ITransformGetter> IFurnitureGetter.PreviewTransform => this.PreviewTransform;
         #endregion
         #region Name
         /// <summary>
@@ -346,7 +345,7 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 this.VirtualMachineAdapter = new MaskItem<TItem, VirtualMachineAdapter.Mask<TItem>?>(initialValue, new VirtualMachineAdapter.Mask<TItem>(initialValue));
                 this.ObjectBounds = new MaskItem<TItem, ObjectBounds.Mask<TItem>?>(initialValue, new ObjectBounds.Mask<TItem>(initialValue));
-                this.PreviewTransform = new MaskItem<TItem, PreviewTransform.Mask<TItem>?>(initialValue, new PreviewTransform.Mask<TItem>(initialValue));
+                this.PreviewTransform = initialValue;
                 this.Name = initialValue;
                 this.Model = new MaskItem<TItem, Model.Mask<TItem>?>(initialValue, new Model.Mask<TItem>(initialValue));
                 this.Destructible = new MaskItem<TItem, Destructible.Mask<TItem>?>(initialValue, new Destructible.Mask<TItem>(initialValue));
@@ -403,7 +402,7 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 this.VirtualMachineAdapter = new MaskItem<TItem, VirtualMachineAdapter.Mask<TItem>?>(VirtualMachineAdapter, new VirtualMachineAdapter.Mask<TItem>(VirtualMachineAdapter));
                 this.ObjectBounds = new MaskItem<TItem, ObjectBounds.Mask<TItem>?>(ObjectBounds, new ObjectBounds.Mask<TItem>(ObjectBounds));
-                this.PreviewTransform = new MaskItem<TItem, PreviewTransform.Mask<TItem>?>(PreviewTransform, new PreviewTransform.Mask<TItem>(PreviewTransform));
+                this.PreviewTransform = PreviewTransform;
                 this.Name = Name;
                 this.Model = new MaskItem<TItem, Model.Mask<TItem>?>(Model, new Model.Mask<TItem>(Model));
                 this.Destructible = new MaskItem<TItem, Destructible.Mask<TItem>?>(Destructible, new Destructible.Mask<TItem>(Destructible));
@@ -434,7 +433,7 @@ namespace Mutagen.Bethesda.Fallout4
             #region Members
             public MaskItem<TItem, VirtualMachineAdapter.Mask<TItem>?>? VirtualMachineAdapter { get; set; }
             public MaskItem<TItem, ObjectBounds.Mask<TItem>?>? ObjectBounds { get; set; }
-            public MaskItem<TItem, PreviewTransform.Mask<TItem>?>? PreviewTransform { get; set; }
+            public TItem PreviewTransform;
             public TItem Name;
             public MaskItem<TItem, Model.Mask<TItem>?>? Model { get; set; }
             public MaskItem<TItem, Destructible.Mask<TItem>?>? Destructible { get; set; }
@@ -530,11 +529,7 @@ namespace Mutagen.Bethesda.Fallout4
                     if (!eval(this.ObjectBounds.Overall)) return false;
                     if (this.ObjectBounds.Specific != null && !this.ObjectBounds.Specific.All(eval)) return false;
                 }
-                if (PreviewTransform != null)
-                {
-                    if (!eval(this.PreviewTransform.Overall)) return false;
-                    if (this.PreviewTransform.Specific != null && !this.PreviewTransform.Specific.All(eval)) return false;
-                }
+                if (!eval(this.PreviewTransform)) return false;
                 if (!eval(this.Name)) return false;
                 if (Model != null)
                 {
@@ -629,11 +624,7 @@ namespace Mutagen.Bethesda.Fallout4
                     if (eval(this.ObjectBounds.Overall)) return true;
                     if (this.ObjectBounds.Specific != null && this.ObjectBounds.Specific.Any(eval)) return true;
                 }
-                if (PreviewTransform != null)
-                {
-                    if (eval(this.PreviewTransform.Overall)) return true;
-                    if (this.PreviewTransform.Specific != null && this.PreviewTransform.Specific.Any(eval)) return true;
-                }
+                if (eval(this.PreviewTransform)) return true;
                 if (eval(this.Name)) return true;
                 if (Model != null)
                 {
@@ -727,7 +718,7 @@ namespace Mutagen.Bethesda.Fallout4
                 base.Translate_InternalFill(obj, eval);
                 obj.VirtualMachineAdapter = this.VirtualMachineAdapter == null ? null : new MaskItem<R, VirtualMachineAdapter.Mask<R>?>(eval(this.VirtualMachineAdapter.Overall), this.VirtualMachineAdapter.Specific?.Translate(eval));
                 obj.ObjectBounds = this.ObjectBounds == null ? null : new MaskItem<R, ObjectBounds.Mask<R>?>(eval(this.ObjectBounds.Overall), this.ObjectBounds.Specific?.Translate(eval));
-                obj.PreviewTransform = this.PreviewTransform == null ? null : new MaskItem<R, PreviewTransform.Mask<R>?>(eval(this.PreviewTransform.Overall), this.PreviewTransform.Specific?.Translate(eval));
+                obj.PreviewTransform = eval(this.PreviewTransform);
                 obj.Name = eval(this.Name);
                 obj.Model = this.Model == null ? null : new MaskItem<R, Model.Mask<R>?>(eval(this.Model.Overall), this.Model.Specific?.Translate(eval));
                 obj.Destructible = this.Destructible == null ? null : new MaskItem<R, Destructible.Mask<R>?>(eval(this.Destructible.Overall), this.Destructible.Specific?.Translate(eval));
@@ -830,9 +821,9 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         ObjectBounds?.ToString(fg);
                     }
-                    if (printMask?.PreviewTransform?.Overall ?? true)
+                    if (printMask?.PreviewTransform ?? true)
                     {
-                        PreviewTransform?.ToString(fg);
+                        fg.AppendItem(PreviewTransform, "PreviewTransform");
                     }
                     if (printMask?.Name ?? true)
                     {
@@ -992,7 +983,7 @@ namespace Mutagen.Bethesda.Fallout4
             #region Members
             public MaskItem<Exception?, VirtualMachineAdapter.ErrorMask?>? VirtualMachineAdapter;
             public MaskItem<Exception?, ObjectBounds.ErrorMask?>? ObjectBounds;
-            public MaskItem<Exception?, PreviewTransform.ErrorMask?>? PreviewTransform;
+            public Exception? PreviewTransform;
             public Exception? Name;
             public MaskItem<Exception?, Model.ErrorMask?>? Model;
             public MaskItem<Exception?, Destructible.ErrorMask?>? Destructible;
@@ -1075,7 +1066,7 @@ namespace Mutagen.Bethesda.Fallout4
                         this.ObjectBounds = new MaskItem<Exception?, ObjectBounds.ErrorMask?>(ex, null);
                         break;
                     case Furniture_FieldIndex.PreviewTransform:
-                        this.PreviewTransform = new MaskItem<Exception?, PreviewTransform.ErrorMask?>(ex, null);
+                        this.PreviewTransform = ex;
                         break;
                     case Furniture_FieldIndex.Name:
                         this.Name = ex;
@@ -1146,7 +1137,7 @@ namespace Mutagen.Bethesda.Fallout4
                         this.ObjectBounds = (MaskItem<Exception?, ObjectBounds.ErrorMask?>?)obj;
                         break;
                     case Furniture_FieldIndex.PreviewTransform:
-                        this.PreviewTransform = (MaskItem<Exception?, PreviewTransform.ErrorMask?>?)obj;
+                        this.PreviewTransform = (Exception?)obj;
                         break;
                     case Furniture_FieldIndex.Name:
                         this.Name = (Exception?)obj;
@@ -1265,7 +1256,7 @@ namespace Mutagen.Bethesda.Fallout4
                 base.ToString_FillInternal(fg);
                 VirtualMachineAdapter?.ToString(fg);
                 ObjectBounds?.ToString(fg);
-                PreviewTransform?.ToString(fg);
+                fg.AppendItem(PreviewTransform, "PreviewTransform");
                 fg.AppendItem(Name, "Name");
                 Model?.ToString(fg);
                 Destructible?.ToString(fg);
@@ -1377,7 +1368,7 @@ namespace Mutagen.Bethesda.Fallout4
                 var ret = new ErrorMask();
                 ret.VirtualMachineAdapter = this.VirtualMachineAdapter.Combine(rhs.VirtualMachineAdapter, (l, r) => l.Combine(r));
                 ret.ObjectBounds = this.ObjectBounds.Combine(rhs.ObjectBounds, (l, r) => l.Combine(r));
-                ret.PreviewTransform = this.PreviewTransform.Combine(rhs.PreviewTransform, (l, r) => l.Combine(r));
+                ret.PreviewTransform = this.PreviewTransform.Combine(rhs.PreviewTransform);
                 ret.Name = this.Name.Combine(rhs.Name);
                 ret.Model = this.Model.Combine(rhs.Model, (l, r) => l.Combine(r));
                 ret.Destructible = this.Destructible.Combine(rhs.Destructible, (l, r) => l.Combine(r));
@@ -1419,7 +1410,7 @@ namespace Mutagen.Bethesda.Fallout4
             #region Members
             public VirtualMachineAdapter.TranslationMask? VirtualMachineAdapter;
             public ObjectBounds.TranslationMask? ObjectBounds;
-            public PreviewTransform.TranslationMask? PreviewTransform;
+            public bool PreviewTransform;
             public bool Name;
             public Model.TranslationMask? Model;
             public Destructible.TranslationMask? Destructible;
@@ -1445,6 +1436,7 @@ namespace Mutagen.Bethesda.Fallout4
                 bool onOverall = true)
                 : base(defaultOn, onOverall)
             {
+                this.PreviewTransform = defaultOn;
                 this.Name = defaultOn;
                 this.Keywords = defaultOn;
                 this.NativeTerminal = defaultOn;
@@ -1464,7 +1456,7 @@ namespace Mutagen.Bethesda.Fallout4
                 base.GetCrystal(ret);
                 ret.Add((VirtualMachineAdapter != null ? VirtualMachineAdapter.OnOverall : DefaultOn, VirtualMachineAdapter?.GetCrystal()));
                 ret.Add((ObjectBounds != null ? ObjectBounds.OnOverall : DefaultOn, ObjectBounds?.GetCrystal()));
-                ret.Add((PreviewTransform != null ? PreviewTransform.OnOverall : DefaultOn, PreviewTransform?.GetCrystal()));
+                ret.Add((PreviewTransform, null));
                 ret.Add((Name, null));
                 ret.Add((Model != null ? Model.OnOverall : DefaultOn, Model?.GetCrystal()));
                 ret.Add((Destructible != null ? Destructible.OnOverall : DefaultOn, Destructible?.GetCrystal()));
@@ -1646,7 +1638,7 @@ namespace Mutagen.Bethesda.Fallout4
         /// Aspects: IObjectBounded, IObjectBoundedOptional
         /// </summary>
         new ObjectBounds ObjectBounds { get; set; }
-        new PreviewTransform? PreviewTransform { get; set; }
+        new IFormLinkNullable<ITransformGetter> PreviewTransform { get; set; }
         /// <summary>
         /// Aspects: INamed, INamedRequired, ITranslatedNamed, ITranslatedNamedRequired
         /// </summary>
@@ -1718,7 +1710,7 @@ namespace Mutagen.Bethesda.Fallout4
         /// </summary>
         IObjectBoundsGetter ObjectBounds { get; }
         #endregion
-        IPreviewTransformGetter? PreviewTransform { get; }
+        IFormLinkNullableGetter<ITransformGetter> PreviewTransform { get; }
         #region Name
         /// <summary>
         /// Aspects: INamedGetter, INamedRequiredGetter, ITranslatedNamedGetter, ITranslatedNamedRequiredGetter
@@ -2029,7 +2021,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ClearPartial();
             item.VirtualMachineAdapter = null;
             item.ObjectBounds.Clear();
-            item.PreviewTransform = null;
+            item.PreviewTransform.Clear();
             item.Name = default;
             item.Model = null;
             item.Destructible = null;
@@ -2065,7 +2057,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         {
             base.RemapLinks(obj, mapping);
             obj.VirtualMachineAdapter?.RemapLinks(mapping);
-            obj.PreviewTransform?.RemapLinks(mapping);
+            obj.PreviewTransform.Relink(mapping);
             obj.Model?.RemapLinks(mapping);
             obj.Destructible?.RemapLinks(mapping);
             obj.Keywords?.RemapLinks(mapping);
@@ -2150,11 +2142,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 (loqLhs, loqRhs, incl) => loqLhs.GetEqualsMask(loqRhs, incl),
                 include);
             ret.ObjectBounds = MaskItemExt.Factory(item.ObjectBounds.GetEqualsMask(rhs.ObjectBounds, include), include);
-            ret.PreviewTransform = EqualsMaskHelper.EqualsHelper(
-                item.PreviewTransform,
-                rhs.PreviewTransform,
-                (loqLhs, loqRhs, incl) => loqLhs.GetEqualsMask(loqRhs, incl),
-                include);
+            ret.PreviewTransform = item.PreviewTransform.Equals(rhs.PreviewTransform);
             ret.Name = object.Equals(item.Name, rhs.Name);
             ret.Model = EqualsMaskHelper.EqualsHelper(
                 item.Model,
@@ -2260,10 +2248,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 item.ObjectBounds?.ToString(fg, "ObjectBounds");
             }
-            if ((printMask?.PreviewTransform?.Overall ?? true)
-                && item.PreviewTransform is {} PreviewTransformItem)
+            if (printMask?.PreviewTransform ?? true)
             {
-                PreviewTransformItem?.ToString(fg, "PreviewTransform");
+                fg.AppendItem(item.PreviewTransform.FormKeyNullable, "PreviewTransform");
             }
             if ((printMask?.Name ?? true)
                 && item.Name is {} NameItem)
@@ -2468,11 +2455,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             }
             if ((crystal?.GetShouldTranslate((int)Furniture_FieldIndex.PreviewTransform) ?? true))
             {
-                if (EqualsMaskHelper.RefEquality(lhs.PreviewTransform, rhs.PreviewTransform, out var lhsPreviewTransform, out var rhsPreviewTransform, out var isPreviewTransformEqual))
-                {
-                    if (!((PreviewTransformCommon)((IPreviewTransformGetter)lhsPreviewTransform).CommonInstance()!).Equals(lhsPreviewTransform, rhsPreviewTransform, crystal?.GetSubCrystal((int)Furniture_FieldIndex.PreviewTransform))) return false;
-                }
-                else if (!isPreviewTransformEqual) return false;
+                if (!lhs.PreviewTransform.Equals(rhs.PreviewTransform)) return false;
             }
             if ((crystal?.GetShouldTranslate((int)Furniture_FieldIndex.Name) ?? true))
             {
@@ -2591,10 +2574,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 hash.Add(VirtualMachineAdapteritem);
             }
             hash.Add(item.ObjectBounds);
-            if (item.PreviewTransform is {} PreviewTransformitem)
-            {
-                hash.Add(PreviewTransformitem);
-            }
+            hash.Add(item.PreviewTransform);
             if (item.Name is {} Nameitem)
             {
                 hash.Add(Nameitem);
@@ -2675,12 +2655,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     yield return item;
                 }
             }
-            if (obj.PreviewTransform is {} PreviewTransformItems)
+            if (obj.PreviewTransform.FormKeyNullable.HasValue)
             {
-                foreach (var item in PreviewTransformItems.ContainedFormLinks)
-                {
-                    yield return item;
-                }
+                yield return FormLinkInformation.Factory(obj.PreviewTransform);
             }
             if (obj.Model is {} ModelItems)
             {
@@ -2866,29 +2843,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             }
             if ((copyMask?.GetShouldTranslate((int)Furniture_FieldIndex.PreviewTransform) ?? true))
             {
-                errorMask?.PushIndex((int)Furniture_FieldIndex.PreviewTransform);
-                try
-                {
-                    if(rhs.PreviewTransform is {} rhsPreviewTransform)
-                    {
-                        item.PreviewTransform = rhsPreviewTransform.DeepCopy(
-                            errorMask: errorMask,
-                            copyMask?.GetSubCrystal((int)Furniture_FieldIndex.PreviewTransform));
-                    }
-                    else
-                    {
-                        item.PreviewTransform = default;
-                    }
-                }
-                catch (Exception ex)
-                when (errorMask != null)
-                {
-                    errorMask.ReportException(ex);
-                }
-                finally
-                {
-                    errorMask?.PopIndex();
-                }
+                item.PreviewTransform.SetTo(rhs.PreviewTransform.FormKeyNullable);
             }
             if ((copyMask?.GetShouldTranslate((int)Furniture_FieldIndex.Name) ?? true))
             {
@@ -3329,13 +3284,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 item: ObjectBoundsItem,
                 writer: writer,
                 translationParams: translationParams);
-            if (item.PreviewTransform is {} PreviewTransformItem)
-            {
-                ((PreviewTransformBinaryWriteTranslation)((IBinaryItem)PreviewTransformItem).BinaryWriteTranslator).Write(
-                    item: PreviewTransformItem,
-                    writer: writer,
-                    translationParams: translationParams);
-            }
+            FormLinkBinaryTranslation.Instance.WriteNullable(
+                writer: writer,
+                item: item.PreviewTransform,
+                header: translationParams.ConvertToCustom(RecordTypes.PTRN));
             StringBinaryTranslation.Instance.WriteNullable(
                 writer: writer,
                 item: item.Name,
@@ -3606,7 +3558,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.PTRN:
                 {
-                    item.PreviewTransform = Mutagen.Bethesda.Fallout4.PreviewTransform.CreateFromBinary(frame: frame);
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.PreviewTransform.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
                     return (int)Furniture_FieldIndex.PreviewTransform;
                 }
                 case RecordTypeInts.FULL:
@@ -3845,8 +3798,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public IObjectBoundsGetter ObjectBounds => _ObjectBounds ?? new ObjectBounds();
         #endregion
         #region PreviewTransform
-        private RangeInt32? _PreviewTransformLocation;
-        public IPreviewTransformGetter? PreviewTransform => _PreviewTransformLocation.HasValue ? PreviewTransformBinaryOverlay.PreviewTransformFactory(new OverlayStream(_data.Slice(_PreviewTransformLocation!.Value.Min), _package), _package) : default;
+        private int? _PreviewTransformLocation;
+        public IFormLinkNullableGetter<ITransformGetter> PreviewTransform => _PreviewTransformLocation.HasValue ? new FormLinkNullable<ITransformGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _PreviewTransformLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<ITransformGetter>.Null;
         #endregion
         #region Name
         private int? _NameLocation;
@@ -4014,7 +3967,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.PTRN:
                 {
-                    _PreviewTransformLocation = new RangeInt32((stream.Position - offset), finalPos - offset);
+                    _PreviewTransformLocation = (stream.Position - offset);
                     return (int)Furniture_FieldIndex.PreviewTransform;
                 }
                 case RecordTypeInts.FULL:

@@ -79,6 +79,7 @@ namespace Mutagen.Bethesda.Fallout4
             _Activators_Object = new Fallout4Group<Activator>(this);
             _TalkingActivators_Object = new Fallout4Group<TalkingActivator>(this);
             _Armors_Object = new Fallout4Group<Armor>(this);
+            _Books_Object = new Fallout4Group<Book>(this);
             CustomCtor();
         }
         partial void CustomCtor();
@@ -245,6 +246,13 @@ namespace Mutagen.Bethesda.Fallout4
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IFallout4GroupGetter<IArmorGetter> IFallout4ModGetter.Armors => _Armors_Object;
         #endregion
+        #region Books
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Fallout4Group<Book> _Books_Object;
+        public Fallout4Group<Book> Books => _Books_Object;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        IFallout4GroupGetter<IBookGetter> IFallout4ModGetter.Books => _Books_Object;
+        #endregion
 
         #region To String
 
@@ -306,6 +314,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Activators = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.TalkingActivators = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
                 this.Armors = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
+                this.Books = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(initialValue, new Fallout4Group.Mask<TItem>(initialValue));
             }
 
             public Mask(
@@ -331,7 +340,8 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem Spells,
                 TItem Activators,
                 TItem TalkingActivators,
-                TItem Armors)
+                TItem Armors,
+                TItem Books)
             {
                 this.ModHeader = new MaskItem<TItem, Fallout4ModHeader.Mask<TItem>?>(ModHeader, new Fallout4ModHeader.Mask<TItem>(ModHeader));
                 this.GameSettings = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(GameSettings, new Fallout4Group.Mask<TItem>(GameSettings));
@@ -356,6 +366,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.Activators = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Activators, new Fallout4Group.Mask<TItem>(Activators));
                 this.TalkingActivators = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(TalkingActivators, new Fallout4Group.Mask<TItem>(TalkingActivators));
                 this.Armors = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Armors, new Fallout4Group.Mask<TItem>(Armors));
+                this.Books = new MaskItem<TItem, Fallout4Group.Mask<TItem>?>(Books, new Fallout4Group.Mask<TItem>(Books));
             }
 
             #pragma warning disable CS8618
@@ -390,6 +401,7 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Activators { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? TalkingActivators { get; set; }
             public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Armors { get; set; }
+            public MaskItem<TItem, Fallout4Group.Mask<TItem>?>? Books { get; set; }
             #endregion
 
             #region Equals
@@ -425,6 +437,7 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!object.Equals(this.Activators, rhs.Activators)) return false;
                 if (!object.Equals(this.TalkingActivators, rhs.TalkingActivators)) return false;
                 if (!object.Equals(this.Armors, rhs.Armors)) return false;
+                if (!object.Equals(this.Books, rhs.Books)) return false;
                 return true;
             }
             public override int GetHashCode()
@@ -453,6 +466,7 @@ namespace Mutagen.Bethesda.Fallout4
                 hash.Add(this.Activators);
                 hash.Add(this.TalkingActivators);
                 hash.Add(this.Armors);
+                hash.Add(this.Books);
                 return hash.ToHashCode();
             }
 
@@ -576,6 +590,11 @@ namespace Mutagen.Bethesda.Fallout4
                     if (!eval(this.Armors.Overall)) return false;
                     if (this.Armors.Specific != null && !this.Armors.Specific.All(eval)) return false;
                 }
+                if (Books != null)
+                {
+                    if (!eval(this.Books.Overall)) return false;
+                    if (this.Books.Specific != null && !this.Books.Specific.All(eval)) return false;
+                }
                 return true;
             }
             #endregion
@@ -698,6 +717,11 @@ namespace Mutagen.Bethesda.Fallout4
                     if (eval(this.Armors.Overall)) return true;
                     if (this.Armors.Specific != null && this.Armors.Specific.Any(eval)) return true;
                 }
+                if (Books != null)
+                {
+                    if (eval(this.Books.Overall)) return true;
+                    if (this.Books.Specific != null && this.Books.Specific.Any(eval)) return true;
+                }
                 return false;
             }
             #endregion
@@ -735,6 +759,7 @@ namespace Mutagen.Bethesda.Fallout4
                 obj.Activators = this.Activators == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Activators.Overall), this.Activators.Specific?.Translate(eval));
                 obj.TalkingActivators = this.TalkingActivators == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.TalkingActivators.Overall), this.TalkingActivators.Specific?.Translate(eval));
                 obj.Armors = this.Armors == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Armors.Overall), this.Armors.Specific?.Translate(eval));
+                obj.Books = this.Books == null ? null : new MaskItem<R, Fallout4Group.Mask<R>?>(eval(this.Books.Overall), this.Books.Specific?.Translate(eval));
             }
             #endregion
 
@@ -849,6 +874,10 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         Armors?.ToString(fg);
                     }
+                    if (printMask?.Books?.Overall ?? true)
+                    {
+                        Books?.ToString(fg);
+                    }
                 }
                 fg.AppendLine("]");
             }
@@ -897,6 +926,7 @@ namespace Mutagen.Bethesda.Fallout4
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Activator.ErrorMask>?>? Activators;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<TalkingActivator.ErrorMask>?>? TalkingActivators;
             public MaskItem<Exception?, Fallout4Group.ErrorMask<Armor.ErrorMask>?>? Armors;
+            public MaskItem<Exception?, Fallout4Group.ErrorMask<Book.ErrorMask>?>? Books;
             #endregion
 
             #region IErrorMask
@@ -951,6 +981,8 @@ namespace Mutagen.Bethesda.Fallout4
                         return TalkingActivators;
                     case Fallout4Mod_FieldIndex.Armors:
                         return Armors;
+                    case Fallout4Mod_FieldIndex.Books:
+                        return Books;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
                 }
@@ -1029,6 +1061,9 @@ namespace Mutagen.Bethesda.Fallout4
                         break;
                     case Fallout4Mod_FieldIndex.Armors:
                         this.Armors = new MaskItem<Exception?, Fallout4Group.ErrorMask<Armor.ErrorMask>?>(ex, null);
+                        break;
+                    case Fallout4Mod_FieldIndex.Books:
+                        this.Books = new MaskItem<Exception?, Fallout4Group.ErrorMask<Book.ErrorMask>?>(ex, null);
                         break;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
@@ -1109,6 +1144,9 @@ namespace Mutagen.Bethesda.Fallout4
                     case Fallout4Mod_FieldIndex.Armors:
                         this.Armors = (MaskItem<Exception?, Fallout4Group.ErrorMask<Armor.ErrorMask>?>?)obj;
                         break;
+                    case Fallout4Mod_FieldIndex.Books:
+                        this.Books = (MaskItem<Exception?, Fallout4Group.ErrorMask<Book.ErrorMask>?>?)obj;
+                        break;
                     default:
                         throw new ArgumentException($"Index is out of range: {index}");
                 }
@@ -1140,6 +1178,7 @@ namespace Mutagen.Bethesda.Fallout4
                 if (Activators != null) return true;
                 if (TalkingActivators != null) return true;
                 if (Armors != null) return true;
+                if (Books != null) return true;
                 return false;
             }
             #endregion
@@ -1197,6 +1236,7 @@ namespace Mutagen.Bethesda.Fallout4
                 Activators?.ToString(fg);
                 TalkingActivators?.ToString(fg);
                 Armors?.ToString(fg);
+                Books?.ToString(fg);
             }
             #endregion
 
@@ -1228,6 +1268,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Activators = this.Activators.Combine(rhs.Activators, (l, r) => l.Combine(r));
                 ret.TalkingActivators = this.TalkingActivators.Combine(rhs.TalkingActivators, (l, r) => l.Combine(r));
                 ret.Armors = this.Armors.Combine(rhs.Armors, (l, r) => l.Combine(r));
+                ret.Books = this.Books.Combine(rhs.Books, (l, r) => l.Combine(r));
                 return ret;
             }
             public static ErrorMask? Combine(ErrorMask? lhs, ErrorMask? rhs)
@@ -1274,6 +1315,7 @@ namespace Mutagen.Bethesda.Fallout4
             public Fallout4Group.TranslationMask<Activator.TranslationMask>? Activators;
             public Fallout4Group.TranslationMask<TalkingActivator.TranslationMask>? TalkingActivators;
             public Fallout4Group.TranslationMask<Armor.TranslationMask>? Armors;
+            public Fallout4Group.TranslationMask<Book.TranslationMask>? Books;
             #endregion
 
             #region Ctors
@@ -1321,6 +1363,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((Activators != null ? Activators.OnOverall : DefaultOn, Activators?.GetCrystal()));
                 ret.Add((TalkingActivators != null ? TalkingActivators.OnOverall : DefaultOn, TalkingActivators?.GetCrystal()));
                 ret.Add((Armors != null ? Armors.OnOverall : DefaultOn, Armors?.GetCrystal()));
+                ret.Add((Books != null ? Books.OnOverall : DefaultOn, Books?.GetCrystal()));
             }
 
             public static implicit operator TranslationMask(bool defaultOn)
@@ -1385,6 +1428,7 @@ namespace Mutagen.Bethesda.Fallout4
             _Activators_Object = new Fallout4Group<Activator>(this);
             _TalkingActivators_Object = new Fallout4Group<TalkingActivator>(this);
             _Armors_Object = new Fallout4Group<Armor>(this);
+            _Books_Object = new Fallout4Group<Book>(this);
             CustomCtor();
         }
         public void AddRecords(
@@ -1479,6 +1523,10 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 this.Armors.RecordCache.Set(rhsMod.Armors.RecordCache.Items);
             }
+            if (mask?.Books ?? true)
+            {
+                this.Books.RecordCache.Set(rhsMod.Books.RecordCache.Items);
+            }
         }
 
         public override void SyncRecordCount()
@@ -1511,6 +1559,7 @@ namespace Mutagen.Bethesda.Fallout4
             count += Activators.RecordCache.Count > 0 ? 1 : default(uint);
             count += TalkingActivators.RecordCache.Count > 0 ? 1 : default(uint);
             count += Armors.RecordCache.Count > 0 ? 1 : default(uint);
+            count += Books.RecordCache.Count > 0 ? 1 : default(uint);
             GetCustomRecordCount((customCount) => count += customCount);
             return count;
         }
@@ -1782,6 +1831,7 @@ namespace Mutagen.Bethesda.Fallout4
         new Fallout4Group<Activator> Activators { get; }
         new Fallout4Group<TalkingActivator> TalkingActivators { get; }
         new Fallout4Group<Armor> Armors { get; }
+        new Fallout4Group<Book> Books { get; }
     }
 
     public partial interface IFallout4ModGetter :
@@ -1823,6 +1873,7 @@ namespace Mutagen.Bethesda.Fallout4
         IFallout4GroupGetter<IActivatorGetter> Activators { get; }
         IFallout4GroupGetter<ITalkingActivatorGetter> TalkingActivators { get; }
         IFallout4GroupGetter<IArmorGetter> Armors { get; }
+        IFallout4GroupGetter<IBookGetter> Books { get; }
 
     }
 
@@ -2408,6 +2459,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         Activators = 20,
         TalkingActivators = 21,
         Armors = 22,
+        Books = 23,
     }
     #endregion
 
@@ -2425,9 +2477,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
 
         public const string GUID = "9cae6baa-1084-4862-ae0a-07c79b9f2a3a";
 
-        public const ushort AdditionalFieldCount = 23;
+        public const ushort AdditionalFieldCount = 24;
 
-        public const ushort FieldCount = 23;
+        public const ushort FieldCount = 24;
 
         public static readonly Type MaskType = typeof(Fallout4Mod.Mask<>);
 
@@ -2518,6 +2570,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.Activators.Clear();
             item.TalkingActivators.Clear();
             item.Armors.Clear();
+            item.Books.Clear();
         }
         
         #region Mutagen
@@ -2546,6 +2599,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.Activators.RemapLinks(mapping);
             obj.TalkingActivators.RemapLinks(mapping);
             obj.Armors.RemapLinks(mapping);
+            obj.Books.RemapLinks(mapping);
         }
         
         public IEnumerable<IMajorRecord> EnumerateMajorRecords(IFallout4Mod obj)
@@ -2602,6 +2656,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             obj.Activators.Remove(keys);
             obj.TalkingActivators.Remove(keys);
             obj.Armors.Remove(keys);
+            obj.Books.Remove(keys);
         }
         
         public void Remove(
@@ -2797,6 +2852,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         type: type,
                         keys: keys);
                     break;
+                case "Book":
+                case "IBookGetter":
+                case "IBook":
+                case "IBookInternal":
+                    obj.Books.Remove(
+                        type: type,
+                        keys: keys);
+                    break;
                 case "IIdleRelation":
                 case "IIdleRelationGetter":
                     Remove(obj, keys, typeof(IActionRecordGetter), throwIfUnknown: throwIfUnknown);
@@ -2805,6 +2868,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IObjectIdGetter":
                     Remove(obj, keys, typeof(IActivatorGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown);
+                    Remove(obj, keys, typeof(IBookGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(IFactionGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(ISpellGetter), throwIfUnknown: throwIfUnknown);
                     Remove(obj, keys, typeof(ITextureSetGetter), throwIfUnknown: throwIfUnknown);
@@ -2812,6 +2876,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IItem":
                 case "IItemGetter":
                     Remove(obj, keys, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown);
+                    Remove(obj, keys, typeof(IBookGetter), throwIfUnknown: throwIfUnknown);
                     break;
                 case "IOutfitTarget":
                 case "IOutfitTargetGetter":
@@ -2820,6 +2885,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IConstructible":
                 case "IConstructibleGetter":
                     Remove(obj, keys, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown);
+                    Remove(obj, keys, typeof(IBookGetter), throwIfUnknown: throwIfUnknown);
                     break;
                 case "IBindableEquipment":
                 case "IBindableEquipmentGetter":
@@ -2938,6 +3004,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ret.Activators = MaskItemExt.Factory(item.Activators.GetEqualsMask(rhs.Activators, include), include);
             ret.TalkingActivators = MaskItemExt.Factory(item.TalkingActivators.GetEqualsMask(rhs.TalkingActivators, include), include);
             ret.Armors = MaskItemExt.Factory(item.Armors.GetEqualsMask(rhs.Armors, include), include);
+            ret.Books = MaskItemExt.Factory(item.Books.GetEqualsMask(rhs.Books, include), include);
         }
         
         public string ToString(
@@ -3075,6 +3142,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             if (printMask?.Armors?.Overall ?? true)
             {
                 item.Armors?.ToString(fg, "Armors");
+            }
+            if (printMask?.Books?.Overall ?? true)
+            {
+                item.Books?.ToString(fg, "Books");
             }
         }
         
@@ -3269,6 +3340,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 else if (!isArmorsEqual) return false;
             }
+            if ((crystal?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.Books) ?? true))
+            {
+                if (EqualsMaskHelper.RefEquality(lhs.Books, rhs.Books, out var lhsBooks, out var rhsBooks, out var isBooksEqual))
+                {
+                    if (!object.Equals(lhsBooks, rhsBooks)) return false;
+                }
+                else if (!isBooksEqual) return false;
+            }
             return true;
         }
         
@@ -3298,6 +3377,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             hash.Add(item.Activators);
             hash.Add(item.TalkingActivators);
             hash.Add(item.Armors);
+            hash.Add(item.Books);
             return hash.ToHashCode();
         }
         
@@ -3426,6 +3506,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case "IArmor":
                 case "IArmorInternal":
                     return obj.Armors;
+                case "Book":
+                case "IBookGetter":
+                case "IBook":
+                case "IBookInternal":
+                    return obj.Books;
                 default:
                     throw new ArgumentException($"Unknown major record type: {type}");
             }
@@ -3450,7 +3535,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 mod: item,
                 modHeader: item.ModHeader.DeepCopy(),
                 modKey: modKey);
-            Stream[] outputStreams = new Stream[22];
+            Stream[] outputStreams = new Stream[23];
             List<Action> toDo = new List<Action>();
             toDo.Add(() => WriteGroupParallel(item.GameSettings, 0, outputStreams, bundle, parallelParam));
             toDo.Add(() => WriteGroupParallel(item.Keywords, 1, outputStreams, bundle, parallelParam));
@@ -3474,6 +3559,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             toDo.Add(() => WriteGroupParallel(item.Activators, 19, outputStreams, bundle, parallelParam));
             toDo.Add(() => WriteGroupParallel(item.TalkingActivators, 20, outputStreams, bundle, parallelParam));
             toDo.Add(() => WriteGroupParallel(item.Armors, 21, outputStreams, bundle, parallelParam));
+            toDo.Add(() => WriteGroupParallel(item.Books, 22, outputStreams, bundle, parallelParam));
             Parallel.Invoke(parallelParam.ParallelOptions, toDo.ToArray());
             PluginUtilityTranslation.CompileStreamsInto(
                 outputStreams.NotNull(),
@@ -3676,6 +3762,13 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     yield return item;
                 }
             }
+            if (obj.Books is IFormLinkContainerGetter BookslinkCont)
+            {
+                foreach (var item in BookslinkCont.ContainedFormLinks)
+                {
+                    yield return item;
+                }
+            }
             yield break;
         }
         
@@ -3766,6 +3859,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 yield return item;
             }
             foreach (var item in obj.Armors.EnumerateMajorRecords())
+            {
+                yield return item;
+            }
+            foreach (var item in obj.Books.EnumerateMajorRecords())
             {
                 yield return item;
             }
@@ -4002,6 +4099,15 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         yield return item;
                     }
                     yield break;
+                case "Book":
+                case "IBookGetter":
+                case "IBook":
+                case "IBookInternal":
+                    foreach (var item in obj.Books.EnumerateMajorRecords(type, throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    yield break;
                 case "IIdleRelation":
                 {
                     if (!Fallout4Mod_Registration.SetterType.IsAssignableFrom(obj.GetType())) yield break;
@@ -4030,6 +4136,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IBookGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IFactionGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -4054,6 +4164,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IBookGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IFactionGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -4075,11 +4189,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IBookGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     yield break;
                 }
                 case "IItemGetter":
                 {
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IBookGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -4109,11 +4231,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IBookGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     yield break;
                 }
                 case "IConstructibleGetter":
                 {
                     foreach (var item in EnumerateMajorRecords(obj, typeof(IArmorGetter), throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecords(obj, typeof(IBookGetter), throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
                     }
@@ -4480,6 +4610,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     group: (m) => m.Armors,
                     groupGetter: (m) => m.Armors);
             }
+            foreach (var item in obj.Books)
+            {
+                yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, Book, IBookGetter>(
+                    modKey: obj.ModKey,
+                    record: item,
+                    group: (m) => m.Books,
+                    groupGetter: (m) => m.Books);
+            }
         }
         
         public IEnumerable<IModContext<IFallout4Mod, IFallout4ModGetter, IMajorRecord, IMajorRecordGetter>> EnumerateMajorRecordContexts(
@@ -4797,6 +4935,19 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                             groupGetter: (m) => m.Armors);
                     }
                     yield break;
+                case "Book":
+                case "IBookGetter":
+                case "IBook":
+                case "IBookInternal":
+                    foreach (var item in obj.Books)
+                    {
+                        yield return new GroupModContext<IFallout4Mod, IFallout4ModGetter, Book, IBookGetter>(
+                            modKey: obj.ModKey,
+                            record: item,
+                            group: (m) => m.Books,
+                            groupGetter: (m) => m.Books);
+                    }
+                    yield break;
                 case "IIdleRelation":
                 case "IIdleRelationGetter":
                 {
@@ -4825,6 +4976,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         obj,
                         linkCache: linkCache,
                         type: typeof(IArmorGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
+                        type: typeof(IBookGetter),
                         throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -4866,6 +5025,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     {
                         yield return item;
                     }
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
+                        type: typeof(IBookGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
                     yield break;
                 }
                 case "IOutfitTarget":
@@ -4888,6 +5055,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                         obj,
                         linkCache: linkCache,
                         type: typeof(IArmorGetter),
+                        throwIfUnknown: throwIfUnknown))
+                    {
+                        yield return item;
+                    }
+                    foreach (var item in EnumerateMajorRecordContexts(
+                        obj,
+                        linkCache: linkCache,
+                        type: typeof(IBookGetter),
                         throwIfUnknown: throwIfUnknown))
                     {
                         yield return item;
@@ -5514,6 +5689,26 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     errorMask?.PopIndex();
                 }
             }
+            if ((copyMask?.GetShouldTranslate((int)Fallout4Mod_FieldIndex.Books) ?? true))
+            {
+                errorMask?.PushIndex((int)Fallout4Mod_FieldIndex.Books);
+                try
+                {
+                    item.Books.DeepCopyIn(
+                        rhs: rhs.Books,
+                        errorMask: errorMask,
+                        copyMask: copyMask?.GetSubCrystal((int)Fallout4Mod_FieldIndex.Books));
+                }
+                catch (Exception ex)
+                when (errorMask != null)
+                {
+                    errorMask.ReportException(ex);
+                }
+                finally
+                {
+                    errorMask?.PopIndex();
+                }
+            }
         }
         
         #endregion
@@ -5626,6 +5821,7 @@ namespace Mutagen.Bethesda.Fallout4
         public bool Activators;
         public bool TalkingActivators;
         public bool Armors;
+        public bool Books;
         public GroupMask()
         {
         }
@@ -5653,6 +5849,7 @@ namespace Mutagen.Bethesda.Fallout4
             Activators = defaultValue;
             TalkingActivators = defaultValue;
             Armors = defaultValue;
+            Books = defaultValue;
         }
     }
 
@@ -5922,6 +6119,17 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 {
                     ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)ArmorsItem).BinaryWriteTranslator).Write<IArmorGetter>(
                         item: ArmorsItem,
+                        writer: writer,
+                        translationParams: translationParams);
+                }
+            }
+            if (importMask?.Books ?? true)
+            {
+                var BooksItem = item.Books;
+                if (BooksItem.RecordCache.Count > 0)
+                {
+                    ((Fallout4GroupBinaryWriteTranslation)((IBinaryItem)BooksItem).BinaryWriteTranslator).Write<IBookGetter>(
+                        item: BooksItem,
                         writer: writer,
                         translationParams: translationParams);
                 }
@@ -6300,6 +6508,20 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     }
                     return (int)Fallout4Mod_FieldIndex.Armors;
                 }
+                case RecordTypeInts.BOOK:
+                {
+                    if (importMask?.Books ?? true)
+                    {
+                        item.Books.CopyInFromBinary(
+                            frame: frame,
+                            translationParams: null);
+                    }
+                    else
+                    {
+                        frame.Position += contentLength;
+                    }
+                    return (int)Fallout4Mod_FieldIndex.Books;
+                }
                 default:
                     frame.Position += contentLength;
                     return default(int?);
@@ -6571,6 +6793,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private IFallout4GroupGetter<IArmorGetter>? _Armors => _ArmorsLocations != null ? Fallout4GroupBinaryOverlay<IArmorGetter>.Fallout4GroupFactory(_data, _ArmorsLocations, _package) : default;
         public IFallout4GroupGetter<IArmorGetter> Armors => _Armors ?? new Fallout4Group<Armor>(this);
         #endregion
+        #region Books
+        private List<RangeInt64>? _BooksLocations;
+        private IFallout4GroupGetter<IBookGetter>? _Books => _BooksLocations != null ? Fallout4GroupBinaryOverlay<IBookGetter>.Fallout4GroupFactory(_data, _BooksLocations, _package) : default;
+        public IFallout4GroupGetter<IBookGetter> Books => _Books ?? new Fallout4Group<Book>(this);
+        #endregion
         protected Fallout4ModBinaryOverlay(
             IMutagenReadStream stream,
             ModKey modKey,
@@ -6790,6 +7017,12 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     _ArmorsLocations ??= new();
                     _ArmorsLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
                     return (int)Fallout4Mod_FieldIndex.Armors;
+                }
+                case RecordTypeInts.BOOK:
+                {
+                    _BooksLocations ??= new();
+                    _BooksLocations.Add(new RangeInt64((stream.Position - offset), finalPos - offset));
+                    return (int)Fallout4Mod_FieldIndex.Books;
                 }
                 default:
                     return default(int?);

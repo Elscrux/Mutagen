@@ -4,7 +4,7 @@
     <Fields>
       <RefDirect name="VirtualMachineAdapter" refName="VirtualMachineAdapter" />
       <RefDirect name="ObjectBounds" refName="ObjectBounds" nullable="False" />
-      <RefDirect name="PreviewTransform" refName="PreviewTransform" />
+	  <FormLink name="PreviewTransform" refName="Transform" recordType="PTRN" />
       <String name="Name" recordType="FULL" translated="Normal" />
       <FormLink name="ObjectEffect" recordType="EITM">
         <Interface>IEffectRecord</Interface>
@@ -31,7 +31,7 @@
       <FormLink name="PickUpSound" refName="SoundDescriptor" recordType="YNAM" />
       <FormLink name="PutDownSound" refName="SoundDescriptor" recordType="ZNAM" />
       <FormLink name="EquipmentType" recordType="ETYP" refName="EquipType" />
-      <FormLink name="BashImpactDataSet" recordType="BIDS" refName="ImpactDataSet" />
+      <FormLink name="BlockBashImpactDataSet" recordType="BIDS" refName="ImpactDataSet" />
       <FormLink name="AlternateBlockMaterial" recordType="BAMT" refName="MaterialType" />
       <FormLink name="Race" recordType="RNAM" refName="Race" />
       <List name="Keywords" counterRecType="KSIZ" recordType="KWDA">
@@ -55,7 +55,7 @@
           <UInt16 name="Unknown" />
         </Fields>
       </Data>
-      <RefList name="Resistances" refName="ResistanceArmor" recordType="DAMA" />
+      <RefList name="Resistances" refName="ArmorResistance" recordType="DAMA" />
       <FormLink name="TemplateArmor" recordType="TNAM" refName="Armor" />
       <List name="AttachParentSlots" recordType="APPR">
         <FormLink refName="Keyword" />
@@ -82,7 +82,7 @@
       <FormLink name="AddonModel" recordType="MODL" refName="ArmorAddon" />
     </Fields>
   </Object>
-  <Object name="ResistanceArmor" objType="Subrecord" GUID="376e43f7-2bef-4600-af06-4464f173d2fb" ID="145">
+  <Object name="ArmorResistance" objType="Subrecord" GUID="376e43f7-2bef-4600-af06-4464f173d2fb" ID="145">
     <Fields>
       <FormLink name="DamageType" refName="DamageType" />
       <UInt32 name="Value" />

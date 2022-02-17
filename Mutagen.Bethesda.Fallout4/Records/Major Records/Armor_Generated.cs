@@ -94,15 +94,14 @@ namespace Mutagen.Bethesda.Fallout4
         #endregion
         #endregion
         #region PreviewTransform
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private PreviewTransform? _PreviewTransform;
-        public PreviewTransform? PreviewTransform
+        private readonly IFormLinkNullable<ITransformGetter> _PreviewTransform = new FormLinkNullable<ITransformGetter>();
+        public IFormLinkNullable<ITransformGetter> PreviewTransform
         {
             get => _PreviewTransform;
-            set => _PreviewTransform = value;
+            set => _PreviewTransform.SetTo(value);
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IPreviewTransformGetter? IArmorGetter.PreviewTransform => this.PreviewTransform;
+        IFormLinkNullableGetter<ITransformGetter> IArmorGetter.PreviewTransform => this.PreviewTransform;
         #endregion
         #region Name
         /// <summary>
@@ -206,15 +205,15 @@ namespace Mutagen.Bethesda.Fallout4
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         IFormLinkNullableGetter<IEquipTypeGetter> IArmorGetter.EquipmentType => this.EquipmentType;
         #endregion
-        #region BashImpactDataSet
-        private readonly IFormLinkNullable<IImpactDataSetGetter> _BashImpactDataSet = new FormLinkNullable<IImpactDataSetGetter>();
-        public IFormLinkNullable<IImpactDataSetGetter> BashImpactDataSet
+        #region BlockBashImpactDataSet
+        private readonly IFormLinkNullable<IImpactDataSetGetter> _BlockBashImpactDataSet = new FormLinkNullable<IImpactDataSetGetter>();
+        public IFormLinkNullable<IImpactDataSetGetter> BlockBashImpactDataSet
         {
-            get => _BashImpactDataSet;
-            set => _BashImpactDataSet.SetTo(value);
+            get => _BlockBashImpactDataSet;
+            set => _BlockBashImpactDataSet.SetTo(value);
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IFormLinkNullableGetter<IImpactDataSetGetter> IArmorGetter.BashImpactDataSet => this.BashImpactDataSet;
+        IFormLinkNullableGetter<IImpactDataSetGetter> IArmorGetter.BlockBashImpactDataSet => this.BlockBashImpactDataSet;
         #endregion
         #region AlternateBlockMaterial
         private readonly IFormLinkNullable<IMaterialTypeGetter> _AlternateBlockMaterial = new FormLinkNullable<IMaterialTypeGetter>();
@@ -309,15 +308,15 @@ namespace Mutagen.Bethesda.Fallout4
         #endregion
         #region Resistances
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private ExtendedList<ResistanceArmor>? _Resistances;
-        public ExtendedList<ResistanceArmor>? Resistances
+        private ExtendedList<ArmorResistance>? _Resistances;
+        public ExtendedList<ArmorResistance>? Resistances
         {
             get => this._Resistances;
             set => this._Resistances = value;
         }
         #region Interface Members
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        IReadOnlyList<IResistanceArmorGetter>? IArmorGetter.Resistances => _Resistances;
+        IReadOnlyList<IArmorResistanceGetter>? IArmorGetter.Resistances => _Resistances;
         #endregion
 
         #endregion
@@ -402,7 +401,7 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 this.VirtualMachineAdapter = new MaskItem<TItem, VirtualMachineAdapter.Mask<TItem>?>(initialValue, new VirtualMachineAdapter.Mask<TItem>(initialValue));
                 this.ObjectBounds = new MaskItem<TItem, ObjectBounds.Mask<TItem>?>(initialValue, new ObjectBounds.Mask<TItem>(initialValue));
-                this.PreviewTransform = new MaskItem<TItem, PreviewTransform.Mask<TItem>?>(initialValue, new PreviewTransform.Mask<TItem>(initialValue));
+                this.PreviewTransform = initialValue;
                 this.Name = initialValue;
                 this.ObjectEffect = initialValue;
                 this.WorldModel = new MaskItem<TItem, GenderedItem<MaskItem<TItem, ArmorModel.Mask<TItem>?>?>?>(initialValue, default);
@@ -411,7 +410,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.PickUpSound = initialValue;
                 this.PutDownSound = initialValue;
                 this.EquipmentType = initialValue;
-                this.BashImpactDataSet = initialValue;
+                this.BlockBashImpactDataSet = initialValue;
                 this.AlternateBlockMaterial = initialValue;
                 this.Race = initialValue;
                 this.Keywords = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(initialValue, Enumerable.Empty<(int Index, TItem Value)>());
@@ -425,7 +424,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.BaseAddonIndex = initialValue;
                 this.StaggerRating = initialValue;
                 this.Unknown = initialValue;
-                this.Resistances = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ResistanceArmor.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, ResistanceArmor.Mask<TItem>?>>());
+                this.Resistances = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ArmorResistance.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, ArmorResistance.Mask<TItem>?>>());
                 this.TemplateArmor = initialValue;
                 this.AttachParentSlots = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(initialValue, Enumerable.Empty<(int Index, TItem Value)>());
                 this.ObjectTemplates = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ArmorObjectTemplate.Mask<TItem>?>>?>(initialValue, Enumerable.Empty<MaskItemIndexed<TItem, ArmorObjectTemplate.Mask<TItem>?>>());
@@ -452,7 +451,7 @@ namespace Mutagen.Bethesda.Fallout4
                 TItem PickUpSound,
                 TItem PutDownSound,
                 TItem EquipmentType,
-                TItem BashImpactDataSet,
+                TItem BlockBashImpactDataSet,
                 TItem AlternateBlockMaterial,
                 TItem Race,
                 TItem Keywords,
@@ -483,7 +482,7 @@ namespace Mutagen.Bethesda.Fallout4
             {
                 this.VirtualMachineAdapter = new MaskItem<TItem, VirtualMachineAdapter.Mask<TItem>?>(VirtualMachineAdapter, new VirtualMachineAdapter.Mask<TItem>(VirtualMachineAdapter));
                 this.ObjectBounds = new MaskItem<TItem, ObjectBounds.Mask<TItem>?>(ObjectBounds, new ObjectBounds.Mask<TItem>(ObjectBounds));
-                this.PreviewTransform = new MaskItem<TItem, PreviewTransform.Mask<TItem>?>(PreviewTransform, new PreviewTransform.Mask<TItem>(PreviewTransform));
+                this.PreviewTransform = PreviewTransform;
                 this.Name = Name;
                 this.ObjectEffect = ObjectEffect;
                 this.WorldModel = new MaskItem<TItem, GenderedItem<MaskItem<TItem, ArmorModel.Mask<TItem>?>?>?>(WorldModel, default);
@@ -492,7 +491,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.PickUpSound = PickUpSound;
                 this.PutDownSound = PutDownSound;
                 this.EquipmentType = EquipmentType;
-                this.BashImpactDataSet = BashImpactDataSet;
+                this.BlockBashImpactDataSet = BlockBashImpactDataSet;
                 this.AlternateBlockMaterial = AlternateBlockMaterial;
                 this.Race = Race;
                 this.Keywords = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(Keywords, Enumerable.Empty<(int Index, TItem Value)>());
@@ -506,7 +505,7 @@ namespace Mutagen.Bethesda.Fallout4
                 this.BaseAddonIndex = BaseAddonIndex;
                 this.StaggerRating = StaggerRating;
                 this.Unknown = Unknown;
-                this.Resistances = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ResistanceArmor.Mask<TItem>?>>?>(Resistances, Enumerable.Empty<MaskItemIndexed<TItem, ResistanceArmor.Mask<TItem>?>>());
+                this.Resistances = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ArmorResistance.Mask<TItem>?>>?>(Resistances, Enumerable.Empty<MaskItemIndexed<TItem, ArmorResistance.Mask<TItem>?>>());
                 this.TemplateArmor = TemplateArmor;
                 this.AttachParentSlots = new MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>(AttachParentSlots, Enumerable.Empty<(int Index, TItem Value)>());
                 this.ObjectTemplates = new MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ArmorObjectTemplate.Mask<TItem>?>>?>(ObjectTemplates, Enumerable.Empty<MaskItemIndexed<TItem, ArmorObjectTemplate.Mask<TItem>?>>());
@@ -526,7 +525,7 @@ namespace Mutagen.Bethesda.Fallout4
             #region Members
             public MaskItem<TItem, VirtualMachineAdapter.Mask<TItem>?>? VirtualMachineAdapter { get; set; }
             public MaskItem<TItem, ObjectBounds.Mask<TItem>?>? ObjectBounds { get; set; }
-            public MaskItem<TItem, PreviewTransform.Mask<TItem>?>? PreviewTransform { get; set; }
+            public TItem PreviewTransform;
             public TItem Name;
             public TItem ObjectEffect;
             public MaskItem<TItem, GenderedItem<MaskItem<TItem, ArmorModel.Mask<TItem>?>?>?>? WorldModel;
@@ -535,7 +534,7 @@ namespace Mutagen.Bethesda.Fallout4
             public TItem PickUpSound;
             public TItem PutDownSound;
             public TItem EquipmentType;
-            public TItem BashImpactDataSet;
+            public TItem BlockBashImpactDataSet;
             public TItem AlternateBlockMaterial;
             public TItem Race;
             public MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>? Keywords;
@@ -549,7 +548,7 @@ namespace Mutagen.Bethesda.Fallout4
             public TItem BaseAddonIndex;
             public TItem StaggerRating;
             public TItem Unknown;
-            public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ResistanceArmor.Mask<TItem>?>>?>? Resistances;
+            public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ArmorResistance.Mask<TItem>?>>?>? Resistances;
             public TItem TemplateArmor;
             public MaskItem<TItem, IEnumerable<(int Index, TItem Value)>?>? AttachParentSlots;
             public MaskItem<TItem, IEnumerable<MaskItemIndexed<TItem, ArmorObjectTemplate.Mask<TItem>?>>?>? ObjectTemplates;
@@ -580,7 +579,7 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!object.Equals(this.PickUpSound, rhs.PickUpSound)) return false;
                 if (!object.Equals(this.PutDownSound, rhs.PutDownSound)) return false;
                 if (!object.Equals(this.EquipmentType, rhs.EquipmentType)) return false;
-                if (!object.Equals(this.BashImpactDataSet, rhs.BashImpactDataSet)) return false;
+                if (!object.Equals(this.BlockBashImpactDataSet, rhs.BlockBashImpactDataSet)) return false;
                 if (!object.Equals(this.AlternateBlockMaterial, rhs.AlternateBlockMaterial)) return false;
                 if (!object.Equals(this.Race, rhs.Race)) return false;
                 if (!object.Equals(this.Keywords, rhs.Keywords)) return false;
@@ -617,7 +616,7 @@ namespace Mutagen.Bethesda.Fallout4
                 hash.Add(this.PickUpSound);
                 hash.Add(this.PutDownSound);
                 hash.Add(this.EquipmentType);
-                hash.Add(this.BashImpactDataSet);
+                hash.Add(this.BlockBashImpactDataSet);
                 hash.Add(this.AlternateBlockMaterial);
                 hash.Add(this.Race);
                 hash.Add(this.Keywords);
@@ -658,11 +657,7 @@ namespace Mutagen.Bethesda.Fallout4
                     if (!eval(this.ObjectBounds.Overall)) return false;
                     if (this.ObjectBounds.Specific != null && !this.ObjectBounds.Specific.All(eval)) return false;
                 }
-                if (PreviewTransform != null)
-                {
-                    if (!eval(this.PreviewTransform.Overall)) return false;
-                    if (this.PreviewTransform.Specific != null && !this.PreviewTransform.Specific.All(eval)) return false;
-                }
+                if (!eval(this.PreviewTransform)) return false;
                 if (!eval(this.Name)) return false;
                 if (!eval(this.ObjectEffect)) return false;
                 if (!GenderedItem.AllMask(
@@ -681,7 +676,7 @@ namespace Mutagen.Bethesda.Fallout4
                 if (!eval(this.PickUpSound)) return false;
                 if (!eval(this.PutDownSound)) return false;
                 if (!eval(this.EquipmentType)) return false;
-                if (!eval(this.BashImpactDataSet)) return false;
+                if (!eval(this.BlockBashImpactDataSet)) return false;
                 if (!eval(this.AlternateBlockMaterial)) return false;
                 if (!eval(this.Race)) return false;
                 if (this.Keywords != null)
@@ -773,11 +768,7 @@ namespace Mutagen.Bethesda.Fallout4
                     if (eval(this.ObjectBounds.Overall)) return true;
                     if (this.ObjectBounds.Specific != null && this.ObjectBounds.Specific.Any(eval)) return true;
                 }
-                if (PreviewTransform != null)
-                {
-                    if (eval(this.PreviewTransform.Overall)) return true;
-                    if (this.PreviewTransform.Specific != null && this.PreviewTransform.Specific.Any(eval)) return true;
-                }
+                if (eval(this.PreviewTransform)) return true;
                 if (eval(this.Name)) return true;
                 if (eval(this.ObjectEffect)) return true;
                 if (GenderedItem.AnyMask(
@@ -796,7 +787,7 @@ namespace Mutagen.Bethesda.Fallout4
                 if (eval(this.PickUpSound)) return true;
                 if (eval(this.PutDownSound)) return true;
                 if (eval(this.EquipmentType)) return true;
-                if (eval(this.BashImpactDataSet)) return true;
+                if (eval(this.BlockBashImpactDataSet)) return true;
                 if (eval(this.AlternateBlockMaterial)) return true;
                 if (eval(this.Race)) return true;
                 if (this.Keywords != null)
@@ -887,7 +878,7 @@ namespace Mutagen.Bethesda.Fallout4
                 base.Translate_InternalFill(obj, eval);
                 obj.VirtualMachineAdapter = this.VirtualMachineAdapter == null ? null : new MaskItem<R, VirtualMachineAdapter.Mask<R>?>(eval(this.VirtualMachineAdapter.Overall), this.VirtualMachineAdapter.Specific?.Translate(eval));
                 obj.ObjectBounds = this.ObjectBounds == null ? null : new MaskItem<R, ObjectBounds.Mask<R>?>(eval(this.ObjectBounds.Overall), this.ObjectBounds.Specific?.Translate(eval));
-                obj.PreviewTransform = this.PreviewTransform == null ? null : new MaskItem<R, PreviewTransform.Mask<R>?>(eval(this.PreviewTransform.Overall), this.PreviewTransform.Specific?.Translate(eval));
+                obj.PreviewTransform = eval(this.PreviewTransform);
                 obj.Name = eval(this.Name);
                 obj.ObjectEffect = eval(this.ObjectEffect);
                 obj.WorldModel = GenderedItem.TranslateHelper(
@@ -899,7 +890,7 @@ namespace Mutagen.Bethesda.Fallout4
                 obj.PickUpSound = eval(this.PickUpSound);
                 obj.PutDownSound = eval(this.PutDownSound);
                 obj.EquipmentType = eval(this.EquipmentType);
-                obj.BashImpactDataSet = eval(this.BashImpactDataSet);
+                obj.BlockBashImpactDataSet = eval(this.BlockBashImpactDataSet);
                 obj.AlternateBlockMaterial = eval(this.AlternateBlockMaterial);
                 obj.Race = eval(this.Race);
                 if (Keywords != null)
@@ -942,14 +933,14 @@ namespace Mutagen.Bethesda.Fallout4
                 obj.Unknown = eval(this.Unknown);
                 if (Resistances != null)
                 {
-                    obj.Resistances = new MaskItem<R, IEnumerable<MaskItemIndexed<R, ResistanceArmor.Mask<R>?>>?>(eval(this.Resistances.Overall), Enumerable.Empty<MaskItemIndexed<R, ResistanceArmor.Mask<R>?>>());
+                    obj.Resistances = new MaskItem<R, IEnumerable<MaskItemIndexed<R, ArmorResistance.Mask<R>?>>?>(eval(this.Resistances.Overall), Enumerable.Empty<MaskItemIndexed<R, ArmorResistance.Mask<R>?>>());
                     if (Resistances.Specific != null)
                     {
-                        var l = new List<MaskItemIndexed<R, ResistanceArmor.Mask<R>?>>();
+                        var l = new List<MaskItemIndexed<R, ArmorResistance.Mask<R>?>>();
                         obj.Resistances.Specific = l;
                         foreach (var item in Resistances.Specific.WithIndex())
                         {
-                            MaskItemIndexed<R, ResistanceArmor.Mask<R>?>? mask = item.Item == null ? null : new MaskItemIndexed<R, ResistanceArmor.Mask<R>?>(item.Item.Index, eval(item.Item.Overall), item.Item.Specific?.Translate(eval));
+                            MaskItemIndexed<R, ArmorResistance.Mask<R>?>? mask = item.Item == null ? null : new MaskItemIndexed<R, ArmorResistance.Mask<R>?>(item.Item.Index, eval(item.Item.Overall), item.Item.Specific?.Translate(eval));
                             if (mask == null) continue;
                             l.Add(mask);
                         }
@@ -1018,9 +1009,9 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         ObjectBounds?.ToString(fg);
                     }
-                    if (printMask?.PreviewTransform?.Overall ?? true)
+                    if (printMask?.PreviewTransform ?? true)
                     {
-                        PreviewTransform?.ToString(fg);
+                        fg.AppendItem(PreviewTransform, "PreviewTransform");
                     }
                     if (printMask?.Name ?? true)
                     {
@@ -1055,9 +1046,9 @@ namespace Mutagen.Bethesda.Fallout4
                     {
                         fg.AppendItem(EquipmentType, "EquipmentType");
                     }
-                    if (printMask?.BashImpactDataSet ?? true)
+                    if (printMask?.BlockBashImpactDataSet ?? true)
                     {
-                        fg.AppendItem(BashImpactDataSet, "BashImpactDataSet");
+                        fg.AppendItem(BlockBashImpactDataSet, "BlockBashImpactDataSet");
                     }
                     if (printMask?.AlternateBlockMaterial ?? true)
                     {
@@ -1248,7 +1239,7 @@ namespace Mutagen.Bethesda.Fallout4
             #region Members
             public MaskItem<Exception?, VirtualMachineAdapter.ErrorMask?>? VirtualMachineAdapter;
             public MaskItem<Exception?, ObjectBounds.ErrorMask?>? ObjectBounds;
-            public MaskItem<Exception?, PreviewTransform.ErrorMask?>? PreviewTransform;
+            public Exception? PreviewTransform;
             public Exception? Name;
             public Exception? ObjectEffect;
             public MaskItem<Exception?, GenderedItem<Exception?>?>? WorldModel;
@@ -1257,7 +1248,7 @@ namespace Mutagen.Bethesda.Fallout4
             public Exception? PickUpSound;
             public Exception? PutDownSound;
             public Exception? EquipmentType;
-            public Exception? BashImpactDataSet;
+            public Exception? BlockBashImpactDataSet;
             public Exception? AlternateBlockMaterial;
             public Exception? Race;
             public MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>? Keywords;
@@ -1271,7 +1262,7 @@ namespace Mutagen.Bethesda.Fallout4
             public Exception? BaseAddonIndex;
             public Exception? StaggerRating;
             public Exception? Unknown;
-            public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ResistanceArmor.ErrorMask?>>?>? Resistances;
+            public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ArmorResistance.ErrorMask?>>?>? Resistances;
             public Exception? TemplateArmor;
             public MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>? AttachParentSlots;
             public MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ArmorObjectTemplate.ErrorMask?>>?>? ObjectTemplates;
@@ -1308,8 +1299,8 @@ namespace Mutagen.Bethesda.Fallout4
                         return PutDownSound;
                     case Armor_FieldIndex.EquipmentType:
                         return EquipmentType;
-                    case Armor_FieldIndex.BashImpactDataSet:
-                        return BashImpactDataSet;
+                    case Armor_FieldIndex.BlockBashImpactDataSet:
+                        return BlockBashImpactDataSet;
                     case Armor_FieldIndex.AlternateBlockMaterial:
                         return AlternateBlockMaterial;
                     case Armor_FieldIndex.Race:
@@ -1367,7 +1358,7 @@ namespace Mutagen.Bethesda.Fallout4
                         this.ObjectBounds = new MaskItem<Exception?, ObjectBounds.ErrorMask?>(ex, null);
                         break;
                     case Armor_FieldIndex.PreviewTransform:
-                        this.PreviewTransform = new MaskItem<Exception?, PreviewTransform.ErrorMask?>(ex, null);
+                        this.PreviewTransform = ex;
                         break;
                     case Armor_FieldIndex.Name:
                         this.Name = ex;
@@ -1393,8 +1384,8 @@ namespace Mutagen.Bethesda.Fallout4
                     case Armor_FieldIndex.EquipmentType:
                         this.EquipmentType = ex;
                         break;
-                    case Armor_FieldIndex.BashImpactDataSet:
-                        this.BashImpactDataSet = ex;
+                    case Armor_FieldIndex.BlockBashImpactDataSet:
+                        this.BlockBashImpactDataSet = ex;
                         break;
                     case Armor_FieldIndex.AlternateBlockMaterial:
                         this.AlternateBlockMaterial = ex;
@@ -1436,7 +1427,7 @@ namespace Mutagen.Bethesda.Fallout4
                         this.Unknown = ex;
                         break;
                     case Armor_FieldIndex.Resistances:
-                        this.Resistances = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ResistanceArmor.ErrorMask?>>?>(ex, null);
+                        this.Resistances = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ArmorResistance.ErrorMask?>>?>(ex, null);
                         break;
                     case Armor_FieldIndex.TemplateArmor:
                         this.TemplateArmor = ex;
@@ -1474,7 +1465,7 @@ namespace Mutagen.Bethesda.Fallout4
                         this.ObjectBounds = (MaskItem<Exception?, ObjectBounds.ErrorMask?>?)obj;
                         break;
                     case Armor_FieldIndex.PreviewTransform:
-                        this.PreviewTransform = (MaskItem<Exception?, PreviewTransform.ErrorMask?>?)obj;
+                        this.PreviewTransform = (Exception?)obj;
                         break;
                     case Armor_FieldIndex.Name:
                         this.Name = (Exception?)obj;
@@ -1500,8 +1491,8 @@ namespace Mutagen.Bethesda.Fallout4
                     case Armor_FieldIndex.EquipmentType:
                         this.EquipmentType = (Exception?)obj;
                         break;
-                    case Armor_FieldIndex.BashImpactDataSet:
-                        this.BashImpactDataSet = (Exception?)obj;
+                    case Armor_FieldIndex.BlockBashImpactDataSet:
+                        this.BlockBashImpactDataSet = (Exception?)obj;
                         break;
                     case Armor_FieldIndex.AlternateBlockMaterial:
                         this.AlternateBlockMaterial = (Exception?)obj;
@@ -1543,7 +1534,7 @@ namespace Mutagen.Bethesda.Fallout4
                         this.Unknown = (Exception?)obj;
                         break;
                     case Armor_FieldIndex.Resistances:
-                        this.Resistances = (MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ResistanceArmor.ErrorMask?>>?>)obj;
+                        this.Resistances = (MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ArmorResistance.ErrorMask?>>?>)obj;
                         break;
                     case Armor_FieldIndex.TemplateArmor:
                         this.TemplateArmor = (Exception?)obj;
@@ -1583,7 +1574,7 @@ namespace Mutagen.Bethesda.Fallout4
                 if (PickUpSound != null) return true;
                 if (PutDownSound != null) return true;
                 if (EquipmentType != null) return true;
-                if (BashImpactDataSet != null) return true;
+                if (BlockBashImpactDataSet != null) return true;
                 if (AlternateBlockMaterial != null) return true;
                 if (Race != null) return true;
                 if (Keywords != null) return true;
@@ -1641,7 +1632,7 @@ namespace Mutagen.Bethesda.Fallout4
                 base.ToString_FillInternal(fg);
                 VirtualMachineAdapter?.ToString(fg);
                 ObjectBounds?.ToString(fg);
-                PreviewTransform?.ToString(fg);
+                fg.AppendItem(PreviewTransform, "PreviewTransform");
                 fg.AppendItem(Name, "Name");
                 fg.AppendItem(ObjectEffect, "ObjectEffect");
                 if (WorldModel != null)
@@ -1653,7 +1644,7 @@ namespace Mutagen.Bethesda.Fallout4
                 fg.AppendItem(PickUpSound, "PickUpSound");
                 fg.AppendItem(PutDownSound, "PutDownSound");
                 fg.AppendItem(EquipmentType, "EquipmentType");
-                fg.AppendItem(BashImpactDataSet, "BashImpactDataSet");
+                fg.AppendItem(BlockBashImpactDataSet, "BlockBashImpactDataSet");
                 fg.AppendItem(AlternateBlockMaterial, "AlternateBlockMaterial");
                 fg.AppendItem(Race, "Race");
                 if (Keywords is {} KeywordsItem)
@@ -1789,7 +1780,7 @@ namespace Mutagen.Bethesda.Fallout4
                 var ret = new ErrorMask();
                 ret.VirtualMachineAdapter = this.VirtualMachineAdapter.Combine(rhs.VirtualMachineAdapter, (l, r) => l.Combine(r));
                 ret.ObjectBounds = this.ObjectBounds.Combine(rhs.ObjectBounds, (l, r) => l.Combine(r));
-                ret.PreviewTransform = this.PreviewTransform.Combine(rhs.PreviewTransform, (l, r) => l.Combine(r));
+                ret.PreviewTransform = this.PreviewTransform.Combine(rhs.PreviewTransform);
                 ret.Name = this.Name.Combine(rhs.Name);
                 ret.ObjectEffect = this.ObjectEffect.Combine(rhs.ObjectEffect);
                 ret.WorldModel = new MaskItem<Exception?, GenderedItem<Exception?>?>(ExceptionExt.Combine(this.WorldModel?.Overall, rhs.WorldModel?.Overall), GenderedItem.Combine(this.WorldModel?.Specific, rhs.WorldModel?.Specific));
@@ -1798,7 +1789,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.PickUpSound = this.PickUpSound.Combine(rhs.PickUpSound);
                 ret.PutDownSound = this.PutDownSound.Combine(rhs.PutDownSound);
                 ret.EquipmentType = this.EquipmentType.Combine(rhs.EquipmentType);
-                ret.BashImpactDataSet = this.BashImpactDataSet.Combine(rhs.BashImpactDataSet);
+                ret.BlockBashImpactDataSet = this.BlockBashImpactDataSet.Combine(rhs.BlockBashImpactDataSet);
                 ret.AlternateBlockMaterial = this.AlternateBlockMaterial.Combine(rhs.AlternateBlockMaterial);
                 ret.Race = this.Race.Combine(rhs.Race);
                 ret.Keywords = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ExceptionExt.Combine(this.Keywords?.Overall, rhs.Keywords?.Overall), ExceptionExt.Combine(this.Keywords?.Specific, rhs.Keywords?.Specific));
@@ -1812,7 +1803,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.BaseAddonIndex = this.BaseAddonIndex.Combine(rhs.BaseAddonIndex);
                 ret.StaggerRating = this.StaggerRating.Combine(rhs.StaggerRating);
                 ret.Unknown = this.Unknown.Combine(rhs.Unknown);
-                ret.Resistances = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ResistanceArmor.ErrorMask?>>?>(ExceptionExt.Combine(this.Resistances?.Overall, rhs.Resistances?.Overall), ExceptionExt.Combine(this.Resistances?.Specific, rhs.Resistances?.Specific));
+                ret.Resistances = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ArmorResistance.ErrorMask?>>?>(ExceptionExt.Combine(this.Resistances?.Overall, rhs.Resistances?.Overall), ExceptionExt.Combine(this.Resistances?.Specific, rhs.Resistances?.Specific));
                 ret.TemplateArmor = this.TemplateArmor.Combine(rhs.TemplateArmor);
                 ret.AttachParentSlots = new MaskItem<Exception?, IEnumerable<(int Index, Exception Value)>?>(ExceptionExt.Combine(this.AttachParentSlots?.Overall, rhs.AttachParentSlots?.Overall), ExceptionExt.Combine(this.AttachParentSlots?.Specific, rhs.AttachParentSlots?.Specific));
                 ret.ObjectTemplates = new MaskItem<Exception?, IEnumerable<MaskItem<Exception?, ArmorObjectTemplate.ErrorMask?>>?>(ExceptionExt.Combine(this.ObjectTemplates?.Overall, rhs.ObjectTemplates?.Overall), ExceptionExt.Combine(this.ObjectTemplates?.Specific, rhs.ObjectTemplates?.Specific));
@@ -1843,7 +1834,7 @@ namespace Mutagen.Bethesda.Fallout4
             #region Members
             public VirtualMachineAdapter.TranslationMask? VirtualMachineAdapter;
             public ObjectBounds.TranslationMask? ObjectBounds;
-            public PreviewTransform.TranslationMask? PreviewTransform;
+            public bool PreviewTransform;
             public bool Name;
             public bool ObjectEffect;
             public GenderedItem<ArmorModel.TranslationMask>? WorldModel;
@@ -1852,7 +1843,7 @@ namespace Mutagen.Bethesda.Fallout4
             public bool PickUpSound;
             public bool PutDownSound;
             public bool EquipmentType;
-            public bool BashImpactDataSet;
+            public bool BlockBashImpactDataSet;
             public bool AlternateBlockMaterial;
             public bool Race;
             public bool Keywords;
@@ -1866,7 +1857,7 @@ namespace Mutagen.Bethesda.Fallout4
             public bool BaseAddonIndex;
             public bool StaggerRating;
             public bool Unknown;
-            public ResistanceArmor.TranslationMask? Resistances;
+            public ArmorResistance.TranslationMask? Resistances;
             public bool TemplateArmor;
             public bool AttachParentSlots;
             public ArmorObjectTemplate.TranslationMask? ObjectTemplates;
@@ -1881,12 +1872,13 @@ namespace Mutagen.Bethesda.Fallout4
                 bool onOverall = true)
                 : base(defaultOn, onOverall)
             {
+                this.PreviewTransform = defaultOn;
                 this.Name = defaultOn;
                 this.ObjectEffect = defaultOn;
                 this.PickUpSound = defaultOn;
                 this.PutDownSound = defaultOn;
                 this.EquipmentType = defaultOn;
-                this.BashImpactDataSet = defaultOn;
+                this.BlockBashImpactDataSet = defaultOn;
                 this.AlternateBlockMaterial = defaultOn;
                 this.Race = defaultOn;
                 this.Keywords = defaultOn;
@@ -1913,7 +1905,7 @@ namespace Mutagen.Bethesda.Fallout4
                 base.GetCrystal(ret);
                 ret.Add((VirtualMachineAdapter != null ? VirtualMachineAdapter.OnOverall : DefaultOn, VirtualMachineAdapter?.GetCrystal()));
                 ret.Add((ObjectBounds != null ? ObjectBounds.OnOverall : DefaultOn, ObjectBounds?.GetCrystal()));
-                ret.Add((PreviewTransform != null ? PreviewTransform.OnOverall : DefaultOn, PreviewTransform?.GetCrystal()));
+                ret.Add((PreviewTransform, null));
                 ret.Add((Name, null));
                 ret.Add((ObjectEffect, null));
                 ret.Add((WorldModel != null || DefaultOn, null));
@@ -1922,7 +1914,7 @@ namespace Mutagen.Bethesda.Fallout4
                 ret.Add((PickUpSound, null));
                 ret.Add((PutDownSound, null));
                 ret.Add((EquipmentType, null));
-                ret.Add((BashImpactDataSet, null));
+                ret.Add((BlockBashImpactDataSet, null));
                 ret.Add((AlternateBlockMaterial, null));
                 ret.Add((Race, null));
                 ret.Add((Keywords, null));
@@ -2118,7 +2110,7 @@ namespace Mutagen.Bethesda.Fallout4
         /// Aspects: IObjectBounded, IObjectBoundedOptional
         /// </summary>
         new ObjectBounds ObjectBounds { get; set; }
-        new PreviewTransform? PreviewTransform { get; set; }
+        new IFormLinkNullable<ITransformGetter> PreviewTransform { get; set; }
         /// <summary>
         /// Aspects: INamed, INamedRequired, ITranslatedNamed, ITranslatedNamedRequired
         /// </summary>
@@ -2130,7 +2122,7 @@ namespace Mutagen.Bethesda.Fallout4
         new IFormLinkNullable<ISoundDescriptorGetter> PickUpSound { get; set; }
         new IFormLinkNullable<ISoundDescriptorGetter> PutDownSound { get; set; }
         new IFormLinkNullable<IEquipTypeGetter> EquipmentType { get; set; }
-        new IFormLinkNullable<IImpactDataSetGetter> BashImpactDataSet { get; set; }
+        new IFormLinkNullable<IImpactDataSetGetter> BlockBashImpactDataSet { get; set; }
         new IFormLinkNullable<IMaterialTypeGetter> AlternateBlockMaterial { get; set; }
         new IFormLinkNullable<IRaceGetter> Race { get; set; }
         /// <summary>
@@ -2147,7 +2139,7 @@ namespace Mutagen.Bethesda.Fallout4
         new UInt16 BaseAddonIndex { get; set; }
         new UInt16 StaggerRating { get; set; }
         new UInt16 Unknown { get; set; }
-        new ExtendedList<ResistanceArmor>? Resistances { get; set; }
+        new ExtendedList<ArmorResistance>? Resistances { get; set; }
         new IFormLinkNullable<IArmorGetter> TemplateArmor { get; set; }
         new ExtendedList<IFormLinkGetter<IKeywordGetter>>? AttachParentSlots { get; set; }
         new ExtendedList<ArmorObjectTemplate>? ObjectTemplates { get; set; }
@@ -2203,7 +2195,7 @@ namespace Mutagen.Bethesda.Fallout4
         /// </summary>
         IObjectBoundsGetter ObjectBounds { get; }
         #endregion
-        IPreviewTransformGetter? PreviewTransform { get; }
+        IFormLinkNullableGetter<ITransformGetter> PreviewTransform { get; }
         #region Name
         /// <summary>
         /// Aspects: INamedGetter, INamedRequiredGetter, ITranslatedNamedGetter, ITranslatedNamedRequiredGetter
@@ -2217,7 +2209,7 @@ namespace Mutagen.Bethesda.Fallout4
         IFormLinkNullableGetter<ISoundDescriptorGetter> PickUpSound { get; }
         IFormLinkNullableGetter<ISoundDescriptorGetter> PutDownSound { get; }
         IFormLinkNullableGetter<IEquipTypeGetter> EquipmentType { get; }
-        IFormLinkNullableGetter<IImpactDataSetGetter> BashImpactDataSet { get; }
+        IFormLinkNullableGetter<IImpactDataSetGetter> BlockBashImpactDataSet { get; }
         IFormLinkNullableGetter<IMaterialTypeGetter> AlternateBlockMaterial { get; }
         IFormLinkNullableGetter<IRaceGetter> Race { get; }
         #region Keywords
@@ -2236,7 +2228,7 @@ namespace Mutagen.Bethesda.Fallout4
         UInt16 BaseAddonIndex { get; }
         UInt16 StaggerRating { get; }
         UInt16 Unknown { get; }
-        IReadOnlyList<IResistanceArmorGetter>? Resistances { get; }
+        IReadOnlyList<IArmorResistanceGetter>? Resistances { get; }
         IFormLinkNullableGetter<IArmorGetter> TemplateArmor { get; }
         IReadOnlyList<IFormLinkGetter<IKeywordGetter>>? AttachParentSlots { get; }
         IReadOnlyList<IArmorObjectTemplateGetter>? ObjectTemplates { get; }
@@ -2422,7 +2414,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         PickUpSound = 14,
         PutDownSound = 15,
         EquipmentType = 16,
-        BashImpactDataSet = 17,
+        BlockBashImpactDataSet = 17,
         AlternateBlockMaterial = 18,
         Race = 19,
         Keywords = 20,
@@ -2559,7 +2551,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ClearPartial();
             item.VirtualMachineAdapter = null;
             item.ObjectBounds.Clear();
-            item.PreviewTransform = null;
+            item.PreviewTransform.Clear();
             item.Name = default;
             item.ObjectEffect.Clear();
             item.WorldModel = null;
@@ -2568,7 +2560,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             item.PickUpSound.Clear();
             item.PutDownSound.Clear();
             item.EquipmentType.Clear();
-            item.BashImpactDataSet.Clear();
+            item.BlockBashImpactDataSet.Clear();
             item.AlternateBlockMaterial.Clear();
             item.Race.Clear();
             item.Keywords = null;
@@ -2607,14 +2599,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         {
             base.RemapLinks(obj, mapping);
             obj.VirtualMachineAdapter?.RemapLinks(mapping);
-            obj.PreviewTransform?.RemapLinks(mapping);
+            obj.PreviewTransform.Relink(mapping);
             obj.ObjectEffect.Relink(mapping);
             obj.WorldModel?.RemapLinks(mapping);
             obj.Destructible?.RemapLinks(mapping);
             obj.PickUpSound.Relink(mapping);
             obj.PutDownSound.Relink(mapping);
             obj.EquipmentType.Relink(mapping);
-            obj.BashImpactDataSet.Relink(mapping);
+            obj.BlockBashImpactDataSet.Relink(mapping);
             obj.AlternateBlockMaterial.Relink(mapping);
             obj.Race.Relink(mapping);
             obj.Keywords?.RemapLinks(mapping);
@@ -2698,11 +2690,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 (loqLhs, loqRhs, incl) => loqLhs.GetEqualsMask(loqRhs, incl),
                 include);
             ret.ObjectBounds = MaskItemExt.Factory(item.ObjectBounds.GetEqualsMask(rhs.ObjectBounds, include), include);
-            ret.PreviewTransform = EqualsMaskHelper.EqualsHelper(
-                item.PreviewTransform,
-                rhs.PreviewTransform,
-                (loqLhs, loqRhs, incl) => loqLhs.GetEqualsMask(loqRhs, incl),
-                include);
+            ret.PreviewTransform = item.PreviewTransform.Equals(rhs.PreviewTransform);
             ret.Name = object.Equals(item.Name, rhs.Name);
             ret.ObjectEffect = item.ObjectEffect.Equals(rhs.ObjectEffect);
             ret.WorldModel = GenderedItem.EqualityMaskHelper(
@@ -2723,7 +2711,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             ret.PickUpSound = item.PickUpSound.Equals(rhs.PickUpSound);
             ret.PutDownSound = item.PutDownSound.Equals(rhs.PutDownSound);
             ret.EquipmentType = item.EquipmentType.Equals(rhs.EquipmentType);
-            ret.BashImpactDataSet = item.BashImpactDataSet.Equals(rhs.BashImpactDataSet);
+            ret.BlockBashImpactDataSet = item.BlockBashImpactDataSet.Equals(rhs.BlockBashImpactDataSet);
             ret.AlternateBlockMaterial = item.AlternateBlockMaterial.Equals(rhs.AlternateBlockMaterial);
             ret.Race = item.Race.Equals(rhs.Race);
             ret.Keywords = item.Keywords.CollectionEqualsHelper(
@@ -2819,10 +2807,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 item.ObjectBounds?.ToString(fg, "ObjectBounds");
             }
-            if ((printMask?.PreviewTransform?.Overall ?? true)
-                && item.PreviewTransform is {} PreviewTransformItem)
+            if (printMask?.PreviewTransform ?? true)
             {
-                PreviewTransformItem?.ToString(fg, "PreviewTransform");
+                fg.AppendItem(item.PreviewTransform.FormKeyNullable, "PreviewTransform");
             }
             if ((printMask?.Name ?? true)
                 && item.Name is {} NameItem)
@@ -2860,9 +2847,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 fg.AppendItem(item.EquipmentType.FormKeyNullable, "EquipmentType");
             }
-            if (printMask?.BashImpactDataSet ?? true)
+            if (printMask?.BlockBashImpactDataSet ?? true)
             {
-                fg.AppendItem(item.BashImpactDataSet.FormKeyNullable, "BashImpactDataSet");
+                fg.AppendItem(item.BlockBashImpactDataSet.FormKeyNullable, "BlockBashImpactDataSet");
             }
             if (printMask?.AlternateBlockMaterial ?? true)
             {
@@ -3086,11 +3073,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             }
             if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.PreviewTransform) ?? true))
             {
-                if (EqualsMaskHelper.RefEquality(lhs.PreviewTransform, rhs.PreviewTransform, out var lhsPreviewTransform, out var rhsPreviewTransform, out var isPreviewTransformEqual))
-                {
-                    if (!((PreviewTransformCommon)((IPreviewTransformGetter)lhsPreviewTransform).CommonInstance()!).Equals(lhsPreviewTransform, rhsPreviewTransform, crystal?.GetSubCrystal((int)Armor_FieldIndex.PreviewTransform))) return false;
-                }
-                else if (!isPreviewTransformEqual) return false;
+                if (!lhs.PreviewTransform.Equals(rhs.PreviewTransform)) return false;
             }
             if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.Name) ?? true))
             {
@@ -3132,9 +3115,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 if (!lhs.EquipmentType.Equals(rhs.EquipmentType)) return false;
             }
-            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.BashImpactDataSet) ?? true))
+            if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.BlockBashImpactDataSet) ?? true))
             {
-                if (!lhs.BashImpactDataSet.Equals(rhs.BashImpactDataSet)) return false;
+                if (!lhs.BlockBashImpactDataSet.Equals(rhs.BlockBashImpactDataSet)) return false;
             }
             if ((crystal?.GetShouldTranslate((int)Armor_FieldIndex.AlternateBlockMaterial) ?? true))
             {
@@ -3249,10 +3232,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 hash.Add(VirtualMachineAdapteritem);
             }
             hash.Add(item.ObjectBounds);
-            if (item.PreviewTransform is {} PreviewTransformitem)
-            {
-                hash.Add(PreviewTransformitem);
-            }
+            hash.Add(item.PreviewTransform);
             if (item.Name is {} Nameitem)
             {
                 hash.Add(Nameitem);
@@ -3273,7 +3253,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             hash.Add(item.PickUpSound);
             hash.Add(item.PutDownSound);
             hash.Add(item.EquipmentType);
-            hash.Add(item.BashImpactDataSet);
+            hash.Add(item.BlockBashImpactDataSet);
             hash.Add(item.AlternateBlockMaterial);
             hash.Add(item.Race);
             hash.Add(item.Keywords);
@@ -3336,12 +3316,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                     yield return item;
                 }
             }
-            if (obj.PreviewTransform is {} PreviewTransformItems)
+            if (obj.PreviewTransform.FormKeyNullable.HasValue)
             {
-                foreach (var item in PreviewTransformItems.ContainedFormLinks)
-                {
-                    yield return item;
-                }
+                yield return FormLinkInformation.Factory(obj.PreviewTransform);
             }
             if (obj.ObjectEffect.FormKeyNullable.HasValue)
             {
@@ -3373,9 +3350,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 yield return FormLinkInformation.Factory(obj.EquipmentType);
             }
-            if (obj.BashImpactDataSet.FormKeyNullable.HasValue)
+            if (obj.BlockBashImpactDataSet.FormKeyNullable.HasValue)
             {
-                yield return FormLinkInformation.Factory(obj.BashImpactDataSet);
+                yield return FormLinkInformation.Factory(obj.BlockBashImpactDataSet);
             }
             if (obj.AlternateBlockMaterial.FormKeyNullable.HasValue)
             {
@@ -3549,29 +3526,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             }
             if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.PreviewTransform) ?? true))
             {
-                errorMask?.PushIndex((int)Armor_FieldIndex.PreviewTransform);
-                try
-                {
-                    if(rhs.PreviewTransform is {} rhsPreviewTransform)
-                    {
-                        item.PreviewTransform = rhsPreviewTransform.DeepCopy(
-                            errorMask: errorMask,
-                            copyMask?.GetSubCrystal((int)Armor_FieldIndex.PreviewTransform));
-                    }
-                    else
-                    {
-                        item.PreviewTransform = default;
-                    }
-                }
-                catch (Exception ex)
-                when (errorMask != null)
-                {
-                    errorMask.ReportException(ex);
-                }
-                finally
-                {
-                    errorMask?.PopIndex();
-                }
+                item.PreviewTransform.SetTo(rhs.PreviewTransform.FormKeyNullable);
             }
             if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.Name) ?? true))
             {
@@ -3659,9 +3614,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
             {
                 item.EquipmentType.SetTo(rhs.EquipmentType.FormKeyNullable);
             }
-            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.BashImpactDataSet) ?? true))
+            if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.BlockBashImpactDataSet) ?? true))
             {
-                item.BashImpactDataSet.SetTo(rhs.BashImpactDataSet.FormKeyNullable);
+                item.BlockBashImpactDataSet.SetTo(rhs.BlockBashImpactDataSet.FormKeyNullable);
             }
             if ((copyMask?.GetShouldTranslate((int)Armor_FieldIndex.AlternateBlockMaterial) ?? true))
             {
@@ -3773,7 +3728,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                                     errorMask: errorMask,
                                     default(TranslationCrystal));
                             })
-                            .ToExtendedList<ResistanceArmor>();
+                            .ToExtendedList<ArmorResistance>();
                     }
                     else
                     {
@@ -4050,13 +4005,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 item: ObjectBoundsItem,
                 writer: writer,
                 translationParams: translationParams);
-            if (item.PreviewTransform is {} PreviewTransformItem)
-            {
-                ((PreviewTransformBinaryWriteTranslation)((IBinaryItem)PreviewTransformItem).BinaryWriteTranslator).Write(
-                    item: PreviewTransformItem,
-                    writer: writer,
-                    translationParams: translationParams);
-            }
+            FormLinkBinaryTranslation.Instance.WriteNullable(
+                writer: writer,
+                item: item.PreviewTransform,
+                header: translationParams.ConvertToCustom(RecordTypes.PTRN));
             StringBinaryTranslation.Instance.WriteNullable(
                 writer: writer,
                 item: item.Name,
@@ -4110,7 +4062,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 header: translationParams.ConvertToCustom(RecordTypes.ETYP));
             FormLinkBinaryTranslation.Instance.WriteNullable(
                 writer: writer,
-                item: item.BashImpactDataSet,
+                item: item.BlockBashImpactDataSet,
                 header: translationParams.ConvertToCustom(RecordTypes.BIDS));
             FormLinkBinaryTranslation.Instance.WriteNullable(
                 writer: writer,
@@ -4168,14 +4120,14 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 writer.Write(item.StaggerRating);
                 writer.Write(item.Unknown);
             }
-            Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IResistanceArmorGetter>.Instance.Write(
+            Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<IArmorResistanceGetter>.Instance.Write(
                 writer: writer,
                 items: item.Resistances,
                 recordType: translationParams.ConvertToCustom(RecordTypes.DAMA),
-                transl: (MutagenWriter subWriter, IResistanceArmorGetter subItem, TypedWriteParams? conv) =>
+                transl: (MutagenWriter subWriter, IArmorResistanceGetter subItem, TypedWriteParams? conv) =>
                 {
                     var Item = subItem;
-                    ((ResistanceArmorBinaryWriteTranslation)((IBinaryItem)Item).BinaryWriteTranslator).Write(
+                    ((ArmorResistanceBinaryWriteTranslation)((IBinaryItem)Item).BinaryWriteTranslator).Write(
                         item: Item,
                         writer: subWriter,
                         translationParams: conv);
@@ -4314,7 +4266,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.PTRN:
                 {
-                    item.PreviewTransform = Mutagen.Bethesda.Fallout4.PreviewTransform.CreateFromBinary(frame: frame);
+                    frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
+                    item.PreviewTransform.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
                     return (int)Armor_FieldIndex.PreviewTransform;
                 }
                 case RecordTypeInts.FULL:
@@ -4381,8 +4334,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 case RecordTypeInts.BIDS:
                 {
                     frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
-                    item.BashImpactDataSet.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
-                    return (int)Armor_FieldIndex.BashImpactDataSet;
+                    item.BlockBashImpactDataSet.SetTo(FormLinkBinaryTranslation.Instance.Parse(reader: frame));
+                    return (int)Armor_FieldIndex.BlockBashImpactDataSet;
                 }
                 case RecordTypeInts.BAMT:
                 {
@@ -4458,10 +4411,10 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 {
                     frame.Position += frame.MetaData.Constants.SubConstants.HeaderLength;
                     item.Resistances = 
-                        Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<ResistanceArmor>.Instance.Parse(
+                        Mutagen.Bethesda.Plugins.Binary.Translations.ListBinaryTranslation<ArmorResistance>.Instance.Parse(
                             reader: frame.SpawnWithLength(contentLength),
-                            transl: ResistanceArmor.TryCreateFromBinary)
-                        .CastExtendedList<ResistanceArmor>();
+                            transl: ArmorResistance.TryCreateFromBinary)
+                        .CastExtendedList<ArmorResistance>();
                     return (int)Armor_FieldIndex.Resistances;
                 }
                 case RecordTypeInts.TNAM:
@@ -4568,8 +4521,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         public IObjectBoundsGetter ObjectBounds => _ObjectBounds ?? new ObjectBounds();
         #endregion
         #region PreviewTransform
-        private RangeInt32? _PreviewTransformLocation;
-        public IPreviewTransformGetter? PreviewTransform => _PreviewTransformLocation.HasValue ? PreviewTransformBinaryOverlay.PreviewTransformFactory(new OverlayStream(_data.Slice(_PreviewTransformLocation!.Value.Min), _package), _package) : default;
+        private int? _PreviewTransformLocation;
+        public IFormLinkNullableGetter<ITransformGetter> PreviewTransform => _PreviewTransformLocation.HasValue ? new FormLinkNullable<ITransformGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _PreviewTransformLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<ITransformGetter>.Null;
         #endregion
         #region Name
         private int? _NameLocation;
@@ -4608,9 +4561,9 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private int? _EquipmentTypeLocation;
         public IFormLinkNullableGetter<IEquipTypeGetter> EquipmentType => _EquipmentTypeLocation.HasValue ? new FormLinkNullable<IEquipTypeGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _EquipmentTypeLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<IEquipTypeGetter>.Null;
         #endregion
-        #region BashImpactDataSet
-        private int? _BashImpactDataSetLocation;
-        public IFormLinkNullableGetter<IImpactDataSetGetter> BashImpactDataSet => _BashImpactDataSetLocation.HasValue ? new FormLinkNullable<IImpactDataSetGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _BashImpactDataSetLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<IImpactDataSetGetter>.Null;
+        #region BlockBashImpactDataSet
+        private int? _BlockBashImpactDataSetLocation;
+        public IFormLinkNullableGetter<IImpactDataSetGetter> BlockBashImpactDataSet => _BlockBashImpactDataSetLocation.HasValue ? new FormLinkNullable<IImpactDataSetGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _BlockBashImpactDataSetLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<IImpactDataSetGetter>.Null;
         #endregion
         #region AlternateBlockMaterial
         private int? _AlternateBlockMaterialLocation;
@@ -4672,7 +4625,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
         private bool _Unknown_IsSet => _FNAMLocation.HasValue;
         public UInt16 Unknown => _Unknown_IsSet ? BinaryPrimitives.ReadUInt16LittleEndian(_data.Slice(_UnknownLocation, 2)) : default;
         #endregion
-        public IReadOnlyList<IResistanceArmorGetter>? Resistances { get; private set; }
+        public IReadOnlyList<IArmorResistanceGetter>? Resistances { get; private set; }
         #region TemplateArmor
         private int? _TemplateArmorLocation;
         public IFormLinkNullableGetter<IArmorGetter> TemplateArmor => _TemplateArmorLocation.HasValue ? new FormLinkNullable<IArmorGetter>(FormKey.Factory(_package.MetaData.MasterReferences!, BinaryPrimitives.ReadUInt32LittleEndian(HeaderTranslation.ExtractSubrecordMemory(_data, _TemplateArmorLocation.Value, _package.MetaData.Constants)))) : FormLinkNullable<IArmorGetter>.Null;
@@ -4761,7 +4714,7 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.PTRN:
                 {
-                    _PreviewTransformLocation = new RangeInt32((stream.Position - offset), finalPos - offset);
+                    _PreviewTransformLocation = (stream.Position - offset);
                     return (int)Armor_FieldIndex.PreviewTransform;
                 }
                 case RecordTypeInts.FULL:
@@ -4821,8 +4774,8 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 }
                 case RecordTypeInts.BIDS:
                 {
-                    _BashImpactDataSetLocation = (stream.Position - offset);
-                    return (int)Armor_FieldIndex.BashImpactDataSet;
+                    _BlockBashImpactDataSetLocation = (stream.Position - offset);
+                    return (int)Armor_FieldIndex.BlockBashImpactDataSet;
                 }
                 case RecordTypeInts.BAMT:
                 {
@@ -4881,11 +4834,11 @@ namespace Mutagen.Bethesda.Fallout4.Internals
                 {
                     var subMeta = stream.ReadSubrecord();
                     var subLen = subMeta.ContentLength;
-                    this.Resistances = BinaryOverlayList.FactoryByStartIndex<ResistanceArmorBinaryOverlay>(
+                    this.Resistances = BinaryOverlayList.FactoryByStartIndex<ArmorResistanceBinaryOverlay>(
                         mem: stream.RemainingMemory.Slice(0, subLen),
                         package: _package,
                         itemLength: 8,
-                        getter: (s, p) => ResistanceArmorBinaryOverlay.ResistanceArmorFactory(s, p));
+                        getter: (s, p) => ArmorResistanceBinaryOverlay.ArmorResistanceFactory(s, p));
                     stream.Position += subLen;
                     return (int)Armor_FieldIndex.Resistances;
                 }

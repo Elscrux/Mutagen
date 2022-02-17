@@ -4,12 +4,12 @@
     <Fields>
       <RefDirect name="VirtualMachineAdapter" refName="VirtualMachineAdapter" />
       <RefDirect name="ObjectBounds" refName="ObjectBounds" nullable="False" />
-      <RefDirect name="PreviewTransform" refName="PreviewTransform" />
+      <FormLink name="PreviewTransform" refName="Transform" recordType="PTRN" />
       <String name="Name" recordType="FULL" translated="Normal" />
       <RefDirect name="Model" refName="Model" />
       <String name="InventoryImage" recordType="ICON" translated="DL" />
       <String name="MessageIcon" recordType="MICO" translated="DL" />
-      <String name="BookDescription" recordType="DESC" nullable="False" translated="DL" />
+      <String name="BookText" recordType="DESC" nullable="False" translated="DL" />
       <RefDirect name="Destructible" refName="Destructible" />
       <FormLink name="PickUpSound" refName="SoundDescriptor" recordType="YNAM" />
       <FormLink name="PutDownSound" refName="SoundDescriptor" recordType="ZNAM" />
